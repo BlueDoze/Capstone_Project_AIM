@@ -80,6 +80,7 @@ def chat():
         response = model.generate_content(prompt)
         return jsonify({"reply": response.text})
     except Exception as e:
+        print(f"Error generating content: {e}") # Added for debugging
         return jsonify({"reply": f"An error occurred: {e}"}), 500
 
 def main():
