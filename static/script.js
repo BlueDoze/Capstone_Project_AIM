@@ -1,38 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const chatbox = document.getElementById('chatbox');
-    const userInput = document.getElementById('userInput');
-    const sendButton = document.getElementById('sendButton');
+    const chatWindow = document.getElementById('chat-window');
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+    const chatHeader = document.getElementById('chat-header');
 
-    console.log('chatbox:', chatbox);
-    console.log('userInput:', userInput);
-    console.log('sendButton:', sendButton);
-
-    const addMessage = (sender, message, isUser) => {
+    // Function to add a message to the chat window
+    function addMessage(sender, message, isUser) {
         const messageElement = document.createElement('div');
-        messageElement.classList.add('message', isUser ? 'user-message' : 'bot-message');
-
-        const senderElement = document.createElement('strong');
-        senderElement.textContent = sender;
-
-        const contentElement = document.createElement('div');
-        contentElement.innerHTML = message; // Use innerHTML to render HTML tags
-
-        messageElement.appendChild(senderElement);
-        messageElement.appendChild(contentElement);
-        if (chatbox) {
-            chatbox.appendChild(messageElement);
-            chatbox.scrollTop = chatbox.scrollHeight;
+        messageElement.classList.add('message');
+        if (isUser) {
+            messageElement.classList.add('user-message');
         } else {
-            console.error('Chatbox element not found!');
+            messageElement.classList.add('bot-message');
         }
-    };
+        messageElement.textContent = message;
+        chatWindow.appendChild(messageElement);
 
-    const sendMessage = async () => {
-        if (!userInput || !sendButton) {
-            console.error('Input or Send button element not found!');
-            return;
-        }
+        // Scroll to the bottom of the chat window
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
 
+    // Function to send a message
+    async function sendMessage() {
         const message = userInput.value.trim();
         if (message) {
             addMessage('You', message, true);
@@ -46,24 +35,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify({ message: message })
                 });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    addMessage('Bot', data.reply, false);
-                } else {
-                    addMessage('Bot', 'Error: Could not get a response from the server.', false);
-                }
+                const data = await response.json();
+                addMessage('M1 Navigator', data.response, false);
             } catch (error) {
-                addMessage('Bot', `Error: ${error.message}`, false);
+                console.error('Error sending message:', error);
+                addMessage('M1 Navigator', 'Oops! Something went wrong. Please try again.', false);
             }
         }
-    };
+    }
 
     if (sendButton) {
         sendButton.addEventListener('click', sendMessage);
     } else {
         console.error('Send button not found, cannot attach click listener.');
-    }
+    };
 
     if (userInput) {
         userInput.addEventListener('keypress', (e) => {
@@ -76,5 +61,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initial bot message
-    addMessage('Bot', 'Welcome! How can I help you navigate the M1 Blue Building today?', false);
+    addMessage('M1 Navigator', 'Welcome! How can I help you navigate the M1 Blue Building today?', false);
 });
