@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const chatWindow = document.getElementById('chat-window');
-    const userInput = document.getElementById('user-input');
-    const sendButton = document.getElementById('send-button');
-    const chatHeader = document.getElementById('chat-header');
+    const chatbox = document.getElementById('chatbox');
+    const userInput = document.getElementById('userInput');
+    const sendButton = document.getElementById('sendButton');
 
     // Function to add a message to the chat window
     function addMessage(sender, message, isUser) {
@@ -13,11 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             messageElement.classList.add('bot-message');
         }
-        messageElement.textContent = message;
-        chatWindow.appendChild(messageElement);
+        messageElement.innerHTML = message; // Use innerHTML to render HTML tags from the bot
+        chatbox.appendChild(messageElement);
 
         // Scroll to the bottom of the chat window
-        chatWindow.scrollTop = chatWindow.scrollHeight;
+        chatbox.scrollTop = chatbox.scrollHeight;
     }
 
     // Function to send a message
@@ -36,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ message: message })
                 });
                 const data = await response.json();
-                addMessage('M1 Navigator', data.response, false);
+                addMessage('M1 Navigator', data.reply, false);
             } catch (error) {
                 console.error('Error sending message:', error);
                 addMessage('M1 Navigator', 'Oops! Something went wrong. Please try again.', false);

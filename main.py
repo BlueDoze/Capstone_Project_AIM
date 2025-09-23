@@ -1,11 +1,12 @@
 import os
 import google.generativeai as genai
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, render_template
 from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__, static_url_path='/static', static_folder='static')
+# The 'templates' folder is the default for Flask, so we just need to tell it where the static files are.
+app = Flask(__name__, static_folder='static')
 
 # Configure the generative AI model
 try:
@@ -59,7 +60,8 @@ Format your response using simple HTML tags for clarity. For example: use <stron
 
 @app.route("/")
 def index():
-    return send_file('src/index.html')
+    # Use render_template to serve the HTML file from the 'templates' directory
+    return render_template('index.html')
 
 @app.route("/chat", methods=['POST'])
 def chat():
@@ -81,7 +83,7 @@ def chat():
         return jsonify({"reply": f"An error occurred: {e}"}), 500
 
 def main():
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8888)))
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
 
 if __name__ == "__main__":
     main()
