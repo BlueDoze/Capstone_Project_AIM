@@ -6,3 +6,14 @@ autopep8
 flask
 google-generativeai
 python-dotenv
+chromadb
+
+# Image embeddings (optional)
+torch
+open_clip_torch
+pillow
+numpy
+
+# PDF embeddings (optional)
+PyMuPDF
+pdfplumber

@@ -2,11 +2,50 @@ import os
 import google.generativeai as genai
 from flask import Flask, request, jsonify, render_template
 from dotenv import load_dotenv
+from vector_db import initialize_vector_db, get_vector_db
+from pdf_data_processor import process_custom_pdfs
 
 load_dotenv()
 
 # The 'templates' folder is the default for Flask, so we just need to tell it where the static files are.
 app = Flask(__name__, static_folder='static')
+
+# Initialize vector database
+print("🚀 Initializing vector database...")
+vector_db = initialize_vector_db()
+
+# Clear existing vector database and populate with map.pdf data
+print("🗑️ Clearing existing vector database...")
+vector_db.clear_collection()
+
+# Populate vector database with map.pdf data
+print("📄 Populating vector database with map.pdf data...")
+try:
+    from pdf_data_processor import process_custom_pdfs
+    
+    # Process the map.pdf file specifically
+    map_pdf_path = "images/map.pdf"
+    if os.path.exists(map_pdf_path):
+        pdf_data = process_custom_pdfs(
+            pdf_paths=[map_pdf_path],
+            descriptions=["Fanshawe College campus map with building layouts, corridors, and spatial relationships"],
+            categories=["map"]
+        )
+        
+        if pdf_data['embeddings']:
+            vector_db.add_documents(
+                documents=pdf_data['documents'],
+                metadatas=pdf_data['metadatas'],
+                ids=pdf_data['ids'],
+                embeddings=pdf_data['embeddings']
+            )
+            print(f"✅ Vector database populated with {len(pdf_data['documents'])} map.pdf chunks")
+        else:
+            print("⚠️ No embeddings generated from map.pdf")
+    else:
+        print(f"❌ Map PDF not found at {map_pdf_path}")
+except Exception as e:
+    print(f"❌ Error populating map.pdf data: {e}")
 
 # Configure the generative AI model
 try:
@@ -19,49 +58,63 @@ except KeyError as e:
     print(e)
     model = None
 
-# Store the map information for the AI model
-map_info = '''You are a map navigator for the M1 Blue Building. Provide step-by-step walking directions based on the information below.
-Format your response using simple HTML tags for clarity. For example: use <strong> for emphasis, <ul> and <li> for lists, and <br> for line breaks.
-
-**1. General Info**
-
-*   The M1 Blue Building is located between Applied Arts Lane (west) and Campus Drive (east).
-*   The main entrance is on the south side, near Rooms 1004 and 1006.
-*   There are accessible entrances on both the south and east sides.
-*   Nearby buildings: Building H (to the south-west, connected by a hallway) and Building K (to the north-west).
-*   Nearby parking: Lot 2 (Assigned Parking, east) and P3 Meters (south-east).
-*   A compass rose is provided on the map (North is up).
-
-**2. Key Rooms**
-
-*   **1003:** Large classroom, just inside the south entrance (west side).
-*   **1004 & 1006:** Small classrooms right at the south entrance (east side).
-*   **1013–14:** Midway up the main hall, east side.
-*   **1015–16:** Across the hall from 1013–14, west side.
-*   **1020, 1022, 1024, 1026:** Computer labs, west side of the main hall.
-*   **1033:** Main office, in the north-east corner.
-*   **Stairs:** Located at the north end of the main hall.
-*   **Elevator:** Located just south of the stairs.
-*   **Washrooms:** Two sets: one near the south entrance (across from 1003) and another at the north end, near the stairs.
-*   **Connecting Hallway to Building H:** West side, between rooms 1015 and 1020.
-
-**3. Example Directions**
-
-*   **To Room 1033 (Main Office) from the South Entrance:**
-    1.  Enter through the south doors.
-    2.  Walk straight north, down the main hallway.
-    3.  Continue past all the classrooms and labs.
-    4.  The Main Office (1033) will be on your right in the north-east corner of the building.
-*   **To the Elevator from the South Entrance:**
-    1.  Enter through the south doors.
-    2.  Walk straight north, down the main hallway.
-    3.  The elevator is at the far north end of the hall, just before the stairs, on your right.
-'''
+# Map information will now come from the vector database (map.pdf embeddings)
 
 @app.route("/")
 def index():
     # Use render_template to serve the HTML file from the 'templates' directory
     return render_template('index.html')
+
+@app.route("/debug/vector-db")
+def debug_vector_db():
+    """Debug endpoint to check vector database status"""
+    try:
+        info = vector_db.get_collection_info()
+        return jsonify({
+            "status": "success",
+            "vector_db_info": info,
+            "message": "Vector database is working correctly"
+        })
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Vector database error: {e}"
+        }), 500
+
+@app.route("/search/pdf", methods=['POST'])
+def search_pdf():
+    """Search PDF documents"""
+    try:
+        query = request.json.get("query", "")
+        if not query:
+            return jsonify({"error": "Please provide a search query"}), 400
+        
+        # Search for PDF documents
+        results = vector_db.search(query, n_results=5)
+        
+        # Filter for PDF documents
+        pdf_results = {
+            'documents': [],
+            'metadatas': [],
+            'distances': [],
+            'ids': []
+        }
+        
+        for i, metadata in enumerate(results['metadatas']):
+            if metadata.get('type') == 'pdf_text':
+                pdf_results['documents'].append(results['documents'][i])
+                pdf_results['metadatas'].append(metadata)
+                pdf_results['distances'].append(results['distances'][i])
+                pdf_results['ids'].append(results['ids'][i])
+        
+        return jsonify({
+            "query": query,
+            "results": pdf_results,
+            "total_found": len(pdf_results['documents'])
+        })
+        
+    except Exception as e:
+        return jsonify({"error": f"PDF search failed: {e}"}), 500
 
 @app.route("/chat", methods=['POST'])
 def chat():
@@ -72,13 +125,43 @@ def chat():
     if not user_message:
         return jsonify({"reply": "Please provide a message."}), 400
 
-    # Combine the map info with the user's message
-    prompt = f'{map_info}\n\nUser: {user_message}\nAI:'
-
     try:
+        # Search for relevant map information using vector search
+        print(f"🔍 Searching for relevant information for: {user_message}")
+        search_results = vector_db.search(user_message, n_results=3)
+        
+        # Build context from search results
+        context_parts = []
+        if search_results['documents']:
+            for i, doc in enumerate(search_results['documents']):
+                context_parts.append(f"Relevant Information {i+1}: {doc}")
+                print(f"📄 Found relevant info: {doc[:100]}...")
+        
+        # Create enhanced prompt with vector search results
+        if context_parts:
+            context = "\n\n".join(context_parts)
+            prompt = f'''You are a campus navigator for Fanshawe College. Provide step-by-step walking directions based on the relevant information below.
+Format your response using simple HTML tags for clarity. For example: use <strong> for emphasis, <ul> and <li> for lists, and <br> for line breaks.
+
+RELEVANT CAMPUS INFORMATION:
+{context}
+
+User Question: {user_message}
+
+Please provide helpful navigation assistance based on the relevant information above.'''
+        else:
+            # No relevant information found in vector database
+            prompt = f'''You are a campus navigator for Fanshawe College. I don't have specific information about "{user_message}" in my campus map database.
+
+User Question: {user_message}
+
+Please let me know if you need help with navigation to specific buildings, facilities, or areas on the Fanshawe College campus, and I'll do my best to assist you based on the available map information.'''
+            print("⚠️ No relevant information found in vector database")
+
         # Generate a response from the AI model
         response = model.generate_content(prompt)
         return jsonify({"reply": response.text})
+        
     except Exception as e:
         print(f"Error generating content: {e}") # Added for debugging
         return jsonify({"reply": f"An error occurred: {e}"}), 500

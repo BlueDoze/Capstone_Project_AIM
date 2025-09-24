@@ -4,7 +4,7 @@ A Flask web application for the Capstone Project AIM.
 
 ## Prerequisites
 
-- Python 3.11+
+- Python 3.11.10
 - `uv` package manager (ultra-fast Python package manager)
 
 ## Initial Setup
@@ -17,7 +17,7 @@ export PATH="$HOME/.local/bin:$PATH"
 
 ### 2. Create Virtual Environment
 ```bash
-uv venv .venv
+uv venv .venv --python 3.11.10
 ```
 
 ### 3. Activate Virtual Environment
@@ -67,6 +67,6 @@ The project uses the following main dependencies:
 
 ## Development
 
-The virtual environment is configured with Python 3.11.12 and includes all necessary development tools.
+The virtual environment is configured with Python 3.11.10 and includes all necessary development tools. All dependencies are managed using `uv` for ultra-fast package installation and management.
 
 Previews should run automatically when starting a workspace.
