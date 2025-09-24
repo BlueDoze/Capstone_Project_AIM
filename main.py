@@ -2,8 +2,8 @@ import os
 import google.generativeai as genai
 from flask import Flask, request, jsonify, render_template
 from dotenv import load_dotenv
-from vector_db import initialize_vector_db, get_vector_db
-from pdf_data_processor import process_custom_pdfs
+from src.database.vector_db import initialize_vector_db, get_vector_db
+from src.processing.pdf_data_processor import process_custom_pdfs
 
 load_dotenv()
 
@@ -21,7 +21,7 @@ vector_db.clear_collection()
 # Populate vector database with map.pdf data
 print("📄 Populating vector database with map.pdf data...")
 try:
-    from pdf_data_processor import process_custom_pdfs
+    from src.processing.pdf_data_processor import process_custom_pdfs
     
     # Process the map.pdf file specifically
     map_pdf_path = "images/map.pdf"

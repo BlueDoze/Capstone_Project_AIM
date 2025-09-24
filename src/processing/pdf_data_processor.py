@@ -6,8 +6,8 @@ Processes PDFs and creates embeddings for document-based navigation assistance.
 
 import os
 from typing import List, Dict, Any, Optional
-from pdf_embedder import PDFEmbeddingManager, PyMuPDFProcessor
-from image_embedder import CLIPEmbedder
+from ..embeddings.pdf_embedder import PDFEmbeddingManager, PyMuPDFProcessor
+from ..embeddings.image_embedder import CLIPEmbedder
 
 class PDFDataProcessor:
     """Processes PDFs for the map navigation system"""
