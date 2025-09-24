@@ -150,11 +150,12 @@ class GeminiVisionEmbedder(ImageEmbedder):
             # a text embedder on the response
             text = response.text
             # Simple hash-based embedding (you could use a proper text embedder here)
-            embedding = np.array([hash(word) % 1000 for word in text.split()[:512]])
-            if len(embedding) < 512:
-                embedding = np.pad(embedding, (0, 512 - len(embedding)), 'constant')
+            # Generate 384-dimensional embeddings to match collection expectations
+            embedding = np.array([hash(word) % 1000 for word in text.split()[:384]])
+            if len(embedding) < 384:
+                embedding = np.pad(embedding, (0, 384 - len(embedding)), 'constant')
             
-            return embedding[:512]  # Ensure consistent size
+            return embedding[:384]  # Ensure consistent size
             
         except Exception as e:
             print(f"❌ Error embedding image {image_path}: {e}")
