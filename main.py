@@ -14,7 +14,8 @@ try:
     if not api_key:
         raise KeyError("GEMINI_API_KEY environment variable not set.")
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-1.5-flash-latest')
+    # Use a model name confirmed to be available
+    model = genai.GenerativeModel('gemini-pro-latest')
 except KeyError as e:
     print(e)
     model = None
@@ -84,7 +85,8 @@ def chat():
         return jsonify({"reply": f"An error occurred: {e}"}), 500
 
 def main():
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8081)))
+
 
 if __name__ == "__main__":
     main()
