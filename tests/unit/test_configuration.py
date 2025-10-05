@@ -10,7 +10,7 @@ import sys
 import os
 
 # Adicionar o diretório src ao path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
 from config.settings import RAGConfig
 from config.environment import EnvironmentManager

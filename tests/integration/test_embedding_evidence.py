@@ -11,7 +11,7 @@ import sys
 import os
 
 # Adicionar o diretório src ao path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
 from models.embedding_models import EmbeddingModelManager
 from config.settings import RAGConfig

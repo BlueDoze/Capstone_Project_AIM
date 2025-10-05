@@ -13,7 +13,7 @@ import time
 from datetime import datetime
 
 # Adicionar o diretório src ao path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
 from services.validation_service import ValidationService
 from services.initialization_service import InitializationService
