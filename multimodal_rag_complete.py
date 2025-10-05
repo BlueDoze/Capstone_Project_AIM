@@ -193,39 +193,49 @@ def get_gemini_response(
     )
     
     # Handle different response types based on stream parameter
-    if stream:
-        # Streaming response - iterate through chunks
-        response_list = []
-        for chunk in response:
+    try:
+        if stream:
+            # Streaming response - iterate through chunks
+            response_list = []
             try:
-                response_list.append(chunk.text)
-            except Exception as e:
+                for chunk in response:
+                    try:
+                        if hasattr(chunk, 'text') and chunk.text:
+                            response_list.append(chunk.text)
+                    except Exception as e:
+                        if print_exception:
+                            print(
+                                "Exception occurred while processing chunk. Something is blocked. Lower the safety thresholds [safety_settings: BLOCK_NONE ] if not already done. -----",
+                                e,
+                            )
+                        else:
+                            print("Exception occurred while processing chunk. Something is blocked. Lower the safety thresholds [safety_settings: BLOCK_NONE ] if not already done. -----")
+                        response_list.append("**Something blocked.**")
+                        continue
+                return "".join(response_list)
+            except TypeError as te:
+                # If response is not iterable, treat as non-streaming
                 if print_exception:
-                  print(
-                      "Exception occurred while calling gemini. Something is blocked. Lower the safety thresholds [safety_settings: BLOCK_NONE ] if not already done. -----",
-                      e,
-                  )
+                    print(f"Response not iterable, treating as non-streaming: {te}")
+                if hasattr(response, 'text') and response.text:
+                    return response.text
                 else:
-                  print("Exception occurred while calling gemini. Something is blocked. Lower the safety thresholds [safety_settings: BLOCK_NONE ] if not already done. -----")
-                response_list.append("**Something blocked.**")
-                continue
-        return "".join(response_list)
-    else:
-        # Non-streaming response - direct access to text
-        try:
+                    return "**No response generated.**"
+        else:
+            # Non-streaming response - direct access to text
             if hasattr(response, 'text') and response.text:
                 return response.text
             else:
                 return "**No response generated.**"
-        except Exception as e:
-            if print_exception:
-                print(
-                    "Exception occurred while calling gemini. Something is blocked. Lower the safety thresholds [safety_settings: BLOCK_NONE ] if not already done. -----",
-                    e,
-                )
-            else:
-                print("Exception occurred while calling gemini. Something is blocked. Lower the safety thresholds [safety_settings: BLOCK_NONE ] if not already done. -----")
-            return "**Something blocked.**"
+    except Exception as e:
+        if print_exception:
+            print(
+                "Exception occurred while calling gemini. Something is blocked. Lower the safety thresholds [safety_settings: BLOCK_NONE ] if not already done. -----",
+                e,
+            )
+        else:
+            print("Exception occurred while calling gemini. Something is blocked. Lower the safety thresholds [safety_settings: BLOCK_NONE ] if not already done. -----")
+        return "**Something blocked.**"
 
 def get_cosine_score(
     dataframe: pd.DataFrame, column_name: str, input_text_embd: np.ndarray
