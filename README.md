@@ -165,6 +165,56 @@ chmod +x devserver.sh
 ./devserver.sh
 ```
 
+### **Updating Image Embeddings**
+```bash
+# Run the embedding update script
+python update_embeddings.py
+
+# Or using uv
+uv run python update_embeddings.py
+```
+
+The `update_embeddings.py` script provides comprehensive testing and management of the embedding system:
+
+#### **What the Script Does:**
+- **Tests all embedding update methods** (direct, HTTP endpoints, cache management)
+- **Validates system functionality** and reports detailed status
+- **Processes all images** in the `images/` folder and generates embeddings
+- **Provides usage examples** for different embedding update approaches
+
+#### **Script Output:**
+```
+🚀 SCRIPT DE ATUALIZAÇÃO DE EMBEDDINGS
+==================================================
+📦 Importando sistema...
+✅ Sistema RAG multimodal disponível
+🔄 Inicializando modelos RAG...
+✅ Modelos de embedding carregados
+
+📊 STATUS INICIAL:
+- Initialized: True
+- Total Images: 3
+- RAG Available: True
+
+🔄 MÉTODO 1: Atualização Direta
+✅ Atualização direta bem-sucedida
+
+🔄 MÉTODO 2: Atualização via Endpoint
+✅ Endpoint de atualização funcionando
+
+🔄 MÉTODO 3: Limpeza de Cache
+✅ Cache limpo com sucesso
+
+🎉 SCRIPT EXECUTADO COM SUCESSO!
+✅ Todos os métodos de atualização funcionando
+```
+
+#### **When to Use:**
+- **Initial setup**: After adding new images to the `images/` folder
+- **System validation**: To verify embedding system is working correctly
+- **Troubleshooting**: When experiencing issues with image processing
+- **Cache management**: To clear and regenerate embeddings
+
 ## 💻 Usage Examples
 
 ### **Basic Navigation Queries**
@@ -239,6 +289,7 @@ Capstone_Project_AIM/
 │   └── 📁 system/                   # System tests
 ├── main.py                          # Main Flask application
 ├── multimodal_rag_complete.py       # RAG system implementation
+├── update_embeddings.py             # Embedding update and testing script
 ├── requirements.txt                 # Python dependencies
 ├── devserver.sh                     # Development server script
 └── README.md                        # This file
@@ -262,6 +313,13 @@ Capstone_Project_AIM/
 - **Gemini Models**: Text and multimodal understanding
 - **Embedding Models**: Vector generation for search
 - **Vertex AI**: Cloud-based AI services
+
+### **4. Embedding Management (`update_embeddings.py`)**
+- **Comprehensive Testing**: Validates all embedding update methods
+- **System Validation**: Checks RAG system functionality and status
+- **Cache Management**: Handles embedding cache operations
+- **Usage Examples**: Provides documentation for different update approaches
+- **Error Handling**: Robust error reporting and troubleshooting
 
 ## 🧪 Testing
 
