@@ -35,10 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ message: message })
                 });
                 const data = await response.json();
-                addMessage('M1 Navigator', data.reply, false);
+                addMessage('Fanshawe Navigator', data.reply, false);
             } catch (error) {
                 console.error('Error sending message:', error);
-                addMessage('M1 Navigator', 'Oops! Something went wrong. Please try again.', false);
+                addMessage('Fanshawe Navigator', 'Oops! Something went wrong. Please try again.', false);
             }
         }
     }
@@ -60,5 +60,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initial bot message
-    addMessage('M1 Navigator', 'Welcome! How can I help you navigate the M1 Blue Building today?', false);
+    addMessage('Fanshawe Navigator', 'Welcome! How can I help you navigate Fanshawe College today?', false);
 });
