@@ -4,11 +4,11 @@
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <title>FANSHAWE</title>
-          <link rel="stylesheet" href="/static/style.css" />
+          <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
         </head>
         <body>
           <div id="chat-container">
-            <div id="chat-header">FANSHAWE</div>
+            <div id="chat-header"><img src="{{ url_for('static', filename='logo.png') }}" alt="Fanshawe College Logo"></div>
             <div id="chat-window" class="chatbox">
               <!-- Chat messages will be displayed here -->
             </div>
@@ -21,6 +21,6 @@
               <button id="sendButton">Send</button>
             </div>
           </div>
-          <script src="/static/script.js"></script>
+          <script src="{{ url_for('static', filename='script.js') }}"></script>
         </body>
       </html>

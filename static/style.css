@@ -1,3 +1,4 @@
+
       body {
         font-family: sans-serif;
         background-color: #000;
@@ -24,6 +25,10 @@
         text-align: center;
         font-size: 1.2em;
         font-weight: bold;
+      }
+      #chat-header img {
+        height: 75px;
+        width: auto;
       }
       #chat-window {
         flex-grow: 1;
