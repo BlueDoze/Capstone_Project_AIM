@@ -7,18 +7,23 @@
           <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
         </head>
         <body>
-          <div id="chat-container">
-            <div id="chat-header"><img src="{{ url_for('static', filename='logo.png') }}" alt="Fanshawe College Logo"></div>
-            <div id="chat-window" class="chatbox">
-              <!-- Chat messages will be displayed here -->
+          <div class="main-container">
+            <div id="chat-container">
+              <div id="chat-header"><img src="{{ url_for('static', filename='logo.png') }}" alt="Fanshawe College Logo"></div>
+              <div id="chat-window" class="chatbox">
+                <!-- Chat messages will be displayed here -->
+              </div>
+              <div class="chat-input">
+                <input
+                  type="text"
+                  id="userInput"
+                  placeholder="Ask about directions..."
+                />
+                <button id="sendButton">Send</button>
+              </div>
             </div>
-            <div class="chat-input">
-              <input
-                type="text"
-                id="userInput"
-                placeholder="Ask about directions..."
-              />
-              <button id="sendButton">Send</button>
+            <div id="map-container">
+              <!-- The map will be placed here -->
             </div>
           </div>
           <script src="{{ url_for('static', filename='script.js') }}"></script>
