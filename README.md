@@ -55,6 +55,22 @@ If you clone this repository to a new machine, the `.venv` (virtual environment)
     ./devserver.sh
     ```
 
+### Running with Docker
+
+To run the application using Docker, ensure you have Docker and Docker Compose installed.
+
+1.  **Create the environment file:**
+    Create a `.env` file in the root of the project to store your `GEMINI_API_KEY`:
+    ```
+    GEMINI_API_KEY='your_gemini_api_key'
+    ```
+
+2.  **Build and run the container:**
+    ```bash
+    docker-compose up --build
+    ```
+    The application will be accessible at `http://localhost:8081`.
+
 ## Development Environment
 
 - **Python Environment:** The environment uses Python 3 and a virtual environment located at `.venv`.

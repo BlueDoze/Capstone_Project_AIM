@@ -15,7 +15,7 @@ try:
         raise KeyError("GEMINI_API_KEY environment variable not set.")
     genai.configure(api_key=api_key)
     # Use a model name confirmed to be available
-    model = genai.GenerativeModel('gemini-pro-latest')
+    model = genai.GenerativeModel('gemini-2.5-flash')
 except KeyError as e:
     print(e)
     model = None

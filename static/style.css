@@ -78,3 +78,7 @@
         text-align: left;
         color: #f8d7da;
       }
+      #typing-indicator {
+        font-style: italic;
+        color: #ccc;
+      }
