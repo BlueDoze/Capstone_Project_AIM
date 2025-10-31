@@ -6,3 +6,4 @@ autopep8
 flask
 google-generativeai
 python-dotenv
+ngrok
