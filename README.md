@@ -71,6 +71,55 @@ To run the application using Docker, ensure you have Docker and Docker Compose i
     ```
     The application will be accessible at `http://localhost:8081`.
 
+## Mobile Access Using ngrok
+
+To access the application on a mobile device, you can use ngrok to create a secure tunnel that exposes your local server to the internet. This is particularly useful when your mobile device is on a different network or you want to test without configuring firewall rules.
+
+### Prerequisites
+
+1. **Install ngrok:**
+   - Visit [ngrok.com](https://ngrok.com/) and sign up for a free account
+   - Download and install ngrok for your platform
+   - Authenticate your installation with your authtoken:
+     ```bash
+     ngrok config add-authtoken YOUR_AUTH_TOKEN
+     ```
+
+### Steps to Access via Mobile
+
+1. **Start the Flask server:**
+   ```bash
+   ./devserver.sh
+   ```
+   The server should be running on `http://localhost:8081`.
+
+2. **Start ngrok in a new terminal:**
+   ```bash
+   ngrok http 8081
+   ```
+
+3. **Copy the ngrok URL:**
+   - ngrok will display a forwarding URL (e.g., `https://abc123.ngrok.io`)
+   - Copy this HTTPS URL from the ngrok terminal output
+
+4. **Access from your mobile device:**
+   - Open a web browser on your mobile device
+   - Navigate to the ngrok URL (e.g., `https://abc123.ngrok.io`)
+   - The application should load and be fully functional
+
+### Notes
+
+- The ngrok URL changes each time you restart ngrok (unless you're using a paid plan with a static domain)
+- Keep both the Flask server and ngrok running while testing on mobile
+- The ngrok terminal shows request logs, which can be helpful for debugging
+- For production use, consider using a paid ngrok plan with a static domain or deploy to a proper hosting service
+
+### Alternative: Local Network Access
+
+If your mobile device is on the same WiFi network as your development machine, you can access the application directly using your local IP address. The `./devserver.sh` script displays your local IP address when it starts. Use `http://[YOUR_LOCAL_IP]:8081` in your mobile browser.
+
+For troubleshooting local network access issues, see `TROUBLESHOOTING_MOBILE.md`.
+
 ## Development Environment
 
 - **Python Environment:** The environment uses Python 3 and a virtual environment located at `.venv`.
