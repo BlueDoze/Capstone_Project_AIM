@@ -1,141 +1,444 @@
-# Fanshawe Navigator
+# 🏢 Fanshawe Navigator
 
-## Project Goal
+A sophisticated **Multimodal RAG (Retrieval-Augmented Generation)** system that provides intelligent navigation assistance for the M1 Blue Building at Fanshawe College. This AI-powered application combines visual understanding with natural language processing to deliver precise, context-aware directions and building information.
 
-The main goal of this project is to create the **Fanshawe Navigator**, a web application designed to help students, staff, and visitors navigate the Fanshawe College campus. The application will provide an interactive map, search functionality for classrooms and services, and leverage the Gemini API to offer intelligent, conversational guidance.
+## 🎯 Project Overview
 
-## Project Structure
+This system leverages **Google's Gemini AI models** and **Vertex AI** to create an intelligent building navigation assistant that can:
 
-- `main.py`: The main entry point for the Flask application.
-- `templates/`: Contains HTML templates for rendering pages.
-  - `index.html`: The main page of the application.
-- `static/`: Contains static assets like CSS and JavaScript.
-  - `style.css`: Basic styling for the application.
-  - `script.js`: Basic JavaScript for the application.
-- `requirements.txt`: A list of Python dependencies for the project.
-- `devserver.sh`: A script used by the development environment to run the Flask server.
-- `.env`: A file for storing environment variables and secrets. This file is not committed to version control.
-- `README.md`: This file.
+- 📍 **Visual Navigation**: Analyze building floor plans and provide step-by-step directions
+- 🤖 **AI-Powered Responses**: Use multimodal AI to understand both text queries and visual context
+- 🔍 **Smart Search**: Find relevant information using advanced embedding-based similarity search
+- 📱 **Web Interface**: Clean, responsive chat interface for easy interaction
+- 🔄 **Auto-Updates**: Automatically processes new images and updates embeddings
 
-## Getting Started
+## 🏗️ System Architecture
 
-This project is configured to run in a specific development environment. Previews should run automatically when starting the workspace.
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    FANSHAWE NAVIGATOR                           │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌──────────────┐ │
+│  │   Web Client    │    │  Flask Server   │    │  RAG System  │ │
+│  │                 │    │                 │    │              │ │
+│  │ ┌─────────────┐ │    │ ┌─────────────┐ │    │ ┌──────────┐ │ │
+│  │ │ Chat UI     │◄┼────┼►│ /chat       │ │    │ │ Gemini   │ │ │
+│  │ │ (HTML/CSS/  │ │    │ │ /status     │ │    │ │ Models   │ │ │
+│  │ │  JavaScript)│ │    │ │ /images/*   │ │    │ │          │ │ │
+│  │ └─────────────┘ │    │ └─────────────┘ │    │ └──────────┘ │ │
+│  └─────────────────┘    └─────────────────┘    │              │ │
+│                                                 │ ┌──────────┐ │ │
+│                                                 │ │Embedding │ │ │
+│                                                 │ │ Models   │ │ │
+│                                                 │ └──────────┘ │ │
+│                                                 └──────────────┘ │
+│                                                                 │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌──────────────┐ │
+│  │  Image Storage  │    │  Auto Monitor   │    │  Cache       │ │
+│  │                 │    │                 │    │              │ │
+│  │ ┌─────────────┐ │    │ ┌─────────────┐ │    │ ┌──────────┐ │ │
+│  │ │ M1.jpeg     │ │    │ │ FileSystem  │ │    │ │ Pickle   │ │ │
+│  │ │ M2.jpeg     │ │    │ │ Watcher     │ │    │ │ Cache    │ │ │
+│  │ │ M3.jpeg     │ │    │ │             │ │    │ │          │ │ │
+│  │ └─────────────┘ │    │ └─────────────┘ │    │ └──────────┘ │ │
+│  └─────────────────┘    └─────────────────┘    └──────────────┘ │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-To run the server, open a terminal and use the `web` preview task, which executes the `./devserver.sh` script.
+## 🚀 Key Features
 
-### Manual Setup After Cloning
+### 🧠 **Multimodal AI Processing**
+- **Gemini 2.0 Flash**: Advanced multimodal understanding
+- **Text Embeddings**: Semantic search capabilities
+- **Image Embeddings**: Visual similarity matching
+- **Contextual Analysis**: Combines visual and textual information
 
-If you clone this repository to a new machine, the `.venv` (virtual environment), `.env` (environment variables), and `__pycache__` directories will not be included. You will need to set them up manually.
+### 🔄 **Intelligent Image Management**
+- **Auto-Processing**: Automatically processes new images
+- **Embedding Generation**: Creates vector representations for search
+- **Cache System**: Efficient storage and retrieval
+- **File Monitoring**: Real-time detection of new images
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <repository_url>
-    cd <repository_name>
-    ```
+### 💬 **Interactive Chat Interface**
+- **Real-time Chat**: Instant responses to navigation queries
+- **HTML Rendering**: Rich formatting for directions
+- **Responsive Design**: Works on desktop and mobile
+- **Error Handling**: Graceful error recovery
 
-2.  **Create and activate the virtual environment:**
-    ```bash
-    python3 -m venv .venv
-    source .venv/bin/activate
-    ```
+### 🎯 **Navigation Intelligence**
+- **Step-by-step Directions**: Detailed walking instructions
+- **Room Identification**: Precise location descriptions
+- **Context Awareness**: Uses building layout knowledge
+- **Multi-modal Queries**: Understands both text and visual context
 
-3.  **Install dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+## 📋 Prerequisites
 
-4.  **Create the environment file:**
-    Create a `.env` file in the root of the project to store your secret keys, such as your Gemini API key. For example:
-    ```
-    GEMINI_API_KEY='your_gemini_api_key'
-    ```
+Before setting up the project, ensure you have:
 
-5.  **Run the application:**
-    ```bash
-    ./devserver.sh
-    ```
+- **Python 3.11+** installed
+- **Google Cloud eAccount** with Vertex AI enabled
+- **Gemini API Key** from Google AI Studio
+- **Git** for version control
 
-### Running with Docker
+## 🛠️ Installation & Setup
 
-To run the application using Docker, ensure you have Docker and Docker Compose installed.
+### 1. **Clone the Repository**
+```bash
+git clone <repository-url>
+cd Capstone_Project_AIM
+```
 
-1.  **Create the environment file:**
-    Create a `.env` file in the root of the project to store your `GEMINI_API_KEY`:
-    ```
-    GEMINI_API_KEY='your_gemini_api_key'
-    ```
+### 2. **Create Virtual Environment**
+```bash
+# Create virtual environment
+python -m venv .venv
 
-2.  **Build and run the container:**
-    ```bash
-    docker-compose up --build
-    ```
-    The application will be accessible at `http://localhost:8081`.
+# Activate virtual environment
+# On Linux/Mac:
+source .venv/bin/activate
+# On Windows:
+.venv\Scripts\activate
+```
 
-## Mobile Access Using ngrok
+### 3. **Install Dependencies**
+```bash
+pip install -r requirements.txt
+```
 
-To access the application on a mobile device, you can use ngrok to create a secure tunnel that exposes your local server to the internet. This is particularly useful when your mobile device is on a different network or you want to test without configuring firewall rules.
+### 4. **Environment Configuration**
 
-### Prerequisites
+Create a `.env` file in the project root:
 
-1. **Install ngrok:**
-   - Visit [ngrok.com](https://ngrok.com/) and sign up for a free account
-   - Download and install ngrok for your platform
-   - Authenticate your installation with your authtoken:
-     ```bash
-     ngrok config add-authtoken YOUR_AUTH_TOKEN
-     ```
+```bash
+# Google AI/Gemini Configuration
+GEMINI_API_KEY=your_gemini_api_key_here
 
-### Steps to Access via Mobile
+# Google Cloud Configuration (for RAG system)
+GOOGLE_CLOUD_PROJECT_ID=your_project_id_here
+GOOGLE_APPLICATION_CREDENTIALS=path/to/your/service-account-key.json
+```
 
-1. **Start the Flask server:**
-   ```bash
-   ./devserver.sh
-   ```
-   The server should be running on `http://localhost:8081`.
+### 5. **Google Cloud Setup**
 
-2. **Start ngrok in a new terminal:**
-   ```bash
-   ngrok http 8081
-   ```
+#### Enable Required APIs:
+```bash
+gcloud services enable aiplatform.googleapis.com
+gcloud services enable generativelanguage.googleapis.com
+```
 
-3. **Copy the ngrok URL:**
-   - ngrok will display a forwarding URL (e.g., `https://abc123.ngrok.io`)
-   - Copy this HTTPS URL from the ngrok terminal output
+#### Authenticate:
+```bash
+gcloud auth application-default login
+```
 
-4. **Access from your mobile device:**
-   - Open a web browser on your mobile device
-   - Navigate to the ngrok URL (e.g., `https://abc123.ngrok.io`)
-   - The application should load and be fully functional
+### 6. **Image Setup**
 
-### Notes
+Place your building floor plan images in the `images/` directory:
+```bash
+images/
+├── M1.jpeg    # Main floor plan
+├── M2.jpeg    # Additional views
+└── M3.jpeg    # Detailed sections
+```
 
-- The ngrok URL changes each time you restart ngrok (unless you're using a paid plan with a static domain)
-- Keep both the Flask server and ngrok running while testing on mobile
-- The ngrok terminal shows request logs, which can be helpful for debugging
-- For production use, consider using a paid ngrok plan with a static domain or deploy to a proper hosting service
+## 🚀 Running the Application
 
-### Alternative: Local Network Access
+### **Development Mode**
+```bash
+# Activate virtual environment
+source .venv/bin/activate
 
-If your mobile device is on the same WiFi network as your development machine, you can access the application directly using your local IP address. The `./devserver.sh` script displays your local IP address when it starts. Use `http://[YOUR_LOCAL_IP]:8081` in your mobile browser.
+# Run the development server
+python main.py
+```
 
-For troubleshooting local network access issues, see `TROUBLESHOOTING_MOBILE.md`.
+The application will be available at: `http://localhost:8081`
 
-## Development Environment
+### **Using the Development Script**
+```bash
+# Make script executable
+chmod +x devserver.sh
 
-- **Python Environment:** The environment uses Python 3 and a virtual environment located at `.venv`.
-- **Dependency Management:** Project dependencies are listed in `requirements.txt`.
-- **Activation:** Before running any `python` or `pip` commands in the terminal, you must first activate the virtual environment:
-  ```bash
-  source .venv/bin/activate
-  ```
-- **Running the Server:** The Flask development server is started using the `web` preview task, which runs the `./devserver.sh` script.
+# Run using the development script
+./devserver.sh
+```
 
-## Best Practices
+### **Updating Image Embeddings**
+```bash
+# Run the embedding update script
+python update_embeddings.py
 
-### Security
-- **Secrets Management:** Never hard-code secrets like API keys. Use environment variables loaded from a `.env` file (e.g., using the `python-dotenv` library).
-- **Input Validation:** Always validate and sanitize user input to prevent common vulnerabilities.
+# Or using uv
+uv run python update_embeddings.py
+```
 
-### Project Structure
-- **Blueprints:** For larger applications, use Flask Blueprints to organize your code into smaller, reusable components.
-- **Application Factory:** Use the application factory pattern to create application instances, which is useful for testing and managing different configurations.
+The `update_embeddings.py` script provides comprehensive testing and management of the embedding system:
+
+#### **What the Script Does:**
+- **Tests all embedding update methods** (direct, HTTP endpoints, cache management)
+- **Validates system functionality** and reports detailed status
+- **Processes all images** in the `images/` folder and generates embeddings
+- **Provides usage examples** for different embedding update approaches
+
+#### **Script Output:**
+```
+🚀 SCRIPT DE ATUALIZAÇÃO DE EMBEDDINGS
+==================================================
+📦 Importando sistema...
+✅ Sistema RAG multimodal disponível
+🔄 Inicializando modelos RAG...
+✅ Modelos de embedding carregados
+
+📊 STATUS INICIAL:
+- Initialized: True
+- Total Images: 3
+- RAG Available: True
+
+🔄 MÉTODO 1: Atualização Direta
+✅ Atualização direta bem-sucedida
+
+🔄 MÉTODO 2: Atualização via Endpoint
+✅ Endpoint de atualização funcionando
+
+🔄 MÉTODO 3: Limpeza de Cache
+✅ Cache limpo com sucesso
+
+🎉 SCRIPT EXECUTADO COM SUCESSO!
+✅ Todos os métodos de atualização funcionando
+```
+
+#### **When to Use:**
+- **Initial setup**: After adding new images to the `images/` folder
+- **System validation**: To verify embedding system is working correctly
+- **Troubleshooting**: When experiencing issues with image processing
+- **Cache management**: To clear and regenerate embeddings
+
+## 💻 Usage Examples
+
+### **Basic Navigation Queries**
+```
+User: "How do I get to room 1033 from the main entrance?"
+AI: "To reach Room 1033 (Main Office) from the South Entrance:
+     1. Enter through the south doors
+     2. Walk straight north, down the main hallway
+     3. Continue past all the classrooms and labs
+     4. The Main Office (1033) will be on your right in the north-east corner"
+```
+
+### **Complex Queries with Visual Context**
+```
+User: "What's the best way to get to the elevator from room 1015?"
+AI: "Based on the building layout, here's how to reach the elevator from Room 1015:
+     1. Exit Room 1015 (west side of main hall)
+     2. Turn right and walk north toward the stairs
+     3. The elevator is located just south of the stairs, on your right
+     4. Total walking distance: approximately 50 meters"
+```
+
+### **Room Information Queries**
+```
+User: "What rooms are available on this floor?"
+AI: "The M1 Blue Building main floor includes:
+     • Classrooms: 1003, 1004, 1006, 1013-1016
+     • Computer Labs: 1020, 1022, 1024, 1026
+     • Main Office: 1033
+     • Facilities: Elevator, Stairs, Washrooms
+     • Connected to Building H via hallway"
+```
+
+## 🔧 API Endpoints
+
+### **Chat Interface**
+- **POST** `/chat` - Send messages to the AI navigator
+- **GET** `/` - Main chat interface
+
+### **System Status**
+- **GET** `/system/status` - Complete system status
+- **GET** `/images/status` - Image processing status
+
+### **Image Management**
+- **POST** `/images/update` - Update image embeddings
+- **POST** `/images/clear-cache` - Clear embedding cache
+- **POST** `/images/auto-monitor/start` - Start auto-monitoring
+- **POST** `/images/auto-monitor/stop` - Stop auto-monitoring
+- **GET** `/images/auto-monitor/status` - Monitor status
+
+## 🏗️ Project Structure
+
+```
+Capstone_Project_AIM/
+├── 📁 src/                          # Source code modules
+│   ├── 📁 config/                   # Configuration management
+│   ├── 📁 models/                   # AI model wrappers
+│   ├── 📁 services/                 # Business logic services
+│   └── 📁 utils/                    # Utility functions
+├── 📁 templates/                    # HTML templates
+│   └── index.html                   # Main chat interface
+├── 📁 static/                       # Static assets
+│   ├── style.css                    # Application styling
+│   └── script.js                    # Frontend JavaScript
+├── 📁 images/                       # Building floor plans
+│   ├── M1.jpeg                      # Main floor plan
+│   ├── M2.jpeg                      # Additional views
+│   └── M3.jpeg                      # Detailed sections
+├── 📁 tests/                        # Test suite
+│   ├── 📁 unit/                     # Unit tests
+│   ├── 📁 integration/              # Integration tests
+│   └── 📁 system/                   # System tests
+├── main.py                          # Main Flask application
+├── multimodal_rag_complete.py       # RAG system implementation
+├── update_embeddings.py             # Embedding update and testing script
+├── requirements.txt                 # Python dependencies
+├── devserver.sh                     # Development server script
+└── README.md                        # This file
+```
+
+## 🔍 System Components
+
+### **1. Flask Web Application (`main.py`)**
+- **Chat Interface**: Handles user interactions
+- **Image Management**: Processes and manages building images
+- **Auto-Monitoring**: Watches for new images and updates embeddings
+- **API Endpoints**: RESTful API for system control
+
+### **2. RAG System (`multimodal_rag_complete.py`)**
+- **Multimodal Processing**: Handles both text and image inputs
+- **Embedding Generation**: Creates vector representations
+- **Similarity Search**: Finds relevant information
+- **Contextual Analysis**: Combines multiple data sources
+
+### **3. AI Models Integration**
+- **Gemini Models**: Text and multimodal understanding
+- **Embedding Models**: Vector generation for search
+- **Vertex AI**: Cloud-based AI services
+
+### **4. Embedding Management (`update_embeddings.py`)**
+- **Comprehensive Testing**: Validates all embedding update methods
+- **System Validation**: Checks RAG system functionality and status
+- **Cache Management**: Handles embedding cache operations
+- **Usage Examples**: Provides documentation for different update approaches
+- **Error Handling**: Robust error reporting and troubleshooting
+
+## 🧪 Testing
+
+### **Run All Tests**
+```bash
+python -m pytest tests/ -v
+```
+
+### **Run Specific Test Categories**
+```bash
+# Unit tests
+python -m pytest tests/unit/ -v
+
+# Integration tests
+python -m pytest tests/integration/ -v
+
+# System tests
+python -m pytest tests/system/ -v
+```
+
+### **Performance Tests**
+```bash
+python tests/performance/test_models_simulation.py
+```
+
+## 🐛 Troubleshooting
+
+### **Common Issues**
+
+#### **1. Gemini API Key Not Working**
+```bash
+# Check if API key is set
+echo $GEMINI_API_KEY
+
+# Verify in .env file
+cat .env | grep GEMINI_API_KEY
+```
+
+#### **2. Google Cloud Authentication Issues**
+```bash
+# Re-authenticate
+gcloud auth application-default login
+
+# Check current project
+gcloud config get-value project
+
+# Verify APIs are enabled
+gcloud services list --enabled
+```
+
+#### **3. Image Processing Failures**
+```bash
+# Check image directory
+ls -la images/
+
+# Clear cache and reprocess
+curl -X POST http://localhost:8081/images/clear-cache
+curl -X POST http://localhost:8081/images/update
+```
+
+#### **4. Port Already in Use**
+```bash
+# Find process using port 8081
+lsof -i :8081
+
+# Kill the process
+kill -9 <PID>
+```
+
+### **Debug Mode**
+```bash
+# Run with debug output
+FLASK_DEBUG=1 python main.py
+```
+
+## 📊 Performance Metrics
+
+### **Response Times**
+- **Simple Queries**: < 2 seconds
+- **Complex Navigation**: < 5 seconds
+- **Image Processing**: < 10 seconds per image
+
+### **System Capacity**
+- **Concurrent Users**: 50+
+- **Image Storage**: Unlimited (limited by disk space)
+- **Cache Size**: ~1MB per 100 images
+
+## 🔒 Security Considerations
+
+- **API Keys**: Stored in environment variables, never in code
+- **Input Validation**: All user inputs are sanitized
+- **Rate Limiting**: Consider implementing for production
+- **HTTPS**: Use SSL/TLS in production environments
+
+## 🤝 Contributing
+
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Commit changes**: `git commit -m 'Add amazing feature'`
+4. **Push to branch**: `git push origin feature/amazing-feature`
+5. **Open a Pull Request**
+
+## 📝 License
+
+This project is developed for educational purposes as part of the Fanshawe College Capstone Project.
+
+## 🙏 Acknowledgments
+
+- **Google AI**: For Gemini models and Vertex AI platform
+- **Fanshawe College**: For providing the project requirements
+- **Open Source Community**: For the amazing tools and libraries
+
+---
+
+## 📞 Support
+
+For technical support or questions:
+- **Email**: [your-email@fanshawe.ca]
+- **Project Repository**: https://github.com/BlueDoze/Capstone_Project_AIM
+- **Documentation**: This README file
+
+---

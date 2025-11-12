@@ -8,10 +8,6 @@
         height: 100vh;
         margin: 0;
       }
-      .main-container {
-        display: flex;
-        gap: 20px;
-      }
       #chat-container {
         width: 400px;
         height: 600px;
@@ -21,13 +17,6 @@
         flex-direction: column;
         overflow: hidden;
       }
-      #map-container {
-        width: 800px;
-        height: 600px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        background-color: #f0f0f0;
-      }
       #chat-header {
         background-color: #ff0000;
         color: #fff;
@@ -35,10 +24,6 @@
         text-align: center;
         font-size: 1.2em;
         font-weight: bold;
-      }
-      #chat-header img {
-        height: 50px;
-        width: auto;
       }
       #chat-window {
         flex-grow: 1;
@@ -74,83 +59,22 @@
         text-align: right;
         color: #d1e7dd;
       }
-      .ai-message {
+      .bot-message {
         text-align: left;
         color: #f8d7da;
       }
-      #typing-indicator {
-        font-style: italic;
-        color: #ccc;
+      .bot-message p {
+        margin: 8px 0;
       }
-
-      /* Media Query para Tablets e Mobile */
-      @media (max-width: 768px) {
-        body {
-          height: auto;
-          min-height: 100vh;
-          padding: 10px;
-          align-items: flex-start;
-        }
-        
-        .main-container {
-          flex-direction: column;
-          width: 100%;
-          gap: 15px;
-        }
-        
-        #chat-container {
-          width: 100%;
-          height: 45vh;
-          min-height: 300px;
-        }
-        
-        #map-container {
-          width: 100%;
-          height: 50vh;
-          min-height: 300px;
-        }
+      .bot-message ol, .bot-message ul {
+        margin: 10px 0;
+        padding-left: 25px;
       }
-
-      /* Media Query para Mobile pequeno */
-      @media (max-width: 480px) {
-        body {
-          padding: 5px;
-        }
-        
-        .main-container {
-          gap: 10px;
-        }
-        
-        #chat-container {
-          height: 40vh;
-          min-height: 250px;
-        }
-        
-        #map-container {
-          height: 55vh;
-          min-height: 250px;
-        }
-        
-        #chat-header {
-          padding: 8px;
-          font-size: 1em;
-        }
-        
-        #chat-header img {
-          height: 40px;
-        }
-        
-        .chat-input {
-          padding: 8px;
-        }
-        
-        #userInput {
-          padding: 6px;
-          font-size: 14px;
-        }
-        
-        #sendButton {
-          padding: 6px 10px;
-          font-size: 14px;
-        }
+      .bot-message li {
+        margin: 5px 0;
+        line-height: 1.6;
+      }
+      .bot-message strong {
+        color: #fff;
+        font-weight: bold;
       }
