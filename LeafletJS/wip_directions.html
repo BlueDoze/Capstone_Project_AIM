@@ -1,0 +1,831 @@
+<!-- cd "C:\Users\Lukeg\Desktop\Capstone Project\LeafletJS" -->
+<!-- python -m http.server 8000 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Campus Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate.css" />
+    <script src="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate-src.js"></script>
+    <script src="https://unpkg.com/leaflet-image-transform/leaflet-image-transform.min.js"></script>
+    <!-- test -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.distortableimage@latest/dist/leaflet.distortableimage.css" />
+    <script src="https://unpkg.com/leaflet.distortableimage@latest/dist/leaflet.distortableimage.js"></script>
+    <style>
+        #map {
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 0; right: 0;
+        }
+		#rotation-display {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background: rgba(255, 255, 255, 0.9);
+		padding: 10px 15px;
+		border-radius: 5px;
+		font-family: Arial, sans-serif;
+		font-size: 16px;
+		font-weight: bold;
+		box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+		z-index: 1000;
+	}
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+	<div id="rotation-display">Rotation: 21.3°</div>
+	<div style="position: absolute; top: 50px; right: 10px; background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 5px; z-index: 1000;">
+		<label for="bearingInput">Map Bearing:</label>
+		<input type="number" id="bearingInput" value="21.3" step="0.1" style="width: 70px;" />
+		<button onclick="updateMapBearing()">Apply</button>
+	</div>
+    <script src="floorPlansScript.js"></script>
+    <script>
+		
+
+        window.originalExitStyles = new Map();
+
+		//Functions
+
+        // Store original styles for exits
+        function storeOriginalExitStyle(element) {
+            if (!window.originalExitStyles.has(element.id)) {
+                window.originalExitStyles.set(element.id, {
+                    stroke: element.style.stroke || element.getAttribute('stroke') || '',
+                    strokeWidth: element.style.strokeWidth || element.getAttribute('stroke-width') || '',
+                    fill: element.style.fill || element.getAttribute('fill') || ''
+                });
+            }
+        }
+        // Restore original styles for exits
+        function restoreOriginalExitStyle(element) {
+            const original = window.originalExitStyles.get(element.id);
+            if (original) {
+                element.style.stroke = original.stroke;
+                element.style.strokeWidth = original.strokeWidth;
+                element.style.fill = original.fill;
+            }
+        }
+
+		function openFloorPlan() {
+			let select = document.getElementById("floorSelect");
+			let filePath = select.value;
+			window.open(filePath, "_blank"); // open in new tab
+		}
+
+
+		function doorToLatLng(doorElement, svgMap, corners) {
+			const bbox = doorElement.getBBox();
+			const doorCenterX = bbox.x + bbox.width / 2;
+			const doorCenterY = bbox.y + bbox.height / 2;
+
+			const svgBBox = svgMap.viewBox.baseVal || {
+				x: 0,
+				y: 0,
+				width: svgMap.width.baseVal.value,
+				height: svgMap.height.baseVal.value
+			};
+
+			const normX = (doorCenterX - svgBBox.x) / svgBBox.width;
+			const normY = (doorCenterY - svgBBox.y) / svgBBox.height;
+
+			const topLeft = corners[0], topRight = corners[1],
+				bottomRight = corners[2], bottomLeft = corners[3];
+
+			const latTop = topLeft.lat + normX * (topRight.lat - topLeft.lat);
+			const lngTop = topLeft.lng + normX * (topRight.lng - topLeft.lng);
+			const latBottom = bottomLeft.lat + normX * (bottomRight.lat - bottomLeft.lat);
+			const lngBottom = bottomLeft.lng + normX * (bottomRight.lng - bottomLeft.lng);
+
+			const doorLat = latTop + normY * (latBottom - latTop);
+			const doorLng = lngTop + normY * (lngBottom - lngTop);
+
+			return L.latLng(doorLat, doorLng);
+		}
+		
+		function rotatePoint(point, center, angleDeg){
+			const angleRad = (angleDeg * Math.PI) / 180;
+			const cos = Math.cos(angleRad);
+			const sin = Math.sin(angleRad);
+
+			const dx = point.lng - center.lng;
+			const dy = point.lat - center.lat;
+
+			return L.latLng(
+				center.lat + (dy * cos -dx * sin),
+				center.lng + (dx *cos + dy * sin)
+			);
+		}
+
+        //Rotation based functions
+		function updateMapBearing() {
+			const input = document.getElementById('bearingInput');
+			const newBearing = parseFloat(input.value) || 0;
+			map.setBearing(newBearing);
+			
+			// Update any existing overlays
+			if (currentOverlay) {
+				const overlayPane = currentOverlay.getElement();
+				if (overlayPane) {
+					overlayPane.style.transform = `rotate(${newBearing}deg)`;
+				}
+			}
+		}
+
+        //WORK IN PROGRESS: Add rotated SVG overlay
+		function addRotatedSvgOverlay(svgElement, corners, bearing) {
+			const overlay = L.svgOverlay(svgElement, corners, { 
+				interactive: true, 
+				opacity: 0.5 
+			}).addTo(map);
+			
+			// Apply rotation via CSS transform
+			const overlayPane = overlay.getElement();
+			if (overlayPane) {
+				overlayPane.style.transformOrigin = 'center';
+				overlayPane.style.transform = `rotate(${bearing}deg)`;
+			}
+			
+			return overlay;
+		}
+
+        //Pathfinding functions
+
+        //Node finding function
+        function findNearestNode(position, nodePositions) {
+            let nearestNode = null;
+            let minDistance = Infinity;
+            
+            Object.entries(nodePositions).forEach(([nodeId, nodePos]) => {
+                const distance = position.distanceTo(nodePos);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearestNode = nodeId;
+                }
+            });
+            
+            console.log(`📍 Nearest node to user: ${nearestNode} (${minDistance.toFixed(2)}m away)`);
+            return nearestNode;
+        }
+		
+        // Convert SVG circle node to lat/lng (similar to doorToLatLng but for circles)
+        function nodeToLatLng(nodeElement, svgMap, corners) {
+            const cx = parseFloat(nodeElement.getAttribute('cx'));
+            const cy = parseFloat(nodeElement.getAttribute('cy'));
+            
+            const svgBBox = svgMap.viewBox.baseVal || {
+                x: 0,
+                y: 0,
+                width: svgMap.width.baseVal.value,
+                height: svgMap.height.baseVal.value
+            };
+
+            const normX = (cx - svgBBox.x) / svgBBox.width;
+            const normY = (cy - svgBBox.y) / svgBBox.height;
+
+            const topLeft = corners[0], topRight = corners[1],
+                bottomRight = corners[2], bottomLeft = corners[3];
+
+            const latTop = topLeft.lat + normX * (topRight.lat - topLeft.lat);
+            const lngTop = topLeft.lng + normX * (topRight.lng - topLeft.lng);
+            const latBottom = bottomLeft.lat + normX * (bottomRight.lat - bottomLeft.lat);
+            const lngBottom = bottomLeft.lng + normX * (bottomRight.lng - bottomLeft.lng);
+
+            const nodeLat = latTop + normY * (latBottom - latTop);
+            const nodeLng = lngTop + normY * (lngBottom - lngTop);
+
+            return L.latLng(nodeLat, nodeLng);
+        }
+
+        // Build navigation graph from definition
+        function buildNavigationGraph(svgMap, graphDefinition, corners) {
+            const graph = {};
+            const nodePositions = {};
+            const nodeMetadata = {};
+            
+            console.log("🔨 Building navigation graph...");
+            
+            Object.entries(graphDefinition).forEach(([nodeId, nodeData]) => {
+                const nodeElement = svgMap.getElementById(nodeId);
+                
+                if (nodeElement) {
+                    nodePositions[nodeId] = nodeToLatLng(nodeElement, svgMap, corners);
+                    nodeMetadata[nodeId] = {
+                        connections: nodeData.connections || [],
+                        represents: nodeData.represents || null
+                    };
+                    console.log(`✓ Found node: ${nodeId}`);
+                } else {
+                    console.error(`✗ Node ${nodeId} NOT FOUND in SVG!`);
+                }
+            });
+            
+            Object.entries(nodeMetadata).forEach(([nodeId, data]) => {
+                if (!nodePositions[nodeId]) return;
+                
+                graph[nodeId] = data.connections.map(connectedId => {
+                    if (!nodePositions[connectedId]) {
+                        console.warn(`⚠️ Connected node ${connectedId} not found`);
+                        return null;
+                    }
+                    
+                    const distance = nodePositions[nodeId].distanceTo(nodePositions[connectedId]);
+                    return { node: connectedId, distance: distance };
+                }).filter(n => n !== null);
+            });
+            
+            console.log("✅ Navigation graph built!");
+            console.log(`   Nodes: ${Object.keys(nodePositions).length}`);
+            
+            return { graph, nodePositions, nodeMetadata };
+        }
+
+        // Dijkstra's Algorithm
+        function findShortestPath(graph, startNode, endNode) {
+            console.log(`🔍 Finding path: ${startNode} → ${endNode}`);
+            
+            if (!graph[startNode] || !graph[endNode]) {
+                console.error(`❌ Invalid start/end node`);
+                return null;
+            }
+            
+            const distances = {};
+            const previous = {};
+            const unvisited = new Set(Object.keys(graph));
+            
+            Object.keys(graph).forEach(node => {
+                distances[node] = Infinity;
+            });
+            distances[startNode] = 0;
+            
+            while (unvisited.size > 0) {
+                let currentNode = null;
+                let minDistance = Infinity;
+                unvisited.forEach(node => {
+                    if (distances[node] < minDistance) {
+                        minDistance = distances[node];
+                        currentNode = node;
+                    }
+                });
+                
+                if (currentNode === null || currentNode === endNode) break;
+                
+                unvisited.delete(currentNode);
+                
+                if (graph[currentNode]) {
+                    graph[currentNode].forEach(({ node, distance }) => {
+                        const newDistance = distances[currentNode] + distance;
+                        if (newDistance < distances[node]) {
+                            distances[node] = newDistance;
+                            previous[node] = currentNode;
+                        }
+                    });
+                }
+            }
+            
+            const path = [];
+            let current = endNode;
+            while (current) {
+                path.unshift(current);
+                current = previous[current];
+            }
+            
+            if (path[0] !== startNode) {
+                console.warn("❌ No path found!");
+                return null;
+            }
+            
+            console.log(`✅ Path: ${path.join(' → ')}`);
+            return path;
+        }
+
+
+        function drawPathOnMap(path, nodePositions, map, svgMap) {
+            console.log("🎨 Drawing path in SVG...");
+            console.log("Path:", path);
+            
+            // Clear previous highlights from SVG nodes
+            if (window.highlightedNodes) {
+                window.highlightedNodes.forEach(nodeId => {
+                    const node = svgMap.getElementById(nodeId);
+                    if (node) {
+                        node.style.fill = '';
+                        node.style.stroke = '';
+                        node.style.strokeWidth = '';
+                    }
+                });
+            }
+            window.highlightedNodes = [];
+
+            if (!path || path.length === 0) {
+                console.error("❌ No path!");
+                alert("No path found!");
+                return;
+            }
+
+            //Removing until can figure out line system
+            // // Clear previous path lines from SVG
+            // if (window.pathLines) {
+            //     window.pathLines.forEach(line => {
+            //         if (line.parentNode) {
+            //             line.parentNode.removeChild(line);
+            //         }
+            //     });
+            // }
+            // window.pathLines = [];
+        
+            
+            // // Create a group element to hold all path lines (easier to manage z-index)
+            // let pathGroup = svgMap.getElementById('path-lines-group');
+            // if (!pathGroup) {
+            //     pathGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            //     pathGroup.setAttribute('id', 'path-lines-group');
+            //     // Insert at the beginning so nodes render on top
+            //     svgMap.insertBefore(pathGroup, svgMap.firstChild);
+            // } else {
+            //     // Clear existing lines in group
+            //     while (pathGroup.firstChild) {
+            //         pathGroup.removeChild(pathGroup.firstChild);
+            //     }
+            // }
+            
+            // // Draw lines between consecutive nodes IN SVG COORDINATES
+            // for (let i = 0; i < path.length - 1; i++) {
+            //     const currentNodeId = path[i];
+            //     const nextNodeId = path[i + 1];
+                
+            //     const currentNode = svgMap.getElementById(currentNodeId);
+            //     const nextNode = svgMap.getElementById(nextNodeId);
+                
+            //     if (currentNode && nextNode) {
+            //         const x1 = parseFloat(currentNode.getAttribute('cx'));
+            //         const y1 = parseFloat(currentNode.getAttribute('cy'));
+            //         const x2 = parseFloat(nextNode.getAttribute('cx'));
+            //         const y2 = parseFloat(nextNode.getAttribute('cy'));
+                    
+            //         console.log(`Drawing line from (${x1},${y1}) to (${x2},${y2})`);
+                    
+            //         // Create SVG line element
+            //         const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            //         line.setAttribute('x1', x1);
+            //         line.setAttribute('y1', y1);
+            //         line.setAttribute('x2', x2);
+            //         line.setAttribute('y2', y2);
+            //         line.setAttribute('stroke', '#FF0000');
+            //         line.setAttribute('stroke-width', '8');  // Thicker line
+            //         line.setAttribute('stroke-dasharray', '10,10');
+            //         line.setAttribute('stroke-linecap', 'round');
+            //         line.setAttribute('opacity', '0.8');
+            //         line.classList.add('path-line');
+                    
+            //         // Add to group
+            //         pathGroup.appendChild(line);
+            //         window.pathLines.push(line);
+                    
+            //         console.log(`✅ Drew line: ${currentNodeId} → ${nextNodeId}`);
+            //     } else {
+            //         console.error(`❌ Could not find nodes: ${currentNodeId} or ${nextNodeId}`);
+            //     }
+            // }
+            
+            // Highlight each node in the path
+            path.forEach((nodeId, index) => {
+                const node = svgMap.getElementById(nodeId);
+                if (node) {
+                    // Bring node to front by re-appending it
+                    node.parentNode.appendChild(node);
+                    
+                    // Start node = green, end node = red, middle nodes = yellow
+                    if (index === 0) {
+                        node.style.fill = '#00FF00';
+                        node.style.stroke = '#00AA00';
+                    } else if (index === path.length - 1) {
+                        node.style.fill = '#FF0000';
+                        node.style.stroke = '#AA0000';
+                    } else {
+                        node.style.fill = '#FFFF00';
+                        node.style.stroke = '#AAAA00';
+                    }
+                    node.style.strokeWidth = '2';
+                    //node.setAttribute('r', '1');  // Make nodes bigger
+                    window.highlightedNodes.push(nodeId);
+                    console.log(`✅ Highlighted node ${index}: ${nodeId}`);
+                } else {
+                    console.error(`❌ Node ${nodeId} not found in SVG!`);
+                }
+            });
+            
+            //console.log(`✅ Drew ${window.pathLines.length} path lines in SVG!`);
+            //console.log(`✅ Highlighted ${window.highlightedNodes.length} nodes!`);
+        }
+
+        // Find path to object
+        function findPathToObject(objectType, objectId, startPosition, graphData) {
+            console.log(`🎯 Finding path to ${objectType}: ${objectId}`);
+            
+            const { graph, nodePositions, nodeMetadata } = graphData;
+            
+            let destinationNode = null;
+            
+            Object.entries(nodeMetadata).forEach(([nodeId, data]) => {
+                if (!data.represents) return;
+                
+                const represents = Array.isArray(data.represents) ? data.represents : [data.represents];
+                
+                represents.forEach(rep => {
+                    if (rep.type === objectType && rep.id === objectId) {
+                        destinationNode = nodeId;
+                    }
+                });
+            });
+            
+            if (!destinationNode) {
+                console.error(`❌ No node for ${objectId}`);
+                alert(`No navigation node for ${objectId}`);
+                return null;
+            }
+            
+            const startNode = findNearestNode(startPosition, nodePositions);
+            const path = findShortestPath(graph, startNode, destinationNode);
+            
+            return path;
+        }
+
+        // User Position
+        let userPosition = L.latLng(43.0143425, -81.19856355);
+        let userMarker = null;
+
+        function placeUserMarker(latlng) {
+            if (userMarker) {
+                map.removeLayer(userMarker);
+            }
+            
+            userPosition = latlng;
+            userMarker = L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                }),
+                draggable: true,
+                title: "Your Location"
+            }).addTo(map);
+            
+            userMarker.bindPopup("<b>📍 You are here Test</b>").openPopup();
+            
+            userMarker.on('dragend', function(e) {
+                userPosition = e.target.getLatLng();
+                console.log("📍 Position updated:", userPosition);
+            });
+        }
+
+        // Step 1: Initialize the map
+
+		const mapBearing = 21.3
+        let map = L.map('map', {
+            maxZoom: 22,   // allow very close zoom
+			minZoom: 16,
+            rotate: true,
+            bearing: mapBearing,
+            touchRotate: true,
+            shiftKeyRotate: true
+        }).setView([43.0125, -81.2002], 18);
+
+		map.on('rotate', function() {
+			let bearing = map.getBearing();
+			document.getElementById('rotation-display').textContent = 
+				'Rotation: ' + bearing.toFixed(1) + '°';
+		});
+
+        //Mouse handling logic to distinguish drag vs click
+
+        let isDragging = false;
+        let dragStartTime = 0;
+
+        map.on('mousedown touchstart', function() {
+            isDragging = false;
+            dragStartTime = Date.now();
+        });
+
+        map.on('mousemove touchmove', function() {
+            if (Date.now() - dragStartTime > 100) { // If movement lasts > 100ms, it's a drag
+                isDragging = true;
+            }
+        });
+
+        map.on('mouseup touchend', function() {
+            setTimeout(() => {
+                isDragging = false;
+            }, 50); // Small delay to ensure click events see the drag state
+        });
+
+        // Step 2: Add tile layer (the actual map)
+        L.tileLayer(
+            "https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=d3JSA6Uq18jaERqMgDqq",
+            {
+            attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+            maxZoom: 22
+            }
+        ).addTo(map);
+		
+
+        // Test (User starting location)
+
+        // let startPoint = L.latLng(43.0143425, -81.19856355); // Example coordinate near Building M
+        // let startMarker = L.marker(startPoint, {
+        //     title: "You are here",
+        //     draggable: true
+        // }).addTo(map);
+
+        // startMarker.bindPopup("<b>You are here</b>").openPopup();
+
+		let currentOverlay = null;
+
+		window.hallwayLatLngs = []; // store hallway nodes globally
+		window.currentPathLine = null;
+
+
+		// Step 3: Load GeoJSON buildings
+		fetch('campus.geojson?ts=' + new Date().getTime())
+			.then(response => response.json())
+			.then(data => {
+				console.log("GeoJSON loaded:", data); // <-- This checks if the file is loading
+                
+                // Log all building names and their center coordinates
+                data.features.forEach(f => {
+                    if (f.geometry.type === "Polygon" || f.geometry.type === "MultiPolygon") {
+                        const layer = L.geoJSON(f);
+                        const bounds = layer.getBounds();
+                        console.log(
+                            f.properties.name,
+                            "center:",
+                            bounds.getCenter()
+                        );
+                    }
+                });
+
+
+
+				L.geoJSON(data, {
+					onEachFeature: function(feature, layer) {
+						let buildingName = feature.properties.name || "Unknown Building";
+						layer.bindPopup("<b>" + buildingName + "</b><br>Click for floor plans");
+
+						layer.on('click', function() {
+
+							let bounds = layer.getBounds();
+
+							let center = bounds.getCenter();
+
+							let corners = [
+								L.latLng(bounds.getNorth(), bounds.getWest()),  // top-left
+								L.latLng(bounds.getNorth(), bounds.getEast()),  // top-right
+								L.latLng(bounds.getSouth(), bounds.getEast()),  // bottom-right
+								L.latLng(bounds.getSouth(), bounds.getWest())   // bottom-left
+							];
+							console.log("ORIGINAL")
+							console.log(corners)
+							corners = corners.map(corner => rotatePoint(corner, center, mapBearing))
+							console.log("UPDATED")
+							console.log(corners)
+							//map.fitBounds(bounds);	
+                            //let zoom = map.getBoundsZoom(bounds, true);
+                            //map.setView(bounds.getCenter(), zoom);
+							alert("Here you could load floor plans for " + buildingName);
+							if (buildingName === "Building A") {
+								let prePath = floorPlans[buildingName]["path"]
+
+        						let svgPath = prePath + "/A1.svg?ts=" + new Date().getTime();
+
+
+								fetch(svgPath)
+									.then(r => r.text())
+									.then(svgText => {
+										const svgDoc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+										const svgMap = svgDoc.documentElement; 
+                                        //console.log([...svgMap.querySelectorAll('[id]')].map(el => el.id));
+										
+
+										//if (currentOverlay) map.removeLayer(currentOverlay); // remove old overlay
+
+
+                        				//newOverlay = L.svgOverlay(svgMap, corners, { interactive: true, opacity: 0.5 }).addTo(map);
+
+										currentOverlay = addRotatedSvgOverlay(svgMap, corners, mapBearing);
+
+									});
+							} else if (buildingName === "Building M") {
+                                let prePath = floorPlans[buildingName]["path"];
+                                let svgPath = prePath + "/M1_official.svg?ts=" + new Date().getTime();
+
+                                fetch(svgPath)
+                                    .then(r => r.text())
+                                    .then(svgText => {
+                                        const svgDoc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+                                        const svgMap = svgDoc.documentElement;
+
+                                        currentOverlay = L.svgOverlay(svgMap, corners, {
+                                            interactive: true,
+                                            opacity: 0.5
+                                        }).addTo(map);
+
+                                        const floorData = floorPlans[buildingName]["floors"]["floor1"];
+                                        const navigationGraph = floorData["navigationGraph"];
+                                        const rooms = floorData["objects"]["rooms"];
+                                        const exits = floorData["objects"]["exits"];
+
+                                        if (navigationGraph) {
+                                            console.log("🗺️ Building M navigation setup...");
+                                            const graphData = buildNavigationGraph(svgMap, navigationGraph, corners);
+                                            window.currentGraphData = graphData;
+
+                                            Object.entries(rooms).forEach(([roomId, doorList]) => {
+                                                const room = svgMap.getElementById(roomId);
+                                                if (room) {
+                                                    room.style.pointerEvents = 'all';
+                                                    room.style.cursor = 'pointer';
+                                                    room.addEventListener('click', (e) => {
+                                                        e.stopPropagation();
+
+
+                                                        if (isDragging) {
+                                                            console.log("Ignoring click - user was dragging");
+                                                            return;
+                                                        }
+                                                        
+                                                        console.log(`🏢 ${roomId} clicked!`);
+                                                        
+                                                        const userConfirmed = confirm(`You clicked ${roomId}. Would you like directions?`);
+                                                        if (!userConfirmed) {
+                                                            console.log("User declined directions");
+                                                            return; // Exit if user clicks "Cancel"
+                                                        }
+
+
+                                                        svgMap.querySelectorAll('.highlighted-door').forEach(prevDoor => {
+                                                            prevDoor.classList.remove('highlighted-door');
+                                                            prevDoor.style.stroke = '';
+                                                            prevDoor.style.strokeWidth = '';
+                                                        });
+
+                                                        svgMap.querySelectorAll('.highlighted-exit').forEach(prevExit => {
+                                                            restoreOriginalExitStyle(prevExit);
+                                                            prevExit.classList.remove('highlighted-exit');
+                                                        });
+
+                                                        if (doorList.length > 0) {
+                                                            doorList.forEach(doorId => {
+                                                                const door = svgMap.getElementById(doorId);
+                                                                if (door) {
+                                                                    door.classList.add('highlighted-door');
+                                                                    door.style.stroke = 'red';
+                                                                    door.style.strokeWidth = '3px';
+                                                                }
+                                                            });
+                                                        }
+                                                        
+                                                        const startNode = "H_entry";
+                                                        
+                                                        let destinationNode = null;
+                                                    
+
+                                                        Object.entries(graphData.nodeMetadata).forEach(([nodeId, data]) => {
+                                                            if (!data.represents) return;
+                                                            const represents = Array.isArray(data.represents) ? data.represents : [data.represents];
+                                                            represents.forEach(rep => {
+                                                                let room_type = rep.type
+                                                                if (rep.id === roomId) {
+                                                                    destinationNode = nodeId;
+                                                                }
+                                                            });
+                                                        });
+
+                                                        if (!destinationNode) {
+                                                            console.error(`No Node for ${roomId}`);
+                                                            alert(`No navigation node for ${roomId}`);
+                                                            return;
+                                                        }
+
+                                                        console.log(`🔍 Finding path: ${startNode} → ${destinationNode}`);
+
+
+                                                        const path = findShortestPath(graphData.graph, startNode, destinationNode);
+                                                        //const path = findPathToObject("room", roomId, userPosition, graphData);
+
+                                                        if (path) {
+                                                            drawPathOnMap(path, graphData.nodePositions, map, svgMap);
+                                                        } else {
+                                                            alert(`Could not find path to ${roomId}`);
+                                                        }
+                                                    }); // ✅ Close addEventListener
+                                                } else {
+                                                    console.warn(`⚠️ Room ${roomId} not found in SVG`);
+                                                }
+                                            }); // ✅ Close forEach
+
+                                            Object.entries(exits).forEach(([exitId, destinationsList]) => {
+                                                const exit = svgMap.getElementById(exitId);
+                                                console.log("HERE");
+                                                console.log(exitId);
+                                                if (exit) {
+                                                    exit.style.pointerEvents = 'all';
+                                                    exit.style.cursor = 'pointer';
+                                                    exit.addEventListener('click', (e) => {
+                                                        e.stopPropagation();
+                                                                                   
+                                                        if (isDragging) {
+                                                            console.log("Ignoring click - user was dragging");
+                                                            return;
+                                                        }
+                                                        
+                                                        console.log(`🚪 ${exitId} clicked!`);
+                                                        const userConfirmed = confirm(`You clicked ${exitId}. Would you like directions?`);
+                                                        if (!userConfirmed) {
+                                                            console.log("User declined directions");
+                                                            return; // Exit if user clicks "Cancel"
+                                                        }
+
+                                                        // Clear previous highlights and restore original styles
+                                                        svgMap.querySelectorAll('.highlighted-exit').forEach(prevExit => {
+                                                            restoreOriginalExitStyle(prevExit);  // ✅ Restore original styles
+                                                            prevExit.classList.remove('highlighted-exit');
+                                                        });
+
+
+                                                        svgMap.querySelectorAll('.highlighted-door').forEach(prevDoor => {
+                                                            prevDoor.classList.remove('highlighted-door');
+                                                            prevDoor.style.stroke = '';
+                                                            prevDoor.style.strokeWidth = '';
+                                                        });
+
+                                                        // Store original style before highlighting
+                                                        storeOriginalExitStyle(exit);  // ✅ Store before modifying
+                                                        
+                                                        // Highlight the exit itself
+                                                        exit.classList.add('highlighted-exit');
+                                                        exit.style.stroke = 'blue';
+                                                        exit.style.strokeWidth = '3px';
+                                                        exit.style.fill = 'rgba(0, 0, 255, 0.3)';  // Light blue fill
+
+                                                        const startNode = "H_entry";
+                                                        let destinationNode = null;
+
+                                                        // Find destination node for exit
+                                                        Object.entries(graphData.nodeMetadata).forEach(([nodeId, data]) => {
+                                                            if (!data.represents) return;
+                                                            const represents = Array.isArray(data.represents) ? data.represents : [data.represents];
+                                                            represents.forEach(rep => {
+                                                                if (rep.id === exitId) {  // Match exit by ID
+                                                                    destinationNode = nodeId;
+                                                                }
+                                                            });
+                                                        });
+
+                                                        if (!destinationNode) {
+                                                            console.error(`No Node for ${exitId}`);
+                                                            alert(`No navigation node for ${exitId}`);
+                                                            return;
+                                                        }
+
+                                                        console.log(`🔍 Finding path: ${startNode} → ${destinationNode}`);
+                                                        const path = findShortestPath(graphData.graph, startNode, destinationNode);
+
+                                                        if (path) {
+                                                            drawPathOnMap(path, graphData.nodePositions, map, svgMap);
+                                                        } else {
+                                                            alert(`Could not find path to ${exitId}`);
+                                                        }
+                                                    });
+                                                } else {
+                                                    console.warn(`⚠️ Exit ${exitId} not found in SVG`);
+                                                }
+                                            });
+                                            
+                                            console.log("✅ Navigation setup complete!");
+                                        }
+                                    }) 
+                                    .catch(err => console.error("❌ Error loading SVG:", err));
+                                    
+                            } // ✅ Close else if (buildingName === "Building M")
+                        })
+                                       
+					},
+					style: {
+						color: "blue",
+						weight: 2,
+						fillOpacity: 0.2
+					}
+				}).addTo(map);
+			})
+			.catch(err => console.error("Error loading GeoJSON:", err));
+    </script>
+	
+</body>
+</html>
