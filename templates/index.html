@@ -3,24 +3,29 @@
         <head>
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>Fanshawe Navigator</title>
-          <link rel="stylesheet" href="/static/style.css" />
+          <title>FANSHAWE</title>
+          <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
         </head>
         <body>
-          <div id="chat-container">
-            <div id="chat-header">Fanshawe Navigator</div>
-            <div id="chat-window" class="chatbox">
-              <!-- Chat messages will be displayed here -->
+          <div class="main-container">
+            <div id="chat-container">
+              <div id="chat-header"><img src="{{ url_for('static', filename='logo.png') }}" alt="Fanshawe College Logo"></div>
+              <div id="chat-window" class="chatbox">
+                <!-- Chat messages will be displayed here -->
+              </div>
+              <div class="chat-input">
+                <input
+                  type="text"
+                  id="userInput"
+                  placeholder="Ask about directions..."
+                />
+                <button id="sendButton">Send</button>
+              </div>
             </div>
-            <div class="chat-input">
-              <input
-                type="text"
-                id="userInput"
-                placeholder="Ask about directions..."
-              />
-              <button id="sendButton">Send</button>
+            <div id="map-container">
+              <!-- The map will be placed here -->
             </div>
           </div>
-          <script src="/static/script.js"></script>
+          <script src="{{ url_for('static', filename='script.js') }}"></script>
         </body>
       </html>

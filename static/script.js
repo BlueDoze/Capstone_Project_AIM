@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const chatbox = document.getElementById('chat-window'); // Corrected ID
+    const chatbox = document.getElementById('chat-window');
     const userInput = document.getElementById('userInput');
     const sendButton = document.getElementById('sendButton');
 
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isUser) {
             messageElement.classList.add('user-message');
         } else {
-            messageElement.classList.add('bot-message');
+            messageElement.classList.add('ai-message');
         }
         messageElement.innerHTML = message; // Use innerHTML to render HTML tags from the bot
         chatbox.appendChild(messageElement);
@@ -26,6 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
             addMessage('You', message, true);
             userInput.value = '';
 
+            // Show typing indicator
+            const typingIndicator = document.createElement('div');
+            typingIndicator.id = 'typing-indicator';
+            typingIndicator.classList.add('message', 'ai-message');
+            typingIndicator.innerHTML = 'typing...';
+            chatbox.appendChild(typingIndicator);
+            chatbox.scrollTop = chatbox.scrollHeight;
+
             try {
                 const response = await fetch('/chat', {
                     method: 'POST',
@@ -35,9 +43,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ message: message })
                 });
                 const data = await response.json();
+                
+                // Remove typing indicator
+                const indicator = document.getElementById('typing-indicator');
+                if (indicator) {
+                    chatbox.removeChild(indicator);
+                }
+
                 addMessage('Fanshawe Navigator', data.reply, false);
             } catch (error) {
                 console.error('Error sending message:', error);
+
+                // Remove typing indicator
+                const indicator = document.getElementById('typing-indicator');
+                if (indicator) {
+                    chatbox.removeChild(indicator);
+                }
+
                 addMessage('Fanshawe Navigator', 'Oops! Something went wrong. Please try again.', false);
             }
         }
@@ -47,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sendButton.addEventListener('click', sendMessage);
     } else {
         console.error('Send button not found, cannot attach click listener.');
-    };
+    }
 
     if (userInput) {
         userInput.addEventListener('keypress', (e) => {
@@ -60,5 +82,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initial bot message
-    addMessage('Fanshawe Navigator', 'Welcome! How can I help you navigate the Fanshawe Campus today?', false);
+    addMessage('Fanshawe Navigator', 'Welcome! How can I help you navigate Fanshawe College today?', false);
 });
