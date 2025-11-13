@@ -1,9 +1,9 @@
 """
-Serviço de Validação de Recursos
-================================
+Resource Validation Service
+============================
 
-Este módulo orquestra a validação completa de todos os recursos
-do sistema RAG multimodal.
+This module orchestrates the complete validation of all resources
+of the multimodal RAG system.
 """
 
 import sys
@@ -20,172 +20,172 @@ from utils.validators import ResourceValidator
 
 
 class ValidationService:
-    """Serviço completo de validação do sistema RAG multimodal"""
-    
+    """Complete validation service for the multimodal RAG system"""
+
     def __init__(self):
         self.config = None
         self.env_manager = None
         self.init_service = None
         self.resource_validator = None
         self.validation_results = {}
-    
+
     def prepare_for_validation(self) -> bool:
-        """Prepara o sistema para validação"""
-        print("🔧 PREPARANDO SISTEMA PARA VALIDAÇÃO")
+        """Prepares the system for validation"""
+        print("🔧 PREPARING SYSTEM FOR VALIDATION")
         print("=" * 50)
-        
+
         try:
-            # Carregar configurações
+            # Load configurations
             self.config = RAGConfig()
             self.env_manager = EnvironmentManager()
-            
-            # Carregar variáveis de ambiente
+
+            # Load environment variables
             env_loaded = self.env_manager.load_env_variables()
             if not env_loaded:
-                print("⚠️  Arquivo .env não encontrado")
-            
-            # Validar variáveis obrigatórias
+                print("⚠️  .env file not found")
+
+            # Validate required variables
             if not self.env_manager.validate_required_vars():
-                print("❌ Variáveis obrigatórias não definidas")
+                print("❌ Required variables not defined")
                 return False
-            
-            # Atualizar configuração
+
+            # Update configuration
             self.config.PROJECT_ID = self.env_manager.get_project_id()
-            
-            # Criar validador de recursos
+
+            # Create resource validator
             self.resource_validator = ResourceValidator(
                 project_id=self.config.PROJECT_ID,
                 location=self.config.LOCATION
             )
-            
-            print("✅ Sistema preparado para validação")
+
+            print("✅ System prepared for validation")
             return True
-            
+
         except Exception as e:
-            print(f"❌ Erro ao preparar sistema: {e}")
+            print(f"❌ Error preparing system: {e}")
             return False
     
     def validate_system_initialization(self) -> bool:
-        """Valida a inicialização do sistema"""
-        print("\n🚀 VALIDANDO INICIALIZAÇÃO DO SISTEMA")
+        """Validates system initialization"""
+        print("\n🚀 VALIDATING SYSTEM INITIALIZATION")
         print("=" * 45)
-        
+
         try:
-            # Criar serviço de inicialização
+            # Create initialization service
             self.init_service = InitializationService()
-            
-            # Executar fase de preparação
+
+            # Execute preparation phase
             prep_success = self.init_service.prepare_system()
             if not prep_success:
-                print("❌ Falha na preparação do sistema")
+                print("❌ System preparation failed")
                 return False
-            
-            # Inicializar modelos
+
+            # Initialize models
             model_success = self.init_service.initialize_models()
             if not model_success:
-                print("❌ Falha na inicialização de modelos")
+                print("❌ Model initialization failed")
                 return False
-            
-            # Validar recursos básicos
+
+            # Validate basic resources
             resource_success = self.init_service.validate_resources()
             if not resource_success:
-                print("❌ Falha na validação de recursos básicos")
+                print("❌ Basic resource validation failed")
                 return False
-            
-            print("✅ Inicialização do sistema validada")
+
+            print("✅ System initialization validated")
             return True
-            
+
         except Exception as e:
-            print(f"❌ Erro na validação de inicialização: {e}")
+            print(f"❌ Error in initialization validation: {e}")
             return False
     
     def validate_comprehensive_resources(self) -> Dict[str, Any]:
-        """Executa validação completa de recursos"""
-        print("\n🔍 VALIDAÇÃO COMPLETA DE RECURSOS")
+        """Executes comprehensive resource validation"""
+        print("\n🔍 COMPREHENSIVE RESOURCE VALIDATION")
         print("=" * 40)
-        
+
         if not self.resource_validator:
-            print("❌ Validador de recursos não inicializado")
+            print("❌ Resource validator not initialized")
             return {}
-        
-        # Executar validação completa
+
+        # Execute comprehensive validation
         results = self.resource_validator.run_comprehensive_validation()
-        
+
         self.validation_results['resource_validation'] = results
         return results
     
     def validate_end_to_end_functionality(self) -> bool:
-        """Valida funcionalidade end-to-end do sistema"""
-        print("\n🔄 VALIDAÇÃO END-TO-END")
+        """Validates end-to-end system functionality"""
+        print("\n🔄 END-TO-END VALIDATION")
         print("=" * 30)
-        
+
         if not self.init_service:
-            print("❌ Serviço de inicialização não disponível")
+            print("❌ Initialization service not available")
             return False
-        
+
         try:
-            # Testar resposta do Gemini
-            print("🤖 Testando resposta do Gemini...")
+            # Test Gemini response
+            print("🤖 Testing Gemini response...")
             gemini_test = self.init_service.gemini_manager.test_gemini_response(
-                "Responda apenas: SISTEMA FUNCIONANDO"
+                "Answer only: SYSTEM WORKING"
             )
-            
+
             if gemini_test:
-                print("✅ Gemini respondendo corretamente")
+                print("✅ Gemini responding correctly")
             else:
-                print("❌ Gemini não está respondendo")
+                print("❌ Gemini is not responding")
                 return False
-            
-            # Testar embedding de texto
-            print("📝 Testando embedding de texto...")
+
+            # Test text embedding
+            print("📝 Testing text embedding...")
             text_embedding_test = self.init_service.embedding_manager.test_text_embedding_generation(
-                "Teste de funcionalidade end-to-end"
+                "End-to-end functionality test"
             )
-            
+
             if text_embedding_test:
-                print("✅ Embedding de texto funcionando")
+                print("✅ Text embedding working")
             else:
-                print("❌ Embedding de texto com problemas")
+                print("❌ Text embedding has issues")
                 return False
-            
-            # Testar embedding multimodal (se houver imagem)
-            print("🖼️  Testando embedding multimodal...")
+
+            # Test multimodal embedding (if image available)
+            print("🖼️  Testing multimodal embedding...")
             multimodal_test = self.init_service.embedding_manager.test_multimodal_embedding_generation()
-            
+
             if multimodal_test:
-                print("✅ Embedding multimodal funcionando")
+                print("✅ Multimodal embedding working")
             else:
-                print("⚠️  Embedding multimodal não testado (sem imagem)")
-            
-            print("✅ Funcionalidade end-to-end validada")
+                print("⚠️  Multimodal embedding not tested (no image)")
+
+            print("✅ End-to-end functionality validated")
             return True
-            
+
         except Exception as e:
-            print(f"❌ Erro na validação end-to-end: {e}")
+            print(f"❌ Error in end-to-end validation: {e}")
             return False
     
     def run_complete_validation(self) -> Dict[str, Any]:
-        """Executa validação completa de todo o sistema"""
-        print("🎯 EXECUTANDO VALIDAÇÃO COMPLETA DO SISTEMA RAG MULTIMODAL")
+        """Executes complete system validation"""
+        print("🎯 EXECUTING COMPLETE VALIDATION OF MULTIMODAL RAG SYSTEM")
         print("=" * 70)
-        
-        # 1. Preparar sistema
+
+        # 1. Prepare system
         prep_success = self.prepare_for_validation()
         if not prep_success:
-            return {'success': False, 'error': 'Falha na preparação'}
-        
-        # 2. Validar inicialização
+            return {'success': False, 'error': 'Preparation failed'}
+
+        # 2. Validate initialization
         init_success = self.validate_system_initialization()
         if not init_success:
-            return {'success': False, 'error': 'Falha na inicialização'}
-        
-        # 3. Validar recursos completos
+            return {'success': False, 'error': 'Initialization failed'}
+
+        # 3. Validate comprehensive resources
         resource_results = self.validate_comprehensive_resources()
-        
-        # 4. Validar funcionalidade end-to-end
+
+        # 4. Validate end-to-end functionality
         e2e_success = self.validate_end_to_end_functionality()
-        
-        # Compilar resultados finais
+
+        # Compile final results
         final_results = {
             'success': prep_success and init_success and e2e_success,
             'preparation': prep_success,
@@ -194,47 +194,47 @@ class ValidationService:
             'resource_validation': resource_results,
             'summary': self.resource_validator.get_validation_summary() if self.resource_validator else {}
         }
-        
-        # Exibir resultado final
+
+        # Display final result
         print(f"\n{'='*70}")
-        print("📊 RESULTADO FINAL DA VALIDAÇÃO COMPLETA")
+        print("📊 COMPLETE VALIDATION FINAL RESULT")
         print(f"{'='*70}")
-        
+
         if final_results['success']:
-            print("🎉 VALIDAÇÃO COMPLETA BEM-SUCEDIDA!")
-            print("✅ Sistema RAG multimodal totalmente funcional")
-            print("✅ Pronto para uso em produção")
+            print("🎉 COMPLETE VALIDATION SUCCESSFUL!")
+            print("✅ Multimodal RAG system fully functional")
+            print("✅ Ready for production use")
         else:
-            print("⚠️  VALIDAÇÃO COMPLETA COM PROBLEMAS")
-            print("💡 Verifique os erros acima para correções")
-        
+            print("⚠️  COMPLETE VALIDATION WITH ISSUES")
+            print("💡 Check the errors above for corrections")
+
         return final_results
     
     def get_validation_report(self) -> str:
-        """Gera relatório detalhado da validação"""
+        """Generates detailed validation report"""
         if not self.validation_results:
-            return "Nenhuma validação executada"
-        
+            return "No validation executed"
+
         report = []
-        report.append("# Relatório de Validação do Sistema RAG Multimodal")
+        report.append("# Multimodal RAG System Validation Report")
         report.append("=" * 60)
-        
-        # Resumo geral
+
+        # General summary
         summary = self.validation_results.get('summary', {})
-        report.append(f"\n## Resumo Geral")
+        report.append(f"\n## General Summary")
         report.append(f"- Project ID: {summary.get('project_id', 'N/A')}")
-        report.append(f"- Taxa de Sucesso: {summary.get('success_rate', 0):.1f}%")
-        report.append(f"- Testes Aprovados: {summary.get('passed_tests', 0)}/{summary.get('total_tests', 0)}")
-        
-        # Erros e avisos
+        report.append(f"- Success Rate: {summary.get('success_rate', 0):.1f}%")
+        report.append(f"- Passed Tests: {summary.get('passed_tests', 0)}/{summary.get('total_tests', 0)}")
+
+        # Errors and warnings
         if summary.get('errors'):
-            report.append(f"\n## Erros Encontrados ({len(summary['errors'])})")
+            report.append(f"\n## Errors Found ({len(summary['errors'])})")
             for error in summary['errors']:
                 report.append(f"- {error}")
-        
+
         if summary.get('warnings'):
-            report.append(f"\n## Avisos ({len(summary['warnings'])})")
+            report.append(f"\n## Warnings ({len(summary['warnings'])})")
             for warning in summary['warnings']:
                 report.append(f"- {warning}")
-        
+
         return "\n".join(report)

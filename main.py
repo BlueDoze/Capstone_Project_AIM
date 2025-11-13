@@ -462,10 +462,10 @@ def chat():
         # Combine map info + image context + user message
         if image_context:
             prompt = f'{map_info}{image_context}\n\nUser: {user_message}\nAI:'
-            print(f"🔍 Usando informações visuais para: {user_message[:50]}...")
+            print(f"🔍 Using visual information for: {user_message[:50]}...")
         else:
             prompt = f'{map_info}\n\nUser: {user_message}\nAI:'
-            print(f"📝 Usando apenas informações textuais para: {user_message[:50]}...")
+            print(f"📝 Using only textual information for: {user_message[:50]}...")
 
         # Generate a response from the AI model
         response = model.generate_content(prompt)

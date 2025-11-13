@@ -15,108 +15,108 @@ from datetime import datetime
 
 def demo_auto_update():
     """Practical demonstration of automatic system"""
-    print("🎬 DEMONSTRAÇÃO PRÁTICA DO MÉTODO AUTOMÁTICO")
+    print("🎬 PRACTICAL DEMONSTRATION OF AUTOMATIC METHOD")
     print("=" * 55)
-    print(f"📅 Data/Hora: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"📅 Date/Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 55)
     
     try:
         # Import system
-        print("📦 Iniciando sistema...")
+        print("📦 Starting system...")
         import main
 
         # Wait for initialization
         time.sleep(2)
 
-        print("✅ Sistema iniciado com monitoramento automático ativo")
+        print("✅ System started with automatic monitoring active")
 
         # Check initial status
         initial_status = main.image_manager.get_status()
-        print(f"\n📊 STATUS INICIAL:")
-        print(f"   • Imagens processadas: {initial_status['total_images']}")
-        print(f"   • Imagens na pasta: {initial_status['folder_image_count']}")
-        print(f"   • Monitoramento ativo: {main.auto_updater.get_status()['is_running']}")
+        print(f"\n📊 INITIAL STATUS:")
+        print(f"   • Processed images: {initial_status['total_images']}")
+        print(f"   • Images in folder: {initial_status['folder_image_count']}")
+        print(f"   • Active monitoring: {main.auto_updater.get_status()['is_running']}")
 
         # Demonstration 1: Add new image
-        print(f"\n🎯 DEMONSTRAÇÃO 1: ADICIONANDO NOVA IMAGEM")
+        print(f"\n🎯 DEMONSTRATION 1: ADDING NEW IMAGE")
         print("-" * 50)
 
         # Copy an existing image as "new"
         new_image_path = "images/demo_new_image.jpg"
         if os.path.exists("images/M1.jpeg"):
             shutil.copy("images/M1.jpeg", new_image_path)
-            print(f"✅ Nova imagem adicionada: demo_new_image.jpg")
-            print("⏰ Aguardando detecção automática...")
+            print(f"✅ New image added: demo_new_image.jpg")
+            print("⏰ Waiting for automatic detection...")
 
             # Wait for processing
             for i in range(15):  # 15 seconds
                 time.sleep(1)
                 current_status = main.image_manager.get_status()
                 if current_status['total_images'] > initial_status['total_images']:
-                    print(f"🎉 Imagem detectada e processada automaticamente!")
-                    print(f"   • Imagens processadas: {current_status['total_images']}")
+                    print(f"🎉 Image detected and processed automatically!")
+                    print(f"   • Processed images: {current_status['total_images']}")
                     break
-                print(f"   ⏳ Aguardando... ({i+1}/15)")
+                print(f"   ⏳ Waiting... ({i+1}/15)")
             else:
-                print("⚠️ Imagem pode não ter sido detectada automaticamente")
+                print("⚠️ Image may not have been detected automatically")
 
         # Demonstration 2: Remove image
-        print(f"\n🎯 DEMONSTRAÇÃO 2: REMOVENDO IMAGEM")
+        print(f"\n🎯 DEMONSTRATION 2: REMOVING IMAGE")
         print("-" * 40)
-        
+
         if os.path.exists(new_image_path):
             os.remove(new_image_path)
-            print(f"✅ Imagem removida: demo_new_image.jpg")
-            print("⏰ Aguardando detecção automática...")
+            print(f"✅ Image removed: demo_new_image.jpg")
+            print("⏰ Waiting for automatic detection...")
 
             # Wait for processing
             for i in range(10):  # 10 seconds
                 time.sleep(1)
                 current_status = main.image_manager.get_status()
-                print(f"   ⏳ Aguardando... ({i+1}/10)")
+                print(f"   ⏳ Waiting... ({i+1}/10)")
 
             final_status = main.image_manager.get_status()
-            print(f"📊 Status final: {final_status['total_images']} imagens processadas")
+            print(f"📊 Final status: {final_status['total_images']} processed images")
 
         # Demonstration 3: Test chat with new image
-        print(f"\n🎯 DEMONSTRAÇÃO 3: TESTANDO CHAT COM NOVA IMAGEM")
+        print(f"\n🎯 DEMONSTRATION 3: TESTING CHAT WITH NEW IMAGE")
         print("-" * 55)
 
         # Add image again for testing
         if os.path.exists("images/M1.jpeg"):
             shutil.copy("images/M1.jpeg", new_image_path)
-            print(f"✅ Imagem adicionada novamente para teste")
+            print(f"✅ Image added again for testing")
             time.sleep(8)  # Wait for processing
 
             # Test chat
             with main.app.test_client() as client:
                 response = client.post('/chat',
-                                     json={'message': 'Onde fica a sala 1020? Use informações visuais.'},
+                                     json={'message': 'Where is room 1020? Use visual information.'},
                                      content_type='application/json')
 
                 if response.status_code == 200:
                     data = response.get_json()
-                    print("✅ Chat funcionando com informações visuais")
-                    print(f"📝 Resposta: {data['reply'][:100]}...")
+                    print("✅ Chat working with visual information")
+                    print(f"📝 Response: {data['reply'][:100]}...")
                 else:
-                    print(f"❌ Erro no chat: {response.status_code}")
+                    print(f"❌ Chat error: {response.status_code}")
 
         # Clean up test file
         if os.path.exists(new_image_path):
             os.remove(new_image_path)
-        
+
         print(f"\n" + "=" * 55)
-        print("🎉 DEMONSTRAÇÃO CONCLUÍDA COM SUCESSO!")
+        print("🎉 DEMONSTRATION COMPLETED SUCCESSFULLY!")
         print("=" * 55)
-        print("✅ Sistema detecta automaticamente novas imagens")
-        print("✅ Embeddings são atualizados automaticamente")
-        print("✅ Chat usa informações visuais atualizadas")
-        print("✅ Zero intervenção manual necessária")
-        
+        print("✅ System automatically detects new images")
+        print("✅ Embeddings are updated automatically")
+        print("✅ Chat uses updated visual information")
+        print("✅ Zero manual intervention required")
+
         return True
-        
+
     except Exception as e:
-        print(f"\n❌ ERRO NA DEMONSTRAÇÃO: {e}")
+        print(f"\n❌ DEMONSTRATION ERROR: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -124,61 +124,61 @@ def demo_auto_update():
 def show_usage_guide():
     """Shows usage guide for automatic method"""
     print("\n" + "=" * 60)
-    print("📚 GUIA DE USO - MÉTODO AUTOMÁTICO")
+    print("📚 USAGE GUIDE - AUTOMATIC METHOD")
     print("=" * 60)
-    
-    print("\n🚀 COMO USAR:")
+
+    print("\n🚀 HOW TO USE:")
     print("-" * 15)
-    print("1. Inicie o sistema: python main.py")
-    print("2. Adicione imagens na pasta 'images/'")
-    print("3. O sistema detecta automaticamente")
-    print("4. Embeddings são atualizados automaticamente")
-    print("5. Chat usa informações visuais atualizadas")
-    
-    print("\n📁 FORMATOS SUPORTADOS:")
+    print("1. Start the system: python main.py")
+    print("2. Add images to the 'images/' folder")
+    print("3. System detects automatically")
+    print("4. Embeddings are updated automatically")
+    print("5. Chat uses updated visual information")
+
+    print("\n📁 SUPPORTED FORMATS:")
     print("-" * 25)
     print("• JPG, JPEG")
     print("• PNG")
     print("• BMP")
     print("• TIFF")
     print("• WEBP")
-    
-    print("\n⚙️ CONFIGURAÇÃO:")
+
+    print("\n⚙️ CONFIGURATION:")
     print("-" * 18)
-    print("• Pasta monitorada: images/")
-    print("• Delay entre atualizações: 5 segundos")
-    print("• Aguarda 2 segundos antes de processar")
-    print("• Executa em thread separada")
-    
-    print("\n🌐 ENDPOINTS DE CONTROLE:")
+    print("• Monitored folder: images/")
+    print("• Delay between updates: 5 seconds")
+    print("• Waits 2 seconds before processing")
+    print("• Runs in separate thread")
+
+    print("\n🌐 CONTROL ENDPOINTS:")
     print("-" * 30)
     print("• GET /images/auto-monitor/status")
     print("• POST /images/auto-monitor/start")
     print("• POST /images/auto-monitor/stop")
     print("• GET /system/status")
-    
-    print("\n💡 DICAS:")
+
+    print("\n💡 TIPS:")
     print("-" * 10)
-    print("• Sistema inicia automaticamente")
-    print("• Não precisa reiniciar para novas imagens")
-    print("• Cache é atualizado automaticamente")
-    print("• Performance otimizada")
+    print("• System starts automatically")
+    print("• No need to restart for new images")
+    print("• Cache is updated automatically")
+    print("• Optimized performance")
 
 if __name__ == "__main__":
-    print("🎬 DEMONSTRAÇÃO DO MÉTODO AUTOMÁTICO")
+    print("🎬 AUTOMATIC METHOD DEMONSTRATION")
     print("=" * 40)
-    
-    # Executar demonstração
+
+    # Run demonstration
     success = demo_auto_update()
-    
-    # Mostrar guia de uso
+
+    # Show usage guide
     show_usage_guide()
-    
+
     if success:
-        print("\n🎉 DEMONSTRAÇÃO EXECUTADA COM SUCESSO!")
-        print("✅ Método automático funcionando perfeitamente")
+        print("\n🎉 DEMONSTRATION EXECUTED SUCCESSFULLY!")
+        print("✅ Automatic method working perfectly")
     else:
-        print("\n❌ DEMONSTRAÇÃO FALHOU!")
-        print("⚠️ Verifique os erros acima")
-    
+        print("\n❌ DEMONSTRATION FAILED!")
+        print("⚠️ Check the errors above")
+
     sys.exit(0 if success else 1)
