@@ -248,7 +248,28 @@ AI: "The M1 Blue Building main floor includes:
      • Connected to Building H via hallway"
 ```
 
-## 🔧 API Endpoints
+## � Modular Architecture
+
+### **Config Module** (`src/config/`)
+Manages environment configuration and system settings:
+- **environment.py**: Handles environment variables and configuration loading
+- **settings.py**: RAG system configuration and model parameters
+
+### **Models Module** (`src/models/`)
+Wraps AI model interfaces:
+- **embedding_models.py**: Sentence Transformer and embedding generation
+- **gemini_models.py**: Google Gemini API integration
+
+### **Services Module** (`src/services/`)
+Implements business logic and services:
+- **initialization_service.py**: Model initialization and setup
+- **validation_service.py**: Input/output validation
+
+### **Utils Module** (`src/utils/`)
+Provides utility functions and validators:
+- **validators.py**: Data validation and sanitization
+
+## �🔧 API Endpoints
 
 ### **Chat Interface**
 - **POST** `/chat` - Send messages to the AI navigator
@@ -269,28 +290,59 @@ AI: "The M1 Blue Building main floor includes:
 
 ```
 Capstone_Project_AIM/
-├── 📁 src/                          # Source code modules
-│   ├── 📁 config/                   # Configuration management
-│   ├── 📁 models/                   # AI model wrappers
-│   ├── 📁 services/                 # Business logic services
-│   └── 📁 utils/                    # Utility functions
+├── 📁 src/                          # Modular source code
+│   ├── 📁 config/
+│   │   ├── __init__.py              # Configuration initialization
+│   │   ├── environment.py           # Environment variables management
+│   │   └── settings.py              # RAG system settings
+│   ├── 📁 models/
+│   │   ├── __init__.py              # Models initialization
+│   │   ├── embedding_models.py      # Embedding model wrapper
+│   │   └── gemini_models.py         # Gemini model manager
+│   ├── 📁 services/
+│   │   ├── __init__.py              # Services initialization
+│   │   ├── initialization_service.py # Model initialization logic
+│   │   └── validation_service.py    # Data validation services
+│   └── 📁 utils/
+│       ├── __init__.py              # Utils initialization
+│       └── validators.py            # Utility validators
 ├── 📁 templates/                    # HTML templates
 │   └── index.html                   # Main chat interface
-├── 📁 static/                       # Static assets
+├── 📁 static/                       # Static web assets
 │   ├── style.css                    # Application styling
 │   └── script.js                    # Frontend JavaScript
-├── 📁 images/                       # Building floor plans
+├── 📁 images/                       # Building floor plans and images
 │   ├── M1.jpeg                      # Main floor plan
 │   ├── M2.jpeg                      # Additional views
 │   └── M3.jpeg                      # Detailed sections
-├── 📁 tests/                        # Test suite
+├── 📁 tests/                        # Comprehensive test suite
 │   ├── 📁 unit/                     # Unit tests
+│   │   ├── test_configuration.py    # Configuration tests
+│   │   └── test_models.py           # Model tests
 │   ├── 📁 integration/              # Integration tests
-│   └── 📁 system/                   # System tests
+│   │   ├── test_complete_system.py  # Full system integration
+│   │   ├── test_embedding_evidence.py
+│   │   └── test_integrated_system.py
+│   ├── 📁 system/                   # System-level tests
+│   │   ├── test_auto_update.py      # Auto-update functionality
+│   │   ├── test_final_system.py     # End-to-end tests
+│   │   └── test_real_gemini.py      # Real Gemini API tests
+│   ├── 📁 performance/              # Performance tests
+│   │   ├── test_gemini_real_vs_mock.py
+│   │   └── test_models_simulation.py
+│   ├── conftest.py                  # Pytest configuration
+│   └── test_runner.py               # Test execution script
+├── 📁 scripts/                      # Utility scripts
+│   ├── run_tests.py                 # Run all tests
+│   └── setup_environment.py         # Environment setup
+├── 📁 config/                       # Configuration files
+│   └── pytest.ini                   # Pytest settings
 ├── main.py                          # Main Flask application
 ├── multimodal_rag_complete.py       # RAG system implementation
+├── demo_auto_update.py              # Auto-update demonstration
 ├── update_embeddings.py             # Embedding update and testing script
 ├── requirements.txt                 # Python dependencies
+├── pyproject.toml                   # Project configuration
 ├── devserver.sh                     # Development server script
 └── README.md                        # This file
 ```
