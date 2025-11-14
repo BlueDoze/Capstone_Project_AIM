@@ -1,0 +1,466 @@
+<!-- cd "C:\Users\Lukeg\Desktop\Capstone Project\LeafletJS" -->
+<!-- python -m http.server 8000 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Campus Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate.css" />
+    <script src="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate-src.js"></script>
+    <script src="https://unpkg.com/leaflet-image-transform/leaflet-image-transform.min.js"></script>
+    <style>
+        #map {
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 0; right: 0;
+        }
+		#rotation-display {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background: rgba(255, 255, 255, 0.9);
+		padding: 10px 15px;
+		border-radius: 5px;
+		font-family: Arial, sans-serif;
+		font-size: 16px;
+		font-weight: bold;
+		box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+		z-index: 1000;
+	}
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+	<div id="rotation-display">Rotation: 21.3°</div>
+	<div style="position: absolute; top: 50px; right: 10px; background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 5px; z-index: 1000;">
+		<label for="bearingInput">Map Bearing:</label>
+		<input type="number" id="bearingInput" value="21.3" step="0.1" style="width: 70px;" />
+		<button onclick="updateMapBearing()">Apply</button>
+	</div>
+    <script>
+		
+		//Functions
+		
+		
+		//Rotation based functions
+		function updateMapBearing() {
+			const input = document.getElementById('bearingInput');
+			const newBearing = parseFloat(input.value) || 0;
+			map.setBearing(newBearing);
+			
+			// Update any existing overlays
+			if (currentOverlay) {
+				const overlayPane = currentOverlay.getElement();
+				if (overlayPane) {
+					overlayPane.style.transform = `rotate(${newBearing}deg)`;
+				}
+			}
+		}
+
+		function addRotatedSvgOverlay(svgElement, corners, bearing) {
+			const overlay = L.svgOverlay(svgElement, corners, { 
+				interactive: true, 
+				opacity: 0.5 
+			}).addTo(map);
+			
+			// Apply rotation via CSS transform
+			const overlayPane = overlay.getElement();
+			if (overlayPane) {
+				overlayPane.style.transformOrigin = 'center';
+				overlayPane.style.transform = `rotate(${bearing}deg)`;
+			}
+			
+			return overlay;
+		}
+
+		function openFloorPlan() {
+			let select = document.getElementById("floorSelect");
+			let filePath = select.value;
+			window.open(filePath, "_blank"); // open in new tab
+		}
+
+
+		function doorToLatLng(doorElement, svgMap, corners) {
+			const bbox = doorElement.getBBox();
+			const doorCenterX = bbox.x + bbox.width / 2;
+			const doorCenterY = bbox.y + bbox.height / 2;
+
+			const svgBBox = svgMap.viewBox.baseVal || {
+				x: 0,
+				y: 0,
+				width: svgMap.width.baseVal.value,
+				height: svgMap.height.baseVal.value
+			};
+
+			const normX = (doorCenterX - svgBBox.x) / svgBBox.width;
+			const normY = (doorCenterY - svgBBox.y) / svgBBox.height;
+
+			const topLeft = corners[0], topRight = corners[1],
+				bottomRight = corners[2], bottomLeft = corners[3];
+
+			const latTop = topLeft.lat + normX * (topRight.lat - topLeft.lat);
+			const lngTop = topLeft.lng + normX * (topRight.lng - topLeft.lng);
+			const latBottom = bottomLeft.lat + normX * (bottomRight.lat - bottomLeft.lat);
+			const lngBottom = bottomLeft.lng + normX * (bottomRight.lng - bottomLeft.lng);
+
+			const doorLat = latTop + normY * (latBottom - latTop);
+			const doorLng = lngTop + normY * (lngBottom - lngTop);
+
+			return L.latLng(doorLat, doorLng);
+		}
+
+
+		// --- Helper: Find closest hallway node to a given point ---
+		function findClosestNode(latlng, nodeList) {
+			let closest = null, minDist = Infinity;
+			nodeList.forEach(node => {
+				const d = latlng.distanceTo(node);
+				if (d < minDist) {
+					minDist = d;
+					closest = node;
+				}
+			});
+			return closest;
+		}
+
+		
+		function rotatePoint(point, center, angleDeg){
+			const angleRad = (angleDeg * Math.PI) / 180;
+			const cos = Math.cos(angleRad);
+			const sin = Math.sin(angleRad);
+
+			const dx = point.lng - center.lng;
+			const dy = point.lat - center.lat;
+
+			return L.latLng(
+				center.lat + (dy * cos -dx * sin),
+				center.lng + (dx *cos + dy * sin)
+			);
+		}
+
+		
+
+        // Step 1: Initialize the map
+
+		const mapBearing = 21.3
+        let map = L.map('map', {
+            maxZoom: 22,   // allow very close zoom
+			minZoom: 16,
+            rotate: true,
+            bearing: mapBearing,
+            touchRotate: true,
+            shiftKeyRotate: true
+        }).setView([43.0125, -81.2002], 18);
+
+		map.on('rotate', function() {
+			let bearing = map.getBearing();
+			document.getElementById('rotation-display').textContent = 
+				'Rotation: ' + bearing.toFixed(1) + '°';
+		});
+
+        // Step 2: Add tile layer (the actual map)
+        L.tileLayer(
+            "https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=d3JSA6Uq18jaERqMgDqq",
+            {
+            attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+            maxZoom: 22
+            }
+        ).addTo(map);
+		
+
+        // Test (User starting location)
+
+        let startPoint = L.latLng(43.0143425, -81.19856355); // Example coordinate near Building M
+        let startMarker = L.marker(startPoint, {
+            title: "You are here",
+            draggable: false
+        }).addTo(map);
+
+        startMarker.bindPopup("<b>You are here</b>").openPopup();
+
+		let currentOverlay = null;
+
+		window.hallwayLatLngs = []; // store hallway nodes globally
+		window.currentPathLine = null;
+
+
+		//Floor plan data
+		const floorPlans = {
+			"Building A": {
+				"path" : "Floorplans/Building A",
+				"plans": ["A1.jpeg", "A2.jpeg", "A3.jpeg"]},
+			"Building B": {
+				"path" : "Floorplans/Building B",
+				"plans": ["B1.jpeg", "B2.jpeg", "B3.jpeg"]},
+			"Building C": {
+				"path" : "Floorplans/Building C",
+				"plans": ["C1.jpeg", "C2.jpeg", "C3.jpeg"]},
+			"Building M": {
+				"path" : "Floorplans/Building M",
+				"plans": ["M1_test.svg", "M2.jpeg", "M3.jpeg"],
+				"objects": {
+					"floor1": {
+						"rooms" :
+						{
+							"Room_1003": ["Door_1003_1", "Door_1003_2"],
+							"Room_1004": ["Door_1004"], 
+							"Room_1006": ["Door_1006"], 
+							"Room_1013-14": ["Door_1013-14"],
+							"Room_1018": ["Door_1018"],
+							"Room_1030": ["Door_1030"],
+							"Room_1033": ["Door_1033"],
+							"Room_1035": ["Door_1035"],
+							"Room_1037": ["Door_1037"],
+							"Room_1040": ["Door_1040"],
+							"Room_1041": ["Door_1041"],
+							"Room_1041-2": ["Door_1041-2"],
+							"Room_1045": ["Door_1045"]
+						},
+						"entrances":
+						{
+							"Outside-Exit_1": ["Outside"],
+							"Outside-Exit_2": ["Outside"], 
+							"Outside-Exit_3": ["Outside"],
+							"Outside-Exit_4": ["Outside"],
+							"Outside-Exit_5": ["Outside"],
+							"Outside-Exit_6": ["Outside"],
+							"Stairs_1": ["M2", "M3"],
+							"Stairs_2": ["M2", "M3"],
+							"Stairs_3": ["M2", "M3"],
+							"Elevator": ["M2", "M3"],
+							"H-Building": ["H1"]
+
+						}
+					}
+				}
+			}
+		}		
+
+
+		// Step 3: Load GeoJSON buildings
+		fetch('campus.geojson?ts=' + new Date().getTime())
+			.then(response => response.json())
+			.then(data => {
+				console.log("GeoJSON loaded:", data); // <-- This checks if the file is loading
+                
+                // Log all building names and their center coordinates
+                data.features.forEach(f => {
+                    if (f.geometry.type === "Polygon" || f.geometry.type === "MultiPolygon") {
+                        const layer = L.geoJSON(f);
+                        const bounds = layer.getBounds();
+                        console.log(
+                            f.properties.name,
+                            "center:",
+                            bounds.getCenter()
+                        );
+                    }
+                });
+
+
+
+				L.geoJSON(data, {
+					onEachFeature: function(feature, layer) {
+						let buildingName = feature.properties.name || "Unknown Building";
+						layer.bindPopup("<b>" + buildingName + "</b><br>Click for floor plans");
+
+						layer.on('click', function() {
+
+							let bounds = layer.getBounds();
+
+							let center = bounds.getCenter();
+
+							let corners = [
+								L.latLng(bounds.getNorth(), bounds.getWest()),  // top-left
+								L.latLng(bounds.getNorth(), bounds.getEast()),  // top-right
+								L.latLng(bounds.getSouth(), bounds.getEast()),  // bottom-right
+								L.latLng(bounds.getSouth(), bounds.getWest())   // bottom-left
+							];
+							console.log("ORIGINAL")
+							console.log(corners)
+							corners = corners.map(corner => rotatePoint(corner, center, mapBearing))
+							console.log("UPDATED")
+							console.log(corners)
+							//map.fitBounds(bounds);	
+                            //let zoom = map.getBoundsZoom(bounds, true);
+                            //map.setView(bounds.getCenter(), zoom);
+							alert("Here you could load floor plans for " + buildingName);
+							if (buildingName === "Building A") {
+								let prePath = floorPlans[buildingName]["path"]
+
+        						let svgPath = prePath + "/A1.svg?ts=" + new Date().getTime();
+
+
+								fetch(svgPath)
+									.then(r => r.text())
+									.then(svgText => {
+										const svgDoc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+										const svgMap = svgDoc.documentElement; 
+                                        //console.log([...svgMap.querySelectorAll('[id]')].map(el => el.id));
+										
+
+										//if (currentOverlay) map.removeLayer(currentOverlay); // remove old overlay
+
+
+                        				//newOverlay = L.svgOverlay(svgMap, corners, { interactive: true, opacity: 0.5 }).addTo(map);
+
+										currentOverlay = addRotatedSvgOverlay(svgMap, corners, mapBearing);
+
+									});
+							} else if (buildingName === "Building M") {
+								let prePath = floorPlans[buildingName]["path"]
+
+        						let svgPath = prePath + "/M1_demo.svg?ts=" + new Date().getTime();
+								
+								let rooms = floorPlans[buildingName]["objects"]["floor1"]["rooms"]                                
+
+								fetch(svgPath)
+									.then(r => r.text())
+									.then(svgText => {
+										const svgDoc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+										const svgMap = svgDoc.documentElement; 
+                                        //console.log([...svgMap.querySelectorAll('[id]')].map(el => el.id));
+										
+
+										//if (currentOverlay) map.removeLayer(currentOverlay); // remove old overlay
+                        				currentOverlay = L.svgOverlay(svgMap, corners, { interactive: true, opacity: 0.5 }).addTo(map);
+
+
+										const hallway = svgMap.getElementById("Hallway-Route");
+										if (hallway) {
+											const d = hallway.getAttribute("d");
+											if (d) {
+												console.log("d HERE");
+												console.log(d);
+												const segments = d.split(/(?=[Mm])/);
+												
+
+												const nodeCoords = [];
+												const movePoints = [];
+												segments.forEach(segment => {
+													const numbers = Array.from(segment.matchAll(/[-+]?[0-9]*\.?[0-9]+/g)).map(Number);
+													for (let i = 0; i < numbers.length; i += 2) {
+														const pt = {x: numbers[i], y: numbers[i + 1]};
+														nodeCoords.push(pt);
+
+														//if segment starts with M, append the first point into movePoints list
+														if (i === 0) movePoints.push(pt);
+													}
+												});
+												
+												const latLngs = nodeCoords.map(pt => 
+													doorToLatLng({ getBBox: () => ({ x: pt.x, y: pt.y, width: 0, height: 0 }) }, svgMap, corners)
+												);
+
+												const moveLatLngs = movePoints.map(pt => 
+													doorToLatLng({ getBBox: () => ({ x: pt.x, y: pt.y, width: 0, height: 0 }) }, svgMap, corners)
+												);
+												
+												// Highlight regular nodes
+												latLngs.forEach((latlng, index) => {
+													L.circleMarker(latlng, { radius: 4, color: "red", fillColor: "yellow", fillOpacity: 0.8 })
+														.bindPopup(`Node ${index}`)
+														.addTo(map);
+												});
+
+												// Highlight move-to nodes differently
+												moveLatLngs.forEach((latlng, index) => {
+													L.circleMarker(latlng, { radius: 6, color: "blue", fillColor: "cyan", fillOpacity: 0.8 })
+														.bindPopup(`Move Node ${index}`)
+														.addTo(map);
+												});
+
+											}
+										}
+                                        
+                                        
+
+										Object.entries(rooms).forEach(([roomId, doorList]) => {
+											const room = svgMap.getElementById(roomId);
+											console.log(room);
+											if (room) {
+												room.style.pointerEvents = 'all';
+												room.style.cursor = 'pointer';
+												room.addEventListener('click', (e) => {
+													// simple demo popup
+													alert(`You clicked Room ${roomId} !`);
+													svgMap.querySelectorAll('.highlighted-door').forEach(prevDoor =>{
+														prevDoor.classList.remove('highlighted-door');
+														prevDoor.style.stroke = '';
+														prevDoor.style.strokeWidth = '';
+													});
+
+
+													//Highlight doors
+													if (doorList.length > 0){
+														doorList.forEach(doorId => {
+															const door = svgMap.getElementById(doorId);
+															if (door) {
+																door.classList.add('highlighted-door');
+																door.style.stroke = 'red';
+																door.style.strokeWidth = '2px';
+															} else {
+																alert(`Door label for ${roomId} is not the same in SVG and code`);
+															}
+														});
+                                                        // 🧭 Step 2: Draw a simple path from start marker to door (temporary)
+                                                        const firstDoor = svgMap.getElementById(doorList[0]);
+                                                        if (firstDoor && window.hallwayLatLngs?.length) {
+
+															const doorLatLng = doorToLatLng(firstDoor, svgMap, corners);
+
+															// Snap both points to nearest hallway nodes
+															const startNode = findClosestNode(startPoint, window.hallwayLatLngs);
+															const doorNode = findClosestNode(doorLatLng, window.hallwayLatLngs);
+
+															const startIdx = window.hallwayLatLngs.indexOf(startNode);
+															const endIdx = window.hallwayLatLngs.indexOf(doorNode);
+
+															const pathSegment =
+																startIdx < endIdx
+																	? window.hallwayLatLngs.slice(startIdx, endIdx + 1)
+																	: window.hallwayLatLngs.slice(endIdx, startIdx + 1).reverse();
+
+															// Remove old path if it exists
+															if (window.currentPathLine) map.removeLayer(window.currentPathLine);
+
+															// Draw new restricted path
+															window.currentPathLine = L.polyline(pathSegment, { color: "red", weight: 3 }).addTo(map);
+
+														} else {
+															console.warn("⚠️ Hallway or door not ready for path drawing.");
+														}
+
+													} else {
+														alert(`No doors currently exist for ${roomId}`);
+													}
+												});
+											} else {
+												console.warn(`Room ID ${roomId} not found`);
+											}
+										});
+										//L.svgOverlay(svgMap, corners, {interactive: true, opacity: 0.5}).addTo(map);
+									})
+        							.catch(err => console.error("Error loading SVG:", err));
+        						// add the SVG overlay on top of building
+        						//currentOverlay = L.imageTransform(svgPath, corners, { opacity: 0.8 }).addTo(map);
+                                // L.imageOverlay(svgPath, corners, { opacity: 0.8 }).addTo(map);
+							} else { 
+								alert("No floorplans available for " + buildingName); 
+							} 
+						});	
+					},
+					style: {
+						color: "blue",
+						weight: 2,
+						fillOpacity: 0.2
+					}
+				}).addTo(map);
+			})
+			.catch(err => console.error("Error loading GeoJSON:", err));
+    </script>
+	
+</body>
+</html>

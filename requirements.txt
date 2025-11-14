@@ -6,4 +6,13 @@ autopep8
 flask
 google-generativeai
 python-dotenv
-ngrok
+markdown2
+
+# RAG Multimodal System
+google-cloud-aiplatform
+vertexai
+numpy
+pandas
+Pillow
+PyMuPDF
+rich
