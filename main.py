@@ -123,7 +123,7 @@ Suggest the best route to take, which means the shortest one, mentioning landmar
 
 ** Some detailed information about the campus layout: **
         - Where you have for example 1063-C it means that is a corridor near room 1063.
-        - Corridors are marked with gray color path, the user must walk through these gray paths.
+        - Corridors are marked with blue color path, the user must walk through these blue paths to get into destination.
         - -3, -2, -1 indicate inner space inside a room or area and it must not be considered for walking directions.
         - The chatbot will get information about the building, for example: A Building First Floor, and it must use that to give directions.
 ** Campus
