@@ -60,7 +60,7 @@ class GeminiModelManager:
 
             # Configure generation parameters
             self.generation_config = GenerationConfig(
-                temperature=0.2,
+                temperature=0.5,
                 max_output_tokens=2048,
                 top_p=0.95,
                 top_k=40

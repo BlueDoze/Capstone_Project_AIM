@@ -56,8 +56,20 @@ try:
     if not api_key:
         raise KeyError("GEMINI_API_KEY environment variable not set.")
     genai.configure(api_key=api_key)
+    
+    # Configure generation settings with temperature 0.5 for balanced navigation instructions
+    generation_config = genai.types.GenerationConfig(
+        temperature=0.5,
+        max_output_tokens=2048,
+        top_p=0.95,
+        top_k=40
+    )
+    
     # Use a model name confirmed to be available
-    model = genai.GenerativeModel('gemini-pro-latest')
+    model = genai.GenerativeModel(
+        'gemini-pro-latest',
+        generation_config=generation_config
+    )
 except KeyError as e:
     print(e)
     model = None

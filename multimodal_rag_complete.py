@@ -165,7 +165,7 @@ def get_gemini_response(
     model_input: List[str],
     stream: bool = True,
     generation_config: Optional[GenerationConfig] = GenerationConfig(
-        temperature=0.2, max_output_tokens=2048
+        temperature=0.5, max_output_tokens=2048
     ),
     safety_settings: Optional[dict] = {
         HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
