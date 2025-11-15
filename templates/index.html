@@ -4,6 +4,12 @@
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <title>FANSHAWE</title>
+          <!-- Leaflet CSS -->
+          <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+          <!-- Leaflet Rotate CSS -->
+          <link rel="stylesheet" href="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate.css" />
+          <!-- Distortable Image CSS -->
+          <link rel="stylesheet" href="https://unpkg.com/leaflet.distortableimage@latest/dist/leaflet.distortableimage.css" />
           <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
         </head>
         <body>
@@ -23,9 +29,20 @@
               </div>
             </div>
             <div id="map-container">
-              <!-- The map will be placed here -->
+              <div id="map"></div>
+              <div id="map-mode-indicator" class="mode-indicator"></div>
             </div>
           </div>
+          <!-- Leaflet Scripts -->
+          <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+          <script src="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate-src.js"></script>
+          <script src="https://unpkg.com/leaflet-image-transform/leaflet-image-transform.min.js"></script>
+          <script src="https://unpkg.com/leaflet.distortableimage@latest/dist/leaflet.distortableimage.js"></script>
+          <!-- Floor Plans Data -->
+          <script src="{{ url_for('static', filename='../LeafletJS/floorPlansScript.js') }}"></script>
+          <!-- Map Controller -->
+          <script src="{{ url_for('static', filename='map-controller.js') }}"></script>
+          <!-- Chat Script -->
           <script src="{{ url_for('static', filename='script.js') }}"></script>
         </body>
       </html>

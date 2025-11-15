@@ -19,6 +19,25 @@ document.addEventListener('DOMContentLoaded', () => {
         chatbox.scrollTop = chatbox.scrollHeight;
     }
 
+    // Function to handle map action from chat
+    function handleMapAction(mapAction) {
+        if (!mapAction || !mapAction.type) {
+            return;
+        }
+
+        console.log('🗺️ Map action received:', mapAction);
+
+        if (mapAction.type === 'SHOW_ROUTE') {
+            // Feature 1: Display route from chat message
+            if (window.showRouteBuildingM) {
+                window.showRouteBuildingM(mapAction.startNode, mapAction.endNode);
+                console.log('✅ Route displayed on map');
+            } else {
+                console.error('❌ showRouteBuildingM function not available');
+            }
+        }
+    }
+
     // Function to send a message
     async function sendMessage() {
         const message = userInput.value.trim();
@@ -43,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ message: message })
                 });
                 const data = await response.json();
-                
+
                 // Remove typing indicator
                 const indicator = document.getElementById('typing-indicator');
                 if (indicator) {
@@ -51,6 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 addMessage('Fanshawe Navigator', data.reply, false);
+
+                // Handle map action if present (Feature 1)
+                if (data.mapAction) {
+                    handleMapAction(data.mapAction);
+                }
             } catch (error) {
                 console.error('Error sending message:', error);
 

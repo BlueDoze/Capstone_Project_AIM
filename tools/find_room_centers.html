@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Center Finder - Building M Floor 1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .svg-container {
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            overflow: auto;
+            max-height: 600px;
+            position: relative;
+            background: white;
+            cursor: crosshair;
+        }
+        
+        #svgDisplay {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .coordinates-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .coord-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 3px;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .coord-label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .coord-value {
+            font-family: 'Courier New', monospace;
+            color: #2196f3;
+            font-size: 14px;
+        }
+        
+        .json-output {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            white-space: pre;
+            margin-top: 10px;
+        }
+        
+        button {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background: #1976d2;
+        }
+        
+        .copy-btn {
+            background: #4caf50;
+        }
+        
+        .copy-btn:hover {
+            background: #45a049;
+        }
+        
+        .room-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .room-btn {
+            padding: 8px;
+            background: #fff;
+            border: 2px solid #2196f3;
+            color: #2196f3;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .room-btn:hover {
+            background: #2196f3;
+            color: white;
+        }
+        
+        .room-btn.selected {
+            background: #4caf50;
+            border-color: #4caf50;
+            color: white;
+        }
+        
+        .click-marker {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: red;
+            border: 2px solid white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 1000;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .status.success {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+        
+        .status.error {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗺️ Room Center Finder - Building M Floor 1</h1>
+        
+        <div class="instructions">
+            <h3>📋 Instructions:</h3>
+            <ol>
+                <li><strong>Click on a room button</strong> below to select which room you want to find the center for</li>
+                <li><strong>Click on the SVG map</strong> at the exact center point of that room</li>
+                <li>The <strong>SVG coordinates</strong> will be displayed below</li>
+                <li><strong>Copy the JSON</strong> and paste it into <code>config/building_m_rooms.json</code> under <code>"roomCentersSVG"</code></li>
+                <li>Refresh your browser to see the updated positions!</li>
+            </ol>
+            <p><strong>💡 Tip:</strong> The red dot shows where you clicked. Click multiple times to find the perfect center!</p>
+        </div>
+        
+        <div id="status"></div>
+        
+        <h3>Select Room:</h3>
+        <div class="room-list" id="roomList"></div>
+        
+        <h3>SVG Floor Plan:</h3>
+        <div class="svg-container" id="svgContainer">
+            <div id="svgDisplay">Loading SVG...</div>
+        </div>
+        
+        <div class="coordinates-display" id="coordsDisplay" style="display: none;">
+            <h3>📍 Coordinates for: <span id="selectedRoomName"></span></h3>
+            
+            <div class="coord-item">
+                <div class="coord-label">SVG Coordinates (X, Y):</div>
+                <div class="coord-value" id="svgCoords">Click on the map</div>
+            </div>
+            
+            <div class="coord-item">
+                <div class="coord-label">JSON Format (copy this):</div>
+                <div class="json-output" id="jsonOutput">Click on the map</div>
+            </div>
+            
+            <button class="copy-btn" onclick="copyToClipboard()">📋 Copy JSON</button>
+            <button onclick="saveAllCoordinates()">💾 Show All Coordinates</button>
+        </div>
+        
+        <div id="allCoordinates" style="display: none; margin-top: 20px;">
+            <h3>All Room Centers (JSON):</h3>
+            <div class="json-output" id="allCoordsJson"></div>
+            <button class="copy-btn" onclick="copyAllToClipboard()">📋 Copy All JSON</button>
+        </div>
+    </div>
+    
+    <script>
+        let selectedRoom = null;
+        let allRoomCoordinates = {};
+        let svgElement = null;
+        
+        const rooms = [
+            "Room_1003", "Room_1004", "Room_1006", "Room_1018",
+            "Room_1030", "Room_1033", "Room_1035", "Room_1037",
+            "Room_1040", "Room_1041", "Room_1045", "Room_1049",
+            "Bathroom-Men", "Bathroom-Women", "Bathroom-Accessible",
+            "Elevator-M", "Stairs_1", "Stairs_2", "Stairs_3"
+        ];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadSVG();
+            createRoomButtons();
+        });
+        
+        async function loadSVG() {
+            try {
+                const response = await fetch('../LeafletJS/Floorplans/Building M/M1_official.svg');
+                const svgText = await response.text();
+                
+                const svgContainer = document.getElementById('svgDisplay');
+                svgContainer.innerHTML = svgText;
+                
+                svgElement = svgContainer.querySelector('svg');
+                
+                if (svgElement) {
+                    // Add click handler to SVG
+                    svgElement.addEventListener('click', handleSvgClick);
+                    
+                    // Style the SVG
+                    svgElement.style.width = '100%';
+                    svgElement.style.height = 'auto';
+                    
+                    showStatus('✅ SVG loaded successfully! Select a room and click on the map.', 'success');
+                } else {
+                    showStatus('❌ Error: Could not find SVG element', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading SVG:', error);
+                showStatus('❌ Error loading SVG: ' + error.message, 'error');
+            }
+        }
+        
+        function createRoomButtons() {
+            const roomList = document.getElementById('roomList');
+            
+            rooms.forEach(roomId => {
+                const button = document.createElement('button');
+                button.className = 'room-btn';
+                button.textContent = roomId;
+                button.onclick = () => selectRoom(roomId);
+                button.id = `btn-${roomId}`;
+                roomList.appendChild(button);
+            });
+        }
+        
+        function selectRoom(roomId) {
+            // Update UI
+            rooms.forEach(r => {
+                const btn = document.getElementById(`btn-${r}`);
+                if (btn) btn.classList.remove('selected');
+            });
+            
+            const selectedBtn = document.getElementById(`btn-${roomId}`);
+            if (selectedBtn) selectedBtn.classList.add('selected');
+            
+            selectedRoom = roomId;
+            document.getElementById('selectedRoomName').textContent = roomId;
+            document.getElementById('coordsDisplay').style.display = 'block';
+            
+            // Highlight the room in SVG if it exists
+            if (svgElement) {
+                const roomElement = svgElement.getElementById(roomId);
+                if (roomElement) {
+                    // Remove previous highlights
+                    const previousHighlights = svgElement.querySelectorAll('.highlight-room');
+                    previousHighlights.forEach(el => el.classList.remove('highlight-room'));
+                    
+                    // Add highlight
+                    roomElement.style.fill = 'rgba(33, 150, 243, 0.3)';
+                    roomElement.style.stroke = '#2196f3';
+                    roomElement.style.strokeWidth = '2';
+                    roomElement.classList.add('highlight-room');
+                }
+            }
+            
+            showStatus(`📍 Selected: ${roomId}. Now click on the SVG map at the center of this room.`, 'success');
+        }
+        
+        function handleSvgClick(event) {
+            if (!selectedRoom) {
+                showStatus('⚠️ Please select a room first!', 'error');
+                return;
+            }
+            
+            // Get SVG coordinates
+            const svg = event.currentTarget;
+            const pt = svg.createSVGPoint();
+            pt.x = event.clientX;
+            pt.y = event.clientY;
+            
+            // Transform to SVG coordinate system
+            const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+            
+            const x = Math.round(svgP.x * 100) / 100;
+            const y = Math.round(svgP.y * 100) / 100;
+            
+            // Store coordinates
+            allRoomCoordinates[selectedRoom] = { x, y };
+            
+            // Display coordinates
+            document.getElementById('svgCoords').textContent = `X: ${x}, Y: ${y}`;
+            
+            const jsonFormat = `"${selectedRoom}": { "x": ${x}, "y": ${y} }`;
+            document.getElementById('jsonOutput').textContent = jsonFormat;
+            
+            // Add visual marker
+            addClickMarker(event.clientX, event.clientY);
+            
+            showStatus(`✅ Coordinates saved for ${selectedRoom}! Click again to adjust, or select another room.`, 'success');
+        }
+        
+        function addClickMarker(clientX, clientY) {
+            // Remove previous markers for this room
+            const container = document.getElementById('svgContainer');
+            const existingMarkers = container.querySelectorAll('.click-marker');
+            existingMarkers.forEach(m => m.remove());
+            
+            // Add new marker
+            const marker = document.createElement('div');
+            marker.className = 'click-marker';
+            
+            const containerRect = container.getBoundingClientRect();
+            marker.style.left = (clientX - containerRect.left + container.scrollLeft) + 'px';
+            marker.style.top = (clientY - containerRect.top + container.scrollTop) + 'px';
+            
+            container.appendChild(marker);
+        }
+        
+        function copyToClipboard() {
+            const text = document.getElementById('jsonOutput').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showStatus('✅ Copied to clipboard!', 'success');
+            });
+        }
+        
+        function saveAllCoordinates() {
+            if (Object.keys(allRoomCoordinates).length === 0) {
+                showStatus('⚠️ No coordinates saved yet!', 'error');
+                return;
+            }
+            
+            const jsonOutput = JSON.stringify(allRoomCoordinates, null, 2);
+            document.getElementById('allCoordsJson').textContent = jsonOutput;
+            document.getElementById('allCoordinates').style.display = 'block';
+            
+            showStatus(`✅ Showing all ${Object.keys(allRoomCoordinates).length} room coordinates`, 'success');
+        }
+        
+        function copyAllToClipboard() {
+            const text = document.getElementById('allCoordsJson').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showStatus('✅ All coordinates copied to clipboard!', 'success');
+            });
+        }
+        
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.className = `status ${type}`;
+            status.textContent = message;
+            status.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

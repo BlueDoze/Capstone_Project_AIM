@@ -1,6 +1,6 @@
 import os
 import google.generativeai as genai
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_from_directory
 from dotenv import load_dotenv
 import numpy as np
 import pandas as pd
@@ -12,6 +12,8 @@ import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import markdown2
+import json
+import re
 
 # Import functions from the multimodal RAG system
 try:
@@ -37,6 +39,16 @@ load_dotenv()
 
 # The 'templates' folder is the default for Flask, so we just need to tell it where the static files are.
 app = Flask(__name__, static_folder='static')
+
+# Load Building M room configuration
+try:
+    config_path = Path('config/building_m_rooms.json')
+    with open(config_path, 'r') as f:
+        building_m_config = json.load(f)['Building M']
+    print("✅ Building M room configuration loaded")
+except Exception as e:
+    print(f"⚠️ Failed to load room configuration: {e}")
+    building_m_config = {}
 
 # Configure the generative AI model
 try:
@@ -91,7 +103,7 @@ if RAG_SYSTEM_AVAILABLE:
 
 map_info ='''You are the Fanshawe Navigator for the Campus. Provide step-by-step walking directions based on the information you have.
 
-You will provide directions in a clear and concise manner. Tell the user puuting yourself in the map's perspective where to go.
+You will provide directions in a clear and concise manner. Tell the user putting yourself in the map's perspective where to go.
 
 Provide easy instructions like "turn left", "turn right", "go straight", "take the stairs", "take the elevator", etc.
 
@@ -99,6 +111,7 @@ Suggest the best route to take, which means the shortest one, mentioning landmar
 
 ** Some detailed information about the campus layout: **
         - Where you have for example 1063-C it means that is a corridor near room 1063.
+        - Corridors are marked with gray color path, the user must walk through these gray paths.
         - -3, -2, -1 indicate inner space inside a room or area and it must not be considered for walking directions.
         - The chatbot will get information about the building, for example: A Building First Floor, and it must use that to give directions.
 ** Campus
@@ -432,6 +445,110 @@ class AdvancedImageManager:
             "rag_models_initialized": rag_models_initialized if 'rag_models_initialized' in globals() else False
         }
 
+# ============== NAVIGATION HELPER FUNCTIONS ==============
+
+def resolve_room_name(room_name: str) -> Optional[str]:
+    """
+    Resolve a user-provided room name to the official room ID
+    Handles aliases like "1003", "bathroom men", etc.
+    """
+    if not building_m_config:
+        return None
+
+    # Normalize input
+    normalized = room_name.lower().strip()
+
+    # Check aliases
+    aliases = building_m_config.get('aliases', {})
+    if normalized in aliases:
+        return aliases[normalized]
+
+    # Try to match room ID directly
+    room_to_node = building_m_config.get('roomToNode', {})
+    if room_name in room_to_node:
+        return room_name
+
+    return None
+
+def parse_navigation_request(user_message: str) -> Dict[str, Any]:
+    """
+    Parse navigation request from user message
+    Uses Gemini to extract start and end locations
+    Returns dict with: {is_navigation, start, end, startNode, endNode, building, floor}
+    """
+    if not model:
+        return {'is_navigation': False}
+
+    # Check if message looks like a navigation request
+    nav_keywords = ['how', 'get', 'go', 'navigate', 'path', 'way', 'direction',
+                    'from', 'to', 'reach', 'find', 'como', 'ir', 'chegar']
+    message_lower = user_message.lower()
+    is_likely_nav = any(keyword in message_lower for keyword in nav_keywords)
+
+    if not is_likely_nav:
+        return {'is_navigation': False}
+
+    try:
+        # Use Gemini to parse the navigation request
+        parse_prompt = f"""Extract the start location and destination from this message.
+        Return ONLY a JSON response with this format (no other text):
+        {{"is_navigation": true/false, "start": "location or null", "end": "location or null"}}
+
+        Message: {user_message}
+
+        For "location", use room numbers like "1003" or common names like "bathroom men", "elevator", "exit".
+        If no navigation intent, set is_navigation to false."""
+
+        response = model.generate_content(parse_prompt)
+        response_text = response.text.strip()
+
+        # Try to extract JSON
+        import re
+        json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+        if json_match:
+            parsed = json.loads(json_match.group())
+
+            if parsed.get('is_navigation'):
+                start_name = parsed.get('start')
+                end_name = parsed.get('end')
+
+                # Resolve room names
+                start_room = resolve_room_name(start_name) if start_name else None
+                end_room = resolve_room_name(end_name) if end_name else None
+
+                if start_room and end_room:
+                    # Get node IDs
+                    room_to_node = building_m_config.get('roomToNode', {})
+                    start_node = room_to_node.get(start_room)
+                    end_node = room_to_node.get(end_room)
+
+                    if start_node and end_node:
+                        return {
+                            'is_navigation': True,
+                            'start': start_room,
+                            'end': end_room,
+                            'startNode': start_node,
+                            'endNode': end_node,
+                            'building': 'M',
+                            'floor': 1,
+                            'start_original': start_name,
+                            'end_original': end_name
+                        }
+
+        return {'is_navigation': False}
+
+    except Exception as e:
+        print(f"⚠️ Error parsing navigation request: {e}")
+        return {'is_navigation': False}
+
+def get_room_friendly_name(room_id: str) -> str:
+    """Get human-friendly name for a room ID"""
+    if not building_m_config:
+        return room_id
+
+    descriptions = building_m_config.get('roomDescriptions', {})
+    return descriptions.get(room_id, room_id)
+
 # Initialize image manager
 image_manager = AdvancedImageManager("images/")
 
@@ -446,6 +563,14 @@ def index():
     # Use render_template to serve the HTML file from the 'templates' directory
     return render_template('index.html')
 
+@app.route('/LeafletJS/<path:path>')
+def send_leaflet(path):
+    return send_from_directory('LeafletJS', path)
+
+@app.route('/tools/<path:path>')
+def send_tools(path):
+    return send_from_directory('tools', path)
+
 @app.route("/chat", methods=['POST'])
 def chat():
     if model is None:
@@ -456,9 +581,12 @@ def chat():
         return jsonify({"reply": "Please provide a message."}), 400
 
     try:
+        # Check if this is a navigation request
+        nav_result = parse_navigation_request(user_message)
+
         # Get image context if available
         image_context = image_manager.get_image_context_for_prompt(user_message)
-        
+
         # Combine map info + image context + user message
         if image_context:
             prompt = f'{map_info}{image_context}\n\nUser: {user_message}\nAI:'
@@ -473,8 +601,24 @@ def chat():
         # Convert Markdown to HTML
         html_response = markdown2.markdown(response.text)
 
-        return jsonify({"reply": html_response})
-        
+        # If navigation request detected, include map action
+        if nav_result.get('is_navigation'):
+            print(f"🗺️ Navigation detected: {nav_result['start']} → {nav_result['end']}")
+            return jsonify({
+                "reply": html_response,
+                "mapAction": {
+                    "type": "SHOW_ROUTE",
+                    "building": "M",
+                    "floor": 1,
+                    "startRoom": nav_result['start'],
+                    "endRoom": nav_result['end'],
+                    "startNode": nav_result['startNode'],
+                    "endNode": nav_result['endNode']
+                }
+            })
+        else:
+            return jsonify({"reply": html_response})
+
     except Exception as e:
         print(f"Error generating content: {e}") # Added for debugging
         return jsonify({"reply": f"An error occurred: {e}"}), 500
@@ -584,6 +728,105 @@ def stop_auto_monitoring():
 def auto_monitoring_status():
     """Returns automatic monitoring status"""
     return jsonify(auto_updater.get_status())
+
+# ============== NAVIGATION API ENDPOINTS ==============
+
+@app.route("/api/navigation/parse", methods=['POST'])
+def api_parse_navigation():
+    """Parse navigation request from user message"""
+    data = request.json
+    if not data or not data.get('message'):
+        return jsonify({"error": "message required"}), 400
+
+    result = parse_navigation_request(data['message'])
+    return jsonify(result)
+
+@app.route("/api/navigation/from-clicks", methods=['POST'])
+def api_navigation_from_clicks():
+    """
+    Handle navigation request from map clicks
+    Receives: {startRoom, endRoom, building, floor}
+    Returns: {reply, path}
+    """
+    if model is None:
+        return jsonify({"error": "AI model not configured"}), 500
+
+    try:
+        data = request.json
+        if not data or not data.get('startRoom') or not data.get('endRoom'):
+            return jsonify({"error": "startRoom and endRoom required"}), 400
+
+        start_room = data.get('startRoom')
+        end_room = data.get('endRoom')
+
+        # Get friendly names
+        start_friendly = get_room_friendly_name(start_room)
+        end_friendly = get_room_friendly_name(end_room)
+
+        # Create navigation message for Gemini
+        nav_message = f"Give me walking directions from {start_friendly} to {end_friendly} in Building M Floor 1."
+
+        # Parse to get path nodes (optional, for reference)
+        room_to_node = building_m_config.get('roomToNode', {})
+        start_node = room_to_node.get(start_room)
+        end_node = room_to_node.get(end_room)
+
+        # Get image context if available
+        image_context = image_manager.get_image_context_for_prompt(nav_message)
+
+        # Generate response from Gemini
+        if image_context:
+            prompt = f'{map_info}{image_context}\n\nUser: {nav_message}\nAI:'
+            print(f"🔍 Using visual information for navigation...")
+        else:
+            prompt = f'{map_info}\n\nUser: {nav_message}\nAI:'
+            print(f"📝 Using textual information for navigation...")
+
+        response = model.generate_content(prompt)
+        html_response = markdown2.markdown(response.text)
+
+        return jsonify({
+            "reply": html_response,
+            "startRoom": start_room,
+            "endRoom": end_room,
+            "startNode": start_node,
+            "endNode": end_node
+        })
+
+    except Exception as e:
+        print(f"Error in navigation from clicks: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/navigation/rooms", methods=['GET'])
+def api_get_rooms():
+    """Get list of all rooms in Building M with descriptions"""
+    if not building_m_config:
+        return jsonify({"error": "Building M configuration not loaded"}), 500
+
+    rooms_data = {}
+    room_to_node = building_m_config.get('roomToNode', {})
+    descriptions = building_m_config.get('roomDescriptions', {})
+
+    for room_id, node_id in room_to_node.items():
+        rooms_data[room_id] = {
+            "node": node_id,
+            "description": descriptions.get(room_id, room_id)
+        }
+
+    return jsonify(rooms_data)
+
+@app.route("/api/navigation/room-centers", methods=['GET'])
+def api_get_room_centers():
+    """Get manual room center coordinates for Building M"""
+    if not building_m_config:
+        return jsonify({"error": "Building M configuration not loaded"}), 500
+
+    room_centers = building_m_config.get('roomCentersSVG', {})
+    
+    # Filter out comment fields
+    filtered_centers = {k: v for k, v in room_centers.items() if not k.startswith('_')}
+    
+    return jsonify(filtered_centers)
 
 def main():
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8081)))
