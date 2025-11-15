@@ -116,21 +116,66 @@
       "_instructions": "To find SVG coordinates: 1) Open M1_official.svg in Inkscape/browser, 2) Use measuring tool to find center point, 3) Add coordinates here. These will override automatic getBBox() calculations.",
       "_example_format": "\"Room_1003\": { \"x\": 250.5, \"y\": 600.3 }",
       
-      "Room_1003": { "x": 245.5, "y": 595.3 },
-      "Room_1004": {},
-      "Room_1006": {},
-      "Room_1018": {},
-      "Room_1030": {},
-      "Room_1033": {},
-      "Room_1035": {},
-      "Room_1037": {},
-      "Room_1040": {},
-      "Room_1041": {},
-      "Room_1045": {},
-      "Room_1049": {},
-      "Bathroom-Men": {},
-      "Bathroom-Women": {},
-      "Bathroom-Accessible": {},
+  "Room_1003": {
+    "x": 402.13,
+    "y": 514.13
+  },
+  "Room_1004": {
+    "x": 432.83,
+    "y": 792.23
+  },
+  "Room_1006": {
+    "x": 403.36,
+    "y": 805.6
+  },
+  "Room_1018": {
+    "x": 318.01,
+    "y": 505.88
+  },
+  "Room_1030": {
+    "x": 286.69,
+    "y": 273.9
+  },
+  "Room_1033": { 
+    "x": 521,
+     "y": 436 
+  },
+  "Room_1035": {
+    "x": 340.11,
+    "y": 306.99
+  },
+  "Room_1037": {
+    "x": 327.83,
+    "y": 275.68
+  },
+  "Room_1040": {
+    "x": 240.64,
+    "y": 209.97
+  },
+  "Room_1041": {
+    "x": 321.69,
+    "y": 259.37
+  },
+  "Room_1045": {
+    "x": 268.88,
+    "y": 172.17
+  },
+  "Room_1049": {
+    "x": 197.04,
+    "y": 201.1
+  },
+  "Bathroom-Men": {
+    "x": 424.85,
+    "y": 465.01
+  },
+  "Bathroom-Women": {
+    "x": 492.4,
+    "y": 439.22
+  },
+  "Bathroom-Accessible": {
+    "x": 474.59,
+    "y": 444.74
+  },
       "Elevator-M": {},
       "Stairs_1": {},
       "Stairs_2": {},
