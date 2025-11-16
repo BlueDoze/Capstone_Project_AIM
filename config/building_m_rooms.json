@@ -115,70 +115,82 @@
       "_comment": "Manual override for room center coordinates in SVG space. Format: {x, y} in SVG units. Leave empty {} to use automatic calculation from room polygon.",
       "_instructions": "To find SVG coordinates: 1) Open M1_official.svg in Inkscape/browser, 2) Use measuring tool to find center point, 3) Add coordinates here. These will override automatic getBBox() calculations.",
       "_example_format": "\"Room_1003\": { \"x\": 250.5, \"y\": 600.3 }",
-    "Room_1003": {
+      "Room_1003": {
         "x": 402.3,
         "y": 513.7
-    },
-    "Room_1004": {
-      "x": 23830.74,
-      "y": 3510.87
-    },
-    "Room_1006": {
-      "x": 24418.39,
-      "y": 6329.4
-    },
-    "Room_1018": {
-      "x": 250,
-      "y": 543
-    },
-    "Room_1030": {
-      "x": -24011.55,
-      "y": 6118.31
-    },
-    "Room_1033": {
-      "x": 516.64,
-      "y": 390.15
-    },
-    "Room_1035": {
-      "x": -20099.88,
-      "y": 2124.02
-    },
-    "Room_1037": {
-      "x": -23056.96,
-      "y": 2581.24
-    },
-    "Room_1040": {
-      "x": -30457.36,
-      "y": 8873.01
-    },
-    "Room_1041": {
-      "x": -24592.36,
-      "y": 2797.12
-    },
-    "Room_1045": {
-      "x": -33189.89,
-      "y": 5686.16
-    },
-    "Room_1049": {
-      "x": -32075.34,
-      "y": 12485.77
-    },
-    "Bathroom-Men": {
-      "x": -4732.97,
-      "y": -2159.86
-    },
-    "Bathroom-Women": {
-      "x": -5658.33,
-      "y": -8525.95
-    },
-    "Bathroom-Accessible": {
-      "x": -5525.46,
-      "y": -6872.38
-    },
-    "Elevator-M": {},
-    "Stairs_1": {},
-    "Stairs_2": {},
-    "Stairs_3": {}
+      },
+      "Room_1004": {
+        "x": 450,
+        "y": 330
+      },
+      "Room_1006": {
+        "x": 200,
+        "y": 200
+      },
+      "Room_1018": {
+        "x": 285,
+        "y": 555
+      },
+      "Room_1030": {
+        "x": 150,
+        "y": 340
+      },
+      "Room_1033": {
+        "x": 516.64,
+        "y": 390.15
+      },
+      "Room_1035": {
+        "x": 600,
+        "y": 450
+      },
+      "Room_1037": {
+        "x": 200,
+        "y": 320
+      },
+      "Room_1040": {
+        "x": 500,
+        "y": 600
+      },
+      "Room_1041": {
+        "x": 780,
+        "y": 660
+      },
+      "Room_1045": {
+        "x": 800,
+        "y": 500
+      },
+      "Room_1049": {
+        "x": 400,
+        "y": 500
+      },
+      "Bathroom-Men": {
+        "x": 550,
+        "y": 870
+      },
+      "Bathroom-Women": {
+        "x": 740,
+        "y": 630
+      },
+      "Bathroom-Accessible": {
+        "x": 500,
+        "y": 500
+      },
+      "Elevator-M": {
+        "x": 50,
+        "y": 50
+      },
+      "Stairs_1": {
+        "x": 30,
+        "y": 30
+      },
+      "Stairs_2": {
+        "x": 300,
+        "y": 300
+      },
+      "Stairs_3": {
+        "x": 99,
+        "y": 450
+      }
+    }
   }
-}
 }
