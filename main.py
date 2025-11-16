@@ -834,11 +834,35 @@ def api_get_room_centers():
         return jsonify({"error": "Building M configuration not loaded"}), 500
 
     room_centers = building_m_config.get('roomCentersSVG', {})
-    
+
     # Filter out comment fields
     filtered_centers = {k: v for k, v in room_centers.items() if not k.startswith('_')}
-    
+
     return jsonify(filtered_centers)
+
+@app.route("/api/navigation/room-centers/reload", methods=['POST'])
+def reload_room_centers():
+    """Reload room centers from config file without restarting server"""
+    global building_m_config
+    try:
+        config_path = Path('config/building_m_rooms.json')
+        with open(config_path, 'r') as f:
+            building_m_config = json.load(f)['Building M']
+
+        room_count = len(building_m_config.get('roomCentersSVG', {}))
+        print(f"✅ Room centers reloaded: {room_count} coordinates loaded")
+
+        return jsonify({
+            "status": "success",
+            "message": "Room centers reloaded successfully",
+            "room_count": room_count
+        })
+    except Exception as e:
+        print(f"❌ Error reloading room centers: {e}")
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
 
 def main():
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8081)))

@@ -816,10 +816,73 @@ function startMapNavigation() {
     console.log('🗺️ Map navigation mode started');
 }
 
+/**
+ * Reload room center coordinates from the server
+ */
+async function reloadCoordinates() {
+    const btn = document.getElementById('reloadCoordinatesBtn');
+
+    try {
+        // Add loading state
+        btn.classList.add('loading');
+        btn.disabled = true;
+        const originalText = btn.textContent;
+        btn.textContent = '⟳ Reloading...';
+
+        // Call reload API
+        const response = await fetch('/api/navigation/room-centers/reload', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to reload coordinates');
+        }
+
+        // Reload the manual room centers from the updated config
+        await loadManualRoomCenters();
+
+        // Show success message
+        btn.textContent = '✓ Reloaded!';
+        console.log(`✅ Coordinates reloaded: ${data.room_count} rooms updated`);
+
+        // Reset button after 2 seconds
+        setTimeout(() => {
+            btn.classList.remove('loading');
+            btn.disabled = false;
+            btn.textContent = originalText;
+        }, 2000);
+
+    } catch (error) {
+        console.error('❌ Error reloading coordinates:', error);
+        btn.textContent = '✗ Error!';
+
+        // Reset button after 3 seconds
+        setTimeout(() => {
+            btn.classList.remove('loading');
+            btn.disabled = false;
+            btn.textContent = '⟲ Reload Coordinates';
+        }, 3000);
+    }
+}
+
 // Initialize map when DOM is ready
-document.addEventListener('DOMContentLoaded', initializeMap);
+document.addEventListener('DOMContentLoaded', () => {
+    initializeMap();
+
+    // Add event listener for reload button
+    const reloadBtn = document.getElementById('reloadCoordinatesBtn');
+    if (reloadBtn) {
+        reloadBtn.addEventListener('click', reloadCoordinates);
+    }
+});
 
 // Export functions for global access
 window.showRouteBuildingM = showRouteBuildingM;
 window.clearRoute = clearRoute;
 window.startMapNavigation = startMapNavigation;
+window.reloadCoordinates = reloadCoordinates;
