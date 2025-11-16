@@ -32,6 +32,43 @@
               <div id="map"></div>
               <div id="map-mode-indicator" class="mode-indicator"></div>
               <button id="reloadCoordinatesBtn" class="reload-btn" title="Reload coordinates from config file">⟲ Reload Coordinates</button>
+              <button id="editCoordinatesBtn" class="edit-btn" title="Edit room coordinates">✎ Edit Coordinates</button>
+            </div>
+          </div>
+          <!-- Coordinate Editor Modal -->
+          <div id="coordinateEditorModal" class="modal hidden">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2>Edit Room Coordinates</h2>
+                <button class="modal-close" id="modalCloseBtn">&times;</button>
+              </div>
+              <div class="modal-body">
+                <div class="editor-controls">
+                  <button id="exportJsonBtn" class="control-btn">📋 Export JSON</button>
+                  <button id="importJsonBtn" class="control-btn">📥 Import JSON</button>
+                  <input type="file" id="jsonFileInput" class="hidden-input" accept=".json" />
+                </div>
+                <div id="coordinateTableContainer" class="table-container">
+                  <table id="coordinateTable" class="coordinate-table">
+                    <thead>
+                      <tr>
+                        <th>Room ID</th>
+                        <th>X Coordinate</th>
+                        <th>Y Coordinate</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="coordinateTableBody">
+                      <!-- Rows will be populated by JavaScript -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button id="cancelEditorBtn" class="btn-secondary">Cancel</button>
+                <button id="saveEditorBtn" class="btn-primary">Save Changes</button>
+              </div>
             </div>
           </div>
           <!-- Leaflet Scripts -->

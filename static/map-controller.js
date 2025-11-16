@@ -870,6 +870,316 @@ async function reloadCoordinates() {
     }
 }
 
+/**
+ * Coordinate Editor Modal Functions
+ */
+const coordinateEditor = {
+    MIN_COORD: -1000,
+    MAX_COORD: 2000,
+    editedCoords: {},
+    originalCoords: {},
+
+    /**
+     * Initialize the coordinate editor modal
+     */
+    init() {
+        const editBtn = document.getElementById('editCoordinatesBtn');
+        const modal = document.getElementById('coordinateEditorModal');
+        const closeBtn = document.getElementById('modalCloseBtn');
+        const cancelBtn = document.getElementById('cancelEditorBtn');
+        const saveBtn = document.getElementById('saveEditorBtn');
+        const exportBtn = document.getElementById('exportJsonBtn');
+        const importBtn = document.getElementById('importJsonBtn');
+        const fileInput = document.getElementById('jsonFileInput');
+
+        if (editBtn) {
+            editBtn.addEventListener('click', () => this.openEditor());
+        }
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closeEditor());
+        }
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => this.closeEditor());
+        }
+        if (saveBtn) {
+            saveBtn.addEventListener('click', () => this.saveChanges());
+        }
+        if (exportBtn) {
+            exportBtn.addEventListener('click', () => this.exportJson());
+        }
+        if (importBtn) {
+            importBtn.addEventListener('click', () => fileInput.click());
+        }
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => this.importJson(e));
+        }
+
+        // Close modal when clicking outside
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.closeEditor();
+                }
+            });
+        }
+    },
+
+    /**
+     * Open the coordinate editor modal
+     */
+    async openEditor() {
+        const modal = document.getElementById('coordinateEditorModal');
+        if (!modal) return;
+
+        // Load current coordinates
+        this.originalCoords = { ...manualRoomCenters };
+        this.editedCoords = { ...manualRoomCenters };
+
+        // Populate table
+        this.populateTable();
+
+        // Show modal
+        modal.classList.remove('hidden');
+    },
+
+    /**
+     * Close the coordinate editor modal
+     */
+    closeEditor() {
+        const modal = document.getElementById('coordinateEditorModal');
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+        this.editedCoords = {};
+    },
+
+    /**
+     * Populate the coordinate table with all rooms
+     */
+    populateTable() {
+        const tbody = document.getElementById('coordinateTableBody');
+        if (!tbody) return;
+
+        tbody.innerHTML = '';
+
+        // Get all room IDs from current coordinates
+        const roomIds = Object.keys(this.editedCoords).filter(k => !k.startsWith('_')).sort();
+
+        roomIds.forEach(roomId => {
+            const coords = this.editedCoords[roomId];
+            const row = document.createElement('tr');
+
+            const x = coords.x !== undefined ? coords.x : '';
+            const y = coords.y !== undefined ? coords.y : '';
+
+            const isValid = this.isValidCoordinate(x, y);
+            const hasValue = x !== '' && y !== '';
+
+            let statusClass = 'auto';
+            if (hasValue) {
+                statusClass = isValid ? 'valid' : 'invalid';
+            }
+
+            row.innerHTML = `
+                <td><strong>${roomId}</strong></td>
+                <td><input type="number" class="coord-input coord-x" data-room="${roomId}" value="${x}" step="0.1"></td>
+                <td><input type="number" class="coord-input coord-y" data-room="${roomId}" value="${y}" step="0.1"></td>
+                <td><span class="status-badge ${statusClass}">${statusClass.toUpperCase()}</span></td>
+                <td><button class="highlight-btn" data-room="${roomId}">Show</button></td>
+            `;
+
+            // Add event listeners to inputs
+            const xInput = row.querySelector('.coord-x');
+            const yInput = row.querySelector('.coord-y');
+            const highlightBtn = row.querySelector('.highlight-btn');
+
+            [xInput, yInput].forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const room = e.target.dataset.room;
+                    const x = parseFloat(row.querySelector('.coord-x').value) || '';
+                    const y = parseFloat(row.querySelector('.coord-y').value) || '';
+
+                    this.editedCoords[room] = { x, y };
+
+                    // Update status badge
+                    const isValid = this.isValidCoordinate(x, y);
+                    const statusBadge = row.querySelector('.status-badge');
+                    const hasValue = x !== '' && y !== '';
+
+                    statusBadge.className = 'status-badge';
+                    if (hasValue) {
+                        statusBadge.classList.add(isValid ? 'valid' : 'invalid');
+                        statusBadge.textContent = isValid ? 'VALID' : 'INVALID';
+                    } else {
+                        statusBadge.classList.add('auto');
+                        statusBadge.textContent = 'AUTO';
+                    }
+
+                    // Update input styling
+                    [xInput, yInput].forEach(inp => {
+                        inp.classList.remove('valid', 'invalid');
+                        if (inp.value) {
+                            inp.classList.add(isValid ? 'valid' : 'invalid');
+                        }
+                    });
+                });
+            });
+
+            if (highlightBtn) {
+                highlightBtn.addEventListener('click', () => {
+                    console.log(`Would highlight room: ${roomId}`);
+                });
+            }
+
+            tbody.appendChild(row);
+        });
+    },
+
+    /**
+     * Validate if coordinates are within acceptable bounds
+     */
+    isValidCoordinate(x, y) {
+        if (x === '' || y === '') return true; // Empty is okay (auto-calculate)
+        if (typeof x !== 'number' || typeof y !== 'number') return false;
+        return x >= this.MIN_COORD && x <= this.MAX_COORD &&
+               y >= this.MIN_COORD && y <= this.MAX_COORD;
+    },
+
+    /**
+     * Save changes to the server
+     */
+    async saveChanges() {
+        const saveBtn = document.getElementById('saveEditorBtn');
+        if (!saveBtn) return;
+
+        try {
+            saveBtn.disabled = true;
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = '💾 Saving...';
+
+            // Prepare data - only include rooms with coordinates
+            const dataToSave = {};
+            for (const [roomId, coords] of Object.entries(this.editedCoords)) {
+                if (coords.x !== '' && coords.y !== '') {
+                    // Validate before sending
+                    if (!this.isValidCoordinate(coords.x, coords.y)) {
+                        throw new Error(`Invalid coordinates for ${roomId}: (${coords.x}, ${coords.y})`);
+                    }
+                    dataToSave[roomId] = {
+                        x: parseFloat(coords.x),
+                        y: parseFloat(coords.y)
+                    };
+                }
+            }
+
+            if (Object.keys(dataToSave).length === 0) {
+                throw new Error('No valid coordinates to save');
+            }
+
+            // Send to server
+            const response = await fetch('/api/navigation/room-centers/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataToSave)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Failed to save coordinates');
+            }
+
+            console.log(`✅ Saved ${result.updated_count} room coordinates`);
+
+            // Reload coordinates and close modal
+            await loadManualRoomCenters();
+            this.closeEditor();
+
+            // Show success message
+            saveBtn.textContent = '✓ Saved!';
+            setTimeout(() => {
+                saveBtn.disabled = false;
+                saveBtn.textContent = originalText;
+            }, 2000);
+
+        } catch (error) {
+            console.error('❌ Error saving coordinates:', error);
+            saveBtn.textContent = '✗ Error!';
+            alert(`Error: ${error.message}`);
+
+            setTimeout(() => {
+                saveBtn.disabled = false;
+                saveBtn.textContent = '💾 Save Changes';
+            }, 3000);
+        }
+    },
+
+    /**
+     * Export current coordinates as JSON
+     */
+    exportJson() {
+        const data = {};
+        for (const [roomId, coords] of Object.entries(this.editedCoords)) {
+            if (coords.x !== '' && coords.y !== '') {
+                data[roomId] = {
+                    x: parseFloat(coords.x),
+                    y: parseFloat(coords.y)
+                };
+            }
+        }
+
+        const jsonString = JSON.stringify(data, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `room_coordinates_${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    },
+
+    /**
+     * Import coordinates from JSON file
+     */
+    importJson(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+
+                // Merge imported data with existing
+                for (const [roomId, coords] of Object.entries(data)) {
+                    if (coords.x !== undefined && coords.y !== undefined) {
+                        this.editedCoords[roomId] = {
+                            x: coords.x,
+                            y: coords.y
+                        };
+                    }
+                }
+
+                // Refresh table
+                this.populateTable();
+                console.log(`✅ Imported ${Object.keys(data).length} room coordinates`);
+
+            } catch (error) {
+                alert(`Error importing JSON: ${error.message}`);
+            }
+        };
+
+        reader.readAsText(file);
+
+        // Reset input
+        event.target.value = '';
+    }
+};
+
 // Initialize map when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     initializeMap();
@@ -879,6 +1189,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (reloadBtn) {
         reloadBtn.addEventListener('click', reloadCoordinates);
     }
+
+    // Initialize coordinate editor modal
+    coordinateEditor.init();
 });
 
 // Export functions for global access
@@ -886,3 +1199,4 @@ window.showRouteBuildingM = showRouteBuildingM;
 window.clearRoute = clearRoute;
 window.startMapNavigation = startMapNavigation;
 window.reloadCoordinates = reloadCoordinates;
+window.coordinateEditor = coordinateEditor;

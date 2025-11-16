@@ -864,6 +864,80 @@ def reload_room_centers():
             "message": str(e)
         }), 500
 
+@app.route("/api/navigation/room-centers/update", methods=['POST'])
+def update_room_centers():
+    """Update room center coordinates in the configuration file"""
+    global building_m_config
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"status": "error", "message": "No data provided"}), 400
+
+        # Validate coordinate bounds (safe SVG space with padding)
+        MIN_COORD = -1000
+        MAX_COORD = 2000
+        invalid_rooms = []
+
+        for room_id, coords in data.items():
+            if not isinstance(coords, dict) or 'x' not in coords or 'y' not in coords:
+                invalid_rooms.append(f"{room_id}: Invalid format")
+                continue
+
+            x = coords.get('x')
+            y = coords.get('y')
+
+            if not isinstance(x, (int, float)) or not isinstance(y, (int, float)):
+                invalid_rooms.append(f"{room_id}: Coordinates must be numbers")
+                continue
+
+            if not (MIN_COORD <= x <= MAX_COORD and MIN_COORD <= y <= MAX_COORD):
+                invalid_rooms.append(f"{room_id}: Out of bounds ({x}, {y})")
+                continue
+
+        # If there are validation errors, return them
+        if invalid_rooms:
+            return jsonify({
+                "status": "error",
+                "message": "Validation failed",
+                "invalid_rooms": invalid_rooms
+            }), 400
+
+        # Update in-memory config
+        if 'roomCentersSVG' not in building_m_config:
+            building_m_config['roomCentersSVG'] = {}
+
+        for room_id, coords in data.items():
+            building_m_config['roomCentersSVG'][room_id] = {
+                'x': coords['x'],
+                'y': coords['y']
+            }
+
+        # Write to file
+        config_path = Path('config/building_m_rooms.json')
+        with open(config_path, 'r') as f:
+            full_config = json.load(f)
+
+        full_config['Building M']['roomCentersSVG'].update(data)
+
+        with open(config_path, 'w') as f:
+            json.dump(full_config, f, indent=2)
+
+        updated_count = len(data)
+        print(f"✅ Updated {updated_count} room coordinates successfully")
+
+        return jsonify({
+            "status": "success",
+            "message": f"Updated {updated_count} room coordinates",
+            "updated_count": updated_count
+        })
+
+    except Exception as e:
+        print(f"❌ Error updating room centers: {e}")
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
 def main():
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8081)))
 
