@@ -33,6 +33,54 @@
               <div id="map-mode-indicator" class="mode-indicator"></div>
               <button id="reloadCoordinatesBtn" class="reload-btn" title="Reload coordinates from config file">⟲ Reload Coordinates</button>
               <button id="editCoordinatesBtn" class="edit-btn" title="Edit room coordinates">✎ Edit Coordinates</button>
+              <button id="calibrateBtn" class="calibrate-btn" title="Calibrate room coordinates visually">🎯 Calibrate</button>
+              <button id="showCentersBtn" class="show-centers-btn" title="Toggle room center markers on map">👁️ Show Centers</button>
+            </div>
+          </div>
+          <!-- Calibration Panel -->
+          <div id="calibrationPanel" class="calibration-panel hidden">
+            <div class="calibration-content">
+              <div class="calibration-header">
+                <h3>Calibrate Room Coordinates</h3>
+                <button class="calibration-close" id="calibrationCloseBtn">&times;</button>
+              </div>
+              <div class="calibration-body">
+                <div class="calibration-section">
+                  <label for="calibrationRoomSelect">Select Room:</label>
+                  <select id="calibrationRoomSelect" class="calibration-select">
+                    <option value="">Choose a room to calibrate...</option>
+                  </select>
+                </div>
+
+                <div id="calibrationInputs" class="calibration-inputs hidden">
+                  <div class="input-group">
+                    <label for="calibX">X Coordinate:</label>
+                    <input type="number" id="calibX" class="calibration-input" step="0.1" placeholder="Enter X">
+                  </div>
+                  <div class="input-group">
+                    <label for="calibY">Y Coordinate:</label>
+                    <input type="number" id="calibY" class="calibration-input" step="0.1" placeholder="Enter Y">
+                  </div>
+                </div>
+
+                <div id="calibrationComparison" class="calibration-comparison hidden">
+                  <div class="comparison-item current">
+                    <strong>Current Position</strong>
+                    <div class="coord-display" id="currentCoordDisplay">-</div>
+                  </div>
+                  <div class="comparison-arrow">→</div>
+                  <div class="comparison-item preview">
+                    <strong>Preview Position</strong>
+                    <div class="coord-display" id="previewCoordDisplay">-</div>
+                  </div>
+                </div>
+
+                <div id="calibrationMessage" class="calibration-message"></div>
+              </div>
+              <div class="calibration-footer">
+                <button id="cancelCalibBtn" class="btn-secondary">Cancel</button>
+                <button id="confirmCalibBtn" class="btn-primary" disabled>Save Calibration</button>
+              </div>
             </div>
           </div>
           <!-- Coordinate Editor Modal -->

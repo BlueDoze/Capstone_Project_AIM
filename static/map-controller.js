@@ -1180,6 +1180,508 @@ const coordinateEditor = {
     }
 };
 
+/**
+ * Calibration Mode - Visual coordinate adjustment without LLM calls
+ */
+const calibrationMode = {
+    active: false,
+    selectedRoom: null,
+    originalCoords: null,
+    previewCoords: null,
+    MIN_COORD: -1000,
+    MAX_COORD: 2000,
+
+    /**
+     * Initialize calibration mode
+     */
+    init() {
+        const calibrateBtn = document.getElementById('calibrateBtn');
+        const calibPanel = document.getElementById('calibrationPanel');
+        const closeBtn = document.getElementById('calibrationCloseBtn');
+        const cancelBtn = document.getElementById('cancelCalibBtn');
+        const confirmBtn = document.getElementById('confirmCalibBtn');
+        const roomSelect = document.getElementById('calibrationRoomSelect');
+        const calibX = document.getElementById('calibX');
+        const calibY = document.getElementById('calibY');
+
+        if (calibrateBtn) {
+            calibrateBtn.addEventListener('click', () => this.openCalibration());
+        }
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closeCalibration());
+        }
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => this.closeCalibration());
+        }
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', () => this.saveCalibration());
+        }
+        if (roomSelect) {
+            roomSelect.addEventListener('change', (e) => this.selectRoom(e.target.value));
+        }
+        if (calibX) {
+            calibX.addEventListener('input', () => this.updatePreview());
+        }
+        if (calibY) {
+            calibY.addEventListener('input', () => this.updatePreview());
+        }
+    },
+
+    /**
+     * Open calibration panel
+     */
+    openCalibration() {
+        const panel = document.getElementById('calibrationPanel');
+        if (!panel) return;
+
+        // Populate room select dropdown
+        this.populateRoomSelect();
+
+        // Show panel
+        panel.classList.remove('hidden');
+        setTimeout(() => panel.classList.add('visible'), 10);
+    },
+
+    /**
+     * Close calibration panel
+     */
+    closeCalibration() {
+        const panel = document.getElementById('calibrationPanel');
+        if (panel) {
+            panel.classList.remove('visible');
+            setTimeout(() => panel.classList.add('hidden'), 300);
+        }
+
+        // Reset state
+        this.selectedRoom = null;
+        this.originalCoords = null;
+        this.previewCoords = null;
+        this.active = false;
+    },
+
+    /**
+     * Populate room select dropdown with available rooms
+     */
+    populateRoomSelect() {
+        const select = document.getElementById('calibrationRoomSelect');
+        if (!select) return;
+
+        // Get all room IDs from manual room centers
+        const roomIds = Object.keys(manualRoomCenters)
+            .filter(k => !k.startsWith('_'))
+            .sort();
+
+        // Keep existing options and add rooms
+        const currentValue = select.value;
+        const options = select.querySelectorAll('option');
+
+        // Remove room options (keep the first placeholder)
+        for (let i = options.length - 1; i > 0; i--) {
+            select.removeChild(options[i]);
+        }
+
+        // Add room options
+        roomIds.forEach(roomId => {
+            const option = document.createElement('option');
+            option.value = roomId;
+            option.textContent = roomId;
+            select.appendChild(option);
+        });
+
+        // Restore selection if still valid
+        if (roomIds.includes(currentValue)) {
+            select.value = currentValue;
+        }
+    },
+
+    /**
+     * Select a room for calibration
+     */
+    selectRoom(roomId) {
+        if (!roomId) {
+            this.active = false;
+            document.getElementById('calibrationInputs').classList.add('hidden');
+            document.getElementById('calibrationComparison').classList.add('hidden');
+            return;
+        }
+
+        this.active = true;
+        this.selectedRoom = roomId;
+        this.originalCoords = { ...manualRoomCenters[roomId] } || {};
+
+        // Initialize preview with original coordinates
+        this.previewCoords = { ...this.originalCoords };
+
+        // Show input section
+        const inputsDiv = document.getElementById('calibrationInputs');
+        const comparisonDiv = document.getElementById('calibrationComparison');
+
+        if (inputsDiv) inputsDiv.classList.remove('hidden');
+        if (comparisonDiv) comparisonDiv.classList.remove('hidden');
+
+        // Populate input fields
+        const calibX = document.getElementById('calibX');
+        const calibY = document.getElementById('calibY');
+
+        if (calibX) calibX.value = this.originalCoords.x || '';
+        if (calibY) calibY.value = this.originalCoords.y || '';
+
+        // Update display
+        this.updateCoordinateDisplay();
+        this.showMessage(`Selected room: ${roomId}`, 'info');
+    },
+
+    /**
+     * Update preview coordinates from inputs
+     */
+    updatePreview() {
+        const calibX = document.getElementById('calibX');
+        const calibY = document.getElementById('calibY');
+
+        const x = calibX ? parseFloat(calibX.value) || '' : '';
+        const y = calibY ? parseFloat(calibY.value) || '' : '';
+
+        this.previewCoords = { x, y };
+
+        // Validate coordinates
+        const isValid = this.isValidCoordinate(x, y);
+
+        // Update input styling
+        if (calibX) {
+            calibX.classList.remove('valid', 'invalid');
+            if (x !== '') {
+                calibX.classList.add(isValid ? 'valid' : 'invalid');
+            }
+        }
+        if (calibY) {
+            calibY.classList.remove('valid', 'invalid');
+            if (y !== '') {
+                calibY.classList.add(isValid ? 'valid' : 'invalid');
+            }
+        }
+
+        // Enable/disable save button
+        const confirmBtn = document.getElementById('confirmCalibBtn');
+        if (confirmBtn) {
+            confirmBtn.disabled = !isValid || (x === '' && y === '');
+        }
+
+        // Update display
+        this.updateCoordinateDisplay();
+    },
+
+    /**
+     * Validate coordinates
+     */
+    isValidCoordinate(x, y) {
+        if (x === '' || y === '') return false;
+        if (typeof x !== 'number' || typeof y !== 'number') return false;
+        return x >= this.MIN_COORD && x <= this.MAX_COORD &&
+               y >= this.MIN_COORD && y <= this.MAX_COORD;
+    },
+
+    /**
+     * Update coordinate display
+     */
+    updateCoordinateDisplay() {
+        const currentDisplay = document.getElementById('currentCoordDisplay');
+        const previewDisplay = document.getElementById('previewCoordDisplay');
+
+        if (currentDisplay) {
+            const x = this.originalCoords.x !== undefined ? this.originalCoords.x : '-';
+            const y = this.originalCoords.y !== undefined ? this.originalCoords.y : '-';
+            currentDisplay.textContent = `X: ${x}, Y: ${y}`;
+        }
+
+        if (previewDisplay) {
+            const x = this.previewCoords.x !== '' ? this.previewCoords.x : '-';
+            const y = this.previewCoords.y !== '' ? this.previewCoords.y : '-';
+            previewDisplay.textContent = `X: ${x}, Y: ${y}`;
+        }
+    },
+
+    /**
+     * Save calibration - update coordinates without LLM call
+     */
+    async saveCalibration() {
+        if (!this.selectedRoom || !this.previewCoords) return;
+
+        const confirmBtn = document.getElementById('confirmCalibBtn');
+        if (!confirmBtn) return;
+
+        try {
+            confirmBtn.disabled = true;
+            const originalText = confirmBtn.textContent;
+            confirmBtn.textContent = '💾 Saving...';
+
+            // Validate coordinates
+            const x = parseFloat(this.previewCoords.x);
+            const y = parseFloat(this.previewCoords.y);
+
+            if (!this.isValidCoordinate(x, y)) {
+                throw new Error('Invalid coordinates');
+            }
+
+            // Prepare data
+            const dataToSave = {
+                [this.selectedRoom]: { x, y }
+            };
+
+            // Save to server - NO LLM CALL, just coordinate update
+            const response = await fetch('/api/navigation/room-centers/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataToSave)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Failed to save coordinates');
+            }
+
+            // Reload coordinates in memory
+            await loadManualRoomCenters();
+
+            console.log(`✅ Calibrated ${this.selectedRoom}: (${x}, ${y})`);
+
+            // Show visual feedback on map
+            roomCenterVisualizer.showCalibrationFeedback(this.selectedRoom, { x, y });
+
+            // Update room center marker in real-time if centers are visible
+            roomCenterVisualizer.updateRoomMarker(this.selectedRoom, { x, y });
+
+            // Show success and close
+            this.showMessage('Calibration saved successfully!', 'success');
+            confirmBtn.textContent = '✓ Saved!';
+
+            setTimeout(() => {
+                this.closeCalibration();
+            }, 1500);
+
+        } catch (error) {
+            console.error('❌ Error saving calibration:', error);
+            this.showMessage(`Error: ${error.message}`, 'error');
+            confirmBtn.textContent = '✗ Error!';
+
+            setTimeout(() => {
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = 'Save Calibration';
+            }, 2000);
+        }
+    },
+
+    /**
+     * Show message in calibration panel
+     */
+    showMessage(text, type) {
+        const msgDiv = document.getElementById('calibrationMessage');
+        if (!msgDiv) return;
+
+        msgDiv.textContent = text;
+        msgDiv.className = `calibration-message show ${type}`;
+
+        // Auto-hide after 4 seconds for info messages
+        if (type === 'info') {
+            setTimeout(() => {
+                msgDiv.classList.remove('show');
+            }, 4000);
+        }
+    }
+};
+
+/**
+ * Room Center Visualization - Show calibrated room centers on map
+ */
+const roomCenterVisualizer = {
+    roomCenterLayer: null,
+    roomCenterMarkers: {},
+    centersVisible: false,
+
+    /**
+     * Initialize room center visualizer
+     */
+    init() {
+        const showCentersBtn = document.getElementById('showCentersBtn');
+        if (showCentersBtn) {
+            showCentersBtn.addEventListener('click', () => this.toggleRoomCenters());
+        }
+    },
+
+    /**
+     * Toggle visibility of room center markers
+     */
+    toggleRoomCenters() {
+        if (this.centersVisible) {
+            this.hideRoomCenters();
+        } else {
+            this.showRoomCenters();
+        }
+    },
+
+    /**
+     * Show all room center markers on map
+     */
+    showRoomCenters() {
+        if (this.roomCenterLayer) {
+            map.addLayer(this.roomCenterLayer);
+            this.centersVisible = true;
+            const btn = document.getElementById('showCentersBtn');
+            if (btn) btn.classList.add('active');
+            console.log('✅ Room centers displayed');
+            return;
+        }
+
+        const markerGroup = L.featureGroup();
+
+        // Create markers for all rooms with manual coordinates
+        Object.entries(manualRoomCenters).forEach(([roomId, coords]) => {
+            if (coords.x !== undefined && coords.y !== undefined) {
+                const latlng = svgCoordsToLatLng(coords.x, coords.y, currentSvgMap, currentCorners);
+
+                const marker = L.marker(latlng, {
+                    icon: L.icon({
+                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+                        iconSize: [15, 24],
+                        iconAnchor: [7.5, 24],
+                        popupAnchor: [0, -24],
+                        shadowSize: [21, 21]
+                    })
+                })
+                .bindPopup(`<strong>${roomId}</strong><br/>X: ${coords.x.toFixed(2)}<br/>Y: ${coords.y.toFixed(2)}`)
+                .on('click', function() {
+                    this.openPopup();
+                });
+
+                markerGroup.addLayer(marker);
+                this.roomCenterMarkers[roomId] = marker;
+            }
+        });
+
+        markerGroup.addTo(map);
+        this.roomCenterLayer = markerGroup;
+        this.centersVisible = true;
+
+        const btn = document.getElementById('showCentersBtn');
+        if (btn) btn.classList.add('active');
+
+        console.log(`✅ Displayed ${Object.keys(this.roomCenterMarkers).length} room centers`);
+    },
+
+    /**
+     * Hide all room center markers
+     */
+    hideRoomCenters() {
+        if (this.roomCenterLayer) {
+            map.removeLayer(this.roomCenterLayer);
+            this.centersVisible = false;
+
+            const btn = document.getElementById('showCentersBtn');
+            if (btn) btn.classList.remove('active');
+
+            console.log('✅ Room centers hidden');
+        }
+    },
+
+    /**
+     * Show temporary feedback marker after calibration
+     */
+    showCalibrationFeedback(roomId, coords) {
+        if (!currentSvgMap || !currentCorners) {
+            console.warn('Map not fully loaded yet');
+            return;
+        }
+
+        const latlng = svgCoordsToLatLng(coords.x, coords.y, currentSvgMap, currentCorners);
+
+        // Create feedback marker with special styling
+        const feedbackMarker = L.marker(latlng, {
+            icon: L.icon({
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            })
+        })
+        .addTo(map)
+        .bindPopup(`<strong>Calibrated: ${roomId}</strong><br/>X: ${coords.x.toFixed(2)}<br/>Y: ${coords.y.toFixed(2)}<br/><small>Position updated!</small>`, {
+            closeButton: true,
+            autoClose: false
+        })
+        .openPopup();
+
+        // Pan map to show the calibrated room
+        map.panTo(latlng, {
+            animate: true,
+            duration: 0.5
+        });
+
+        // Optional: Zoom in a bit if too zoomed out
+        if (map.getZoom() < 18) {
+            map.setZoom(18, { animate: true });
+        }
+
+        // Remove feedback marker after 4 seconds
+        setTimeout(() => {
+            map.removeLayer(feedbackMarker);
+            console.log(`✅ Calibration feedback removed for ${roomId}`);
+        }, 4000);
+
+        console.log(`✅ Calibration feedback shown for ${roomId} at (${coords.x}, ${coords.y})`);
+    },
+
+    /**
+     * Update a specific room marker with new coordinates (for real-time updates during calibration)
+     */
+    updateRoomMarker(roomId, coords) {
+        // Only update if centers are currently visible
+        if (!this.centersVisible || !this.roomCenterLayer) {
+            return;
+        }
+
+        if (!currentSvgMap || !currentCorners) {
+            console.warn('Map not fully loaded yet');
+            return;
+        }
+
+        try {
+            // Remove old marker if it exists
+            if (this.roomCenterMarkers[roomId]) {
+                this.roomCenterLayer.removeLayer(this.roomCenterMarkers[roomId]);
+            }
+
+            // Create new marker at updated coordinates
+            const latlng = svgCoordsToLatLng(coords.x, coords.y, currentSvgMap, currentCorners);
+
+            const newMarker = L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+                    iconSize: [15, 24],
+                    iconAnchor: [7.5, 24],
+                    popupAnchor: [0, -24],
+                    shadowSize: [21, 21]
+                })
+            })
+            .bindPopup(`<strong>${roomId}</strong><br/>X: ${coords.x.toFixed(2)}<br/>Y: ${coords.y.toFixed(2)}`)
+            .on('click', function() {
+                this.openPopup();
+            });
+
+            // Add to layer and update reference
+            this.roomCenterLayer.addLayer(newMarker);
+            this.roomCenterMarkers[roomId] = newMarker;
+
+            console.log(`✅ Updated marker for ${roomId} to (${coords.x}, ${coords.y})`);
+
+        } catch (error) {
+            console.error(`❌ Error updating marker for ${roomId}:`, error);
+        }
+    }
+};
+
 // Initialize map when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     initializeMap();
@@ -1192,6 +1694,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize coordinate editor modal
     coordinateEditor.init();
+
+    // Initialize calibration mode
+    calibrationMode.init();
+
+    // Initialize room center visualizer
+    roomCenterVisualizer.init();
 });
 
 // Export functions for global access
@@ -1200,3 +1708,5 @@ window.clearRoute = clearRoute;
 window.startMapNavigation = startMapNavigation;
 window.reloadCoordinates = reloadCoordinates;
 window.coordinateEditor = coordinateEditor;
+window.calibrationMode = calibrationMode;
+window.roomCenterVisualizer = roomCenterVisualizer;
