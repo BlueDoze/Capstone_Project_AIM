@@ -3007,28 +3007,11 @@ const routeSegmentsLoader = {
 
             console.log(`📦 Loaded GeoJSON with ${data.features.length} features`);
 
-            // Clear previous segments
-            this.clearSegments();
-
-            // Store loaded segments
+            // Store loaded segments (don't render them yet)
             this.loadedSegments = data.features;
 
-            // Render each segment
-            let successCount = 0;
-            data.features.forEach((feature, index) => {
-                try {
-                    const layer = this.renderSegment(feature, index);
-                    if (layer) {
-                        this.segmentLayers.push(layer);
-                        successCount++;
-                    }
-                } catch (error) {
-                    console.error(`❌ Error rendering segment ${index}:`, error);
-                }
-            });
-
-            console.log(`✅ Loaded ${successCount} route segments`);
-            this.showMessage(`Loaded ${successCount} route segments successfully!`, 'success');
+            console.log(`✅ Loaded ${data.features.length} route segments (available for navigation)`);
+            this.showMessage(`Loaded ${data.features.length} route segments - ready for navigation!`, 'success');
 
             // Enable clear button
             const clearBtn = document.getElementById('clearSegmentsBtn');
@@ -3145,29 +3128,37 @@ const routeSegmentsLoader = {
      */
     findMatchingSegment(startRoom, endRoom) {
         if (this.loadedSegments.length === 0) {
+            console.log('❌ No segments loaded');
             return null;
         }
 
-        console.log(`🔍 Looking for segment: ${startRoom} → ${endRoom}`);
+        console.log(`🔍 Looking for segment: "${startRoom}" → "${endRoom}"`);
 
-        // Normalize room names (remove 'M' prefix if present)
+        // Normalize room names - extract just the number
         const normalizeRoom = (room) => {
             if (!room) return '';
-            const normalized = room.toUpperCase().replace(/^M/, '');
-            return normalized;
+            // Extract numbers from strings like "Room_1006", "M1006", "1006", etc.
+            const match = room.match(/(\d{4})/);
+            return match ? match[1] : room.toUpperCase().replace(/^M/, '').replace('ROOM_', '');
         };
 
         const startNorm = normalizeRoom(startRoom);
         const endNorm = normalizeRoom(endRoom);
 
+        console.log(`📝 Normalized: "${startNorm}" → "${endNorm}"`);
+
         // Look for segments that connect these rooms
         for (const segment of this.loadedSegments) {
             const props = segment.properties || {};
+            
+            console.log(`  Checking segment: ${props.name}, startRoom: ${props.startRoom}, endRoom: ${props.endRoom}`);
             
             // Method 1: Check explicit startRoom and endRoom properties
             if (props.startRoom && props.endRoom) {
                 const segStartNorm = normalizeRoom(props.startRoom);
                 const segEndNorm = normalizeRoom(props.endRoom);
+                
+                console.log(`    Segment normalized: "${segStartNorm}" → "${segEndNorm}"`);
                 
                 if ((segStartNorm === startNorm && segEndNorm === endNorm) ||
                     (segStartNorm === endNorm && segEndNorm === startNorm)) {
@@ -3200,7 +3191,7 @@ const routeSegmentsLoader = {
 
         console.log(`✨ Highlighting segment: ${segment.properties?.name || 'Unnamed'}`);
 
-        // Clear previous highlights
+        // Clear previous route displays
         clearRoutePolylines();
         clearRoute();
 
