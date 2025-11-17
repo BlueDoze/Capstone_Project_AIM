@@ -674,6 +674,106 @@ function generateRouteGeoJSON(path, nodePositions, nodeMetadata, startRoom = nul
 }
 
 /**
+ * Assemble route from corridor segments
+ * Combines pre-traced corridor segments to create smooth paths
+ * @param {String} startNode - Starting node ID
+ * @param {String} endNode - Ending node ID
+ * @returns {Object} Assembled route with coordinates and quality score
+ */
+function assembleRouteFromCorridors(startNode, endNode) {
+    if (!currentGraphData || !window.corridorSegments) {
+        return null;
+    }
+
+    // 1. Get node path using Dijkstra
+    const nodePath = findShortestPath(currentGraphData.graph, startNode, endNode);
+    
+    if (!nodePath || nodePath.length < 2) {
+        console.error('❌ No path found between nodes');
+        return null;
+    }
+
+    console.log(`🔗 Building route from ${nodePath.length} nodes: ${nodePath.join(' → ')}`);
+
+    // 2. For each pair of consecutive nodes, find the corridor segment
+    const allCoordinates = [];
+    let segmentsFound = 0;
+    let segmentsMissing = 0;
+    const missingSegments = [];
+
+    for (let i = 0; i < nodePath.length - 1; i++) {
+        const fromNode = nodePath[i];
+        const toNode = nodePath[i + 1];
+
+        // Look for pre-traced corridor segment
+        const segment = window.corridorSegments.find(seg => {
+            const props = seg.properties || {};
+            return (props.startNode === fromNode && props.endNode === toNode) ||
+                   (props.startNode === toNode && props.endNode === fromNode);
+        });
+
+        if (segment) {
+            // Use traced path
+            let coords = segment.geometry.coordinates;
+            
+            // Reverse if needed to maintain direction
+            const needsReverse = segment.properties.startNode === toNode;
+            if (needsReverse) {
+                coords = [...coords].reverse();
+            }
+            
+            // Add coordinates (avoid duplicates at junction points)
+            if (allCoordinates.length > 0) {
+                // Skip first coordinate if it's the same as last added
+                coords = coords.slice(1);
+            }
+            
+            allCoordinates.push(...coords);
+            segmentsFound++;
+            console.log(`  ✅ ${fromNode} → ${toNode}: corridor segment`);
+        } else {
+            // Fallback: straight line between nodes
+            const startPos = currentGraphData.nodePositions[fromNode];
+            const endPos = currentGraphData.nodePositions[toNode];
+            
+            if (startPos && endPos) {
+                // Skip adding if we already have coordinates (avoid duplicates)
+                if (allCoordinates.length === 0 || 
+                    allCoordinates[allCoordinates.length - 1][0] !== startPos.lng ||
+                    allCoordinates[allCoordinates.length - 1][1] !== startPos.lat) {
+                    allCoordinates.push([startPos.lng, startPos.lat]);
+                }
+                allCoordinates.push([endPos.lng, endPos.lat]);
+            }
+            
+            segmentsMissing++;
+            missingSegments.push(`${fromNode}→${toNode}`);
+            console.warn(`  ⚠️ ${fromNode} → ${toNode}: missing, using straight line`);
+        }
+    }
+
+    const quality = segmentsFound / (segmentsFound + segmentsMissing);
+
+    console.log(`📊 Route assembled:`);
+    console.log(`   ✅ ${segmentsFound} traced corridor segments`);
+    console.log(`   ⚠️ ${segmentsMissing} calculated segments`);
+    console.log(`   📈 Quality: ${(quality * 100).toFixed(0)}%`);
+    
+    if (missingSegments.length > 0) {
+        console.log(`   📋 Missing: ${missingSegments.join(', ')}`);
+    }
+
+    return {
+        coordinates: allCoordinates,
+        nodePath: nodePath,
+        segmentsFound: segmentsFound,
+        segmentsMissing: segmentsMissing,
+        missingSegments: missingSegments,
+        quality: quality
+    };
+}
+
+/**
  * Render route as Leaflet polyline from GeoJSON
  * @param {Object} geoJSON - GeoJSON Feature with LineString geometry
  * @param {Object} options - Optional styling options
@@ -982,7 +1082,7 @@ function showRouteBuildingM(startNode, endNode) {
 
     console.log(`📍 Start room: ${startRoomName}, End room: ${endRoomName}`);
 
-    // Check if we have saved segments that match this route
+    // Priority 1: Check for complete room-to-room saved segments
     if (window.routeSegmentsLoader && window.routeSegmentsLoader.loadedSegments.length > 0) {
         const matchingSegment = window.routeSegmentsLoader.findMatchingSegment(
             startRoomName || startNode,
@@ -990,7 +1090,7 @@ function showRouteBuildingM(startNode, endNode) {
         );
 
         if (matchingSegment) {
-            console.log(`✅ Found matching saved segment: ${matchingSegment.properties.name}`);
+            console.log(`✅ Found matching room-to-room segment: ${matchingSegment.properties.name}`);
             // Highlight the matching segment
             window.routeSegmentsLoader.highlightSegment(matchingSegment);
             
@@ -1016,11 +1116,63 @@ function showRouteBuildingM(startNode, endNode) {
             
             return; // Use saved segment instead of calculating
         } else {
-            console.log('ℹ️ No matching saved segment found, calculating route...');
+            console.log('ℹ️ No matching room-to-room segment, checking corridor segments...');
         }
     }
 
-    // Calculate path using Dijkstra's algorithm
+    // Priority 2: Try to assemble route from corridor segments
+    if (window.corridorSegments && window.corridorSegments.length > 0) {
+        console.log(`🔗 Attempting to build route from ${window.corridorSegments.length} corridor segments`);
+        
+        const assembledRoute = assembleRouteFromCorridors(startNode, endNode);
+        
+        if (assembledRoute && assembledRoute.quality > 0.5) {
+            console.log(`✅ Successfully assembled route from corridors (quality: ${(assembledRoute.quality * 100).toFixed(0)}%)`);
+            
+            // Clear previous routes
+            clearRoutePolylines();
+            clearRoute();
+            
+            // Render the assembled route
+            const polyline = L.polyline(
+                assembledRoute.coordinates.map(coord => L.latLng(coord[1], coord[0])),
+                {
+                    color: '#2196F3',
+                    weight: 5,
+                    opacity: 0.9,
+                    dashArray: ''
+                }
+            );
+            
+            polyline.addTo(map);
+            window.routePolylines.push(polyline);
+            
+            // Add markers
+            const startCoords = getCoordinatesForRoom(startRoomName, currentGraphData, currentSvgMap);
+            const endCoords = getCoordinatesForRoom(endRoomName, currentGraphData, currentSvgMap);
+            
+            if (startCoords && endCoords) {
+                if (navigationMarkers.start) map.removeLayer(navigationMarkers.start);
+                if (navigationMarkers.end) map.removeLayer(navigationMarkers.end);
+
+                navigationMarkers.start = L.marker(startCoords, { icon: markerIcons.start })
+                    .addTo(map)
+                    .bindPopup(`Start: ${startRoomName || startNode}`);
+                navigationMarkers.end = L.marker(endCoords, { icon: markerIcons.end })
+                    .addTo(map)
+                    .bindPopup(`Destination: ${endRoomName || endNode}`);
+
+                map.fitBounds([startCoords, endCoords], { padding: [50, 50] });
+            }
+            
+            return; // Use assembled corridor segments
+        } else {
+            console.log(`⚠️ Corridor assembly quality too low (${assembledRoute ? (assembledRoute.quality * 100).toFixed(0) : 0}%), falling back to calculated route`);
+        }
+    }
+
+    // Priority 3: Calculate path using Dijkstra's algorithm (fallback)
+    console.log('🤖 Using calculated route (Dijkstra fallback)');
     const path = findShortestPath(currentGraphData.graph, startNode, endNode);
 
     if (path) {
@@ -3281,7 +3433,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize route segments loader
     routeSegmentsLoader.init();
+    
+    // Load corridor segments for route assembly
+    loadCorridorSegments();
 });
+
+/**
+ * Load corridor segments from GeoJSON file
+ * These are node-to-node corridor segments that can be combined to create any route
+ */
+async function loadCorridorSegments() {
+    try {
+        const response = await fetch('/map/corridor_segments_building_m.geojson?ts=' + new Date().getTime());
+        
+        if (!response.ok) {
+            // File might not exist yet - that's okay
+            console.log('ℹ️ No corridor segments file found (trace them with Route Builder)');
+            window.corridorSegments = [];
+            return;
+        }
+        
+        const data = await response.json();
+        
+        if (!data || !data.features || !Array.isArray(data.features)) {
+            throw new Error('Invalid GeoJSON format');
+        }
+        
+        window.corridorSegments = data.features;
+        console.log(`✅ Loaded ${data.features.length} corridor segments for route assembly`);
+        
+        // Log coverage statistics
+        const segmentsWithNodes = data.features.filter(f => 
+            f.properties && f.properties.startNode && f.properties.endNode
+        );
+        console.log(`📊 ${segmentsWithNodes.length} segments ready for automatic assembly`);
+        
+    } catch (error) {
+        console.log('ℹ️ Corridor segments not available yet:', error.message);
+        window.corridorSegments = [];
+    }
+}
 
 // Export functions for global access
 window.showRouteBuildingM = showRouteBuildingM;

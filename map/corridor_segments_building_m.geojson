@@ -1,0 +1,27 @@
+{
+  "type": "FeatureCollection",
+  "info": {
+    "building": "Building M",
+    "floor": 1,
+    "description": "Corridor segments (node-to-node) for automatic route assembly",
+    "created": "2025-11-17",
+    "instructions": "Trace these segments using Route Builder. Each segment connects two navigation nodes."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": []
+      },
+      "properties": {
+        "name": "Example: corridor_M1_1_M1_2",
+        "segmentType": "corridor",
+        "startNode": "M1_1",
+        "endNode": "M1_2",
+        "status": "not_traced",
+        "note": "Replace this with your traced segments"
+      }
+    }
+  ]
+}
