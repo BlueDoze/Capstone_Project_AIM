@@ -35,6 +35,7 @@
               <button id="editCoordinatesBtn" class="edit-btn" title="Edit room coordinates">✎ Edit Coordinates</button>
               <button id="calibrateBtn" class="calibrate-btn" title="Calibrate room coordinates visually">🎯 Calibrate</button>
               <button id="showCentersBtn" class="show-centers-btn" title="Toggle room center markers on map">👁️ Show Centers</button>
+              <button id="routeTracerBtn" class="route-tracer-btn" title="Trace routes and export as GeoJSON">🗺️ Trace Route</button>
             </div>
           </div>
           <!-- Calibration Panel -->
@@ -80,6 +81,56 @@
               <div class="calibration-footer">
                 <button id="cancelCalibBtn" class="btn-secondary">Cancel</button>
                 <button id="confirmCalibBtn" class="btn-primary" disabled>Save Calibration</button>
+              </div>
+            </div>
+          </div>
+          <!-- Route Tracer Panel -->
+          <div id="routeTracerPanel" class="route-tracer-panel hidden">
+            <div class="route-tracer-content">
+              <div class="route-tracer-header">
+                <h3>Route Tracer</h3>
+                <button class="route-tracer-close" id="routeTracerCloseBtn">&times;</button>
+              </div>
+              <div class="route-tracer-body">
+                <div class="route-tracer-section">
+                  <label for="startRoomSelect">Start Room:</label>
+                  <select id="startRoomSelect" class="route-tracer-select">
+                    <option value="">Choose start room...</option>
+                  </select>
+                </div>
+
+                <div class="route-tracer-section">
+                  <label for="endRoomSelect">End Room:</label>
+                  <select id="endRoomSelect" class="route-tracer-select">
+                    <option value="">Choose destination...</option>
+                  </select>
+                </div>
+
+                <div id="routeStatsDisplay" class="route-stats-display hidden">
+                  <div class="stat-item">
+                    <span class="stat-label">Distance:</span>
+                    <span class="stat-value" id="routeDistance">-</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">Nodes:</span>
+                    <span class="stat-value" id="routeNodes">-</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">Turns:</span>
+                    <span class="stat-value" id="routeTurns">-</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">Rooms:</span>
+                    <span class="stat-value" id="routeRooms">-</span>
+                  </div>
+                </div>
+
+                <div id="routeTracerMessage" class="route-tracer-message"></div>
+              </div>
+              <div class="route-tracer-footer">
+                <button id="clearRouteBtn" class="btn-secondary">Clear Route</button>
+                <button id="calculateRouteBtn" class="btn-primary" disabled>Calculate Route</button>
+                <button id="exportGeoJSONBtn" class="btn-success" disabled>Export GeoJSON</button>
               </div>
             </div>
           </div>

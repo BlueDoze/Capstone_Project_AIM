@@ -57,6 +57,10 @@ window.navigationMarkers = {
 window.highlightedNodes = [];
 window.pathLines = [];
 
+// Store route polylines and GeoJSON data
+window.routePolylines = [];
+window.routeGeoJSONData = null;
+
 // Debug mode flag
 const DEBUG_COORDINATES = true;
 
@@ -574,6 +578,172 @@ function drawPathOnMap(path, nodePositions, svgMap) {
 }
 
 /**
+ * Generate GeoJSON LineString from path
+ * @param {Array} path - Array of node IDs representing the route
+ * @param {Object} nodePositions - Map of node IDs to LatLng positions
+ * @param {Object} nodeMetadata - Map of node IDs to metadata
+ * @param {String} startRoom - Starting room ID (optional)
+ * @param {String} endRoom - Ending room ID (optional)
+ * @returns {Object} GeoJSON Feature object
+ */
+function generateRouteGeoJSON(path, nodePositions, nodeMetadata, startRoom = null, endRoom = null) {
+    if (!path || path.length === 0) {
+        console.error('❌ Cannot generate GeoJSON from empty path');
+        return null;
+    }
+
+    // Build LineString coordinates from path
+    const coordinates = path.map(nodeId => {
+        const pos = nodePositions[nodeId];
+        if (!pos) {
+            console.warn(`⚠️ No position found for node ${nodeId}`);
+            return null;
+        }
+        // GeoJSON uses [lng, lat] order (NOT [lat, lng])
+        return [pos.lng, pos.lat];
+    }).filter(coord => coord !== null);
+
+    if (coordinates.length === 0) {
+        console.error('❌ No valid coordinates in path');
+        return null;
+    }
+
+    // Calculate total distance
+    let totalDistance = 0;
+    for (let i = 0; i < path.length - 1; i++) {
+        const pos1 = nodePositions[path[i]];
+        const pos2 = nodePositions[path[i + 1]];
+        if (pos1 && pos2) {
+            totalDistance += pos1.distanceTo(pos2);
+        }
+    }
+
+    // Extract rooms along the route
+    const roomsAlongRoute = [];
+    path.forEach(nodeId => {
+        const roomName = getRoomNameFromNode(nodeId, nodeMetadata);
+        if (roomName && !roomsAlongRoute.includes(roomName)) {
+            roomsAlongRoute.push(roomName);
+        }
+    });
+
+    // Count turns (nodes with type: "turn" or "intersection")
+    let turnCount = 0;
+    path.forEach(nodeId => {
+        const metadata = nodeMetadata[nodeId];
+        if (metadata && metadata.represents) {
+            const represents = Array.isArray(metadata.represents) ? metadata.represents : [metadata.represents];
+            if (represents.some(r => r.type === 'turn' || r.type === 'intersection')) {
+                turnCount++;
+            }
+        }
+    });
+
+    // Build GeoJSON Feature
+    const geoJSON = {
+        type: "Feature",
+        geometry: {
+            type: "LineString",
+            coordinates: coordinates
+        },
+        properties: {
+            start: startRoom || path[0],
+            end: endRoom || path[path.length - 1],
+            distance: parseFloat(totalDistance.toFixed(2)),
+            distanceUnit: "meters",
+            nodes: path,
+            nodeCount: path.length,
+            rooms: roomsAlongRoute,
+            roomCount: roomsAlongRoute.length,
+            turns: turnCount,
+            building: "M",
+            floor: 1,
+            timestamp: new Date().toISOString()
+        }
+    };
+
+    console.log(`✅ Generated GeoJSON route: ${geoJSON.properties.distance}m, ${path.length} nodes, ${turnCount} turns`);
+    return geoJSON;
+}
+
+/**
+ * Render route as Leaflet polyline from GeoJSON
+ * @param {Object} geoJSON - GeoJSON Feature with LineString geometry
+ * @param {Object} options - Optional styling options
+ * @returns {Object} Leaflet polyline layer
+ */
+function renderRoutePolyline(geoJSON, options = {}) {
+    if (!geoJSON || geoJSON.geometry.type !== 'LineString') {
+        console.error('❌ Invalid GeoJSON for polyline rendering');
+        return null;
+    }
+
+    // Default styling
+    const defaultOptions = {
+        color: '#2196F3',
+        weight: 4,
+        opacity: 0.8,
+        smoothFactor: 1,
+        lineJoin: 'round',
+        lineCap: 'round'
+    };
+
+    const styleOptions = { ...defaultOptions, ...options };
+
+    // Create GeoJSON layer with Leaflet
+    const geoJSONLayer = L.geoJSON(geoJSON, {
+        style: styleOptions,
+        onEachFeature: (feature, layer) => {
+            // Add popup with route info
+            if (feature.properties) {
+                const props = feature.properties;
+                const popupContent = `
+                    <div style="min-width: 200px;">
+                        <strong>Route Information</strong><br>
+                        From: <strong>${props.start}</strong><br>
+                        To: <strong>${props.end}</strong><br>
+                        Distance: <strong>${props.distance} ${props.distanceUnit}</strong><br>
+                        Nodes: ${props.nodeCount}<br>
+                        Turns: ${props.turns}<br>
+                        Rooms: ${props.roomCount}
+                    </div>
+                `;
+                layer.bindPopup(popupContent);
+            }
+
+            // Add tooltip on hover
+            layer.on('mouseover', function (e) {
+                this.setStyle({ weight: 6, opacity: 1 });
+            });
+
+            layer.on('mouseout', function (e) {
+                this.setStyle(styleOptions);
+            });
+        }
+    });
+
+    geoJSONLayer.addTo(map);
+    console.log(`✅ Rendered route polyline: ${geoJSON.properties.start} → ${geoJSON.properties.end}`);
+
+    return geoJSONLayer;
+}
+
+/**
+ * Clear all route polylines from map
+ */
+function clearRoutePolylines() {
+    if (window.routePolylines && window.routePolylines.length > 0) {
+        window.routePolylines.forEach(polyline => {
+            if (polyline && map.hasLayer(polyline)) {
+                map.removeLayer(polyline);
+            }
+        });
+        window.routePolylines = [];
+        console.log('✅ Cleared all route polylines');
+    }
+}
+
+/**
  * Get room name from node
  */
 function getRoomNameFromNode(nodeId, nodeMetadata) {
@@ -794,12 +964,35 @@ function showRouteBuildingM(startNode, endNode) {
     const path = findShortestPath(currentGraphData.graph, startNode, endNode);
 
     if (path) {
-        // Draw on map
-        drawPathOnMap(path, currentGraphData.nodePositions, currentSvgMap);
-
         // Get room names from nodes to find room centers
         const startRoomName = getRoomNameFromNode(startNode, currentGraphData.nodeMetadata);
         const endRoomName = getRoomNameFromNode(endNode, currentGraphData.nodeMetadata);
+
+        // Generate GeoJSON for the route
+        const routeGeoJSON = generateRouteGeoJSON(
+            path,
+            currentGraphData.nodePositions,
+            currentGraphData.nodeMetadata,
+            startRoomName || startNode,
+            endRoomName || endNode
+        );
+
+        // Store GeoJSON data globally
+        window.routeGeoJSONData = routeGeoJSON;
+
+        // Clear previous polylines
+        clearRoutePolylines();
+
+        // Render route as polyline
+        if (routeGeoJSON) {
+            const polyline = renderRoutePolyline(routeGeoJSON);
+            if (polyline) {
+                window.routePolylines.push(polyline);
+            }
+        }
+
+        // Also draw on SVG for backward compatibility (optional - can be disabled)
+        drawPathOnMap(path, currentGraphData.nodePositions, currentSvgMap);
 
         // Get coordinates - prefer room centers for markers
         let startCoords, endCoords;
@@ -879,6 +1072,12 @@ function clearRoute() {
         });
     }
     window.pathLines = [];
+
+    // Clear polylines
+    clearRoutePolylines();
+
+    // Clear GeoJSON data
+    window.routeGeoJSONData = null;
 
     console.log('✅ Route cleared');
 }
@@ -1831,6 +2030,323 @@ const roomCenterVisualizer = {
     }
 };
 
+// Route Tracer Object
+const routeTracer = {
+    active: false,
+    startRoom: null,
+    endRoom: null,
+
+    /**
+     * Initialize route tracer
+     */
+    init() {
+        const tracerBtn = document.getElementById('routeTracerBtn');
+        const closeBtn = document.getElementById('routeTracerCloseBtn');
+        const calculateBtn = document.getElementById('calculateRouteBtn');
+        const clearBtn = document.getElementById('clearRouteBtn');
+        const exportBtn = document.getElementById('exportGeoJSONBtn');
+        const startSelect = document.getElementById('startRoomSelect');
+        const endSelect = document.getElementById('endRoomSelect');
+
+        if (tracerBtn) {
+            tracerBtn.addEventListener('click', () => this.openTracer());
+        }
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closeTracer());
+        }
+        if (calculateBtn) {
+            calculateBtn.addEventListener('click', () => this.calculateRoute());
+        }
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => this.clearCurrentRoute());
+        }
+        if (exportBtn) {
+            exportBtn.addEventListener('click', () => this.exportGeoJSON());
+        }
+        if (startSelect) {
+            startSelect.addEventListener('change', (e) => this.selectStartRoom(e.target.value));
+        }
+        if (endSelect) {
+            endSelect.addEventListener('change', (e) => this.selectEndRoom(e.target.value));
+        }
+    },
+
+    /**
+     * Open route tracer panel
+     */
+    openTracer() {
+        const panel = document.getElementById('routeTracerPanel');
+        if (!panel) return;
+
+        // Populate room dropdowns
+        this.populateRoomSelects();
+
+        // Show panel
+        panel.classList.remove('hidden');
+        setTimeout(() => panel.classList.add('visible'), 10);
+
+        // Activate button
+        const tracerBtn = document.getElementById('routeTracerBtn');
+        if (tracerBtn) tracerBtn.classList.add('active');
+
+        this.active = true;
+    },
+
+    /**
+     * Close route tracer panel
+     */
+    closeTracer() {
+        const panel = document.getElementById('routeTracerPanel');
+        if (panel) {
+            panel.classList.remove('visible');
+            setTimeout(() => panel.classList.add('hidden'), 300);
+        }
+
+        // Deactivate button
+        const tracerBtn = document.getElementById('routeTracerBtn');
+        if (tracerBtn) tracerBtn.classList.remove('active');
+
+        // Reset state
+        this.startRoom = null;
+        this.endRoom = null;
+        this.active = false;
+    },
+
+    /**
+     * Populate room select dropdowns
+     */
+    populateRoomSelects() {
+        const startSelect = document.getElementById('startRoomSelect');
+        const endSelect = document.getElementById('endRoomSelect');
+
+        if (!startSelect || !endSelect) return;
+
+        // Get all room IDs from manual room centers
+        const roomIds = Object.keys(manualRoomCenters)
+            .filter(k => !k.startsWith('_'))
+            .sort();
+
+        // Clear existing options (keep placeholder)
+        while (startSelect.options.length > 1) {
+            startSelect.remove(1);
+        }
+        while (endSelect.options.length > 1) {
+            endSelect.remove(1);
+        }
+
+        // Add room options
+        roomIds.forEach(roomId => {
+            const startOption = document.createElement('option');
+            startOption.value = roomId;
+            startOption.textContent = roomId;
+            startSelect.appendChild(startOption);
+
+            const endOption = document.createElement('option');
+            endOption.value = roomId;
+            endOption.textContent = roomId;
+            endSelect.appendChild(endOption);
+        });
+    },
+
+    /**
+     * Select start room
+     */
+    selectStartRoom(roomId) {
+        this.startRoom = roomId;
+        this.updateCalculateButton();
+    },
+
+    /**
+     * Select end room
+     */
+    selectEndRoom(roomId) {
+        this.endRoom = roomId;
+        this.updateCalculateButton();
+    },
+
+    /**
+     * Update calculate button state
+     */
+    updateCalculateButton() {
+        const calculateBtn = document.getElementById('calculateRouteBtn');
+        if (calculateBtn) {
+            calculateBtn.disabled = !(this.startRoom && this.endRoom);
+        }
+    },
+
+    /**
+     * Calculate and display route
+     */
+    calculateRoute() {
+        if (!this.startRoom || !this.endRoom) {
+            this.showMessage('Please select both start and end rooms', 'error');
+            return;
+        }
+
+        if (!currentGraphData) {
+            this.showMessage('Navigation graph not loaded', 'error');
+            return;
+        }
+
+        // Get node IDs for rooms
+        const startNode = currentGraphData.roomToNode?.[this.startRoom];
+        const endNode = currentGraphData.roomToNode?.[this.endRoom];
+
+        if (!startNode || !endNode) {
+            this.showMessage('Could not find navigation nodes for selected rooms', 'error');
+            return;
+        }
+
+        // Calculate path
+        const path = findShortestPath(currentGraphData.graph, startNode, endNode);
+
+        if (!path) {
+            this.showMessage('Could not calculate route', 'error');
+            return;
+        }
+
+        // Generate GeoJSON
+        const routeGeoJSON = generateRouteGeoJSON(
+            path,
+            currentGraphData.nodePositions,
+            currentGraphData.nodeMetadata,
+            this.startRoom,
+            this.endRoom
+        );
+
+        if (!routeGeoJSON) {
+            this.showMessage('Could not generate GeoJSON', 'error');
+            return;
+        }
+
+        // Store GeoJSON globally
+        window.routeGeoJSONData = routeGeoJSON;
+
+        // Clear previous routes
+        clearRoutePolylines();
+        clearRoute();
+
+        // Render route polyline
+        const polyline = renderRoutePolyline(routeGeoJSON);
+        if (polyline) {
+            window.routePolylines.push(polyline);
+        }
+
+        // Add start/end markers
+        const startCoords = getCoordinatesForRoom(this.startRoom, currentGraphData, currentSvgMap);
+        const endCoords = getCoordinatesForRoom(this.endRoom, currentGraphData, currentSvgMap);
+
+        if (startCoords && endCoords) {
+            navigationMarkers.start = L.marker(startCoords, { icon: markerIcons.start })
+                .addTo(map)
+                .bindPopup(`Start: ${this.startRoom}`);
+            navigationMarkers.end = L.marker(endCoords, { icon: markerIcons.end })
+                .addTo(map)
+                .bindPopup(`Destination: ${this.endRoom}`);
+
+            // Fit bounds
+            map.fitBounds([startCoords, endCoords]);
+        }
+
+        // Update stats display
+        this.updateStatsDisplay(routeGeoJSON.properties);
+
+        // Enable export button
+        const exportBtn = document.getElementById('exportGeoJSONBtn');
+        if (exportBtn) exportBtn.disabled = false;
+
+        this.showMessage('Route calculated successfully!', 'success');
+    },
+
+    /**
+     * Update route statistics display
+     */
+    updateStatsDisplay(props) {
+        const statsDisplay = document.getElementById('routeStatsDisplay');
+        const distanceEl = document.getElementById('routeDistance');
+        const nodesEl = document.getElementById('routeNodes');
+        const turnsEl = document.getElementById('routeTurns');
+        const roomsEl = document.getElementById('routeRooms');
+
+        if (statsDisplay) statsDisplay.classList.remove('hidden');
+        if (distanceEl) distanceEl.textContent = `${props.distance} ${props.distanceUnit}`;
+        if (nodesEl) nodesEl.textContent = props.nodeCount;
+        if (turnsEl) turnsEl.textContent = props.turns;
+        if (roomsEl) roomsEl.textContent = props.roomCount;
+    },
+
+    /**
+     * Clear current route
+     */
+    clearCurrentRoute() {
+        clearRoutePolylines();
+        clearRoute();
+
+        const statsDisplay = document.getElementById('routeStatsDisplay');
+        if (statsDisplay) statsDisplay.classList.add('hidden');
+
+        const exportBtn = document.getElementById('exportGeoJSONBtn');
+        if (exportBtn) exportBtn.disabled = true;
+
+        window.routeGeoJSONData = null;
+
+        this.showMessage('Route cleared', 'info');
+    },
+
+    /**
+     * Export route as GeoJSON file
+     */
+    exportGeoJSON() {
+        if (!window.routeGeoJSONData) {
+            this.showMessage('No route to export', 'error');
+            return;
+        }
+
+        try {
+            // Create JSON string
+            const jsonString = JSON.stringify(window.routeGeoJSONData, null, 2);
+
+            // Create download link
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+
+            // Generate filename with timestamp
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+            const filename = `route_${window.routeGeoJSONData.properties.start}_to_${window.routeGeoJSONData.properties.end}_${timestamp}.geojson`;
+            a.download = filename;
+
+            // Trigger download
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            this.showMessage(`Exported: ${filename}`, 'success');
+        } catch (error) {
+            console.error('Export error:', error);
+            this.showMessage('Error exporting GeoJSON', 'error');
+        }
+    },
+
+    /**
+     * Show message in panel
+     */
+    showMessage(text, type = 'info') {
+        const msgDiv = document.getElementById('routeTracerMessage');
+        if (!msgDiv) return;
+
+        msgDiv.textContent = text;
+        msgDiv.className = `route-tracer-message show ${type}`;
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            msgDiv.classList.remove('show');
+        }, 5000);
+    }
+};
+
 // Initialize map when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     initializeMap();
@@ -1849,6 +2365,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize room center visualizer
     roomCenterVisualizer.init();
+
+    // Initialize route tracer
+    routeTracer.init();
 });
 
 // Export functions for global access
@@ -1859,3 +2378,6 @@ window.reloadCoordinates = reloadCoordinates;
 window.coordinateEditor = coordinateEditor;
 window.calibrationMode = calibrationMode;
 window.roomCenterVisualizer = roomCenterVisualizer;
+window.routeTracer = routeTracer;
+window.generateRouteGeoJSON = generateRouteGeoJSON;
+window.renderRoutePolyline = renderRoutePolyline;
