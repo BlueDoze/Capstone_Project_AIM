@@ -116,48 +116,48 @@
       "_instructions": "To find SVG coordinates: 1) Open M1_official.svg in Inkscape/browser, 2) Use measuring tool to find center point, 3) Add coordinates here. These will override automatic getBBox() calculations.",
       "_example_format": "\"Room_1003\": { \"x\": 250.5, \"y\": 600.3 }",
       "Room_1003": {
-        "x": 402.3,
-        "y": 513.7
+        "x": 402,
+        "y": 512
       },
       "Room_1004": {
-        "x": 450,
-        "y": 330
+        "x": 560,
+        "y": 765
       },
       "Room_1006": {
-        "x": 200,
-        "y": 200
+        "x": 480,
+        "y": 833
       },
       "Room_1018": {
         "x": 285,
         "y": 555
       },
       "Room_1030": {
-        "x": 150,
+        "x": 156,
         "y": 340
       },
       "Room_1033": {
-        "x": 516.64,
+        "x": 516,
         "y": 390.15
       },
       "Room_1035": {
-        "x": 600,
-        "y": 450
+        "x": 240,
+        "y": 340
       },
       "Room_1037": {
-        "x": 200,
+        "x": 220,
         "y": 320
       },
       "Room_1040": {
-        "x": 500,
+        "x": 505,
         "y": 600
       },
       "Room_1041": {
-        "x": 780,
-        "y": 660
+        "x": -100,
+        "y": 100
       },
       "Room_1045": {
-        "x": 800,
-        "y": 500
+        "x": 100,
+        "y": 100
       },
       "Room_1049": {
         "x": 400,
@@ -168,15 +168,15 @@
         "y": 870
       },
       "Bathroom-Women": {
-        "x": 740,
-        "y": 630
+        "x": 550,
+        "y": 500
       },
       "Bathroom-Accessible": {
         "x": 500,
         "y": 500
       },
       "Elevator-M": {
-        "x": 50,
+        "x": 500,
         "y": 50
       },
       "Stairs_1": {
