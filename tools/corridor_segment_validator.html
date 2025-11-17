@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corridor Segment Validator - Building M</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #sidebar {
+            width: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+        }
+
+        #map {
+            flex: 1;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section h2 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 5px;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 10px;
+            background: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .segment-list {
+            margin-top: 10px;
+        }
+
+        .segment-item {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .segment-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(5px);
+        }
+
+        .segment-item.active {
+            background: rgba(255, 255, 255, 0.35);
+            border-left: 4px solid #ffd700;
+        }
+
+        .segment-item.valid {
+            border-left: 4px solid #00ff00;
+        }
+
+        .segment-item.invalid {
+            border-left: 4px solid #ff4444;
+        }
+
+        .segment-name {
+            font-weight: bold;
+            font-size: 1.05em;
+            margin-bottom: 5px;
+        }
+
+        .segment-info {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        .status-valid {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .status-invalid {
+            background: #ff4444;
+            color: #fff;
+        }
+
+        .status-warning {
+            background: #ffaa00;
+            color: #000;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            opacity: 0.9;
+        }
+
+        .error-list {
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .error-item {
+            background: rgba(255, 68, 68, 0.2);
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            border-left: 3px solid #ff4444;
+        }
+
+        .button {
+            width: 100%;
+            padding: 12px;
+            background: #ffd700;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .button:hover {
+            background: #ffed4e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .button:disabled {
+            background: #666;
+            color: #999;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .node-marker {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #000;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .coordinates-display {
+            font-family: monospace;
+            font-size: 0.8em;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px;
+            border-radius: 3px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <h1>🔍 Corridor Segment Validator</h1>
+        <p class="subtitle">Building M - Validação e Diagnóstico</p>
+
+        <div class="section">
+            <h2>📂 Carregar Arquivo</h2>
+            <input type="file" id="fileInput" class="file-input" accept=".geojson,.json">
+            <button class="button" onclick="loadDefaultFile()">Carregar corridor_segments_building_m.geojson</button>
+        </div>
+
+        <div class="section" id="statsSection" style="display: none;">
+            <h2>📊 Estatísticas</h2>
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="totalSegments">0</div>
+                    <div class="stat-label">Segmentos</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="validSegments">0</div>
+                    <div class="stat-label">Válidos</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="invalidSegments">0</div>
+                    <div class="stat-label">Inválidos</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="coveragePercent">0%</div>
+                    <div class="stat-label">Cobertura</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="errorsSection" style="display: none;">
+            <h2>⚠️ Problemas Encontrados</h2>
+            <div class="error-list" id="errorList"></div>
+        </div>
+
+        <div class="section" id="segmentsSection" style="display: none;">
+            <h2>📍 Segmentos Tracejados</h2>
+            <div class="segment-list" id="segmentList"></div>
+        </div>
+
+        <div class="section">
+            <h2>ℹ️ Como Corrigir</h2>
+            <p style="font-size: 0.9em; line-height: 1.5;">
+                Para cada segmento, adicione manualmente no GeoJSON:
+            </p>
+            <div class="coordinates-display">
+"startNode": "M1_2",<br>
+"endNode": "M1_3"
+            </div>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate.js"></script>
+    <script>
+        // Building M node positions (from navigation graph)
+        const nodePositions = {
+            'H_entry': [43.014194, -81.198702],
+            'M1_1': [43.014097, -81.198648],
+            'M1_2': [43.014108, -81.198600],
+            'M1_3': [43.014094, -81.198592],
+            'M1_Int_1': [43.014131, -81.198520],
+            'M1_4': [43.014117, -81.198513],
+            'M1_5': [43.014097, -81.198434],
+            'M1_6': [43.014091, -81.198453],
+            'M1_7': [43.014056, -81.198466],
+            'M1_Turn_1': [43.014145, -81.198490],
+            'M1_8': [43.014147, -81.198442],
+            'M1_Int_2': [43.014142, -81.198390],
+            'M1_9': [43.014123, -81.198390],
+            'M1_10': [43.014104, -81.198390],
+            'M1_11': [43.014085, -81.198390],
+            'M1_12': [43.014066, -81.198390],
+            'M1_13': [43.014047, -81.198390],
+            'M1_14': [43.014142, -81.198330],
+            'M1_15': [43.014142, -81.198290],
+            'M1_16': [43.014142, -81.198250],
+            'M1_17': [43.014142, -81.198210],
+            'M1_18': [43.014142, -81.198170],
+            'M1_19': [43.014142, -81.198130]
+        };
+
+        // Expected segments from CORRIDOR_SEGMENTS_TO_TRACE.md
+        const expectedSegments = [
+            // PATH 1: Main Entrance
+            { start: 'H_entry', end: 'M1_1', name: 'corridor_H_entry_M1_1' },
+            { start: 'M1_1', end: 'M1_2', name: 'corridor_M1_1_M1_2' },
+            { start: 'M1_2', end: 'M1_3', name: 'corridor_M1_2_M1_3' },
+            { start: 'M1_3', end: 'M1_Int_1', name: 'corridor_M1_3_M1_Int_1' },
+            { start: 'M1_Int_1', end: 'M1_4', name: 'corridor_M1_Int_1_M1_4' },
+            { start: 'M1_4', end: 'M1_5', name: 'corridor_M1_4_M1_5' },
+            { start: 'M1_5', end: 'M1_6', name: 'corridor_M1_5_M1_6' },
+            { start: 'M1_6', end: 'M1_7', name: 'corridor_M1_6_M1_7' },
+            // PATH 2: Connector
+            { start: 'M1_Int_1', end: 'M1_Turn_1', name: 'corridor_M1_Int_1_M1_Turn_1' },
+            { start: 'M1_Turn_1', end: 'M1_8', name: 'corridor_M1_Turn_1_M1_8' },
+            // PATH 3: Bathrooms
+            { start: 'M1_8', end: 'M1_Int_2', name: 'corridor_M1_8_M1_Int_2' },
+            { start: 'M1_Int_2', end: 'M1_9', name: 'corridor_M1_Int_2_M1_9' },
+            { start: 'M1_9', end: 'M1_10', name: 'corridor_M1_9_M1_10' },
+            { start: 'M1_10', end: 'M1_11', name: 'corridor_M1_10_M1_11' },
+            { start: 'M1_11', end: 'M1_12', name: 'corridor_M1_11_M1_12' },
+            { start: 'M1_12', end: 'M1_13', name: 'corridor_M1_12_M1_13' },
+            // PATH 4: Side Branch
+            { start: 'M1_Int_2', end: 'M1_14', name: 'corridor_M1_Int_2_M1_14' },
+            { start: 'M1_14', end: 'M1_15', name: 'corridor_M1_14_M1_15' },
+            { start: 'M1_15', end: 'M1_16', name: 'corridor_M1_15_M1_16' },
+            { start: 'M1_16', end: 'M1_17', name: 'corridor_M1_16_M1_17' },
+            { start: 'M1_17', end: 'M1_18', name: 'corridor_M1_17_M1_18' },
+            { start: 'M1_18', end: 'M1_19', name: 'corridor_M1_18_M1_19' }
+        ];
+
+        let map, currentLayer, nodeMarkers = [];
+        let loadedSegments = [];
+
+        // Initialize map
+        function initMap() {
+            map = L.map('map', {
+                center: [43.014120, -81.198400],
+                zoom: 20,
+                bearing: 21.3,
+                rotate: true,
+                rotateControl: {
+                    closeOnZeroBearing: false
+                }
+            });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Draw all nodes
+            drawNodes();
+        }
+
+        function drawNodes() {
+            Object.entries(nodePositions).forEach(([nodeName, coords]) => {
+                const marker = L.circleMarker(coords, {
+                    radius: 8,
+                    fillColor: '#4444ff',
+                    color: '#000',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).addTo(map);
+
+                marker.bindPopup(`<b>${nodeName}</b><br>${coords[0].toFixed(6)}, ${coords[1].toFixed(6)}`);
+                nodeMarkers.push(marker);
+            });
+        }
+
+        function loadDefaultFile() {
+            fetch('/map/corridor_segments_building_m.geojson')
+                .then(response => response.json())
+                .then(data => processGeoJSON(data))
+                .catch(error => {
+                    alert('Erro ao carregar arquivo: ' + error.message);
+                });
+        }
+
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        processGeoJSON(data);
+                    } catch (error) {
+                        alert('Erro ao ler arquivo: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function processGeoJSON(data) {
+            loadedSegments = [];
+            const errors = [];
+            
+            if (currentLayer) {
+                map.removeLayer(currentLayer);
+            }
+
+            // Validate each segment
+            data.features.forEach((feature, idx) => {
+                const props = feature.properties;
+                const validation = validateSegment(feature, idx);
+                
+                loadedSegments.push({
+                    feature: feature,
+                    validation: validation
+                });
+
+                if (!validation.valid) {
+                    errors.push(...validation.errors);
+                }
+            });
+
+            // Display results
+            displayStatistics();
+            displayErrors(errors);
+            displaySegments();
+            drawSegments(data);
+        }
+
+        function validateSegment(feature, idx) {
+            const errors = [];
+            const props = feature.properties;
+            
+            // Check required properties
+            if (!props.name) {
+                errors.push(`Segmento ${idx + 1}: Falta propriedade "name"`);
+            }
+            
+            if (!props.startNode) {
+                errors.push(`${props.name || 'Segmento ' + (idx + 1)}: Falta propriedade "startNode"`);
+            } else if (!nodePositions[props.startNode]) {
+                errors.push(`${props.name}: startNode "${props.startNode}" não existe no grafo`);
+            }
+            
+            if (!props.endNode) {
+                errors.push(`${props.name || 'Segmento ' + (idx + 1)}: Falta propriedade "endNode"`);
+            } else if (!nodePositions[props.endNode]) {
+                errors.push(`${props.name}: endNode "${props.endNode}" não existe no grafo`);
+            }
+
+            // Check if segment matches expected
+            const expectedSegment = expectedSegments.find(s => s.name === props.name);
+            if (!expectedSegment && props.name) {
+                errors.push(`${props.name}: Nome não está na lista esperada`);
+            }
+
+            // Check coordinates
+            if (!feature.geometry || !feature.geometry.coordinates || feature.geometry.coordinates.length < 2) {
+                errors.push(`${props.name}: Coordenadas inválidas`);
+            }
+
+            // Calculate distance from expected nodes
+            if (props.startNode && props.endNode && nodePositions[props.startNode] && nodePositions[props.endNode]) {
+                const firstCoord = feature.geometry.coordinates[0];
+                const lastCoord = feature.geometry.coordinates[feature.geometry.coordinates.length - 1];
+                
+                const startNodePos = nodePositions[props.startNode];
+                const endNodePos = nodePositions[props.endNode];
+                
+                const distToStart = getDistance(
+                    [firstCoord[1], firstCoord[0]], 
+                    startNodePos
+                );
+                const distToEnd = getDistance(
+                    [lastCoord[1], lastCoord[0]], 
+                    endNodePos
+                );
+                
+                if (distToStart > 0.00005) { // ~5 meters
+                    errors.push(`${props.name}: Início está longe do startNode (${(distToStart * 111000).toFixed(1)}m)`);
+                }
+                if (distToEnd > 0.00005) {
+                    errors.push(`${props.name}: Fim está longe do endNode (${(distToEnd * 111000).toFixed(1)}m)`);
+                }
+            }
+
+            return {
+                valid: errors.length === 0,
+                errors: errors,
+                hasNodes: !!(props.startNode && props.endNode),
+                expectedSegment: expectedSegment
+            };
+        }
+
+        function getDistance(coord1, coord2) {
+            const lat1 = coord1[0];
+            const lon1 = coord1[1];
+            const lat2 = coord2[0];
+            const lon2 = coord2[1];
+            return Math.sqrt(Math.pow(lat2 - lat1, 2) + Math.pow(lon2 - lon1, 2));
+        }
+
+        function displayStatistics() {
+            const total = loadedSegments.length;
+            const valid = loadedSegments.filter(s => s.validation.valid).length;
+            const invalid = total - valid;
+            const coverage = ((total / expectedSegments.length) * 100).toFixed(0);
+
+            document.getElementById('totalSegments').textContent = total;
+            document.getElementById('validSegments').textContent = valid;
+            document.getElementById('invalidSegments').textContent = invalid;
+            document.getElementById('coveragePercent').textContent = coverage + '%';
+
+            document.getElementById('statsSection').style.display = 'block';
+        }
+
+        function displayErrors(errors) {
+            const errorList = document.getElementById('errorList');
+            
+            if (errors.length === 0) {
+                document.getElementById('errorsSection').style.display = 'none';
+                return;
+            }
+
+            errorList.innerHTML = errors.map(error => 
+                `<div class="error-item">❌ ${error}</div>`
+            ).join('');
+            
+            document.getElementById('errorsSection').style.display = 'block';
+        }
+
+        function displaySegments() {
+            const segmentList = document.getElementById('segmentList');
+            
+            segmentList.innerHTML = loadedSegments.map((seg, idx) => {
+                const props = seg.feature.properties;
+                const val = seg.validation;
+                const statusClass = val.valid ? 'valid' : 'invalid';
+                const statusBadge = val.valid ? 
+                    '<span class="status-badge status-valid">✓ Válido</span>' :
+                    '<span class="status-badge status-invalid">✗ Inválido</span>';
+                
+                const nodeInfo = val.hasNodes ? 
+                    `📍 ${props.startNode} → ${props.endNode}` :
+                    '⚠️ Faltam startNode/endNode';
+
+                const pointCount = seg.feature.geometry.coordinates.length;
+                
+                return `
+                    <div class="segment-item ${statusClass}" onclick="focusSegment(${idx})">
+                        <div class="segment-name">${props.name || 'Sem nome'}</div>
+                        <div class="segment-info">${nodeInfo}</div>
+                        <div class="segment-info">📏 ${pointCount} pontos | ${(props.length || 0).toFixed(1)}m</div>
+                        ${statusBadge}
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('segmentsSection').style.display = 'block';
+        }
+
+        function drawSegments(data) {
+            currentLayer = L.geoJSON(data, {
+                style: function(feature) {
+                    const validation = loadedSegments.find(s => s.feature === feature)?.validation;
+                    return {
+                        color: validation?.valid ? '#00ff00' : '#ff4444',
+                        weight: 4,
+                        opacity: 0.8
+                    };
+                },
+                onEachFeature: function(feature, layer) {
+                    const props = feature.properties;
+                    const validation = loadedSegments.find(s => s.feature === feature)?.validation;
+                    
+                    let popupContent = `<b>${props.name || 'Sem nome'}</b><br>`;
+                    if (props.startNode && props.endNode) {
+                        popupContent += `${props.startNode} → ${props.endNode}<br>`;
+                    }
+                    popupContent += `Pontos: ${feature.geometry.coordinates.length}<br>`;
+                    popupContent += `Status: ${validation?.valid ? '✓ Válido' : '✗ Inválido'}`;
+                    
+                    layer.bindPopup(popupContent);
+                }
+            }).addTo(map);
+
+            if (data.features.length > 0) {
+                map.fitBounds(currentLayer.getBounds());
+            }
+        }
+
+        function focusSegment(idx) {
+            const segment = loadedSegments[idx];
+            const bounds = L.geoJSON(segment.feature).getBounds();
+            map.fitBounds(bounds, { padding: [50, 50] });
+            
+            // Highlight in sidebar
+            document.querySelectorAll('.segment-item').forEach((el, i) => {
+                el.classList.toggle('active', i === idx);
+            });
+        }
+
+        // Initialize
+        initMap();
+    </script>
+</body>
+</html>

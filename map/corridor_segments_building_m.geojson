@@ -1,26 +1,187 @@
 {
   "type": "FeatureCollection",
-  "info": {
-    "building": "Building M",
-    "floor": 1,
-    "description": "Corridor segments (node-to-node) for automatic route assembly",
-    "created": "2025-11-17",
-    "instructions": "Trace these segments using Route Builder. Each segment connects two navigation nodes."
-  },
   "features": [
     {
       "type": "Feature",
       "geometry": {
         "type": "LineString",
-        "coordinates": []
+        "coordinates": [
+          [
+            -81.19859947105056,
+            43.014108112876286
+          ],
+          [
+            -81.1985919201037,
+            43.01409395187068
+          ]
+        ]
       },
       "properties": {
-        "name": "Example: corridor_M1_1_M1_2",
+        "name": "M1_2_M1_3",
+        "segmentType": "corridor",
+        "startNode": "M1_2",
+        "endNode": "M1_3",
+        "pointCount": 2,
+        "length": 1.6900792163710276,
+        "timestamp": "2025-11-17T19:55:25.049Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.19864782019873,
+            43.0140948558703
+          ],
+          [
+            -81.19859978342438,
+            43.01410802382559
+          ]
+        ]
+      },
+      "properties": {
+        "name": "M1_1_M1_2",
         "segmentType": "corridor",
         "startNode": "M1_1",
         "endNode": "M1_2",
-        "status": "not_traced",
-        "note": "Replace this with your traced segments"
+        "pointCount": 2,
+        "length": 4.171035648993417,
+        "timestamp": "2025-11-17T19:55:52.389Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.19859985221927,
+            43.01410747796827
+          ],
+          [
+            -81.19852044047252,
+            43.01413064270475
+          ]
+        ]
+      },
+      "properties": {
+        "name": "M1_3_M1_Int_1",
+        "segmentType": "corridor",
+        "startNode": "M1_3",
+        "endNode": "M1_Int_1",
+        "pointCount": 2,
+        "length": 6.951344020586181,
+        "timestamp": "2025-11-17T19:56:19.254Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.19851957214593,
+            43.01413036399972
+          ],
+          [
+            -81.198512264778,
+            43.01411665980575
+          ]
+        ]
+      },
+      "properties": {
+        "name": "M1_Int_1_M1_4",
+        "segmentType": "corridor",
+        "startNode": "M1_Int_1",
+        "endNode": "M1_4",
+        "pointCount": 2,
+        "length": 1.6355599338895237,
+        "timestamp": "2025-11-17T19:56:41.866Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.19852025079379,
+            43.01413032685913
+          ],
+          [
+            -81.1984601532297,
+            43.01414719618598
+          ],
+          [
+            -81.1984343496633,
+            43.014097454582114
+          ]
+        ]
+      },
+      "properties": {
+        "name": "M1_4_M1_5",
+        "segmentType": "corridor",
+        "startNode": "M1_4",
+        "endNode": "M1_5",
+        "pointCount": 3,
+        "length": 11.149387918830115,
+        "timestamp": "2025-11-17T19:58:16.959Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.19843391550002,
+            43.01409731522952
+          ],
+          [
+            -81.19845303909831,
+            43.014091337276845
+          ]
+        ]
+      },
+      "properties": {
+        "name": "M1_5_M1_6",
+        "segmentType": "corridor",
+        "startNode": "M1_5",
+        "endNode": "M1_6",
+        "pointCount": 2,
+        "length": 1.6909585074223066,
+        "timestamp": "2025-11-17T19:58:43.383Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.19843295685936,
+            43.01409510723271
+          ],
+          [
+            -81.19842009457699,
+            43.01406693611787
+          ],
+          [
+            -81.19846624130805,
+            43.01405562257762
+          ]
+        ]
+      },
+      "properties": {
+        "name": "M1_6_M1_7",
+        "segmentType": "corridor",
+        "startNode": "M1_6",
+        "endNode": "M1_7",
+        "pointCount": 3,
+        "length": 7.259644493895124,
+        "timestamp": "2025-11-17T19:59:39.514Z"
       }
     }
   ]
