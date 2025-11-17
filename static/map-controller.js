@@ -284,6 +284,90 @@ function svgCoordsToLatLng(svgX, svgY, svgMap, corners) {
 }
 
 /**
+ * Convert LatLng coordinates to SVG coordinates (inverse of svgCoordsToLatLng)
+ * Uses bilinear interpolation to find SVG position from map position
+ */
+function latLngToSvgCoords(latlng, svgMap, corners) {
+    if (!svgMap || !corners || corners.length !== 4) {
+        console.error('❌ Invalid parameters for latLngToSvgCoords');
+        return null;
+    }
+
+    const svgBBox = svgMap.viewBox.baseVal || {
+        x: 0,
+        y: 0,
+        width: svgMap.width.baseVal.value,
+        height: svgMap.height.baseVal.value
+    };
+
+    const topLeft = corners[0], topRight = corners[1],
+        bottomRight = corners[2], bottomLeft = corners[3];
+
+    const targetLat = latlng.lat;
+    const targetLng = latlng.lng;
+
+    // Use bilinear interpolation to find normalized coordinates
+    // We need to solve:
+    // targetLat = latTop + normY * (latBottom - latTop)
+    // targetLng = lngTop + normY * (lngBottom - lngTop)
+    // where latTop = topLeft.lat + normX * (topRight.lat - topLeft.lat), etc.
+
+    let bestNormX = 0.5, bestNormY = 0.5;
+    let bestError = Infinity;
+
+    // Iterative approach: sample grid and refine
+    for (let normX = 0; normX <= 1; normX += 0.01) {
+        const latTop = topLeft.lat + normX * (topRight.lat - topLeft.lat);
+        const lngTop = topLeft.lng + normX * (topRight.lng - topLeft.lng);
+        const latBottom = bottomLeft.lat + normX * (bottomRight.lat - bottomLeft.lat);
+        const lngBottom = bottomLeft.lng + normX * (bottomRight.lng - bottomLeft.lng);
+
+        // Find normY for this normX
+        if (Math.abs(latBottom - latTop) > 0.0001 || Math.abs(lngBottom - lngTop) > 0.0001) {
+            // Prefer latitude for interpolation
+            let normY;
+            if (Math.abs(latBottom - latTop) > Math.abs(lngBottom - lngTop)) {
+                normY = (targetLat - latTop) / (latBottom - latTop);
+            } else {
+                normY = (targetLng - lngTop) / (lngBottom - lngTop);
+            }
+
+            // Clamp normY to [0, 1]
+            normY = Math.max(0, Math.min(1, normY));
+
+            // Calculate resulting coordinates
+            const resultLat = latTop + normY * (latBottom - latTop);
+            const resultLng = lngTop + normY * (lngBottom - lngTop);
+
+            // Calculate error
+            const error = Math.pow(resultLat - targetLat, 2) + Math.pow(resultLng - targetLng, 2);
+            if (error < bestError) {
+                bestError = error;
+                bestNormX = normX;
+                bestNormY = normY;
+            }
+        }
+    }
+
+    // Convert normalized coordinates to SVG coordinates
+    const svgX = svgBBox.x + bestNormX * svgBBox.width;
+    const svgY = svgBBox.y + bestNormY * svgBBox.height;
+
+    debugLogCoordinates(`LatLng→SVG`, latlng, {
+        svgX: svgX.toFixed(2),
+        svgY: svgY.toFixed(2),
+        normX: bestNormX.toFixed(4),
+        normY: bestNormY.toFixed(4),
+        error: bestError.toFixed(6)
+    });
+
+    return {
+        x: parseFloat(svgX.toFixed(2)),
+        y: parseFloat(svgY.toFixed(2))
+    };
+}
+
+/**
  * Convert SVG node to LatLng coordinates
  */
 function nodeToLatLng(nodeElement, svgMap, corners) {
@@ -1252,6 +1336,9 @@ const calibrationMode = {
             setTimeout(() => panel.classList.add('hidden'), 300);
         }
 
+        // Disable map click mode
+        this.enableMapClickMode(false);
+
         // Reset state
         this.selectedRoom = null;
         this.originalCoords = null;
@@ -1300,6 +1387,7 @@ const calibrationMode = {
     selectRoom(roomId) {
         if (!roomId) {
             this.active = false;
+            this.enableMapClickMode(false);
             document.getElementById('calibrationInputs').classList.add('hidden');
             document.getElementById('calibrationComparison').classList.add('hidden');
             return;
@@ -1316,19 +1404,80 @@ const calibrationMode = {
         const inputsDiv = document.getElementById('calibrationInputs');
         const comparisonDiv = document.getElementById('calibrationComparison');
 
-        if (inputsDiv) inputsDiv.classList.remove('hidden');
+        if (inputsDiv) inputsDiv.classList.add('hidden'); // Hide inputs, will click on map instead
         if (comparisonDiv) comparisonDiv.classList.remove('hidden');
-
-        // Populate input fields
-        const calibX = document.getElementById('calibX');
-        const calibY = document.getElementById('calibY');
-
-        if (calibX) calibX.value = this.originalCoords.x || '';
-        if (calibY) calibY.value = this.originalCoords.y || '';
 
         // Update display
         this.updateCoordinateDisplay();
-        this.showMessage(`Selected room: ${roomId}`, 'info');
+        this.showMessage(`Click on the map to set the center for ${roomId}`, 'info');
+
+        // Enable map click mode for calibration
+        this.enableMapClickMode(true);
+    },
+
+    /**
+     * Enable/disable map click mode for calibration
+     */
+    enableMapClickMode(enable) {
+        if (enable && this.selectedRoom) {
+            // Show instruction
+            const msgDiv = document.getElementById('calibrationMessage');
+            if (msgDiv) {
+                msgDiv.textContent = `👆 Click on the map to set position for ${this.selectedRoom}`;
+                msgDiv.className = 'calibration-message show info';
+            }
+
+            // Add map click listener
+            if (!this.mapClickListener) {
+                this.mapClickListener = (e) => this.handleMapClick(e);
+            }
+            map.on('click', this.mapClickListener);
+        } else {
+            // Remove map click listener
+            if (this.mapClickListener) {
+                map.off('click', this.mapClickListener);
+            }
+        }
+    },
+
+    /**
+     * Handle map click during calibration
+     */
+    handleMapClick(e) {
+        if (!this.selectedRoom) return;
+
+        try {
+            // Convert Leaflet LatLng to SVG coordinates
+            const latlng = e.latlng;
+            const svgCoords = latLngToSvgCoords(latlng, currentSvgMap, currentCorners);
+
+            if (!svgCoords) {
+                this.showMessage('Click outside map bounds. Try again.', 'error');
+                return;
+            }
+
+            // Update preview coordinates
+            this.previewCoords = {
+                x: parseFloat(svgCoords.x.toFixed(2)),
+                y: parseFloat(svgCoords.y.toFixed(2))
+            };
+
+            // Update display
+            this.updateCoordinateDisplay();
+            this.showMessage(`Position set: X: ${this.previewCoords.x}, Y: ${this.previewCoords.y} - Click "Save" to confirm`, 'info');
+
+            // Enable save button
+            const confirmBtn = document.getElementById('confirmCalibBtn');
+            if (confirmBtn) {
+                confirmBtn.disabled = false;
+            }
+
+            console.log(`📍 Map click captured: (${this.previewCoords.x}, ${this.previewCoords.y})`);
+
+        } catch (error) {
+            console.error('❌ Error processing map click:', error);
+            this.showMessage('Error reading position. Try again.', 'error');
+        }
     },
 
     /**
