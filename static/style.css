@@ -900,6 +900,61 @@
         box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
       }
 
+      /* Load Segments Button */
+      .load-segments-btn {
+        position: absolute;
+        bottom: 15px;
+        right: 645px;
+        padding: 8px 12px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        z-index: 999;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+      }
+      .load-segments-btn:hover {
+        background-color: #45A049;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      }
+      .load-segments-btn:active {
+        transform: scale(0.95);
+      }
+
+      /* Clear Segments Button */
+      .clear-segments-btn {
+        position: absolute;
+        bottom: 15px;
+        right: 750px;
+        padding: 8px 12px;
+        background-color: #F44336;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        z-index: 999;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+      }
+      .clear-segments-btn:hover {
+        background-color: #D32F2F;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      }
+      .clear-segments-btn:active {
+        transform: scale(0.95);
+      }
+      .clear-segments-btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
       /* Route Builder Panel */
       .route-builder-panel {
         position: fixed;

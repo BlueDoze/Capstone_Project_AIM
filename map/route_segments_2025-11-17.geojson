@@ -103,7 +103,9 @@
         "segmentType": "corridor",
         "pointCount": 7,
         "length": 7.098545769778598,
-        "timestamp": "2025-11-17T03:24:18.160Z"
+        "timestamp": "2025-11-17T03:24:18.160Z",
+        "startRoom": "M1006",
+        "endRoom": "M1004"
       }
     }
   ]

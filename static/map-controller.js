@@ -976,14 +976,54 @@ function showRouteBuildingM(startNode, endNode) {
 
     console.log(`🎯 Showing route: ${startNode} → ${endNode}`);
 
-    // Calculate path
+    // Get room names from nodes
+    const startRoomName = getRoomNameFromNode(startNode, currentGraphData.nodeMetadata);
+    const endRoomName = getRoomNameFromNode(endNode, currentGraphData.nodeMetadata);
+
+    console.log(`📍 Start room: ${startRoomName}, End room: ${endRoomName}`);
+
+    // Check if we have saved segments that match this route
+    if (window.routeSegmentsLoader && window.routeSegmentsLoader.loadedSegments.length > 0) {
+        const matchingSegment = window.routeSegmentsLoader.findMatchingSegment(
+            startRoomName || startNode,
+            endRoomName || endNode
+        );
+
+        if (matchingSegment) {
+            console.log(`✅ Found matching saved segment: ${matchingSegment.properties.name}`);
+            // Highlight the matching segment
+            window.routeSegmentsLoader.highlightSegment(matchingSegment);
+            
+            // Add markers for start/end
+            const startCoords = getCoordinatesForRoom(startRoomName, currentGraphData, currentSvgMap);
+            const endCoords = getCoordinatesForRoom(endRoomName, currentGraphData, currentSvgMap);
+            
+            if (startCoords && endCoords) {
+                // Clear previous markers
+                if (navigationMarkers.start) map.removeLayer(navigationMarkers.start);
+                if (navigationMarkers.end) map.removeLayer(navigationMarkers.end);
+
+                navigationMarkers.start = L.marker(startCoords, { icon: markerIcons.start })
+                    .addTo(map)
+                    .bindPopup(`Start: ${startRoomName || startNode}`);
+                navigationMarkers.end = L.marker(endCoords, { icon: markerIcons.end })
+                    .addTo(map)
+                    .bindPopup(`Destination: ${endRoomName || endNode}`);
+
+                // Fit map to show the route
+                map.fitBounds([startCoords, endCoords], { padding: [50, 50] });
+            }
+            
+            return; // Use saved segment instead of calculating
+        } else {
+            console.log('ℹ️ No matching saved segment found, calculating route...');
+        }
+    }
+
+    // Calculate path using Dijkstra's algorithm
     const path = findShortestPath(currentGraphData.graph, startNode, endNode);
 
     if (path) {
-        // Get room names from nodes to find room centers
-        const startRoomName = getRoomNameFromNode(startNode, currentGraphData.nodeMetadata);
-        const endRoomName = getRoomNameFromNode(endNode, currentGraphData.nodeMetadata);
-
         // Generate GeoJSON for the route
         const routeGeoJSON = generateRouteGeoJSON(
             path,
@@ -2911,6 +2951,318 @@ const routeBuilder = {
     }
 };
 
+// ============================================
+// Route Segments Loader - Load and display saved route segments
+// ============================================
+const routeSegmentsLoader = {
+    loadedSegments: [],
+    segmentLayers: [],
+
+    /**
+     * Initialize route segments loader
+     */
+    init() {
+        console.log('🔧 Initializing Route Segments Loader...');
+
+        const loadBtn = document.getElementById('loadSegmentsBtn');
+        const clearBtn = document.getElementById('clearSegmentsBtn');
+
+        if (loadBtn) {
+            loadBtn.addEventListener('click', () => this.loadSegments());
+        }
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => this.clearSegments());
+        }
+
+        console.log('✅ Route Segments Loader initialized');
+    },
+
+    /**
+     * Load route segments from file
+     */
+    async loadSegments() {
+        try {
+            console.log('📥 Loading route segments...');
+
+            // Check if map is initialized
+            if (!map) {
+                this.showMessage('Map not initialized yet', 'error');
+                console.error('❌ Map not initialized');
+                return;
+            }
+
+            // Fetch the latest route segments file
+            const response = await fetch('/map/route_segments_2025-11-17.geojson?ts=' + new Date().getTime());
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (!data || !data.features || data.features.length === 0) {
+                this.showMessage('No route segments found in file', 'warning');
+                return;
+            }
+
+            console.log(`📦 Loaded GeoJSON with ${data.features.length} features`);
+
+            // Clear previous segments
+            this.clearSegments();
+
+            // Store loaded segments
+            this.loadedSegments = data.features;
+
+            // Render each segment
+            let successCount = 0;
+            data.features.forEach((feature, index) => {
+                try {
+                    const layer = this.renderSegment(feature, index);
+                    if (layer) {
+                        this.segmentLayers.push(layer);
+                        successCount++;
+                    }
+                } catch (error) {
+                    console.error(`❌ Error rendering segment ${index}:`, error);
+                }
+            });
+
+            console.log(`✅ Loaded ${successCount} route segments`);
+            this.showMessage(`Loaded ${successCount} route segments successfully!`, 'success');
+
+            // Enable clear button
+            const clearBtn = document.getElementById('clearSegmentsBtn');
+            if (clearBtn) clearBtn.disabled = false;
+
+        } catch (error) {
+            console.error('❌ Error loading route segments:', error);
+            console.error('Error details:', error.message);
+            this.showMessage(`Error: ${error.message}`, 'error');
+        }
+    },
+
+    /**
+     * Render a single segment on the map
+     */
+    renderSegment(feature, index) {
+        if (!feature || !feature.geometry || feature.geometry.type !== 'LineString') {
+            console.warn(`⚠️ Invalid segment at index ${index}`);
+            return null;
+        }
+
+        const props = feature.properties || {};
+
+        // Convert GeoJSON coordinates to LatLng
+        const latlngs = feature.geometry.coordinates.map(coord => 
+            L.latLng(coord[1], coord[0])
+        );
+
+        if (latlngs.length === 0) {
+            console.warn(`⚠️ No coordinates in segment ${index}`);
+            return null;
+        }
+
+        // DON'T apply rotation compensation - these coordinates were captured 
+        // from the already-rotated map during manual tracing
+        // They're already in the correct coordinate system for display
+
+        // Determine color based on segment type
+        const colors = {
+            'corridor': '#9C27B0',      // Purple
+            'room_entrance': '#FF5722', // Red-Orange
+            'connection': '#00BCD4'     // Cyan
+        };
+        const color = colors[props.segmentType] || '#9C27B0';
+
+        console.log(`🎨 Rendering segment "${props.name || 'Segment ' + index}" with color ${color}`);
+
+        // Create polyline (use latlngs directly, no rotation)
+        const polyline = L.polyline(latlngs, {
+            color: color,
+            weight: 3,
+            opacity: 0.7,
+            dashArray: '5, 5'
+        });
+
+        // Add popup with segment info
+        const popupContent = `
+            <div style="min-width: 180px;">
+                <strong>${props.name || 'Unnamed Segment'}</strong><br>
+                Type: <strong>${props.segmentType || 'unknown'}</strong><br>
+                Points: ${props.pointCount || latlngs.length}<br>
+                Length: <strong>${props.length ? props.length.toFixed(2) + ' m' : 'N/A'}</strong><br>
+                <small>Created: ${props.timestamp ? new Date(props.timestamp).toLocaleString() : 'Unknown'}</small>
+            </div>
+        `;
+        polyline.bindPopup(popupContent);
+
+        // Add hover effects
+        polyline.on('mouseover', function () {
+            this.setStyle({ weight: 5, opacity: 1 });
+        });
+
+        polyline.on('mouseout', function () {
+            this.setStyle({ weight: 3, opacity: 0.7 });
+        });
+
+        try {
+            polyline.addTo(map);
+            console.log(`✅ Rendered segment: ${props.name || 'Segment ' + index}`);
+            return polyline;
+        } catch (error) {
+            console.error(`❌ Error adding segment ${index} to map:`, error);
+            return null;
+        }
+    },
+
+    /**
+     * Clear all loaded segments from map
+     */
+    clearSegments() {
+        console.log('🗑️ Clearing route segments...');
+
+        // Remove all layers from map
+        this.segmentLayers.forEach(layer => {
+            if (map.hasLayer(layer)) {
+                map.removeLayer(layer);
+            }
+        });
+
+        // Reset state
+        this.segmentLayers = [];
+        this.loadedSegments = [];
+
+        // Disable clear button
+        const clearBtn = document.getElementById('clearSegmentsBtn');
+        if (clearBtn) clearBtn.disabled = true;
+
+        this.showMessage('Route segments cleared', 'info');
+        console.log('✅ Route segments cleared');
+    },
+
+    /**
+     * Find a matching segment for a route
+     */
+    findMatchingSegment(startRoom, endRoom) {
+        if (this.loadedSegments.length === 0) {
+            return null;
+        }
+
+        console.log(`🔍 Looking for segment: ${startRoom} → ${endRoom}`);
+
+        // Normalize room names (remove 'M' prefix if present)
+        const normalizeRoom = (room) => {
+            if (!room) return '';
+            const normalized = room.toUpperCase().replace(/^M/, '');
+            return normalized;
+        };
+
+        const startNorm = normalizeRoom(startRoom);
+        const endNorm = normalizeRoom(endRoom);
+
+        // Look for segments that connect these rooms
+        for (const segment of this.loadedSegments) {
+            const props = segment.properties || {};
+            
+            // Method 1: Check explicit startRoom and endRoom properties
+            if (props.startRoom && props.endRoom) {
+                const segStartNorm = normalizeRoom(props.startRoom);
+                const segEndNorm = normalizeRoom(props.endRoom);
+                
+                if ((segStartNorm === startNorm && segEndNorm === endNorm) ||
+                    (segStartNorm === endNorm && segEndNorm === startNorm)) {
+                    console.log(`✅ Found exact match: ${props.name}`);
+                    return segment;
+                }
+            }
+            
+            // Method 2: Check segment name for room references
+            const name = (props.name || '').toLowerCase();
+            
+            if ((name.includes(startNorm.toLowerCase()) && name.includes(endNorm.toLowerCase())) ||
+                (name.includes(endNorm.toLowerCase()) && name.includes(startNorm.toLowerCase()))) {
+                console.log(`✅ Found name match: ${props.name}`);
+                return segment;
+            }
+        }
+
+        console.log('❌ No matching segment found');
+        return null;
+    },
+
+    /**
+     * Highlight a specific segment
+     */
+    highlightSegment(segment) {
+        if (!segment || !segment.geometry) {
+            return;
+        }
+
+        console.log(`✨ Highlighting segment: ${segment.properties?.name || 'Unnamed'}`);
+
+        // Clear previous highlights
+        clearRoutePolylines();
+        clearRoute();
+
+        // Convert GeoJSON coordinates to LatLng
+        const latlngs = segment.geometry.coordinates.map(coord => 
+            L.latLng(coord[1], coord[0])
+        );
+
+        // DON'T apply rotation compensation - these coordinates were captured 
+        // from the already-rotated map, so they're already in the correct system
+        console.log(`📍 Using ${latlngs.length} points directly (no rotation compensation needed)`);
+
+        // Create highlighted polyline (blue, solid, thick)
+        const polyline = L.polyline(latlngs, {
+            color: '#2196F3',    // Blue - same as calculated routes
+            weight: 5,
+            opacity: 0.9,
+            dashArray: ''        // Solid line for highlight
+        });
+
+        const props = segment.properties || {};
+        const popupContent = `
+            <div style="min-width: 200px;">
+                <strong>🎯 ${props.name || 'Route Segment'}</strong><br>
+                <em>Saved Route</em><br><br>
+                Type: <strong>${props.segmentType || 'unknown'}</strong><br>
+                Length: <strong>${props.length ? props.length.toFixed(2) + ' m' : 'N/A'}</strong><br>
+                Points: ${props.pointCount || latlngs.length}
+            </div>
+        `;
+        polyline.bindPopup(popupContent);
+        // Don't auto-open popup - let user click to see details
+
+        polyline.addTo(map);
+        window.routePolylines.push(polyline);
+
+        // Fit map to segment bounds
+        map.fitBounds(polyline.getBounds(), { padding: [80, 80] });
+
+        console.log('✅ Segment highlighted with blue line');
+    },
+
+    /**
+     * Show message to user
+     */
+    showMessage(text, type = 'info') {
+        console.log(`💬 ${text}`);
+        
+        // Show in map indicator
+        const indicator = document.getElementById('map-mode-indicator');
+        if (indicator) {
+            indicator.textContent = text;
+            indicator.classList.add('active');
+            
+            setTimeout(() => {
+                indicator.classList.remove('active');
+                indicator.textContent = '';
+            }, 3000);
+        }
+    }
+};
+
 // Initialize map when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     initializeMap();
@@ -2935,6 +3287,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize route builder
     routeBuilder.init();
+
+    // Initialize route segments loader
+    routeSegmentsLoader.init();
 });
 
 // Export functions for global access
@@ -2947,5 +3302,6 @@ window.calibrationMode = calibrationMode;
 window.roomCenterVisualizer = roomCenterVisualizer;
 window.routeTracer = routeTracer;
 window.routeBuilder = routeBuilder;
+window.routeSegmentsLoader = routeSegmentsLoader;
 window.generateRouteGeoJSON = generateRouteGeoJSON;
 window.renderRoutePolyline = renderRoutePolyline;

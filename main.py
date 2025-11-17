@@ -583,6 +583,10 @@ def send_leaflet(path):
 def send_tools(path):
     return send_from_directory('tools', path)
 
+@app.route('/map/<path:path>')
+def send_map(path):
+    return send_from_directory('map', path)
+
 @app.route("/chat", methods=['POST'])
 def chat():
     if model is None:
