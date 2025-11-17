@@ -798,6 +798,272 @@
         background-color: #ccc;
         cursor: not-allowed;
       }
+      .btn-small {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      /* Route Adjustment Controls */
+      .route-adjustment-controls {
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #FFF8E1;
+        border-radius: 6px;
+        border-left: 4px solid #FFA726;
+      }
+      .route-adjustment-controls.hidden {
+        display: none;
+      }
+      .route-adjustment-controls h4 {
+        margin: 0 0 15px 0;
+        font-size: 14px;
+        color: #E65100;
+        font-weight: 600;
+      }
+      .adjustment-group {
+        margin-bottom: 15px;
+      }
+      .adjustment-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 12px;
+        color: #555;
+        font-weight: 500;
+      }
+      .adjustment-group label span {
+        color: #FFA726;
+        font-weight: 700;
+        font-family: monospace;
+      }
+      .adjustment-slider {
+        width: 100%;
+        height: 6px;
+        border-radius: 3px;
+        background: #ddd;
+        outline: none;
+        -webkit-appearance: none;
+      }
+      .adjustment-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #FFA726;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .adjustment-slider::-webkit-slider-thumb:hover {
+        background: #FF9800;
+        transform: scale(1.1);
+      }
+      .adjustment-slider::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #FFA726;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+      }
+      .adjustment-slider::-moz-range-thumb:hover {
+        background: #FF9800;
+        transform: scale(1.1);
+      }
+
+      /* Route Builder Button */
+      .route-builder-btn {
+        position: absolute;
+        bottom: 15px;
+        right: 540px;
+        padding: 8px 12px;
+        background-color: #9C27B0;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        z-index: 999;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+      }
+      .route-builder-btn:hover {
+        background-color: #7B1FA2;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      }
+      .route-builder-btn:active {
+        transform: scale(0.95);
+      }
+      .route-builder-btn.active {
+        background-color: #6A1B9A;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Route Builder Panel */
+      .route-builder-panel {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 380px;
+        height: 100%;
+        background-color: white;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        color: black;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+      .route-builder-panel.visible {
+        transform: translateX(0);
+      }
+      .route-builder-panel.hidden {
+        display: none;
+      }
+      .route-builder-content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      .route-builder-header {
+        padding: 20px;
+        border-bottom: 2px solid #9C27B0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .route-builder-header h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #333;
+      }
+      .route-builder-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #666;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .route-builder-close:hover {
+        color: #000;
+      }
+      .route-builder-body {
+        padding: 20px;
+        overflow-y: auto;
+        flex: 1;
+      }
+      .route-builder-footer {
+        padding: 20px;
+        border-top: 1px solid #ddd;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .builder-instructions {
+        margin-bottom: 20px;
+        padding: 12px;
+        background-color: #F3E5F5;
+        border-radius: 4px;
+        border-left: 3px solid #9C27B0;
+      }
+      .builder-instructions p {
+        margin: 0 0 8px 0;
+        font-size: 13px;
+        color: #333;
+      }
+      .builder-instructions ol {
+        margin: 0;
+        padding-left: 20px;
+        font-size: 12px;
+        color: #666;
+      }
+      .builder-instructions ol li {
+        margin-bottom: 4px;
+      }
+      .builder-section {
+        margin-bottom: 18px;
+      }
+      .builder-section label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        font-size: 13px;
+        color: #333;
+      }
+      .builder-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 13px;
+        box-sizing: border-box;
+      }
+      .builder-input:focus {
+        outline: none;
+        border-color: #9C27B0;
+        box-shadow: 0 0 4px rgba(156, 39, 176, 0.3);
+      }
+      .builder-select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 13px;
+        background-color: #f9f9f9;
+      }
+      .builder-select:focus {
+        outline: none;
+        border-color: #9C27B0;
+        box-shadow: 0 0 4px rgba(156, 39, 176, 0.3);
+      }
+      .builder-stats {
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #F3E5F5;
+        border-radius: 6px;
+        border-left: 4px solid #9C27B0;
+      }
+      .builder-stats.hidden {
+        display: none;
+      }
+      .route-builder-message {
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        margin-top: 15px;
+        display: none;
+      }
+      .route-builder-message.show {
+        display: block;
+      }
+      .route-builder-message.success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .route-builder-message.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      .route-builder-message.info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+      }
+      .route-builder-message.warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+      }
 
       /* Pulsing Animation for Feedback Markers */
       @keyframes markerPulse {

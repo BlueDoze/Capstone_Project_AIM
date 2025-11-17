@@ -36,6 +36,7 @@
               <button id="calibrateBtn" class="calibrate-btn" title="Calibrate room coordinates visually">🎯 Calibrate</button>
               <button id="showCentersBtn" class="show-centers-btn" title="Toggle room center markers on map">👁️ Show Centers</button>
               <button id="routeTracerBtn" class="route-tracer-btn" title="Trace routes and export as GeoJSON">🗺️ Trace Route</button>
+              <button id="routeBuilderBtn" class="route-builder-btn" title="Draw and define route segments">✏️ Route Builder</button>
             </div>
           </div>
           <!-- Calibration Panel -->
@@ -126,11 +127,81 @@
                 </div>
 
                 <div id="routeTracerMessage" class="route-tracer-message"></div>
+
+                <!-- Route Adjustment Controls -->
+                <div id="routeAdjustmentControls" class="route-adjustment-controls hidden">
+                  <h4>Manual Adjustments</h4>
+                  <div class="adjustment-group">
+                    <label for="routeTranslateX">Translate X: <span id="translateXValue">0</span> units</label>
+                    <input type="range" id="routeTranslateX" class="adjustment-slider" min="-0.001" max="0.001" step="0.00001" value="0">
+                  </div>
+                  <div class="adjustment-group">
+                    <label for="routeTranslateY">Translate Y: <span id="translateYValue">0</span> units</label>
+                    <input type="range" id="routeTranslateY" class="adjustment-slider" min="-0.001" max="0.001" step="0.00001" value="0">
+                  </div>
+                  <div class="adjustment-group">
+                    <label for="routeRotate">Rotation: <span id="rotateValue">0</span>°</label>
+                    <input type="range" id="routeRotate" class="adjustment-slider" min="-45" max="45" step="0.1" value="0">
+                  </div>
+                  <button id="resetAdjustmentsBtn" class="btn-secondary btn-small">Reset Adjustments</button>
+                </div>
               </div>
               <div class="route-tracer-footer">
                 <button id="clearRouteBtn" class="btn-secondary">Clear Route</button>
                 <button id="calculateRouteBtn" class="btn-primary" disabled>Calculate Route</button>
                 <button id="exportGeoJSONBtn" class="btn-success" disabled>Export GeoJSON</button>
+              </div>
+            </div>
+          </div>
+          <!-- Route Builder Panel -->
+          <div id="routeBuilderPanel" class="route-builder-panel hidden">
+            <div class="route-builder-content">
+              <div class="route-builder-header">
+                <h3>Route Segment Builder</h3>
+                <button class="route-builder-close" id="routeBuilderCloseBtn">&times;</button>
+              </div>
+              <div class="route-builder-body">
+                <div class="builder-instructions">
+                  <p><strong>How to use:</strong></p>
+                  <ol>
+                    <li>Click on map to add points</li>
+                    <li>Define corridor paths and room connections</li>
+                    <li>Save segments as clean GeoJSON</li>
+                  </ol>
+                </div>
+
+                <div class="builder-section">
+                  <label for="segmentName">Segment Name:</label>
+                  <input type="text" id="segmentName" class="builder-input" placeholder="e.g., Main_Corridor_1">
+                </div>
+
+                <div class="builder-section">
+                  <label for="segmentType">Segment Type:</label>
+                  <select id="segmentType" class="builder-select">
+                    <option value="corridor">Corridor Path</option>
+                    <option value="room_entrance">Room Entrance</option>
+                    <option value="connection">Connection Point</option>
+                  </select>
+                </div>
+
+                <div id="builderStats" class="builder-stats hidden">
+                  <div class="stat-item">
+                    <span class="stat-label">Points:</span>
+                    <span class="stat-value" id="pointCount">0</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">Length:</span>
+                    <span class="stat-value" id="segmentLength">0 m</span>
+                  </div>
+                </div>
+
+                <div id="routeBuilderMessage" class="route-builder-message"></div>
+              </div>
+              <div class="route-builder-footer">
+                <button id="clearPointsBtn" class="btn-secondary">Clear Points</button>
+                <button id="undoPointBtn" class="btn-secondary">Undo Last</button>
+                <button id="saveSegmentBtn" class="btn-primary" disabled>Save Segment</button>
+                <button id="exportSegmentsBtn" class="btn-success">Export All</button>
               </div>
             </div>
           </div>

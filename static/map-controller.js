@@ -217,6 +217,13 @@ async function loadBuildingM() {
 
                     if (navigationGraph) {
                         currentGraphData = buildNavigationGraph(currentSvgMap, navigationGraph, currentCorners);
+
+                        // Add roomToNode mapping from floor data
+                        if (floorData['roomToNode']) {
+                            currentGraphData.roomToNode = floorData['roomToNode'];
+                            console.log('✅ Loaded roomToNode mapping:', Object.keys(currentGraphData.roomToNode).length, 'rooms');
+                        }
+
                         window.currentGraphData = currentGraphData; // Store globally
 
                         // Setup room click handlers
@@ -690,42 +697,51 @@ function renderRoutePolyline(geoJSON, options = {}) {
 
     const styleOptions = { ...defaultOptions, ...options };
 
-    // Create GeoJSON layer with Leaflet
-    const geoJSONLayer = L.geoJSON(geoJSON, {
-        style: styleOptions,
-        onEachFeature: (feature, layer) => {
-            // Add popup with route info
-            if (feature.properties) {
-                const props = feature.properties;
-                const popupContent = `
-                    <div style="min-width: 200px;">
-                        <strong>Route Information</strong><br>
-                        From: <strong>${props.start}</strong><br>
-                        To: <strong>${props.end}</strong><br>
-                        Distance: <strong>${props.distance} ${props.distanceUnit}</strong><br>
-                        Nodes: ${props.nodeCount}<br>
-                        Turns: ${props.turns}<br>
-                        Rooms: ${props.roomCount}
-                    </div>
-                `;
-                layer.bindPopup(popupContent);
-            }
+    // Convert GeoJSON coordinates [lng, lat] back to LatLng objects
+    const latlngs = geoJSON.geometry.coordinates.map(coord => L.latLng(coord[1], coord[0]));
 
-            // Add tooltip on hover
-            layer.on('mouseover', function (e) {
-                this.setStyle({ weight: 6, opacity: 1 });
-            });
+    // Calculate map center for rotation
+    const mapCenter = map.getCenter();
+    const mapBearing = -21.3; // Negative to counter-rotate
 
-            layer.on('mouseout', function (e) {
-                this.setStyle(styleOptions);
-            });
-        }
+    // Counter-rotate each point to compensate for the map's bearing
+    // The node positions were rotated by +21.3°, but the map view is also rotated by +21.3°
+    // This creates double rotation, so we need to apply inverse rotation
+    const unrotatedLatLngs = latlngs.map(latlng => rotatePoint(latlng, mapCenter, mapBearing));
+
+    // Create polyline with counter-rotated coordinates
+    const polyline = L.polyline(unrotatedLatLngs, styleOptions);
+
+    // Add popup with route info
+    if (geoJSON.properties) {
+        const props = geoJSON.properties;
+        const popupContent = `
+            <div style="min-width: 200px;">
+                <strong>Route Information</strong><br>
+                From: <strong>${props.start}</strong><br>
+                To: <strong>${props.end}</strong><br>
+                Distance: <strong>${props.distance} ${props.distanceUnit}</strong><br>
+                Nodes: ${props.nodeCount}<br>
+                Turns: ${props.turns}<br>
+                Rooms: ${props.roomCount}
+            </div>
+        `;
+        polyline.bindPopup(popupContent);
+    }
+
+    // Add hover effects
+    polyline.on('mouseover', function (e) {
+        this.setStyle({ weight: 6, opacity: 1 });
     });
 
-    geoJSONLayer.addTo(map);
+    polyline.on('mouseout', function (e) {
+        this.setStyle(styleOptions);
+    });
+
+    polyline.addTo(map);
     console.log(`✅ Rendered route polyline: ${geoJSON.properties.start} → ${geoJSON.properties.end}`);
 
-    return geoJSONLayer;
+    return polyline;
 }
 
 /**
@@ -2035,6 +2051,13 @@ const routeTracer = {
     active: false,
     startRoom: null,
     endRoom: null,
+    adjustments: {
+        translateX: 0,
+        translateY: 0,
+        rotation: 0
+    },
+    currentPolyline: null,
+    originalCoordinates: null,
 
     /**
      * Initialize route tracer
@@ -2047,6 +2070,12 @@ const routeTracer = {
         const exportBtn = document.getElementById('exportGeoJSONBtn');
         const startSelect = document.getElementById('startRoomSelect');
         const endSelect = document.getElementById('endRoomSelect');
+
+        // Adjustment controls
+        const translateXSlider = document.getElementById('routeTranslateX');
+        const translateYSlider = document.getElementById('routeTranslateY');
+        const rotateSlider = document.getElementById('routeRotate');
+        const resetBtn = document.getElementById('resetAdjustmentsBtn');
 
         if (tracerBtn) {
             tracerBtn.addEventListener('click', () => this.openTracer());
@@ -2063,6 +2092,33 @@ const routeTracer = {
         if (exportBtn) {
             exportBtn.addEventListener('click', () => this.exportGeoJSON());
         }
+
+        // Adjustment event listeners
+        if (translateXSlider) {
+            translateXSlider.addEventListener('input', (e) => {
+                this.adjustments.translateX = parseFloat(e.target.value);
+                document.getElementById('translateXValue').textContent = e.target.value;
+                this.applyAdjustments();
+            });
+        }
+        if (translateYSlider) {
+            translateYSlider.addEventListener('input', (e) => {
+                this.adjustments.translateY = parseFloat(e.target.value);
+                document.getElementById('translateYValue').textContent = e.target.value;
+                this.applyAdjustments();
+            });
+        }
+        if (rotateSlider) {
+            rotateSlider.addEventListener('input', (e) => {
+                this.adjustments.rotation = parseFloat(e.target.value);
+                document.getElementById('rotateValue').textContent = e.target.value;
+                this.applyAdjustments();
+            });
+        }
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => this.resetAdjustments());
+        }
+
         if (startSelect) {
             startSelect.addEventListener('change', (e) => this.selectStartRoom(e.target.value));
         }
@@ -2219,8 +2275,9 @@ const routeTracer = {
             return;
         }
 
-        // Store GeoJSON globally
+        // Store GeoJSON globally and save original coordinates
         window.routeGeoJSONData = routeGeoJSON;
+        this.originalCoordinates = routeGeoJSON.geometry.coordinates.map(coord => [...coord]);
 
         // Clear previous routes
         clearRoutePolylines();
@@ -2230,6 +2287,7 @@ const routeTracer = {
         const polyline = renderRoutePolyline(routeGeoJSON);
         if (polyline) {
             window.routePolylines.push(polyline);
+            this.currentPolyline = polyline;
         }
 
         // Add start/end markers
@@ -2250,6 +2308,10 @@ const routeTracer = {
 
         // Update stats display
         this.updateStatsDisplay(routeGeoJSON.properties);
+
+        // Show adjustment controls
+        const adjustmentControls = document.getElementById('routeAdjustmentControls');
+        if (adjustmentControls) adjustmentControls.classList.remove('hidden');
 
         // Enable export button
         const exportBtn = document.getElementById('exportGeoJSONBtn');
@@ -2282,8 +2344,17 @@ const routeTracer = {
         clearRoutePolylines();
         clearRoute();
 
+        // Reset adjustment state
+        this.currentPolyline = null;
+        this.originalCoordinates = null;
+        this.resetAdjustments();
+
         const statsDisplay = document.getElementById('routeStatsDisplay');
         if (statsDisplay) statsDisplay.classList.add('hidden');
+
+        // Hide adjustment controls
+        const adjustmentControls = document.getElementById('routeAdjustmentControls');
+        if (adjustmentControls) adjustmentControls.classList.add('hidden');
 
         const exportBtn = document.getElementById('exportGeoJSONBtn');
         if (exportBtn) exportBtn.disabled = true;
@@ -2344,6 +2415,499 @@ const routeTracer = {
         setTimeout(() => {
             msgDiv.classList.remove('show');
         }, 5000);
+    },
+
+    /**
+     * Apply manual adjustments to the route
+     */
+    applyAdjustments() {
+        if (!this.currentPolyline || !this.originalCoordinates) {
+            console.warn('No active route to adjust');
+            return;
+        }
+
+        // Get map center for rotation
+        const mapCenter = map.getCenter();
+
+        // Apply transformations to original coordinates
+        const adjustedCoords = this.originalCoordinates.map(([lng, lat]) => {
+            let newLat = lat;
+            let newLng = lng;
+
+            // Apply translation
+            newLng += this.adjustments.translateX;
+            newLat += this.adjustments.translateY;
+
+            // Apply rotation around map center
+            if (this.adjustments.rotation !== 0) {
+                const angleRad = (this.adjustments.rotation * Math.PI) / 180;
+                const cos = Math.cos(angleRad);
+                const sin = Math.sin(angleRad);
+
+                const dx = newLng - mapCenter.lng;
+                const dy = newLat - mapCenter.lat;
+
+                newLat = mapCenter.lat + (dy * cos - dx * sin);
+                newLng = mapCenter.lng + (dx * cos + dy * sin);
+            }
+
+            return L.latLng(newLat, newLng);
+        });
+
+        // Update the polyline with new coordinates
+        this.currentPolyline.setLatLngs(adjustedCoords);
+
+        console.log(`🔧 Applied adjustments - X: ${this.adjustments.translateX}, Y: ${this.adjustments.translateY}, Rotation: ${this.adjustments.rotation}°`);
+    },
+
+    /**
+     * Reset all adjustments to default
+     */
+    resetAdjustments() {
+        // Reset adjustment values
+        this.adjustments.translateX = 0;
+        this.adjustments.translateY = 0;
+        this.adjustments.rotation = 0;
+
+        // Reset slider positions
+        const translateXSlider = document.getElementById('routeTranslateX');
+        const translateYSlider = document.getElementById('routeTranslateY');
+        const rotateSlider = document.getElementById('routeRotate');
+
+        if (translateXSlider) {
+            translateXSlider.value = 0;
+            document.getElementById('translateXValue').textContent = '0';
+        }
+        if (translateYSlider) {
+            translateYSlider.value = 0;
+            document.getElementById('translateYValue').textContent = '0';
+        }
+        if (rotateSlider) {
+            rotateSlider.value = 0;
+            document.getElementById('rotateValue').textContent = '0';
+        }
+
+        // Apply reset (which restores original coordinates)
+        this.applyAdjustments();
+
+        this.showMessage('Adjustments reset to default', 'info');
+        console.log('🔄 Reset all route adjustments');
+    }
+};
+
+// ============================================
+// Route Builder - Manual Route Segment Creator
+// ============================================
+const routeBuilder = {
+    active: false,
+    currentSegment: {
+        name: '',
+        type: 'corridor',
+        points: [],
+        polyline: null
+    },
+    savedSegments: [],
+    mapClickHandler: null,
+
+    init() {
+        console.log('🔧 Initializing Route Builder...');
+
+        const openBtn = document.getElementById('routeBuilderBtn');
+        const closeBtn = document.getElementById('routeBuilderCloseBtn');
+        const clearBtn = document.getElementById('clearPointsBtn');
+        const undoBtn = document.getElementById('undoPointBtn');
+        const saveBtn = document.getElementById('saveSegmentBtn');
+        const exportBtn = document.getElementById('exportSegmentsBtn');
+        const nameInput = document.getElementById('segmentName');
+        const typeSelect = document.getElementById('segmentType');
+
+        if (openBtn) {
+            openBtn.addEventListener('click', () => this.openBuilder());
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closeBuilder());
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => this.clearPoints());
+        }
+
+        if (undoBtn) {
+            undoBtn.addEventListener('click', () => this.undoLastPoint());
+        }
+
+        if (saveBtn) {
+            saveBtn.addEventListener('click', () => {
+                console.log('💾 Save Segment button clicked');
+                console.log('   Button disabled:', saveBtn.disabled);
+                console.log('   Current segment:', this.currentSegment);
+                this.saveSegment();
+            });
+        }
+
+        if (exportBtn) {
+            exportBtn.addEventListener('click', () => this.exportAllSegments());
+        }
+
+        if (nameInput) {
+            nameInput.addEventListener('input', (e) => {
+                this.currentSegment.name = e.target.value;
+                this.updateSaveButton();
+            });
+        }
+
+        if (typeSelect) {
+            typeSelect.addEventListener('change', (e) => {
+                this.currentSegment.type = e.target.value;
+            });
+        }
+
+        console.log('✅ Route Builder initialized');
+    },
+
+    openBuilder() {
+        console.log('📐 Opening Route Builder...');
+
+        const panel = document.getElementById('routeBuilderPanel');
+        if (panel) {
+            panel.classList.remove('hidden');
+            // Force reflow to ensure transition works
+            panel.offsetHeight;
+            panel.classList.add('visible');
+            this.active = true;
+
+            // Enable map click mode
+            this.enableMapClickMode();
+
+            // Show indicator on map
+            const indicator = document.getElementById('map-mode-indicator');
+            if (indicator) {
+                indicator.textContent = '✏️ Route Builder - Click to add points';
+                indicator.classList.add('active');
+            }
+
+            this.showMessage('Click on the map to trace your route segment', 'info');
+            console.log('✅ Route Builder panel opened');
+        }
+    },
+
+    closeBuilder() {
+        console.log('📐 Closing Route Builder...');
+
+        const panel = document.getElementById('routeBuilderPanel');
+        if (panel) {
+            panel.classList.remove('visible');
+            this.active = false;
+
+            // Disable map click mode
+            this.disableMapClickMode();
+
+            // Clear current segment preview
+            if (this.currentSegment.polyline) {
+                map.removeLayer(this.currentSegment.polyline);
+                this.currentSegment.polyline = null;
+            }
+
+            // Hide indicator
+            const indicator = document.getElementById('map-mode-indicator');
+            if (indicator) {
+                indicator.textContent = '';
+                indicator.classList.remove('active');
+            }
+
+            // Wait for animation to complete before hiding
+            setTimeout(() => {
+                panel.classList.add('hidden');
+            }, 300);
+
+            console.log('✅ Route Builder panel closed');
+        }
+    },
+
+    enableMapClickMode() {
+        console.log('🖱️ Enabling map click mode...');
+
+        // Create click handler
+        this.mapClickHandler = (e) => {
+            if (this.active) {
+                this.addPoint(e.latlng);
+            }
+        };
+
+        // Add to map
+        map.on('click', this.mapClickHandler);
+
+        // Change cursor
+        document.getElementById('map').style.cursor = 'crosshair';
+
+        console.log('✅ Map click mode enabled');
+    },
+
+    disableMapClickMode() {
+        console.log('🖱️ Disabling map click mode...');
+
+        // Remove click handler
+        if (this.mapClickHandler) {
+            map.off('click', this.mapClickHandler);
+            this.mapClickHandler = null;
+        }
+
+        // Reset cursor
+        document.getElementById('map').style.cursor = '';
+
+        console.log('✅ Map click mode disabled');
+    },
+
+    addPoint(latlng) {
+        console.log('📍 Adding point:', latlng.lat, latlng.lng);
+
+        // Add to points array
+        this.currentSegment.points.push(latlng);
+
+        // Update or create polyline preview
+        if (this.currentSegment.polyline) {
+            map.removeLayer(this.currentSegment.polyline);
+        }
+
+        if (this.currentSegment.points.length > 0) {
+            this.currentSegment.polyline = L.polyline(this.currentSegment.points, {
+                color: '#9C27B0',
+                weight: 4,
+                opacity: 0.8,
+                dashArray: '10, 5'
+            }).addTo(map);
+        }
+
+        // Update statistics
+        this.updateStats();
+
+        // Update save button
+        this.updateSaveButton();
+
+        this.showMessage(`Point ${this.currentSegment.points.length} added`, 'success');
+        console.log(`✅ Point added (total: ${this.currentSegment.points.length})`);
+    },
+
+    undoLastPoint() {
+        if (this.currentSegment.points.length === 0) {
+            this.showMessage('No points to undo', 'warning');
+            return;
+        }
+
+        console.log('↩️ Undoing last point...');
+
+        // Remove last point
+        this.currentSegment.points.pop();
+
+        // Update polyline
+        if (this.currentSegment.polyline) {
+            map.removeLayer(this.currentSegment.polyline);
+            this.currentSegment.polyline = null;
+        }
+
+        if (this.currentSegment.points.length > 0) {
+            this.currentSegment.polyline = L.polyline(this.currentSegment.points, {
+                color: '#9C27B0',
+                weight: 4,
+                opacity: 0.8,
+                dashArray: '10, 5'
+            }).addTo(map);
+        }
+
+        // Update statistics
+        this.updateStats();
+
+        // Update save button
+        this.updateSaveButton();
+
+        this.showMessage(`Point removed (${this.currentSegment.points.length} remaining)`, 'info');
+        console.log(`✅ Point removed (total: ${this.currentSegment.points.length})`);
+    },
+
+    clearPoints() {
+        console.log('🗑️ Clearing all points...');
+
+        // Clear points array
+        this.currentSegment.points = [];
+
+        // Remove polyline
+        if (this.currentSegment.polyline) {
+            map.removeLayer(this.currentSegment.polyline);
+            this.currentSegment.polyline = null;
+        }
+
+        // Update statistics
+        this.updateStats();
+
+        // Update save button
+        this.updateSaveButton();
+
+        this.showMessage('All points cleared', 'info');
+        console.log('✅ All points cleared');
+    },
+
+    updateStats() {
+        const pointCount = this.currentSegment.points.length;
+        const distance = this.calculateSegmentLength();
+
+        // Update point count
+        const pointCountEl = document.getElementById('pointCount');
+        if (pointCountEl) {
+            pointCountEl.textContent = pointCount;
+        }
+
+        // Update distance
+        const distanceEl = document.getElementById('segmentLength');
+        if (distanceEl) {
+            distanceEl.textContent = distance > 0 ? `${distance.toFixed(2)} m` : '0 m';
+        }
+
+        // Show/hide stats display
+        const statsDisplay = document.getElementById('builderStats');
+        if (statsDisplay) {
+            if (pointCount > 0) {
+                statsDisplay.classList.remove('hidden');
+            } else {
+                statsDisplay.classList.add('hidden');
+            }
+        }
+    },
+
+    calculateSegmentLength() {
+        if (this.currentSegment.points.length < 2) {
+            return 0;
+        }
+
+        let totalDistance = 0;
+
+        for (let i = 0; i < this.currentSegment.points.length - 1; i++) {
+            const p1 = this.currentSegment.points[i];
+            const p2 = this.currentSegment.points[i + 1];
+            totalDistance += map.distance(p1, p2);
+        }
+
+        return totalDistance;
+    },
+
+    updateSaveButton() {
+        const saveBtn = document.getElementById('saveSegmentBtn');
+        if (saveBtn) {
+            const hasName = this.currentSegment.name.trim().length > 0;
+            const hasPoints = this.currentSegment.points.length >= 2;
+            const shouldEnable = hasName && hasPoints;
+            saveBtn.disabled = !shouldEnable;
+
+            console.log('🔘 Update Save Button:', {
+                hasName,
+                hasPoints,
+                shouldEnable,
+                currentName: this.currentSegment.name,
+                pointCount: this.currentSegment.points.length
+            });
+        }
+    },
+
+    saveSegment() {
+        console.log('💾 Saving segment...');
+
+        if (this.currentSegment.points.length < 2) {
+            this.showMessage('Need at least 2 points to save a segment', 'error');
+            return;
+        }
+
+        if (!this.currentSegment.name.trim()) {
+            this.showMessage('Please enter a segment name', 'error');
+            return;
+        }
+
+        // Create segment object with clean coordinates
+        const segment = {
+            name: this.currentSegment.name,
+            type: this.currentSegment.type,
+            coordinates: this.currentSegment.points.map(p => [p.lng, p.lat]),
+            pointCount: this.currentSegment.points.length,
+            length: this.calculateSegmentLength(),
+            timestamp: new Date().toISOString()
+        };
+
+        // Add to saved segments
+        this.savedSegments.push(segment);
+
+        console.log('✅ Segment saved:', segment);
+
+        this.showMessage(`Segment "${segment.name}" saved successfully! (${this.savedSegments.length} total)`, 'success');
+
+        // Clear current segment and start fresh
+        this.clearPoints();
+        document.getElementById('segmentName').value = '';
+        this.currentSegment.name = '';
+    },
+
+    exportAllSegments() {
+        console.log('📦 Exporting all segments...');
+
+        if (this.savedSegments.length === 0) {
+            this.showMessage('No segments to export', 'warning');
+            return;
+        }
+
+        // Create GeoJSON FeatureCollection
+        const geoJSON = {
+            type: 'FeatureCollection',
+            features: this.savedSegments.map(segment => ({
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString',
+                    coordinates: segment.coordinates
+                },
+                properties: {
+                    name: segment.name,
+                    segmentType: segment.type,
+                    pointCount: segment.pointCount,
+                    length: segment.length,
+                    timestamp: segment.timestamp
+                }
+            }))
+        };
+
+        // Create download
+        const dataStr = JSON.stringify(geoJSON, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `route_segments_${new Date().toISOString().split('T')[0]}.geojson`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        console.log('✅ Exported GeoJSON:', geoJSON);
+        this.showMessage(`Exported ${this.savedSegments.length} segments as GeoJSON`, 'success');
+    },
+
+    showMessage(message, type = 'info') {
+        const messageEl = document.getElementById('routeBuilderMessage');
+        if (!messageEl) return;
+
+        messageEl.textContent = message;
+        messageEl.className = 'route-builder-message show';
+
+        if (type === 'success') {
+            messageEl.classList.add('success');
+        } else if (type === 'error') {
+            messageEl.classList.add('error');
+        } else if (type === 'warning') {
+            messageEl.classList.add('warning');
+        } else {
+            messageEl.classList.add('info');
+        }
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+        }, 5000);
     }
 };
 
@@ -2368,6 +2932,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize route tracer
     routeTracer.init();
+
+    // Initialize route builder
+    routeBuilder.init();
 });
 
 // Export functions for global access
@@ -2379,5 +2946,6 @@ window.coordinateEditor = coordinateEditor;
 window.calibrationMode = calibrationMode;
 window.roomCenterVisualizer = roomCenterVisualizer;
 window.routeTracer = routeTracer;
+window.routeBuilder = routeBuilder;
 window.generateRouteGeoJSON = generateRouteGeoJSON;
 window.renderRoutePolyline = renderRoutePolyline;
