@@ -42,7 +42,13 @@
       "stairs": "Stairs_1",
       "stair": "Stairs_1",
       "main entrance": "H-Building",
-      "entrance": "Outside-Exit_1",
+      "h building": "H-Building",
+      "h building entrance": "H-Building",
+      "building h": "H-Building",
+      "entrance h": "H-Building",
+      "entrance to h": "H-Building",
+      "h entrance": "H-Building",
+      "entrance": "H-Building",
       "exit": "Outside-Exit_1",
       "outside": "Outside-Exit_1",
       "exit 1": "Outside-Exit_1",
@@ -188,6 +194,26 @@
         "y": 431.93
       },
       "Stairs_3": {
+        "x": 8.16,
+        "y": 428.6
+      },
+      "H-Building": {
+        "x": 704,
+        "y": 850
+      },
+      "Outside-Exit_1": {
+        "x": 386,
+        "y": 495
+      },
+      "Outside-Exit_2": {
+        "x": 704,
+        "y": 850
+      },
+      "Outside-Exit_3": {
+        "x": 612,
+        "y": 431.93
+      },
+      "Outside-Exit_4": {
         "x": 8.16,
         "y": 428.6
       }

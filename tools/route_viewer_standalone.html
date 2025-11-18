@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Visualization - Building M</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+        .info-panel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            max-width: 350px;
+            max-height: 90vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        .info-panel h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 18px;
+        }
+        .route-item {
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 4px solid;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .route-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .route-item.entrance {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        .route-item.exit {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .route-item.normal {
+            border-left-color: #007bff;
+            background: #d1ecf1;
+        }
+        .route-item.selected {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        .route-name {
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+        .route-desc {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .route-nodes {
+            font-size: 11px;
+            color: #999;
+            margin-top: 3px;
+        }
+        .legend {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            font-size: 13px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 3px;
+        }
+        .stats {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        .toggle-btn {
+            margin: 5px;
+            padding: 8px 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .toggle-btn:hover {
+            background: #0056b3;
+        }
+        .toggle-btn.active {
+            background: #28a745;
+        }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    
+    <div class="info-panel">
+        <h2>🗺️ Visualização de Rotas</h2>
+        
+        <div class="stats">
+            <div class="stats-item">
+                <span>Total de Rotas:</span>
+                <strong id="totalRoutes">0</strong>
+            </div>
+            <div class="stats-item">
+                <span>Entradas:</span>
+                <strong id="totalEntrances">0</strong>
+            </div>
+            <div class="stats-item">
+                <span>Saídas:</span>
+                <strong id="totalExits">0</strong>
+            </div>
+            <div class="stats-item">
+                <span>Nós:</span>
+                <strong id="totalNodes">0</strong>
+            </div>
+        </div>
+
+        <div style="margin: 10px 0;">
+            <button class="toggle-btn active" onclick="toggleRoutes('all')">Todas</button>
+            <button class="toggle-btn" onclick="toggleRoutes('entrance')">Entradas</button>
+            <button class="toggle-btn" onclick="toggleRoutes('exit')">Saídas</button>
+            <button class="toggle-btn" onclick="toggleRoutes('normal')">Normais</button>
+        </div>
+        
+        <div id="routeList"></div>
+        
+        <div class="legend">
+            <strong>Legenda:</strong>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #28a745;"></div>
+                <span>Entrada Principal</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #dc3545;"></div>
+                <span>Saída</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #007bff;"></div>
+                <span>Corredor Normal</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ffc107;"></div>
+                <span>Rota Selecionada</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Embedded GeoJSON data
+        const ROUTE_DATA = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.19859947105056,
+            43.014108112876286
+          ],
+          [
+            -81.1985919201037,
+            43.01409395187068
+          ]
+        ]
+      },
+      "properties": {
+        "name": "M1_2_M1_3",
+        "segmentType": "corridor",
+        "startNode": "M1_2",
+        "endNode": "M1_3",
+        "pointCount": 2,
+        "length": 1.6900792163710276,
+        "timestamp": "2025-11-17T19:55:25.049Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.19864782019873,
+            43.0140948558703
+          ],
+          [
+            -81.19859978342438,
+            43.01410802382559
+          ]
+        ]
+      },
+      "properties": {
+        "name": "M1_1_M1_2",
+        "segmentType": "corridor",
+        "startNode": "M1_1",
+        "endNode": "M1_2",
+        "description": "Main entrance corridor from H Building",
+        "connectsTo": [
+          "H-Building",
+          "Stairs_1"
+        ],
+        "isEntrance": true,
+        "entranceType": "main",
+        "building": "H",
+        "accessibility": "wheelchair",
+        "keywords": [
+          "entrance",
+          "h building",
+          "main entrance",
+          "building h"
+        ],
+        "pointCount": 2,
+        "length": 4.171035648993417,
+        "timestamp": "2025-11-17T19:55:52.389Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.19859985221927,
+            43.01410747796827
+          ],
+          [
+            -81.19852044047252,
+            43.01413064270475
+          ]
+        ]
+      },
+      "properties": {
+        "name": "M1_3_M1_Int_1",
+        "segmentType": "corridor",
+        "startNode": "M1_3",
+        "endNode": "M1_Int_1",
+        "description": "Corridor from Room 1006 to main intersection",
+        "connectsTo": [
+          "Room_1006",
+          "M1_Int_1"
+        ],
+        "keywords": [
+          "room 1006",
+          "conference room"
+        ],
+        "pointCount": 2,
+        "length": 6.951344020586181,
+        "timestamp": "2025-11-17T19:56:19.254Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.19851957214593,
+            43.01413036399972
+          ],
+          [
+            -81.198512264778,
+            43.01411665980575
+          ]
+        ]
+      },
+      "properties": {
+        "name": "M1_Int_1_M1_4",
+        "segmentType": "corridor",
+        "startNode": "M1_Int_1",
+        "endNode": "M1_4",
+        "pointCount": 2,
+        "length": 1.6355599338895237,
+        "timestamp": "2025-11-17T19:56:41.866Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.19852025079379,
+            43.01413032685913
+          ],
+          [
+            -81.1984601532297,
+            43.01414719618598
+          ],
+          [
+            -81.1984343496633,
+            43.014097454582114
+          ]
+        ]
+      },
+      "properties": {
+        "name": "M1_4_M1_5",
+        "segmentType": "corridor",
+        "startNode": "M1_4",
+        "endNode": "M1_5",
+        "pointCount": 3,
+        "length": 11.149387918830115,
+        "timestamp": "2025-11-17T19:58:16.959Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.19843391550002,
+            43.01409731522952
+          ],
+          [
+            -81.19845303909831,
+            43.014091337276845
+          ]
+        ]
+      },
+      "properties": {
+        "name": "M1_5_M1_6",
+        "segmentType": "corridor",
+        "startNode": "M1_5",
+        "endNode": "M1_6",
+        "description": "Corridor from Elevator to Room 1003",
+        "connectsTo": [
+          "Elevator-M",
+          "Room_1003"
+        ],
+        "keywords": [
+          "elevator",
+          "elevador",
+          "room 1003",
+          "computer lab"
+        ],
+        "pointCount": 2,
+        "length": 1.6909585074223066,
+        "timestamp": "2025-11-17T19:58:43.383Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.19843295685936,
+            43.01409510723271
+          ],
+          [
+            -81.19842009457699,
+            43.01406693611787
+          ],
+          [
+            -81.19846624130805,
+            43.01405562257762
+          ]
+        ]
+      },
+      "properties": {
+        "name": "M1_6_M1_7",
+        "segmentType": "corridor",
+        "startNode": "M1_6",
+        "endNode": "M1_7",
+        "description": "Corridor from Room 1003 to Exit 1",
+        "connectsTo": [
+          "Room_1003",
+          "Outside-Exit_1"
+        ],
+        "isExit": true,
+        "exitNumber": 1,
+        "keywords": [
+          "exit 1",
+          "south entrance",
+          "outside"
+        ],
+        "pointCount": 3,
+        "length": 7.259644493895124,
+        "timestamp": "2025-11-17T19:59:39.514Z"
+      }
+    }
+  ]
+};
+
+        // Initialize map
+        const map = L.map('map').setView([43.01411, -81.19855], 19);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 22,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        let routeLayers = [];
+        let markerLayers = [];
+        let allRoutes = [];
+
+        // Color scheme
+        const colors = {
+            entrance: '#28a745',
+            exit: '#dc3545',
+            normal: '#007bff',
+            highlight: '#ffc107'
+        };
+
+        // Load and display routes
+        function loadRoutes() {
+            try {
+                allRoutes = ROUTE_DATA.features;
+                displayRoutes(allRoutes);
+                updateStats(allRoutes);
+                createRouteList(allRoutes);
+                console.log('✅ Routes loaded successfully:', allRoutes.length);
+            } catch (error) {
+                console.error('❌ Error loading routes:', error);
+                document.getElementById('routeList').innerHTML = 
+                    '<div class="error-message">Erro ao carregar rotas: ' + error.message + '</div>';
+            }
+        }
+
+        function displayRoutes(routes) {
+            // Clear existing layers
+            routeLayers.forEach(layer => map.removeLayer(layer));
+            markerLayers.forEach(layer => map.removeLayer(layer));
+            routeLayers = [];
+            markerLayers = [];
+
+            routes.forEach((feature, index) => {
+                const props = feature.properties;
+                const coords = feature.geometry.coordinates;
+                
+                // Determine color
+                let color = colors.normal;
+                if (props.isEntrance) color = colors.entrance;
+                else if (props.isExit) color = colors.exit;
+                
+                // Convert coordinates to LatLng
+                const latLngs = coords.map(coord => [coord[1], coord[0]]);
+                
+                // Create polyline
+                const polyline = L.polyline(latLngs, {
+                    color: color,
+                    weight: 4,
+                    opacity: 0.7,
+                    routeId: index
+                }).addTo(map);
+                
+                // Add popup
+                let popupContent = `<strong>${props.name}</strong><br>`;
+                if (props.description) popupContent += `${props.description}<br>`;
+                if (props.startNode || props.endNode) {
+                    popupContent += `<em>${props.startNode || '?'} → ${props.endNode || '?'}</em><br>`;
+                }
+                if (props.length) {
+                    popupContent += `Comprimento: ${props.length.toFixed(2)}m`;
+                }
+                
+                polyline.bindPopup(popupContent);
+                
+                // Add start/end markers
+                const startMarker = L.circleMarker(latLngs[0], {
+                    radius: 6,
+                    fillColor: color,
+                    color: '#fff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).addTo(map);
+                startMarker.bindPopup(`<strong>Início:</strong> ${props.startNode || 'N/A'}`);
+                
+                const endMarker = L.circleMarker(latLngs[latLngs.length - 1], {
+                    radius: 6,
+                    fillColor: color,
+                    color: '#fff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).addTo(map);
+                endMarker.bindPopup(`<strong>Fim:</strong> ${props.endNode || 'N/A'}`);
+                
+                routeLayers.push(polyline);
+                markerLayers.push(startMarker, endMarker);
+                
+                // Store reference
+                polyline.routeData = props;
+            });
+
+            // Fit bounds to all routes
+            if (routeLayers.length > 0) {
+                const group = L.featureGroup(routeLayers);
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
+        }
+
+        function updateStats(routes) {
+            const entrances = routes.filter(r => r.properties.isEntrance).length;
+            const exits = routes.filter(r => r.properties.isExit).length;
+            const nodes = new Set();
+            
+            routes.forEach(r => {
+                if (r.properties.startNode) nodes.add(r.properties.startNode);
+                if (r.properties.endNode) nodes.add(r.properties.endNode);
+            });
+            
+            document.getElementById('totalRoutes').textContent = routes.length;
+            document.getElementById('totalEntrances').textContent = entrances;
+            document.getElementById('totalExits').textContent = exits;
+            document.getElementById('totalNodes').textContent = nodes.size;
+        }
+
+        function createRouteList(routes) {
+            const listDiv = document.getElementById('routeList');
+            listDiv.innerHTML = '';
+            
+            routes.forEach((feature, index) => {
+                const props = feature.properties;
+                
+                let className = 'normal';
+                if (props.isEntrance) className = 'entrance';
+                else if (props.isExit) className = 'exit';
+                
+                const routeItem = document.createElement('div');
+                routeItem.className = `route-item ${className}`;
+                routeItem.id = `route-item-${index}`;
+                routeItem.onclick = () => highlightRoute(index);
+                
+                let html = `<div class="route-name">${props.name}</div>`;
+                if (props.description) {
+                    html += `<div class="route-desc">${props.description}</div>`;
+                }
+                html += `<div class="route-nodes">${props.startNode || '?'} ➜ ${props.endNode || '?'}</div>`;
+                
+                routeItem.innerHTML = html;
+                listDiv.appendChild(routeItem);
+            });
+        }
+
+        function highlightRoute(index) {
+            // Remove previous selection
+            document.querySelectorAll('.route-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Add selection to clicked item
+            const selectedItem = document.getElementById(`route-item-${index}`);
+            if (selectedItem) {
+                selectedItem.classList.add('selected');
+            }
+            
+            // Reset all routes
+            routeLayers.forEach((layer, i) => {
+                const props = allRoutes[i].properties;
+                let color = colors.normal;
+                if (props.isEntrance) color = colors.entrance;
+                else if (props.isExit) color = colors.exit;
+                
+                layer.setStyle({ 
+                    color: color, 
+                    weight: 4,
+                    opacity: 0.7
+                });
+            });
+            
+            // Highlight selected route
+            const selectedLayer = routeLayers[index];
+            selectedLayer.setStyle({ 
+                color: colors.highlight,
+                weight: 6,
+                opacity: 1
+            });
+            selectedLayer.openPopup();
+            
+            // Pan to route
+            map.fitBounds(selectedLayer.getBounds().pad(0.2));
+        }
+
+        function toggleRoutes(type) {
+            // Update button states
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            let filteredRoutes = allRoutes;
+            
+            if (type === 'entrance') {
+                filteredRoutes = allRoutes.filter(r => r.properties.isEntrance);
+            } else if (type === 'exit') {
+                filteredRoutes = allRoutes.filter(r => r.properties.isExit);
+            } else if (type === 'normal') {
+                filteredRoutes = allRoutes.filter(r => !r.properties.isEntrance && !r.properties.isExit);
+            }
+            
+            displayRoutes(filteredRoutes);
+            createRouteList(filteredRoutes);
+        }
+
+        // Load routes on page load
+        loadRoutes();
+    </script>
+</body>
+</html>
