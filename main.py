@@ -146,6 +146,48 @@ Suggest the best route to take, which means the shortest one, mentioning landmar
 
 '''
 
+# Events information prompt for AI model
+events_prompt = '''You are the Fanshawe Events Assistant. You help students discover campus events, activities, and schedules.
+
+You have access to information about campus events including:
+- Event names, dates, and times
+- Event locations (buildings and rooms)
+- Event descriptions and organizers
+- Registration requirements
+- Links to more information
+
+When answering about events:
+- Provide clear, concise information about the events
+- Include relevant details like date, time, location, and organizer
+- If multiple events match the query, list them clearly
+- Suggest relevant events based on the user's interests
+- If an event requires registration, mention it
+- Include links when available
+
+Be helpful, friendly, and enthusiastic about campus events!
+'''
+
+# Restaurant information prompt for AI model
+restaurants_prompt = '''You are the Fanshawe Dining Guide. You help students find food and dining options on campus.
+
+You have access to information about campus dining including:
+- Restaurant and cafe names and locations
+- Operating hours for each day
+- Cuisine types and menu highlights
+- Payment methods accepted
+- Building and floor locations
+
+When answering about dining:
+- Provide clear information about location and hours
+- Mention what type of food is available
+- Include operating hours, especially for today
+- Suggest options based on the user's needs (quick snack, full meal, coffee, etc.)
+- Mention payment methods if relevant
+- Be aware of current day/time when suggesting options
+
+Be helpful, friendly, and make it easy for students to find what they're looking for!
+'''
+
 class ImageFileHandler(FileSystemEventHandler):
     """Handler to monitor changes in the images folder"""
 
@@ -563,6 +605,278 @@ def get_room_friendly_name(room_id: str) -> str:
     descriptions = building_m_config.get('roomDescriptions', {})
     return descriptions.get(room_id, room_id)
 
+def classify_user_intent(user_message: str) -> Dict[str, Any]:
+    """
+    Classifies user intent into one of four categories:
+    - NAVIGATION: Directions, wayfinding, localization
+    - EVENTS: Campus events, schedules, activities
+    - RESTAURANTS: Food services, dining halls, cafeterias
+    - OUT_OF_SCOPE: Everything else
+
+    Returns dict with: {intent: str, confidence: float, entities: dict}
+    """
+    if not model:
+        return {'intent': 'OUT_OF_SCOPE', 'confidence': 0.0, 'entities': {}}
+
+    try:
+        # Use keyword pre-filtering for faster classification
+        message_lower = user_message.lower()
+
+        # Navigation keywords
+        nav_keywords = ['how', 'get', 'go', 'navigate', 'path', 'way', 'direction',
+                        'from', 'to', 'reach', 'find', 'where', 'location', 'room',
+                        'como', 'ir', 'chegar', 'onde']
+
+        # Event keywords
+        event_keywords = ['event', 'activity', 'happening', 'schedule', 'workshop',
+                          'seminar', 'fair', 'meeting', 'conference', 'talk', 'when',
+                          'evento', 'atividade', 'quando']
+
+        # Restaurant keywords
+        restaurant_keywords = ['food', 'eat', 'restaurant', 'cafe', 'coffee', 'lunch',
+                               'dinner', 'breakfast', 'hungry', 'menu', 'dining',
+                               'comida', 'comer', 'restaurante', 'lanche']
+
+        # Count keyword matches
+        nav_score = sum(1 for kw in nav_keywords if kw in message_lower)
+        event_score = sum(1 for kw in event_keywords if kw in message_lower)
+        restaurant_score = sum(1 for kw in restaurant_keywords if kw in message_lower)
+
+        # If clear winner from keywords, use it
+        max_score = max(nav_score, event_score, restaurant_score)
+        if max_score >= 2:
+            if nav_score == max_score:
+                return {'intent': 'NAVIGATION', 'confidence': 0.8, 'entities': {}}
+            elif event_score == max_score:
+                return {'intent': 'EVENTS', 'confidence': 0.8, 'entities': {}}
+            elif restaurant_score == max_score:
+                return {'intent': 'RESTAURANTS', 'confidence': 0.8, 'entities': {}}
+
+        # Use Gemini for more nuanced classification
+        classify_prompt = f"""Classify this user query into ONE of these categories:
+        - NAVIGATION: Questions about directions, finding locations, wayfinding on campus
+        - EVENTS: Questions about campus events, activities, schedules, workshops
+        - RESTAURANTS: Questions about food, dining, cafeterias, restaurants on campus
+        - OUT_OF_SCOPE: Anything else not related to the above categories
+
+        Return ONLY a JSON response with this format (no other text):
+        {{"intent": "NAVIGATION|EVENTS|RESTAURANTS|OUT_OF_SCOPE", "confidence": 0.0-1.0}}
+
+        User query: {user_message}"""
+
+        response = model.generate_content(classify_prompt)
+        response_text = response.text.strip()
+
+        # Extract JSON
+        json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+        if json_match:
+            parsed = json.loads(json_match.group())
+            intent = parsed.get('intent', 'OUT_OF_SCOPE')
+            confidence = parsed.get('confidence', 0.5)
+
+            return {
+                'intent': intent,
+                'confidence': confidence,
+                'entities': {}
+            }
+
+        return {'intent': 'OUT_OF_SCOPE', 'confidence': 0.5, 'entities': {}}
+
+    except Exception as e:
+        print(f"⚠️ Error classifying intent: {e}")
+        return {'intent': 'OUT_OF_SCOPE', 'confidence': 0.0, 'entities': {}}
+
+def handle_event_query(user_message: str, entities: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Handles event-related queries by searching the events database
+    and generating AI-powered responses about campus events
+    """
+    if not model:
+        return {'reply': 'The AI model is not configured.'}
+
+    try:
+        # Load events data
+        events_path = Path('data/campus_events.json')
+        if not events_path.exists():
+            return {'reply': 'Event information is currently unavailable. Please check back later.'}
+
+        with open(events_path, 'r') as f:
+            events_data = json.load(f)
+
+        events = events_data.get('events', [])
+
+        # Format events data as context
+        events_context = "\n\n** Available Campus Events: **\n"
+        for event in events:
+            events_context += f"\n- **{event['name']}**\n"
+            events_context += f"  Date: {event['date']}\n"
+            events_context += f"  Time: {event['time']}\n"
+            events_context += f"  Location: {event['location']}\n"
+            events_context += f"  Organizer: {event['organizer']}\n"
+            events_context += f"  Description: {event['description']}\n"
+            if event.get('registration_required'):
+                events_context += f"  Registration: Required\n"
+            if event.get('link'):
+                events_context += f"  Link: {event['link']}\n"
+
+        # Combine events prompt + context + user query
+        prompt = f"{events_prompt}\n{events_context}\n\nUser: {user_message}\nAI:"
+
+        # Generate response
+        response = model.generate_content(prompt)
+        html_response = markdown2.markdown(response.text)
+
+        print(f"📅 Event query handled: {user_message[:50]}...")
+
+        return {'reply': html_response}
+
+    except Exception as e:
+        print(f"⚠️ Error handling event query: {e}")
+        return {'reply': 'Sorry, I encountered an error while searching for events. Please try again.'}
+
+def handle_restaurant_query(user_message: str, entities: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Handles restaurant/dining queries by searching the restaurants database
+    and generating AI-powered responses about campus dining options
+    """
+    if not model:
+        return {'reply': 'The AI model is not configured.'}
+
+    try:
+        # Load restaurants data
+        restaurants_path = Path('data/campus_restaurants.json')
+        if not restaurants_path.exists():
+            return {'reply': 'Restaurant information is currently unavailable. Please check back later.'}
+
+        with open(restaurants_path, 'r') as f:
+            restaurants_data = json.load(f)
+
+        restaurants = restaurants_data.get('restaurants', [])
+
+        # Format restaurants data as context
+        from datetime import datetime
+        today = datetime.now().strftime('%A').lower()
+
+        restaurants_context = "\n\n** Campus Dining Options: **\n"
+        for restaurant in restaurants:
+            restaurants_context += f"\n- **{restaurant['name']}**\n"
+            restaurants_context += f"  Location: {restaurant['location']}\n"
+            restaurants_context += f"  Type: {restaurant['cuisine_type']}\n"
+
+            # Show today's hours prominently
+            hours = restaurant.get('hours', {})
+            if today in hours:
+                restaurants_context += f"  Hours Today ({today.capitalize()}): {hours[today]}\n"
+
+            # Show menu highlights
+            menu = restaurant.get('menu_highlights', [])
+            if menu:
+                restaurants_context += f"  Menu: {', '.join(menu)}\n"
+
+            restaurants_context += f"  Payment: {', '.join(restaurant.get('payment_methods', []))}\n"
+            restaurants_context += f"  Description: {restaurant['description']}\n"
+
+        # Combine restaurants prompt + context + user query
+        current_time = datetime.now().strftime('%A, %B %d, %Y at %I:%M %p')
+        prompt = f"{restaurants_prompt}\n\nCurrent time: {current_time}\n{restaurants_context}\n\nUser: {user_message}\nAI:"
+
+        # Generate response
+        response = model.generate_content(prompt)
+        html_response = markdown2.markdown(response.text)
+
+        print(f"🍽️ Restaurant query handled: {user_message[:50]}...")
+
+        return {'reply': html_response}
+
+    except Exception as e:
+        print(f"⚠️ Error handling restaurant query: {e}")
+        return {'reply': 'Sorry, I encountered an error while searching for restaurants. Please try again.'}
+
+def handle_out_of_scope_query(user_message: str) -> Dict[str, Any]:
+    """
+    Provides a standard response for queries outside the supported categories
+    """
+    fallback_message = """I'm Fanshawe Navigator, your campus assistant! I specialize in helping you with:
+
+- 🗺️ **Navigation & Directions** - Finding your way around campus
+- 📅 **Campus Events** - Discovering activities and schedules
+- 🍽️ **Dining & Restaurants** - Locating food services on campus
+
+Your question seems to be outside these areas. For other assistance, please visit:
+- **Student Services**: [www.fanshawec.ca/student-services](https://www.fanshawec.ca/student-services)
+- **Academic Support**: Contact your program coordinator
+- **General Inquiries**: Visit the Information Desk at the Student Centre
+
+How else can I help you with navigation, events, or dining?"""
+
+    html_response = markdown2.markdown(fallback_message)
+    print(f"❌ Out-of-scope query: {user_message[:50]}...")
+
+    return {'reply': html_response}
+
+def parse_docx_event(docx_path: str) -> Dict[str, Any]:
+    """
+    Parse event information from a DOCX file
+    Extracts text and uses Gemini to structure the event data
+
+    Args:
+        docx_path: Path to the DOCX file
+
+    Returns:
+        Dict with event information (name, date, time, location, description, etc.)
+    """
+    try:
+        from docx import Document
+
+        # Read the DOCX file
+        doc = Document(docx_path)
+
+        # Extract all text from paragraphs
+        full_text = '\n'.join([para.text for para in doc.paragraphs if para.text.strip()])
+
+        if not full_text.strip():
+            return {'error': 'No text found in document'}
+
+        # Use Gemini to extract structured event information
+        if not model:
+            return {'error': 'AI model not configured'}
+
+        extract_prompt = f"""Extract event information from this text and return ONLY a JSON response with this format (no other text):
+
+{{
+    "name": "event name",
+    "date": "YYYY-MM-DD format",
+    "time": "event time",
+    "location": "full location description",
+    "building": "building code (e.g., SC, F, H)",
+    "room": "room number",
+    "organizer": "organizer name",
+    "description": "event description",
+    "link": "event link if available",
+    "registration_required": true/false
+}}
+
+Event text:
+{full_text}"""
+
+        response = model.generate_content(extract_prompt)
+        response_text = response.text.strip()
+
+        # Extract JSON
+        json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+        if json_match:
+            event_data = json.loads(json_match.group())
+            print(f"📄 Parsed DOCX event: {event_data.get('name', 'Unknown')}")
+            return event_data
+
+        return {'error': 'Could not parse event information'}
+
+    except ImportError:
+        return {'error': 'python-docx library not installed. Run: pip install python-docx'}
+    except Exception as e:
+        print(f"⚠️ Error parsing DOCX: {e}")
+        return {'error': str(e)}
+
 # Initialize image manager
 image_manager = AdvancedImageManager("images/")
 
@@ -599,46 +913,69 @@ def chat():
         return jsonify({"reply": "Please provide a message."}), 400
 
     try:
-        # Check if this is a navigation request
-        nav_result = parse_navigation_request(user_message)
+        # Step 1: Classify user intent
+        intent_result = classify_user_intent(user_message)
+        intent_type = intent_result['intent']
 
-        # Get image context if available
-        image_context = image_manager.get_image_context_for_prompt(user_message)
+        print(f"🎯 Intent classified: {intent_type} (confidence: {intent_result['confidence']:.2f})")
 
-        # Combine map info + image context + user message
-        if image_context:
-            prompt = f'{map_info}{image_context}\n\nUser: {user_message}\nAI:'
-            print(f"🔍 Using visual information for: {user_message[:50]}...")
-        else:
-            prompt = f'{map_info}\n\nUser: {user_message}\nAI:'
-            print(f"📝 Using only textual information for: {user_message[:50]}...")
+        # Step 2: Route to appropriate handler based on intent
+        if intent_type == "NAVIGATION":
+            # Handle navigation queries
+            nav_result = parse_navigation_request(user_message)
 
-        # Generate a response from the AI model
-        response = model.generate_content(prompt)
+            # Get image context if available
+            image_context = image_manager.get_image_context_for_prompt(user_message)
 
-        # Convert Markdown to HTML
-        html_response = markdown2.markdown(response.text)
+            # Combine map info + image context + user message
+            if image_context:
+                prompt = f'{map_info}{image_context}\n\nUser: {user_message}\nAI:'
+                print(f"🔍 Using visual information for navigation: {user_message[:50]}...")
+            else:
+                prompt = f'{map_info}\n\nUser: {user_message}\nAI:'
+                print(f"📝 Using only textual information for navigation: {user_message[:50]}...")
 
-        # If navigation request detected, include map action
-        if nav_result.get('is_navigation'):
-            print(f"🗺️ Navigation detected: {nav_result['start']} → {nav_result['end']}")
-            return jsonify({
-                "reply": html_response,
-                "mapAction": {
-                    "type": "SHOW_ROUTE",
-                    "building": "M",
-                    "floor": 1,
-                    "startRoom": nav_result['start'],
-                    "endRoom": nav_result['end'],
-                    "startNode": nav_result['startNode'],
-                    "endNode": nav_result['endNode']
-                }
-            })
-        else:
-            return jsonify({"reply": html_response})
+            # Generate a response from the AI model
+            response = model.generate_content(prompt)
+
+            # Convert Markdown to HTML
+            html_response = markdown2.markdown(response.text)
+
+            # If navigation request detected, include map action
+            if nav_result.get('is_navigation'):
+                print(f"🗺️ Navigation route: {nav_result['start']} → {nav_result['end']}")
+                return jsonify({
+                    "reply": html_response,
+                    "mapAction": {
+                        "type": "SHOW_ROUTE",
+                        "building": "M",
+                        "floor": 1,
+                        "startRoom": nav_result['start'],
+                        "endRoom": nav_result['end'],
+                        "startNode": nav_result['startNode'],
+                        "endNode": nav_result['endNode']
+                    }
+                })
+            else:
+                return jsonify({"reply": html_response})
+
+        elif intent_type == "EVENTS":
+            # Handle event queries
+            result = handle_event_query(user_message, intent_result['entities'])
+            return jsonify(result)
+
+        elif intent_type == "RESTAURANTS":
+            # Handle restaurant queries
+            result = handle_restaurant_query(user_message, intent_result['entities'])
+            return jsonify(result)
+
+        else:  # OUT_OF_SCOPE
+            # Handle out-of-scope queries with fallback message
+            result = handle_out_of_scope_query(user_message)
+            return jsonify(result)
 
     except Exception as e:
-        print(f"Error generating content: {e}") # Added for debugging
+        print(f"⚠️ Error generating content: {e}")
         return jsonify({"reply": f"An error occurred: {e}"}), 500
 
 @app.route("/images/status", methods=['GET'])

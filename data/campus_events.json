@@ -1,0 +1,79 @@
+{
+  "events": [
+    {
+      "id": "evt001",
+      "name": "Club Event - Elevator Pitch Workshop",
+      "date": "2025-11-20",
+      "time": "12:00 PM",
+      "location": "Alumni Lounge, Room SC 2013",
+      "building": "SC",
+      "room": "2013",
+      "floor": 2,
+      "description": "Join ASCM Fanshawe Student Chapter in collaboration with Career Services for an Elevator Speech Workshop. Guest speakers include Zeinab Mcheimech, PhD and Christina Larke. Prizes and snacks will be provided!",
+      "category": "career",
+      "organizer": "ASCM Fanshawe Student Chapter",
+      "registration_required": false,
+      "link": "https://www.fsu.ca/eventInfo/clubs-ascm-elevator-speech-november-20"
+    },
+    {
+      "id": "evt002",
+      "name": "Fall Career Fair",
+      "date": "2025-11-25",
+      "time": "10:00 AM - 4:00 PM",
+      "location": "Building F, Room 2001",
+      "building": "F",
+      "room": "2001",
+      "floor": 2,
+      "description": "Annual Fall Career Fair featuring over 50 employers from various industries. Bring your resume and dress professionally. Great opportunity to network and explore career options.",
+      "category": "career",
+      "organizer": "Career Services",
+      "registration_required": true,
+      "link": ""
+    },
+    {
+      "id": "evt003",
+      "name": "Tech Talks: AI and Machine Learning",
+      "date": "2025-11-22",
+      "time": "2:00 PM - 4:00 PM",
+      "location": "Building H, Room 1015",
+      "building": "H",
+      "room": "1015",
+      "floor": 1,
+      "description": "Industry experts discuss the latest trends in AI and Machine Learning. Learn about career opportunities and cutting-edge technologies. Q&A session included.",
+      "category": "technology",
+      "organizer": "Computer Programming Students Association",
+      "registration_required": false,
+      "link": ""
+    },
+    {
+      "id": "evt004",
+      "name": "International Student Welcome",
+      "date": "2025-11-21",
+      "time": "11:00 AM - 1:00 PM",
+      "location": "Student Centre, Main Lobby",
+      "building": "SC",
+      "room": "Main Lobby",
+      "floor": 1,
+      "description": "Welcome event for international students. Meet other students, learn about campus resources, and enjoy refreshments from around the world.",
+      "category": "social",
+      "organizer": "International Centre",
+      "registration_required": false,
+      "link": ""
+    },
+    {
+      "id": "evt005",
+      "name": "Wellness Wednesday: Stress Management Workshop",
+      "date": "2025-11-27",
+      "time": "3:00 PM - 4:30 PM",
+      "location": "Building A, Room 1204",
+      "building": "A",
+      "room": "1204",
+      "floor": 1,
+      "description": "Learn effective stress management techniques during exam season. Free workshop led by wellness counselors. Light refreshments provided.",
+      "category": "wellness",
+      "organizer": "Student Wellness Centre",
+      "registration_required": false,
+      "link": ""
+    }
+  ]
+}

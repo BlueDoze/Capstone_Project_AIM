@@ -1,0 +1,130 @@
+{
+  "restaurants": [
+    {
+      "id": "rest001",
+      "name": "Tim Hortons",
+      "location": "Building H, First Floor",
+      "building": "H",
+      "floor": 1,
+      "room": "Main Floor",
+      "hours": {
+        "monday": "7:00 AM - 8:00 PM",
+        "tuesday": "7:00 AM - 8:00 PM",
+        "wednesday": "7:00 AM - 8:00 PM",
+        "thursday": "7:00 AM - 8:00 PM",
+        "friday": "7:00 AM - 6:00 PM",
+        "saturday": "Closed",
+        "sunday": "Closed"
+      },
+      "cuisine_type": "cafe",
+      "menu_highlights": ["coffee", "donuts", "sandwiches", "bagels", "breakfast items", "soups"],
+      "payment_methods": ["cash", "credit", "debit", "meal_plan"],
+      "description": "Popular Canadian coffee shop offering fresh coffee, baked goods, and quick meals. Perfect for grabbing a coffee between classes."
+    },
+    {
+      "id": "rest002",
+      "name": "Oasis Restaurant",
+      "location": "Student Centre, Second Floor",
+      "building": "SC",
+      "floor": 2,
+      "room": "2000",
+      "hours": {
+        "monday": "8:00 AM - 7:00 PM",
+        "tuesday": "8:00 AM - 7:00 PM",
+        "wednesday": "8:00 AM - 7:00 PM",
+        "thursday": "8:00 AM - 7:00 PM",
+        "friday": "8:00 AM - 3:00 PM",
+        "saturday": "Closed",
+        "sunday": "Closed"
+      },
+      "cuisine_type": "cafeteria",
+      "menu_highlights": ["daily hot meals", "salad bar", "pizza", "burgers", "vegetarian options", "vegan options"],
+      "payment_methods": ["cash", "credit", "debit", "meal_plan", "OneCard"],
+      "description": "Main campus cafeteria offering a variety of hot meals, salads, and daily specials. Spacious seating area with great views."
+    },
+    {
+      "id": "rest003",
+      "name": "Subway",
+      "location": "Building F, First Floor",
+      "building": "F",
+      "floor": 1,
+      "room": "Main Floor",
+      "hours": {
+        "monday": "9:00 AM - 7:00 PM",
+        "tuesday": "9:00 AM - 7:00 PM",
+        "wednesday": "9:00 AM - 7:00 PM",
+        "thursday": "9:00 AM - 7:00 PM",
+        "friday": "9:00 AM - 5:00 PM",
+        "saturday": "Closed",
+        "sunday": "Closed"
+      },
+      "cuisine_type": "sandwiches",
+      "menu_highlights": ["custom sandwiches", "salads", "wraps", "cookies", "chips"],
+      "payment_methods": ["cash", "credit", "debit", "meal_plan"],
+      "description": "Build your own sandwich with fresh ingredients. Healthy options available including salads and wraps."
+    },
+    {
+      "id": "rest004",
+      "name": "The Spoke Bar & Grill",
+      "location": "Student Centre, First Floor",
+      "building": "SC",
+      "floor": 1,
+      "room": "1005",
+      "hours": {
+        "monday": "11:00 AM - 10:00 PM",
+        "tuesday": "11:00 AM - 10:00 PM",
+        "wednesday": "11:00 AM - 10:00 PM",
+        "thursday": "11:00 AM - 11:00 PM",
+        "friday": "11:00 AM - 11:00 PM",
+        "saturday": "Closed",
+        "sunday": "Closed"
+      },
+      "cuisine_type": "pub",
+      "menu_highlights": ["wings", "burgers", "nachos", "poutine", "craft beer", "cocktails"],
+      "payment_methods": ["cash", "credit", "debit"],
+      "description": "Campus pub and grill offering comfort food and beverages. Great place to relax with friends. Must be 19+ for alcohol service."
+    },
+    {
+      "id": "rest005",
+      "name": "The Market",
+      "location": "Building A, Main Floor",
+      "building": "A",
+      "floor": 1,
+      "room": "Main Floor",
+      "hours": {
+        "monday": "7:30 AM - 6:00 PM",
+        "tuesday": "7:30 AM - 6:00 PM",
+        "wednesday": "7:30 AM - 6:00 PM",
+        "thursday": "7:30 AM - 6:00 PM",
+        "friday": "7:30 AM - 4:00 PM",
+        "saturday": "Closed",
+        "sunday": "Closed"
+      },
+      "cuisine_type": "convenience",
+      "menu_highlights": ["grab-and-go meals", "snacks", "drinks", "fresh fruit", "yogurt", "sandwiches"],
+      "payment_methods": ["cash", "credit", "debit", "meal_plan", "OneCard"],
+      "description": "Convenience store offering quick snacks, drinks, and pre-packaged meals. Perfect for grabbing something quick between classes."
+    },
+    {
+      "id": "rest006",
+      "name": "Starbucks",
+      "location": "Building E, Main Entrance",
+      "building": "E",
+      "floor": 1,
+      "room": "Main Floor",
+      "hours": {
+        "monday": "7:00 AM - 7:00 PM",
+        "tuesday": "7:00 AM - 7:00 PM",
+        "wednesday": "7:00 AM - 7:00 PM",
+        "thursday": "7:00 AM - 7:00 PM",
+        "friday": "7:00 AM - 5:00 PM",
+        "saturday": "Closed",
+        "sunday": "Closed"
+      },
+      "cuisine_type": "cafe",
+      "menu_highlights": ["coffee", "tea", "frappuccinos", "pastries", "breakfast sandwiches"],
+      "payment_methods": ["cash", "credit", "debit", "Starbucks app"],
+      "description": "Premium coffee shop offering a wide variety of specialty drinks and light food options. Comfortable seating for studying."
+    }
+  ]
+}
