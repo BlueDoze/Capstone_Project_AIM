@@ -10,6 +10,84 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+async def extract_announcements_detailed(page):
+    """Extrai anúncios com conteúdo completo clicando em cada um."""
+    announcements = []
+
+    try:
+        # Aguardar tabela de anúncios carregar
+        await page.wait_for_selector("table", timeout=10000)
+
+        # Obter todas as linhas da tabela (exceto header)
+        rows = await page.query_selector_all("table tbody tr")
+
+        print(f"[News Scraper] Encontradas {len(rows)} linhas de anúncios")
+
+        for idx, row in enumerate(rows):
+            try:
+                # Extrair título e link
+                title_element = await row.query_selector("td:first-child a")
+                if not title_element:
+                    continue
+
+                title = await title_element.text_content()
+                title = title.strip() if title else ""
+
+                # Extrair data
+                date_element = await row.query_selector("td:nth-child(2)")
+                date = await date_element.text_content() if date_element else ""
+                date = date.strip() if date else ""
+
+                if not title:
+                    continue
+
+                # Clicar no título para abrir o anúncio completo
+                print(f"[News Scraper] Abrindo anúncio {idx + 1}: {title[:50]}...")
+                await title_element.click()
+
+                # Aguardar conteúdo carregar
+                await asyncio.sleep(1)
+
+                # Extrair conteúdo completo
+                try:
+                    content_area = await page.query_selector(".d2l-page-main, [role='main'], .content")
+                    if content_area:
+                        content = await content_area.text_content()
+                    else:
+                        content = await page.evaluate("() => document.body.innerText")
+
+                    content = content.strip() if content else ""
+                except:
+                    content = ""
+
+                # Salvar anúncio
+                announcement = {
+                    "title": title,
+                    "date": date,
+                    "content": content,
+                    "index": idx + 1
+                }
+                announcements.append(announcement)
+
+                # Voltar à lista de anúncios
+                await page.go_back()
+                await asyncio.sleep(1)
+
+            except Exception as e:
+                print(f"[News Scraper] Erro ao processar anúncio {idx + 1}: {str(e)}")
+                try:
+                    await page.go_back()
+                    await asyncio.sleep(0.5)
+                except:
+                    pass
+                continue
+
+        return announcements
+
+    except Exception as e:
+        print(f"[News Scraper] Erro ao extrair anúncios: {str(e)}")
+        return announcements
+
 async def scrape_news_page():
     """Acessa página de notícias e extrai informações."""
 
@@ -45,7 +123,11 @@ async def scrape_news_page():
             await page.click("input#idSIButton9")
 
             print("[News Scraper] Aguardando conclusão do login...")
-            await page.wait_for_load_state("networkidle", timeout=30000)
+            try:
+                await page.wait_for_load_state("networkidle", timeout=15000)
+            except:
+                print("[News Scraper] Timeout na espera de networkidle, continuando mesmo assim...")
+                await page.wait_for_load_state("domcontentloaded", timeout=5000)
             await asyncio.sleep(3)
 
             current_url = page.url
@@ -81,6 +163,16 @@ async def scrape_news_page():
             with open("news_page_text.txt", "w", encoding="utf-8") as f:
                 f.write(visible_text)
             print("[News Scraper] Texto visível salvo em news_page_text.txt")
+
+            # Extrair anúncios com detalhes completos
+            print("[News Scraper] Extraindo detalhes dos anúncios...")
+            announcements = await extract_announcements_detailed(page)
+
+            # Salvar anúncios em formato estruturado
+            import json
+            with open("news_announcements.json", "w", encoding="utf-8") as f:
+                json.dump(announcements, f, indent=2, ensure_ascii=False)
+            print(f"[News Scraper] {len(announcements)} anúncios extraídos e salvos em news_announcements.json")
 
             # Extrair informações estruturadas
             print("\n" + "="*80)
