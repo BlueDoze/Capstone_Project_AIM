@@ -10,33 +10,47 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-async def wait_for_2fa_approval(page, timeout=120000):
+async def wait_for_2fa_approval(page, timeout=180000):
     """Aguarda aprovação do 2FA detectando redirecionamento."""
-    print("\n" + "="*80)
-    print("🔐 AUTENTICAÇÃO DE DOIS FATORES DETECTADA")
-    print("="*80)
-    print("Por favor, aprove a solicitação no seu Microsoft Authenticator app.")
-    print("Aguardando aprovação...")
-    print("="*80 + "\n")
+    print("\n" + "╔" + "="*78 + "╗")
+    print("║" + " 🔐 AUTENTICAÇÃO DE DOIS FATORES NECESSÁRIA ".center(78) + "║")
+    print("╚" + "="*78 + "╝")
+    print()
+    print("📱 AÇÃO NECESSÁRIA:")
+    print("   1. Abra o app Microsoft Authenticator no seu celular")
+    print("   2. Procure pela notificação de aprovação")
+    print("   3. Toque em 'Aprovar' ou digite o código se solicitado")
+    print()
+    print("⏳ Aguardando aprovação...\n")
 
     start_url = page.url
     elapsed = 0
+    dots = 0
 
     while elapsed < timeout:
         current_url = page.url
 
         # Verifica se saiu da página de 2FA
         if "login.microsoftonline.com" not in current_url and "fanshaweonline.ca" in current_url:
-            print("\n✓ Autenticação aprovada com sucesso!")
+            print("\n✅ AUTENTICAÇÃO APROVADA COM SUCESSO!\n")
             return True
 
         await asyncio.sleep(2)
         elapsed += 2000
 
-        if elapsed % 10000 == 0:  # A cada 10 segundos
-            print(f"  Ainda aguardando... ({elapsed // 1000}s)")
+        # Animação de "carregando"
+        dots = (dots + 1) % 4
+        loading_animation = "." * dots + " " * (3 - dots)
+        elapsed_sec = elapsed // 1000
 
-    print("\n✗ Timeout aguardando aprovação do 2FA")
+        if elapsed % 2000 == 0:  # A cada 2 segundos
+            print(f"\r   Aguardando{loading_animation} ({elapsed_sec}s)", end="", flush=True)
+
+        if elapsed % 30000 == 0 and elapsed > 0:  # Lembrete a cada 30 segundos
+            print(f"\n   💡 Lembrete: Verifique seu celular - {elapsed_sec}s decorridos")
+
+    print("\n\n❌ TIMEOUT: Aprovação não detectada após 3 minutos")
+    print("   Por favor, tente novamente.\n")
     return False
 
 async def extract_all_announcements():
@@ -49,8 +63,8 @@ async def extract_all_announcements():
         raise ValueError("Configure D2L_USERNAME e D2L_PASSWORD no .env")
 
     async with async_playwright() as p:
-        # Browser VISÍVEL para aprovar 2FA
-        browser = await p.firefox.launch(headless=False)
+        # Browser INVISÍVEL - tudo via terminal
+        browser = await p.firefox.launch(headless=True)
         context = await browser.new_context(viewport={'width': 1920, 'height': 1080})
         page = await context.new_page()
 
@@ -85,15 +99,37 @@ async def extract_all_announcements():
             await asyncio.sleep(3)
 
             # Verificar se precisa de 2FA
+            print("   → Verificando se 2FA é necessário...")
+            await asyncio.sleep(2)
             current_url = page.url
-            if "login.microsoftonline.com" in current_url:
-                # Ainda na página da Microsoft - pode precisar de 2FA
-                success = await wait_for_2fa_approval(page, timeout=180000)  # 3 minutos
-                if not success:
-                    raise Exception("Falha na aprovação do 2FA")
+            print(f"   → URL atual: {current_url[:60]}...")
 
-            await asyncio.sleep(3)
-            print(f"\n✓ Login completado! URL: {page.url}\n")
+            if "login.microsoftonline.com" in current_url or "Stay signed in" in await page.content():
+                # Ainda na página da Microsoft - pode precisar de 2FA ou "Stay signed in"
+
+                # Verificar se é tela "Stay signed in?"
+                try:
+                    stay_button = await page.query_selector("input#idSIButton9")
+                    if stay_button:
+                        button_value = await stay_button.get_attribute("value")
+                        if button_value and ("Yes" in button_value or "No" in button_value):
+                            print("   → Detectada tela 'Stay signed in?' - clicando 'Yes'...")
+                            await stay_button.click()
+                            await page.wait_for_load_state("networkidle", timeout=10000)
+                            await asyncio.sleep(2)
+                except:
+                    pass
+
+                # Re-verificar URL após clicar
+                current_url = page.url
+                if "login.microsoftonline.com" in current_url:
+                    # Ainda precisa de 2FA
+                    success = await wait_for_2fa_approval(page, timeout=300000)  # 5 minutos
+                    if not success:
+                        raise Exception("Falha na aprovação do 2FA")
+
+            await asyncio.sleep(2)
+            print(f"\n✓ Login completado! URL: {page.url[:60]}...\n")
 
             # ETAPA 2: Acessar página de notícias
             print("[2/4] Acessando página de notícias...")
@@ -146,13 +182,24 @@ async def extract_all_announcements():
 
             for idx, announcement in enumerate(announcements_list, 1):
                 try:
-                    print(f"[{idx}/{len(announcements_list)}] {announcement['title'][:60]}...")
+                    # Barra de progresso visual
+                    progress_bar_width = 40
+                    progress = int((idx / len(announcements_list)) * progress_bar_width)
+                    bar = "█" * progress + "░" * (progress_bar_width - progress)
+                    percentage = int((idx / len(announcements_list)) * 100)
+
+                    print(f"\n[{idx}/{len(announcements_list)}] {bar} {percentage}%")
+                    print(f"📄 {announcement['title'][:70]}")
+                    print(f"📅 {announcement['date']}")
 
                     # Acessar página do anúncio
+                    print(f"   → Acessando página...", end="", flush=True)
                     await page.goto(announcement['url'], wait_until="networkidle", timeout=30000)
                     await asyncio.sleep(1)
+                    print(" OK")
 
                     # Extrair conteúdo
+                    print(f"   → Extraindo conteúdo...", end="", flush=True)
                     content = await page.evaluate("""
                         () => {
                             const htmlBlock = document.querySelector('d2l-html-block');
@@ -189,14 +236,16 @@ async def extract_all_announcements():
                     }
                     all_announcements.append(result)
 
-                    print(f"    ✓ Extraído ({len(content)} caracteres)")
+                    print(f" OK ({len(content)} caracteres)")
+                    print(f"   ✅ Sucesso!")
 
                     # Voltar para lista
                     await page.go_back()
                     await asyncio.sleep(0.5)
 
                 except Exception as e:
-                    print(f"    ✗ Erro: {str(e)}")
+                    print(f" FALHOU")
+                    print(f"   ❌ Erro: {str(e)[:100]}")
                     result = {
                         "index": idx,
                         "title": announcement['title'],
@@ -257,8 +306,6 @@ async def extract_all_announcements():
             raise
 
         finally:
-            print("\nFechando browser em 5 segundos...")
-            await asyncio.sleep(5)
             await browser.close()
 
 if __name__ == "__main__":
