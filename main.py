@@ -188,6 +188,28 @@ When answering about dining:
 Be helpful, friendly, and make it easy for students to find what they're looking for!
 '''
 
+# Announcements information prompt for AI model
+announcements_prompt = '''You are the Fanshawe Announcements Assistant. You help students stay informed about course announcements and important updates from D2L.
+
+You have access to information about:
+- Recent course announcements from instructors
+- Important class updates and reminders
+- Assignment and exam notifications
+- Course-related news and changes
+- Posted dates and content of announcements
+
+When answering about announcements:
+- Provide clear, concise summaries of announcements
+- Include dates when announcements were posted
+- Highlight action items (deadlines, required attendance, submissions, etc.)
+- Prioritize recent and urgent announcements
+- Mention the instructor or source when relevant
+- If multiple announcements match, list them chronologically (most recent first)
+- Be aware of deadlines and time-sensitive information
+
+Be helpful, organized, and ensure students don't miss important information!
+'''
+
 class ImageFileHandler(FileSystemEventHandler):
     """Handler to monitor changes in the images folder"""
 
@@ -637,13 +659,19 @@ def classify_user_intent(user_message: str) -> Dict[str, Any]:
                                'dinner', 'breakfast', 'hungry', 'menu', 'dining',
                                'comida', 'comer', 'restaurante', 'lanche']
 
+        # Announcement keywords
+        announcement_keywords = ['announcement', 'anuncio', 'news', 'notice', 'update',
+                                'd2l', 'brightspace', 'message', 'aviso', 'noticia',
+                                'posted', 'instructor', 'professor', 'class update']
+
         # Count keyword matches
         nav_score = sum(1 for kw in nav_keywords if kw in message_lower)
         event_score = sum(1 for kw in event_keywords if kw in message_lower)
         restaurant_score = sum(1 for kw in restaurant_keywords if kw in message_lower)
+        announcement_score = sum(1 for kw in announcement_keywords if kw in message_lower)
 
         # If clear winner from keywords, use it
-        max_score = max(nav_score, event_score, restaurant_score)
+        max_score = max(nav_score, event_score, restaurant_score, announcement_score)
         if max_score >= 2:
             if nav_score == max_score:
                 return {'intent': 'NAVIGATION', 'confidence': 0.8, 'entities': {}}
@@ -651,16 +679,19 @@ def classify_user_intent(user_message: str) -> Dict[str, Any]:
                 return {'intent': 'EVENTS', 'confidence': 0.8, 'entities': {}}
             elif restaurant_score == max_score:
                 return {'intent': 'RESTAURANTS', 'confidence': 0.8, 'entities': {}}
+            elif announcement_score == max_score:
+                return {'intent': 'ANNOUNCEMENTS', 'confidence': 0.8, 'entities': {}}
 
         # Use Gemini for more nuanced classification
         classify_prompt = f"""Classify this user query into ONE of these categories:
         - NAVIGATION: Questions about directions, finding locations, wayfinding on campus
         - EVENTS: Questions about campus events, activities, schedules, workshops
         - RESTAURANTS: Questions about food, dining, cafeterias, restaurants on campus
+        - ANNOUNCEMENTS: Questions about course announcements, D2L news, class updates, instructor messages
         - OUT_OF_SCOPE: Anything else not related to the above categories
 
         Return ONLY a JSON response with this format (no other text):
-        {{"intent": "NAVIGATION|EVENTS|RESTAURANTS|OUT_OF_SCOPE", "confidence": 0.0-1.0}}
+        {{"intent": "NAVIGATION|EVENTS|RESTAURANTS|ANNOUNCEMENTS|OUT_OF_SCOPE", "confidence": 0.0-1.0}}
 
         User query: {user_message}"""
 
@@ -792,6 +823,67 @@ def handle_restaurant_query(user_message: str, entities: Dict[str, Any]) -> Dict
         print(f"⚠️ Error handling restaurant query: {e}")
         return {'reply': 'Sorry, I encountered an error while searching for restaurants. Please try again.'}
 
+def handle_announcement_query(user_message: str, entities: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Handles announcement-related queries by reading directly from all_announcements.json
+    (raw D2L scraper output - no transformation needed)
+    """
+    if not model:
+        return {'reply': 'The AI model is not configured.'}
+
+    try:
+        # Load announcements data directly from scraper output
+        announcements_path = Path('all_announcements.json')
+        if not announcements_path.exists():
+            return {'reply': 'Announcement information is currently unavailable. Please run extract_all_announcements.py to collect D2L announcements.'}
+
+        with open(announcements_path, 'r', encoding='utf-8') as f:
+            raw_data = json.load(f)
+
+        announcements = raw_data.get('announcements', [])
+
+        if not announcements:
+            return {'reply': 'No announcements found. Please run extract_all_announcements.py to collect D2L announcements.'}
+
+        # Format announcements data as context
+        from datetime import datetime
+
+        announcements_context = "\n\n** Recent D2L Announcements: **\n"
+        announcements_context += f"Course: {raw_data.get('course', 'Unknown')}\n"
+        announcements_context += f"Total: {raw_data.get('total_announcements', 0)} announcements\n"
+        announcements_context += f"Extracted: {raw_data.get('extracted_at', 'Unknown')}\n\n"
+
+        for announcement in announcements:
+            announcements_context += f"\n- **{announcement.get('title', 'Untitled')}**\n"
+            announcements_context += f"  Posted: {announcement.get('date', 'Unknown date')}\n"
+
+            # Limit content length for context
+            content = announcement.get('content', '')
+            if len(content) > 500:
+                announcements_context += f"  Content: {content[:500]}...\n"
+            else:
+                announcements_context += f"  Content: {content}\n"
+
+            if announcement.get('url'):
+                announcements_context += f"  Link: {announcement['url']}\n"
+
+        # Combine announcements prompt + context + user query
+        prompt = f"{announcements_prompt}\n{announcements_context}\n\nUser: {user_message}\nAI:"
+
+        # Generate response
+        response = model.generate_content(prompt)
+        html_response = markdown2.markdown(response.text)
+
+        print(f"📢 Announcement query handled: {user_message[:50]}...")
+
+        return {'reply': html_response}
+
+    except Exception as e:
+        print(f"⚠️ Error handling announcement query: {e}")
+        import traceback
+        traceback.print_exc()
+        return {'reply': 'Sorry, I encountered an error while searching for announcements. Please try again.'}
+
 def handle_out_of_scope_query(user_message: str) -> Dict[str, Any]:
     """
     Provides a standard response for queries outside the supported categories
@@ -801,13 +893,14 @@ def handle_out_of_scope_query(user_message: str) -> Dict[str, Any]:
 - 🗺️ **Navigation & Directions** - Finding your way around campus
 - 📅 **Campus Events** - Discovering activities and schedules
 - 🍽️ **Dining & Restaurants** - Locating food services on campus
+- 📢 **Course Announcements** - D2L updates and class news
 
 Your question seems to be outside these areas. For other assistance, please visit:
 - **Student Services**: [www.fanshawec.ca/student-services](https://www.fanshawec.ca/student-services)
 - **Academic Support**: Contact your program coordinator
 - **General Inquiries**: Visit the Information Desk at the Student Centre
 
-How else can I help you with navigation, events, or dining?"""
+How else can I help you with navigation, events, dining, or announcements?"""
 
     html_response = markdown2.markdown(fallback_message)
     print(f"❌ Out-of-scope query: {user_message[:50]}...")
@@ -969,6 +1062,11 @@ def chat():
             result = handle_restaurant_query(user_message, intent_result['entities'])
             return jsonify(result)
 
+        elif intent_type == "ANNOUNCEMENTS":
+            # Handle announcement queries
+            result = handle_announcement_query(user_message, intent_result['entities'])
+            return jsonify(result)
+
         else:  # OUT_OF_SCOPE
             # Handle out-of-scope queries with fallback message
             result = handle_out_of_scope_query(user_message)
@@ -1083,6 +1181,105 @@ def stop_auto_monitoring():
 def auto_monitoring_status():
     """Returns automatic monitoring status"""
     return jsonify(auto_updater.get_status())
+
+# ============== ANNOUNCEMENTS API ENDPOINTS ==============
+
+@app.route("/api/announcements/refresh", methods=['POST'])
+def refresh_announcements():
+    """
+    Transform all_announcements.json to d2l_announcements.json cache.
+    Note: You must run extract_all_announcements.py manually first.
+    """
+    try:
+        # Check if raw scraper output exists
+        raw_file = Path('all_announcements.json')
+        if not raw_file.exists():
+            return jsonify({
+                "status": "error",
+                "message": "all_announcements.json not found. Please run extract_all_announcements.py first."
+            }), 404
+
+        print("🔄 Transforming announcements from all_announcements.json...")
+
+        # Load raw scraper output
+        with open(raw_file, 'r', encoding='utf-8') as f:
+            raw_data = json.load(f)
+
+        # Transform to standardized format
+        from src.services.announcement_transformer import transform_announcements
+        standardized = transform_announcements(raw_data)
+
+        # Save to cache
+        cache_path = Path('data/d2l_announcements.json')
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with open(cache_path, 'w', encoding='utf-8') as f:
+            json.dump(standardized, f, indent=2, ensure_ascii=False)
+
+        print(f"✅ Announcements transformed: {len(standardized['announcements'])} announcements")
+
+        return jsonify({
+            "status": "success",
+            "message": f"Transformed {len(standardized['announcements'])} announcements",
+            "last_updated": standardized['last_updated'],
+            "total_announcements": len(standardized['announcements']),
+            "source_file": str(raw_file)
+        })
+
+    except Exception as e:
+        print(f"❌ Error transforming announcements: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+@app.route("/api/announcements/status", methods=['GET'])
+def announcements_status():
+    """Returns announcements data status (reads directly from all_announcements.json)"""
+    try:
+        announcements_path = Path('all_announcements.json')
+
+        if not announcements_path.exists():
+            return jsonify({
+                "status": "no_data",
+                "message": "No announcements found. Please run extract_all_announcements.py",
+                "file_exists": False
+            })
+
+        with open(announcements_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+        from datetime import datetime
+        extracted_at = data.get('extracted_at', 'Unknown')
+
+        # Calculate data age
+        try:
+            extracted_dt = datetime.fromisoformat(extracted_at)
+            age_seconds = (datetime.now() - extracted_dt).total_seconds()
+            age_hours = age_seconds / 3600
+            age_str = f"{age_hours:.1f} hours ago"
+        except:
+            age_str = "Unknown"
+
+        return jsonify({
+            "status": "available",
+            "file_exists": True,
+            "total_announcements": data.get('total_announcements', 0),
+            "successful": data.get('successful', 0),
+            "failed": data.get('failed', 0),
+            "extracted_at": extracted_at,
+            "data_age": age_str,
+            "course": data.get('course', 'Unknown'),
+            "source_file": "all_announcements.json"
+        })
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
 
 # ============== NAVIGATION API ENDPOINTS ==============
 

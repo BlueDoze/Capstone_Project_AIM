@@ -1,54 +1,73 @@
 {
-  "total_announcements": 5,
-  "successful": 5,
-  "failed": 0,
-  "course": "INFO-6156-(01)-25F",
-  "extracted_at": "2025-11-19T23:22:09.747707",
-  "home_page": {
-    "url": "https://www.fanshaweonline.ca/d2l/home",
-    "content": "Fanshawe College\nAnnouncements\nWinner - FOL Ambassador Draw!\nPosted Nov 19, 2025 3:42 PM\n2025 Fall Exam Schedule\nPosted Nov 12, 2025 11:57 AM\nShow All Announcements\nMy Courses\nFanshaweOnline Email\nUser Links\nTasks\nAdd a task...\nAdd a task...\nFOL and Email Access",
-    "content_length": 262
-  },
   "announcements": [
     {
-      "index": 1,
+      "id": "ann001",
       "title": "Reminder: Capstone Class & Agentic AI Workshop",
-      "date": "Nov 18, 2025 10:15 AM",
-      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2257918/view?ou=2001542",
+      "date": "2025-11-18",
+      "time": "10:15 AM",
+      "posted_by": "Instructor",
+      "course": "INFO-6156-(01)-25F",
       "content": "Dear all,\nPlease note that we will be meeting in the Canada Life Village Square, F Building, for our regular capstone project class from 1–2 PM, followed by the Agentic AI workshop from 2-4 PM.\nI appreciate full attendance (I will be taking attendance before 2 pm) for this session, as it is organized exclusively for AIM students.\nThank you,Magdalene",
-      "content_length": 351
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2257918/view?ou=2001542",
+      "priority": "high",
+      "action_required": true,
+      "deadline": ""
     },
     {
-      "index": 2,
+      "id": "ann002",
       "title": "Building Agentic AI using IBM Tools - 18th Nov, Tuesday, 2-4 PM",
-      "date": "Nov 13, 2025 1:24 PM",
-      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2255777/view?ou=2001542",
+      "date": "2025-11-13",
+      "time": "1:24 PM",
+      "posted_by": "Instructor",
+      "course": "INFO-6156-(01)-25F",
       "content": "Hello everyone,\nHere is another exciting opportunity to learn Agentic AI building using IBM tools.\nRegister Now!\nNov 18th, 2-4 PM at Canada Life Village Square (F1027/F1029), Innovation Village\nHands-on Workshop: Building Agents with watsonx Orchestrate\nLearning Objectives\nBy the end of this session, you’ll be able to:\nUnderstand what watsonx Orchestrate is and how it works\nBuild agents without writing any code\nIntegrate tools and knowledge bases into your agents\nCreate agentic RAG (Retrieval Augmented Generation) solutions\nUse external tools like Firecrawl for web scraping\nGovern Agents\nThis is a hands-on session, so don’t forget to bring your laptop!\nIt’s also a fantastic chance to meet industry experts from IBM and gain insights into their expectations.",
-      "content_length": 766
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2255777/view?ou=2001542",
+      "priority": "medium",
+      "action_required": true,
+      "deadline": ""
     },
     {
-      "index": 3,
+      "id": "ann003",
       "title": "Gentle Reminder - Sprint 2",
-      "date": "Nov 4, 2025 9:36 AM",
-      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2249581/view?ou=2001542",
+      "date": "2025-11-04",
+      "time": "9:36 AM",
+      "posted_by": "Instructor",
+      "course": "INFO-6156-(01)-25F",
       "content": "Dear all,\nPlease note that your Sprint 2 presentation will take place today, November 4th from 1:00 to 4:00 p.m.\nThe presentation is GRADED!\nThank you,\nMagdalene",
-      "content_length": 161
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2249581/view?ou=2001542",
+      "priority": "high",
+      "action_required": true,
+      "deadline": ""
     },
     {
-      "index": 4,
+      "id": "ann004",
       "title": "Gentle Reminder - Building with Agentic AI: A Hands-on Workshop",
-      "date": "Oct 28, 2025 9:47 AM",
-      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2246212/view?ou=2001542",
+      "date": "2025-10-28",
+      "time": "9:47 AM",
+      "posted_by": "Instructor",
+      "course": "INFO-6156-(01)-25F",
       "content": "Dear all,\nYou should have received the meeting invitation along with your registration confirmation. However, I’m sharing it here again in case you’re unable to locate it.\nJoin Zoom Meeting:\nhttps://fanshawec-ca.zoom.us/j/94157020641?pwd=rQsQ5PQJ9Q5CEaa5Z6xYqkTdBRdjvz.1Meeting ID: 941 5702 0641Passcode: 13937778\nDate: October 28,  1-3 PM\nPlease reach out to me at mravichandran@fanshaweonline.ca if you have any trouble joining the meeting.\nThank you,\nMagdalene",
-      "content_length": 463
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2246212/view?ou=2001542",
+      "priority": "high",
+      "action_required": true,
+      "deadline": ""
     },
     {
-      "index": 5,
+      "id": "ann005",
       "title": "Sprint 2 Submission - reg",
-      "date": "Oct 27, 2025 10:36 PM",
-      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2246117/view?ou=2001542",
+      "date": "2025-10-27",
+      "time": "10:36 PM",
+      "posted_by": "Instructor",
+      "course": "INFO-6156-(01)-25F",
       "content": "Dear all,\nPlease submit your Sprint 2 work by October 28th, as you will need to begin working on Sprint 3 right after.\nSince we couldn’t have our Sprint presentation due to the workshop, it has been rescheduled to November 4th but there is no change to the submission date.\nThank you,\nMagdalene",
-      "content_length": 294
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2246117/view?ou=2001542",
+      "priority": "high",
+      "action_required": true,
+      "deadline": "October 28"
     }
-  ]
+  ],
+  "last_updated": "2025-11-19T23:22:44.115003",
+  "total": 5,
+  "course": "INFO-6156-(01)-25F",
+  "source": "D2L Scraper"
 }
