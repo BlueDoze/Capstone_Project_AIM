@@ -1,5 +1,5 @@
 """
-Script para extrair TODOS os anúncios do D2L com um único login.
+Script para extrair a página home e os 5 primeiros anúncios do D2L com um único login.
 """
 
 import asyncio
@@ -144,7 +144,7 @@ async def wait_for_2fa_approval(page, timeout=300000):
     return False
 
 async def extract_all_announcements():
-    """Extrai todos os anúncios com um único login."""
+    """Extrai a página home e os 5 primeiros anúncios com um único login."""
 
     username = os.getenv("D2L_USERNAME")
     password = os.getenv("D2L_PASSWORD")
@@ -162,11 +162,11 @@ async def extract_all_announcements():
 
         try:
             print("="*80)
-            print("EXTRATOR DE ANÚNCIOS D2L - LOGIN ÚNICO")
+            print("EXTRATOR D2L - HOME + 5 ANÚNCIOS - LOGIN ÚNICO")
             print("="*80)
 
             # ETAPA 1: Login
-            print("\n[1/4] Iniciando login...")
+            print("\n[1/5] Iniciando login...")
             login_url = "https://www.fanshaweonline.ca/d2l/login"
             await page.goto(login_url, wait_until="networkidle", timeout=30000)
 
@@ -221,15 +221,45 @@ async def extract_all_announcements():
             await asyncio.sleep(2)
             print(f"\n✓ Login completado! URL: {page.url[:60]}...\n")
 
-            # ETAPA 2: Acessar página de notícias
-            print("[2/4] Acessando página de notícias...")
+            # ETAPA 2: Acessar e extrair página home
+            print("[2/5] Acessando página home...")
+            home_url = "https://www.fanshaweonline.ca/d2l/home"
+            await page.goto(home_url, wait_until="networkidle", timeout=30000)
+            await asyncio.sleep(2)
+            print("✓ Página home carregada!\n")
+
+            # Extrair conteúdo da home
+            print("   → Extraindo conteúdo da home...", end="", flush=True)
+            home_content = await page.evaluate("""
+                () => {
+                    // Tentar extrair conteúdo principal
+                    const main = document.querySelector('[role="main"]') ||
+                                 document.querySelector('.d2l-page-main') ||
+                                 document.querySelector('main');
+
+                    if (main) {
+                        return main.innerText.trim();
+                    }
+
+                    return document.body.innerText.trim();
+                }
+            """)
+
+            home_content = home_content.strip() if home_content else ""
+            home_content = '\n'.join(line.strip() for line in home_content.split('\n') if line.strip())
+
+            print(f" OK ({len(home_content)} caracteres)")
+            print(f"   ✅ Conteúdo da home extraído!\n")
+
+            # ETAPA 3: Acessar página de notícias
+            print("[3/5] Acessando página de notícias...")
             news_url = "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001542"
             await page.goto(news_url, wait_until="networkidle", timeout=30000)
             await asyncio.sleep(2)
             print("✓ Página de notícias carregada!\n")
 
-            # ETAPA 3: Extrair lista de anúncios
-            print("[3/4] Extraindo lista de anúncios...")
+            # ETAPA 4: Extrair lista de anúncios
+            print("[4/5] Extraindo lista de anúncios...")
 
             # Buscar todos os links de anúncios na página
             announcements_list = await page.evaluate("""
@@ -266,19 +296,20 @@ async def extract_all_announcements():
 
             print(f"✓ Encontrados {len(announcements_list)} anúncios!\n")
 
-            # ETAPA 4: Extrair conteúdo de cada anúncio
-            print(f"[4/4] Extraindo conteúdo de {len(announcements_list)} anúncios...")
+            # ETAPA 5: Extrair conteúdo de cada anúncio (apenas 5 primeiros)
+            announcements_to_extract = announcements_list[:5]
+            print(f"[5/5] Extraindo conteúdo de 5 anúncios...")
             print("="*80 + "\n")
 
-            for idx, announcement in enumerate(announcements_list, 1):
+            for idx, announcement in enumerate(announcements_to_extract, 1):
                 try:
                     # Barra de progresso visual
                     progress_bar_width = 40
-                    progress = int((idx / len(announcements_list)) * progress_bar_width)
+                    progress = int((idx / len(announcements_to_extract)) * progress_bar_width)
                     bar = "█" * progress + "░" * (progress_bar_width - progress)
-                    percentage = int((idx / len(announcements_list)) * 100)
+                    percentage = int((idx / len(announcements_to_extract)) * 100)
 
-                    print(f"\n[{idx}/{len(announcements_list)}] {bar} {percentage}%")
+                    print(f"\n[{idx}/{len(announcements_to_extract)}] {bar} {percentage}%")
                     print(f"📄 {announcement['title'][:70]}")
                     print(f"📅 {announcement['date']}")
 
@@ -359,11 +390,16 @@ async def extract_all_announcements():
             print("="*80)
 
             output = {
-                "total": len(all_announcements),
+                "total_announcements": len(all_announcements),
                 "successful": sum(1 for a in all_announcements if 'error' not in a),
                 "failed": sum(1 for a in all_announcements if 'error' in a),
                 "course": "INFO-6156-(01)-25F",
                 "extracted_at": __import__('datetime').datetime.now().isoformat(),
+                "home_page": {
+                    "url": home_url,
+                    "content": home_content,
+                    "content_length": len(home_content)
+                },
                 "announcements": all_announcements
             }
 
@@ -371,10 +407,11 @@ async def extract_all_announcements():
                 json.dump(output, f, indent=2, ensure_ascii=False)
 
             print(f"\n✓ Arquivo salvo: all_announcements.json")
-            print(f"✓ Total: {output['total']} anúncios")
+            print(f"✓ Home page: {len(home_content)} caracteres")
+            print(f"✓ Total: {output['total_announcements']} anúncios")
             print(f"✓ Sucesso: {output['successful']}")
             print(f"✓ Falhas: {output['failed']}")
-            print(f"✓ Conteúdo total: {sum(a.get('content_length', 0) for a in all_announcements)} caracteres")
+            print(f"✓ Conteúdo total dos anúncios: {sum(a.get('content_length', 0) for a in all_announcements)} caracteres")
 
             return output
 
@@ -402,7 +439,7 @@ if __name__ == "__main__":
     print("\n")
     print("╔" + "="*78 + "╗")
     print("║" + " "*78 + "║")
-    print("║" + "  EXTRATOR DE ANÚNCIOS D2L - TODOS OS ANÚNCIOS COM LOGIN ÚNICO".center(78) + "║")
+    print("║" + "  EXTRATOR D2L - HOME + 5 ANÚNCIOS - LOGIN ÚNICO".center(78) + "║")
     print("║" + " "*78 + "║")
     print("╚" + "="*78 + "╝")
     print("\n")
@@ -413,5 +450,6 @@ if __name__ == "__main__":
     print("CONCLUÍDO COM SUCESSO!")
     print("="*80)
     print(f"Arquivo gerado: all_announcements.json")
-    print(f"Total de anúncios extraídos: {result['total']}")
+    print(f"Home page extraída: {result['home_page']['content_length']} caracteres")
+    print(f"Total de anúncios extraídos: {result['total_announcements']}")
     print("="*80 + "\n")
