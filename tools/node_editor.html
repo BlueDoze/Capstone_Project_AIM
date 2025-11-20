@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Node Editor - Building M</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            background: #1a1a2e;
+        }
+
+        #sidebar {
+            width: 380px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        #sidebar-header {
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        #sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        #map {
+            flex: 1;
+            position: relative;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section h2 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 5px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .mode-indicator {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        .mode-viewing {
+            background: rgba(100, 100, 255, 0.3);
+            border: 2px solid rgba(100, 100, 255, 0.5);
+        }
+
+        .mode-drawing {
+            background: rgba(255, 200, 0, 0.3);
+            border: 2px solid rgba(255, 200, 0, 0.8);
+        }
+
+        .mode-editing {
+            background: rgba(255, 100, 100, 0.3);
+            border: 2px solid rgba(255, 100, 100, 0.8);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            background: rgba(255,255,255,0.9);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        #node-info, #route-info {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        #node-info h3, #route-info h3 {
+            margin-bottom: 8px;
+            font-size: 1em;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding-bottom: 5px;
+        }
+
+        .info-item {
+            margin: 5px 0;
+        }
+
+        .info-label {
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .stat-box {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            opacity: 0.9;
+            display: block;
+            margin-top: 3px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .waypoint-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0,0,0,0.2);
+            border-radius: 4px;
+            padding: 8px;
+        }
+
+        .waypoint-item {
+            padding: 5px;
+            margin: 3px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
+        }
+
+        .waypoint-item button {
+            padding: 2px 8px;
+            border: none;
+            border-radius: 3px;
+            background: rgba(255,0,0,0.6);
+            color: white;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .waypoint-item button:hover {
+            background: rgba(255,0,0,0.8);
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            z-index: 10000;
+            font-size: 1.2em;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .connection-line {
+            stroke: #4444ff;
+            stroke-width: 2;
+            opacity: 0.6;
+        }
+
+        .connection-line.entrance {
+            stroke: #00ff00;
+        }
+
+        .connection-line.exit {
+            stroke: #ff0000;
+        }
+
+        .connection-line.selected {
+            stroke-width: 4;
+            opacity: 1;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <div id="sidebar-header">
+            <h1>🗺️ Node Editor</h1>
+            <div class="subtitle">Building M - Floor 1</div>
+        </div>
+
+        <div id="sidebar-content">
+            <!-- Mode Indicator -->
+            <div id="mode-indicator" class="mode-indicator mode-viewing">
+                📍 VIEWING MODE
+            </div>
+
+            <!-- Statistics -->
+            <div class="section">
+                <h2>📊 Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-value" id="stat-nodes">0</span>
+                        <span class="stat-label">Nodes</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-value" id="stat-routes">0</span>
+                        <span class="stat-label">Routes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="section">
+                <h2>🎮 Controls</h2>
+                <button id="btn-toggle-nodes" class="btn btn-primary">Show/Hide Nodes</button>
+                <button id="btn-toggle-routes" class="btn btn-primary">Show/Hide Routes</button>
+                <button id="btn-new-route" class="btn btn-success">✏️ Draw New Route</button>
+                <button id="btn-cancel" class="btn btn-danger hidden">❌ Cancel</button>
+            </div>
+
+            <!-- Route Drawing Form -->
+            <div id="route-form" class="section hidden">
+                <h2>📝 New Route Properties</h2>
+
+                <div class="form-group">
+                    <label>Start Node:</label>
+                    <select id="input-start-node">
+                        <option value="">-- Select or click on map --</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>End Node:</label>
+                    <select id="input-end-node">
+                        <option value="">-- Select or click on map --</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Description:</label>
+                    <input type="text" id="input-description" placeholder="e.g., Corridor from Room X to Room Y">
+                </div>
+
+                <div class="form-group">
+                    <label>Connected Rooms (comma-separated):</label>
+                    <input type="text" id="input-rooms" placeholder="e.g., Room_1003, Elevator-M">
+                </div>
+
+                <div class="form-group">
+                    <label>Keywords (comma-separated):</label>
+                    <input type="text" id="input-keywords" placeholder="e.g., elevator, room 1003, lab">
+                </div>
+
+                <div class="form-group">
+                    <label>Special Properties:</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="input-entrance"> Entrance</label>
+                        <label><input type="checkbox" id="input-exit"> Exit</label>
+                        <label><input type="checkbox" id="input-wheelchair"> Wheelchair Access</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Waypoints (<span id="waypoint-count">0</span>):</label>
+                    <div id="waypoint-list" class="waypoint-list">
+                        <em>Click on map to add waypoints</em>
+                    </div>
+                </div>
+
+                <button id="btn-save-route" class="btn btn-success">💾 Save Route</button>
+            </div>
+
+            <!-- Node Info -->
+            <div id="node-info" class="hidden">
+                <h3>Node Information</h3>
+                <div id="node-details"></div>
+            </div>
+
+            <!-- Route Info -->
+            <div id="route-info" class="hidden">
+                <h3>Route Information</h3>
+                <div id="route-details"></div>
+            </div>
+
+            <!-- Export -->
+            <div class="section">
+                <h2>💾 Export</h2>
+                <button id="btn-export" class="btn btn-warning">📥 Export GeoJSON</button>
+                <button id="btn-download" class="btn btn-primary hidden">⬇️ Download File</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="map"></div>
+    <div id="loading">Loading...</div>
+
+    <script>
+        // Node positions (from configuration)
+        const nodePositions = {
+            "M1_1": [43.014095, -81.198648],
+            "M1_2": [43.014108, -81.198600],
+            "M1_3": [43.014094, -81.198592],
+            "M1_Int_1": [43.014131, -81.198520],
+            "M1_4": [43.014117, -81.198512],
+            "M1_5": [43.014097, -81.198434],
+            "M1_6": [43.014091, -81.198453],
+            "M1_7": [43.014056, -81.198466],
+            "M1_8": [43.014145, -81.198396],
+            "M1_9": [43.014177, -81.198364],
+            "M1_10": [43.014193, -81.198372],
+            "M1_11": [43.014217, -81.198325],
+            "M1_12": [43.014243, -81.198289],
+            "M1_13": [43.014267, -81.198241],
+            "M1_14": [43.014281, -81.198223],
+            "M1_15": [43.014295, -81.198201],
+            "M1_16": [43.014313, -81.198167],
+            "M1_17": [43.014329, -81.198145],
+            "M1_18": [43.014347, -81.198119],
+            "M1_19": [43.014365, -81.198093],
+            "M1_Turn_1": [43.014189, -81.198473],
+            "M1_Turn_2": [43.014371, -81.198213],
+            "H_entry": [43.014089, -81.198680]
+        };
+
+        // Global state
+        let map, currentMode = 'viewing';
+        let nodeMarkers = {}, routeLayers = [];
+        let currentRoute = { waypoints: [], startNode: null, endNode: null };
+        let loadedSegments = [];
+        let nodesVisible = true, routesVisible = true;
+        let selectedNode = null, selectedRoute = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', init);
+
+        function init() {
+            initMap();
+            loadNodes();
+            loadRoutes();
+            setupEventListeners();
+            updateStats();
+            hideLoading();
+        }
+
+        // SVG overlay variables
+        let svgOverlay = null;
+        let currentCorners = null;
+
+        function initMap() {
+            const mapBearing = 21.3; // Match frontend rotation
+
+            map = L.map('map', {
+                center: [43.014120, -81.198400],
+                zoom: 22,
+                maxZoom: 24,
+                minZoom: 18,
+                rotate: true,
+                bearing: mapBearing,
+                touchRotate: true,
+                shiftKeyRotate: true,
+                rotateControl: {
+                    closeOnZeroBearing: false,
+                    position: 'topleft'
+                }
+            });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 24
+            }).addTo(map);
+
+            // Load SVG floor plan overlay
+            loadSVGOverlay();
+
+            // Add rotation display (like frontend)
+            const rotationDisplay = document.createElement('div');
+            rotationDisplay.style.position = 'absolute';
+            rotationDisplay.style.top = '10px';
+            rotationDisplay.style.left = '10px';
+            rotationDisplay.style.background = 'rgba(255, 255, 255, 0.9)';
+            rotationDisplay.style.padding = '8px 12px';
+            rotationDisplay.style.borderRadius = '5px';
+            rotationDisplay.style.fontSize = '14px';
+            rotationDisplay.style.fontWeight = 'bold';
+            rotationDisplay.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
+            rotationDisplay.style.zIndex = '1000';
+            rotationDisplay.textContent = 'Rotation: ' + mapBearing + '°';
+            document.getElementById('map').appendChild(rotationDisplay);
+
+            // Update rotation display when map rotates
+            map.on('rotate', function () {
+                const bearing = map.getBearing();
+                rotationDisplay.textContent = 'Rotation: ' + bearing.toFixed(1) + '°';
+            });
+
+            // Map click handler for drawing
+            map.on('click', onMapClick);
+        }
+
+        function loadNodes() {
+            Object.entries(nodePositions).forEach(([nodeName, coords]) => {
+                const marker = L.circleMarker(coords, {
+                    radius: 10,
+                    fillColor: getNodeColor(nodeName),
+                    color: '#000',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8,
+                    draggable: false
+                }).addTo(map);
+
+                // Node label
+                marker.bindTooltip(nodeName, {
+                    permanent: false,
+                    direction: 'top',
+                    offset: [0, -10]
+                });
+
+                // Node popup
+                marker.bindPopup(`<b>${nodeName}</b><br>${coords[0].toFixed(6)}, ${coords[1].toFixed(6)}`);
+
+                // Click handler
+                marker.on('click', (e) => onNodeClick(nodeName, e));
+
+                // Enable dragging
+                marker.on('dragend', (e) => onNodeDrag(nodeName, e));
+
+                nodeMarkers[nodeName] = marker;
+
+                // Populate dropdown
+                const option1 = document.createElement('option');
+                option1.value = nodeName;
+                option1.textContent = nodeName;
+                document.getElementById('input-start-node').appendChild(option1);
+
+                const option2 = document.createElement('option');
+                option2.value = nodeName;
+                option2.textContent = nodeName;
+                document.getElementById('input-end-node').appendChild(option2);
+            });
+        }
+
+        function loadRoutes() {
+            fetch('../map/corridor_segments_building_m.geojson')
+                .then(response => response.json())
+                .then(data => {
+                    loadedSegments = data.features || [];
+                    drawRoutes();
+                    updateStats();
+                })
+                .catch(error => {
+                    console.error('Error loading routes:', error);
+                    alert('Could not load existing routes. You can still create new ones.');
+                });
+        }
+
+        function drawRoutes() {
+            // Clear existing route layers
+            routeLayers.forEach(layer => map.removeLayer(layer));
+            routeLayers = [];
+
+            loadedSegments.forEach((feature, idx) => {
+                const coords = feature.geometry.coordinates;
+                const props = feature.properties || {};
+
+                // Convert [lng, lat] to [lat, lng]
+                const latLngs = coords.map(c => [c[1], c[0]]);
+
+                const polyline = L.polyline(latLngs, {
+                    color: getRouteColor(props),
+                    weight: 4,
+                    opacity: 0.7
+                }).addTo(map);
+
+                // Popup
+                let popupContent = `<b>${props.name || 'Unnamed'}</b><br>`;
+                if (props.startNode && props.endNode) {
+                    popupContent += `${props.startNode} → ${props.endNode}<br>`;
+                }
+                if (props.description) {
+                    popupContent += `${props.description}<br>`;
+                }
+                popupContent += `Points: ${coords.length}`;
+
+                polyline.bindPopup(popupContent);
+
+                // Click handler
+                polyline.on('click', (e) => onRouteClick(idx, e));
+
+                routeLayers.push(polyline);
+            });
+        }
+
+        function getNodeColor(nodeName) {
+            if (nodeName === 'H_entry') return '#00ff00'; // Entrance
+            if (nodeName.includes('Exit')) return '#ff0000'; // Exit
+            if (nodeName.includes('Int')) return '#ffff00'; // Intersection
+            if (nodeName.includes('Turn')) return '#ff8800'; // Turn
+            return '#4444ff'; // Default
+        }
+
+        function getRouteColor(props) {
+            if (props.isEntrance) return '#00ff00';
+            if (props.isExit) return '#ff0000';
+            return '#4444ff';
+        }
+
+        function onMapClick(e) {
+            if (currentMode === 'drawing') {
+                addWaypoint(e.latlng);
+            }
+        }
+
+        function onNodeClick(nodeName, e) {
+            L.DomEvent.stopPropagation(e);
+
+            if (currentMode === 'drawing') {
+                // Auto-set start/end nodes
+                if (!currentRoute.startNode) {
+                    currentRoute.startNode = nodeName;
+                    document.getElementById('input-start-node').value = nodeName;
+                    showInfo(`Start node set to ${nodeName}`);
+                } else if (!currentRoute.endNode && nodeName !== currentRoute.startNode) {
+                    currentRoute.endNode = nodeName;
+                    document.getElementById('input-end-node').value = nodeName;
+                    showInfo(`End node set to ${nodeName}`);
+                }
+            } else {
+                selectNode(nodeName);
+            }
+        }
+
+        function onNodeDrag(nodeName, e) {
+            const newPos = e.target.getLatLng();
+            nodePositions[nodeName] = [newPos.lat, newPos.lng];
+            showInfo(`${nodeName} moved to ${newPos.lat.toFixed(6)}, ${newPos.lng.toFixed(6)}`);
+        }
+
+        function onRouteClick(idx, e) {
+            L.DomEvent.stopPropagation(e);
+            selectRoute(idx);
+        }
+
+        function addWaypoint(latlng) {
+            currentRoute.waypoints.push(latlng);
+
+            // Draw marker
+            L.circleMarker(latlng, {
+                radius: 5,
+                fillColor: '#ffff00',
+                color: '#000',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map);
+
+            // Draw line if we have multiple points
+            if (currentRoute.waypoints.length > 1) {
+                L.polyline(currentRoute.waypoints, {
+                    color: '#ffff00',
+                    weight: 3,
+                    opacity: 0.8,
+                    dashArray: '5, 5'
+                }).addTo(map);
+            }
+
+            updateWaypointList();
+        }
+
+        function updateWaypointList() {
+            const list = document.getElementById('waypoint-list');
+            const count = document.getElementById('waypoint-count');
+            count.textContent = currentRoute.waypoints.length;
+
+            if (currentRoute.waypoints.length === 0) {
+                list.innerHTML = '<em>Click on map to add waypoints</em>';
+                return;
+            }
+
+            list.innerHTML = '';
+            currentRoute.waypoints.forEach((wp, idx) => {
+                const div = document.createElement('div');
+                div.className = 'waypoint-item';
+                div.innerHTML = `
+                    <span>${idx + 1}. ${wp.lat.toFixed(6)}, ${wp.lng.toFixed(6)}</span>
+                    <button onclick="removeWaypoint(${idx})">✕</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function removeWaypoint(idx) {
+            currentRoute.waypoints.splice(idx, 1);
+            updateWaypointList();
+            // TODO: Redraw route on map
+        }
+
+        function selectNode(nodeName) {
+            selectedNode = nodeName;
+
+            // Highlight node
+            Object.entries(nodeMarkers).forEach(([name, marker]) => {
+                if (name === nodeName) {
+                    marker.setStyle({ radius: 14, weight: 3 });
+                } else {
+                    marker.setStyle({ radius: 10, weight: 2 });
+                }
+            });
+
+            // Show node info
+            const pos = nodePositions[nodeName];
+            const connectedRoutes = loadedSegments.filter(seg =>
+                seg.properties.startNode === nodeName || seg.properties.endNode === nodeName
+            );
+
+            const details = `
+                <div class="info-item"><span class="info-label">Node:</span> ${nodeName}</div>
+                <div class="info-item"><span class="info-label">Position:</span> ${pos[0].toFixed(6)}, ${pos[1].toFixed(6)}</div>
+                <div class="info-item"><span class="info-label">Connected Routes:</span> ${connectedRoutes.length}</div>
+                <div class="info-item"><span class="info-label">Type:</span> ${getNodeType(nodeName)}</div>
+            `;
+
+            document.getElementById('node-details').innerHTML = details;
+            document.getElementById('node-info').classList.remove('hidden');
+            document.getElementById('route-info').classList.add('hidden');
+        }
+
+        function selectRoute(idx) {
+            selectedRoute = idx;
+            const feature = loadedSegments[idx];
+            const props = feature.properties || {};
+
+            // Highlight route
+            routeLayers.forEach((layer, i) => {
+                if (i === idx) {
+                    layer.setStyle({ weight: 6, opacity: 1 });
+                } else {
+                    layer.setStyle({ weight: 4, opacity: 0.7 });
+                }
+            });
+
+            // Show route info
+            const details = `
+                <div class="info-item"><span class="info-label">Name:</span> ${props.name || 'Unnamed'}</div>
+                <div class="info-item"><span class="info-label">Route:</span> ${props.startNode || '?'} → ${props.endNode || '?'}</div>
+                <div class="info-item"><span class="info-label">Description:</span> ${props.description || 'None'}</div>
+                <div class="info-item"><span class="info-label">Rooms:</span> ${props.connectsTo ? props.connectsTo.join(', ') : 'None'}</div>
+                <div class="info-item"><span class="info-label">Points:</span> ${feature.geometry.coordinates.length}</div>
+                <div class="info-item"><span class="info-label">Length:</span> ${props.length ? props.length.toFixed(2) + 'm' : 'N/A'}</div>
+            `;
+
+            document.getElementById('route-details').innerHTML = details;
+            document.getElementById('route-info').classList.remove('hidden');
+            document.getElementById('node-info').classList.add('hidden');
+        }
+
+        function getNodeType(nodeName) {
+            if (nodeName === 'H_entry') return 'Entrance';
+            if (nodeName.includes('Exit')) return 'Exit';
+            if (nodeName.includes('Int')) return 'Intersection';
+            if (nodeName.includes('Turn')) return 'Turn Point';
+            return 'Navigation Node';
+        }
+
+        function setupEventListeners() {
+            document.getElementById('btn-toggle-nodes').addEventListener('click', toggleNodes);
+            document.getElementById('btn-toggle-routes').addEventListener('click', toggleRoutes);
+            document.getElementById('btn-new-route').addEventListener('click', startDrawing);
+            document.getElementById('btn-cancel').addEventListener('click', cancelDrawing);
+            document.getElementById('btn-save-route').addEventListener('click', saveRoute);
+            document.getElementById('btn-export').addEventListener('click', exportGeoJSON);
+        }
+
+        function toggleNodes() {
+            nodesVisible = !nodesVisible;
+            Object.values(nodeMarkers).forEach(marker => {
+                if (nodesVisible) {
+                    marker.addTo(map);
+                } else {
+                    map.removeLayer(marker);
+                }
+            });
+        }
+
+        function toggleRoutes() {
+            routesVisible = !routesVisible;
+            routeLayers.forEach(layer => {
+                if (routesVisible) {
+                    layer.addTo(map);
+                } else {
+                    map.removeLayer(layer);
+                }
+            });
+        }
+
+        function startDrawing() {
+            currentMode = 'drawing';
+            currentRoute = { waypoints: [], startNode: null, endNode: null };
+
+            // Update UI
+            document.getElementById('mode-indicator').className = 'mode-indicator mode-drawing';
+            document.getElementById('mode-indicator').textContent = '✏️ DRAWING MODE - Click on map to add waypoints';
+            document.getElementById('route-form').classList.remove('hidden');
+            document.getElementById('btn-cancel').classList.remove('hidden');
+            document.getElementById('btn-new-route').classList.add('hidden');
+
+            // Enable node dragging
+            Object.values(nodeMarkers).forEach(marker => {
+                marker.dragging.enable();
+            });
+
+            updateWaypointList();
+        }
+
+        function cancelDrawing() {
+            currentMode = 'viewing';
+            currentRoute = { waypoints: [], startNode: null, endNode: null };
+
+            // Update UI
+            document.getElementById('mode-indicator').className = 'mode-indicator mode-viewing';
+            document.getElementById('mode-indicator').textContent = '📍 VIEWING MODE';
+            document.getElementById('route-form').classList.add('hidden');
+            document.getElementById('btn-cancel').classList.add('hidden');
+            document.getElementById('btn-new-route').classList.remove('hidden');
+
+            // Disable node dragging
+            Object.values(nodeMarkers).forEach(marker => {
+                marker.dragging.disable();
+            });
+
+            // Clear form
+            document.getElementById('input-start-node').value = '';
+            document.getElementById('input-end-node').value = '';
+            document.getElementById('input-description').value = '';
+            document.getElementById('input-rooms').value = '';
+            document.getElementById('input-keywords').value = '';
+            document.getElementById('input-entrance').checked = false;
+            document.getElementById('input-exit').checked = false;
+            document.getElementById('input-wheelchair').checked = false;
+
+            // TODO: Clear temporary drawings from map
+        }
+
+        function saveRoute() {
+            // Get form data
+            const startNode = document.getElementById('input-start-node').value;
+            const endNode = document.getElementById('input-end-node').value;
+            const description = document.getElementById('input-description').value;
+            const rooms = document.getElementById('input-rooms').value.split(',').map(s => s.trim()).filter(s => s);
+            const keywords = document.getElementById('input-keywords').value.split(',').map(s => s.trim()).filter(s => s);
+            const isEntrance = document.getElementById('input-entrance').checked;
+            const isExit = document.getElementById('input-exit').checked;
+            const accessibility = document.getElementById('input-wheelchair').checked ? 'wheelchair' : null;
+
+            // Validate
+            if (!startNode || !endNode) {
+                alert('Please select start and end nodes!');
+                return;
+            }
+
+            if (currentRoute.waypoints.length < 2) {
+                alert('Please add at least 2 waypoints!');
+                return;
+            }
+
+            // Create GeoJSON feature
+            const coordinates = currentRoute.waypoints.map(wp => [wp.lng, wp.lat]);
+
+            const feature = {
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString',
+                    coordinates: coordinates
+                },
+                properties: {
+                    name: `${startNode}_${endNode}`,
+                    segmentType: 'corridor',
+                    startNode: startNode,
+                    endNode: endNode,
+                    description: description || `Corridor from ${startNode} to ${endNode}`,
+                    connectsTo: rooms,
+                    keywords: keywords,
+                    pointCount: coordinates.length,
+                    length: calculateLength(coordinates),
+                    timestamp: new Date().toISOString()
+                }
+            };
+
+            if (isEntrance) {
+                feature.properties.isEntrance = true;
+                feature.properties.entranceType = 'main';
+            }
+            if (isExit) {
+                feature.properties.isExit = true;
+            }
+            if (accessibility) {
+                feature.properties.accessibility = accessibility;
+            }
+
+            // Add to loaded segments
+            loadedSegments.push(feature);
+
+            // Redraw routes
+            drawRoutes();
+
+            // Cancel drawing mode
+            cancelDrawing();
+
+            // Update stats
+            updateStats();
+
+            showInfo('Route saved successfully!');
+        }
+
+        function calculateLength(coordinates) {
+            let length = 0;
+            for (let i = 1; i < coordinates.length; i++) {
+                const lat1 = coordinates[i-1][1];
+                const lon1 = coordinates[i-1][0];
+                const lat2 = coordinates[i][1];
+                const lon2 = coordinates[i][0];
+
+                // Haversine formula for distance
+                const R = 6371000; // Earth radius in meters
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLon = (lon2 - lon1) * Math.PI / 180;
+                const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                         Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                         Math.sin(dLon/2) * Math.sin(dLon/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                length += R * c;
+            }
+            return length;
+        }
+
+        function exportGeoJSON() {
+            const geojson = {
+                type: 'FeatureCollection',
+                features: loadedSegments
+            };
+
+            const dataStr = JSON.stringify(geojson, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'corridor_segments_building_m.geojson';
+            link.click();
+
+            showInfo('GeoJSON exported successfully!');
+        }
+
+        function updateStats() {
+            document.getElementById('stat-nodes').textContent = Object.keys(nodePositions).length;
+            document.getElementById('stat-routes').textContent = loadedSegments.length;
+        }
+
+        function showInfo(message) {
+            console.log(message);
+            // Could add a toast notification here
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+
+        function loadSVGOverlay() {
+            // Load campus.geojson to get Building M bounds
+            fetch('../LeafletJS/campus.geojson')
+                .then(response => response.json())
+                .then(data => {
+                    const buildingMFeature = data.features.find(f => f.properties.name === 'Building M');
+
+                    if (!buildingMFeature) {
+                        console.error('Building M not found in GeoJSON');
+                        return;
+                    }
+
+                    // Get building bounds
+                    const layer = L.geoJSON(buildingMFeature);
+                    const bounds = layer.getBounds();
+                    const center = bounds.getCenter();
+
+                    // Calculate corners for SVG overlay
+                    const corners = [
+                        L.latLng(bounds.getNorth(), bounds.getWest()),  // top-left
+                        L.latLng(bounds.getNorth(), bounds.getEast()),  // top-right
+                        L.latLng(bounds.getSouth(), bounds.getEast()),  // bottom-right
+                        L.latLng(bounds.getSouth(), bounds.getWest())   // bottom-left
+                    ];
+
+                    const mapBearing = 21.3;
+                    currentCorners = corners.map(corner => rotatePoint(corner, center, mapBearing));
+
+                    // Load SVG floor plan
+                    const svgPath = '../LeafletJS/Floorplans/Building M/M1_official.svg';
+
+                    fetch(svgPath)
+                        .then(r => r.text())
+                        .then(svgText => {
+                            // Create SVG overlay
+                            const svgBounds = L.latLngBounds(currentCorners);
+
+                            // Create image overlay with SVG
+                            const svgBlob = new Blob([svgText], { type: 'image/svg+xml' });
+                            const svgUrl = URL.createObjectURL(svgBlob);
+
+                            svgOverlay = L.imageOverlay(svgUrl, svgBounds, {
+                                opacity: 0.7,
+                                interactive: false
+                            }).addTo(map);
+
+                            console.log('✅ SVG floor plan loaded');
+                        })
+                        .catch(error => {
+                            console.error('❌ Error loading SVG:', error);
+                        });
+                })
+                .catch(error => {
+                    console.error('❌ Error loading campus.geojson:', error);
+                });
+        }
+
+        function rotatePoint(point, center, angleDeg) {
+            const angleRad = angleDeg * Math.PI / 180;
+            const cos = Math.cos(angleRad);
+            const sin = Math.sin(angleRad);
+
+            const dx = point.lat - center.lat;
+            const dy = point.lng - center.lng;
+
+            return L.latLng(
+                center.lat + dx * cos - dy * sin,
+                center.lng + dx * sin + dy * cos
+            );
+        }
+
+        // Make removeWaypoint available globally
+        window.removeWaypoint = removeWaypoint;
+    </script>
+</body>
+</html>

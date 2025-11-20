@@ -41,7 +41,7 @@ class RAGConfig:
 
         # Gemini 2.5 Pro Specific Configuration
         self.GEMINI_CONFIG: Dict[str, Any] = {
-            "temperature": 0.2,
+            "temperature": 0.5,
             "max_output_tokens": 2048,
             "top_p": 0.95,
             "top_k": 40

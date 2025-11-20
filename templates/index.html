@@ -4,6 +4,12 @@
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <title>FANSHAWE</title>
+          <!-- Leaflet CSS -->
+          <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+          <!-- Leaflet Rotate CSS -->
+          <link rel="stylesheet" href="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate.css" />
+          <!-- Distortable Image CSS -->
+          <link rel="stylesheet" href="https://unpkg.com/leaflet.distortableimage@latest/dist/leaflet.distortableimage.css" />
           <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
         </head>
         <body>
@@ -23,9 +29,230 @@
               </div>
             </div>
             <div id="map-container">
-              <!-- The map will be placed here -->
+              <div id="map"></div>
+              <div id="map-mode-indicator" class="mode-indicator"></div>
+              <button id="reloadCoordinatesBtn" class="reload-btn" title="Reload coordinates from config file">⟲ Reload Coordinates</button>
+              <button id="editCoordinatesBtn" class="edit-btn" title="Edit room coordinates">✎ Edit Coordinates</button>
+              <button id="calibrateBtn" class="calibrate-btn" title="Calibrate room coordinates visually">🎯 Calibrate</button>
+              <button id="showCentersBtn" class="show-centers-btn" title="Toggle room center markers on map">👁️ Show Centers</button>
+              <button id="routeTracerBtn" class="route-tracer-btn" title="Trace routes and export as GeoJSON">🗺️ Trace Route</button>
+              <button id="routeBuilderBtn" class="route-builder-btn" title="Draw and define route segments">✏️ Route Builder</button>
+              <button id="loadSegmentsBtn" class="load-segments-btn" title="Load saved route segments">📥 Load Segments</button>
+              <button id="clearSegmentsBtn" class="clear-segments-btn" title="Clear loaded segments" disabled>🗑️ Clear Segments</button>
             </div>
           </div>
+          <!-- Calibration Panel -->
+          <div id="calibrationPanel" class="calibration-panel hidden">
+            <div class="calibration-content">
+              <div class="calibration-header">
+                <h3>Calibrate Room Coordinates</h3>
+                <button class="calibration-close" id="calibrationCloseBtn">&times;</button>
+              </div>
+              <div class="calibration-body">
+                <div class="calibration-section">
+                  <label for="calibrationRoomSelect">Select Room:</label>
+                  <select id="calibrationRoomSelect" class="calibration-select">
+                    <option value="">Choose a room to calibrate...</option>
+                  </select>
+                </div>
+
+                <div id="calibrationInputs" class="calibration-inputs hidden">
+                  <div class="input-group">
+                    <label for="calibX">X Coordinate:</label>
+                    <input type="number" id="calibX" class="calibration-input" step="0.1" placeholder="Enter X">
+                  </div>
+                  <div class="input-group">
+                    <label for="calibY">Y Coordinate:</label>
+                    <input type="number" id="calibY" class="calibration-input" step="0.1" placeholder="Enter Y">
+                  </div>
+                </div>
+
+                <div id="calibrationComparison" class="calibration-comparison hidden">
+                  <div class="comparison-item current">
+                    <strong>Current Position</strong>
+                    <div class="coord-display" id="currentCoordDisplay">-</div>
+                  </div>
+                  <div class="comparison-arrow">→</div>
+                  <div class="comparison-item preview">
+                    <strong>Preview Position</strong>
+                    <div class="coord-display" id="previewCoordDisplay">-</div>
+                  </div>
+                </div>
+
+                <div id="calibrationMessage" class="calibration-message"></div>
+              </div>
+              <div class="calibration-footer">
+                <button id="cancelCalibBtn" class="btn-secondary">Cancel</button>
+                <button id="confirmCalibBtn" class="btn-primary" disabled>Save Calibration</button>
+              </div>
+            </div>
+          </div>
+          <!-- Route Tracer Panel -->
+          <div id="routeTracerPanel" class="route-tracer-panel hidden">
+            <div class="route-tracer-content">
+              <div class="route-tracer-header">
+                <h3>Route Tracer</h3>
+                <button class="route-tracer-close" id="routeTracerCloseBtn">&times;</button>
+              </div>
+              <div class="route-tracer-body">
+                <div class="route-tracer-section">
+                  <label for="startRoomSelect">Start Room:</label>
+                  <select id="startRoomSelect" class="route-tracer-select">
+                    <option value="">Choose start room...</option>
+                  </select>
+                </div>
+
+                <div class="route-tracer-section">
+                  <label for="endRoomSelect">End Room:</label>
+                  <select id="endRoomSelect" class="route-tracer-select">
+                    <option value="">Choose destination...</option>
+                  </select>
+                </div>
+
+                <div id="routeStatsDisplay" class="route-stats-display hidden">
+                  <div class="stat-item">
+                    <span class="stat-label">Distance:</span>
+                    <span class="stat-value" id="routeDistance">-</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">Nodes:</span>
+                    <span class="stat-value" id="routeNodes">-</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">Turns:</span>
+                    <span class="stat-value" id="routeTurns">-</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">Rooms:</span>
+                    <span class="stat-value" id="routeRooms">-</span>
+                  </div>
+                </div>
+
+                <div id="routeTracerMessage" class="route-tracer-message"></div>
+
+                <!-- Route Adjustment Controls -->
+                <div id="routeAdjustmentControls" class="route-adjustment-controls hidden">
+                  <h4>Manual Adjustments</h4>
+                  <div class="adjustment-group">
+                    <label for="routeTranslateX">Translate X: <span id="translateXValue">0</span> units</label>
+                    <input type="range" id="routeTranslateX" class="adjustment-slider" min="-0.001" max="0.001" step="0.00001" value="0">
+                  </div>
+                  <div class="adjustment-group">
+                    <label for="routeTranslateY">Translate Y: <span id="translateYValue">0</span> units</label>
+                    <input type="range" id="routeTranslateY" class="adjustment-slider" min="-0.001" max="0.001" step="0.00001" value="0">
+                  </div>
+                  <div class="adjustment-group">
+                    <label for="routeRotate">Rotation: <span id="rotateValue">0</span>°</label>
+                    <input type="range" id="routeRotate" class="adjustment-slider" min="-45" max="45" step="0.1" value="0">
+                  </div>
+                  <button id="resetAdjustmentsBtn" class="btn-secondary btn-small">Reset Adjustments</button>
+                </div>
+              </div>
+              <div class="route-tracer-footer">
+                <button id="clearRouteBtn" class="btn-secondary">Clear Route</button>
+                <button id="calculateRouteBtn" class="btn-primary" disabled>Calculate Route</button>
+                <button id="exportGeoJSONBtn" class="btn-success" disabled>Export GeoJSON</button>
+              </div>
+            </div>
+          </div>
+          <!-- Route Builder Panel -->
+          <div id="routeBuilderPanel" class="route-builder-panel hidden">
+            <div class="route-builder-content">
+              <div class="route-builder-header">
+                <h3>Route Segment Builder</h3>
+                <button class="route-builder-close" id="routeBuilderCloseBtn">&times;</button>
+              </div>
+              <div class="route-builder-body">
+                <div class="builder-instructions">
+                  <p><strong>How to use:</strong></p>
+                  <ol>
+                    <li>Click on map to add points</li>
+                    <li>Define corridor paths and room connections</li>
+                    <li>Save segments as clean GeoJSON</li>
+                  </ol>
+                </div>
+
+                <div class="builder-section">
+                  <label for="segmentName">Segment Name:</label>
+                  <input type="text" id="segmentName" class="builder-input" placeholder="e.g., Main_Corridor_1">
+                </div>
+
+                <div class="builder-section">
+                  <label for="segmentType">Segment Type:</label>
+                  <select id="segmentType" class="builder-select">
+                    <option value="corridor">Corridor Path</option>
+                    <option value="room_entrance">Room Entrance</option>
+                    <option value="connection">Connection Point</option>
+                  </select>
+                </div>
+
+                <div id="builderStats" class="builder-stats hidden">
+                  <div class="stat-item">
+                    <span class="stat-label">Points:</span>
+                    <span class="stat-value" id="pointCount">0</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">Length:</span>
+                    <span class="stat-value" id="segmentLength">0 m</span>
+                  </div>
+                </div>
+
+                <div id="routeBuilderMessage" class="route-builder-message"></div>
+              </div>
+              <div class="route-builder-footer">
+                <button id="clearPointsBtn" class="btn-secondary">Clear Points</button>
+                <button id="undoPointBtn" class="btn-secondary">Undo Last</button>
+                <button id="saveSegmentBtn" class="btn-primary" disabled>Save Segment</button>
+                <button id="exportSegmentsBtn" class="btn-success">Export All</button>
+              </div>
+            </div>
+          </div>
+          <!-- Coordinate Editor Modal -->
+          <div id="coordinateEditorModal" class="modal hidden">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2>Edit Room Coordinates</h2>
+                <button class="modal-close" id="modalCloseBtn">&times;</button>
+              </div>
+              <div class="modal-body">
+                <div class="editor-controls">
+                  <button id="exportJsonBtn" class="control-btn">📋 Export JSON</button>
+                  <button id="importJsonBtn" class="control-btn">📥 Import JSON</button>
+                  <input type="file" id="jsonFileInput" class="hidden-input" accept=".json" />
+                </div>
+                <div id="coordinateTableContainer" class="table-container">
+                  <table id="coordinateTable" class="coordinate-table">
+                    <thead>
+                      <tr>
+                        <th>Room ID</th>
+                        <th>X Coordinate</th>
+                        <th>Y Coordinate</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="coordinateTableBody">
+                      <!-- Rows will be populated by JavaScript -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button id="cancelEditorBtn" class="btn-secondary">Cancel</button>
+                <button id="saveEditorBtn" class="btn-primary">Save Changes</button>
+              </div>
+            </div>
+          </div>
+          <!-- Leaflet Scripts -->
+          <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+          <script src="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate-src.js"></script>
+          <script src="https://unpkg.com/leaflet-image-transform/leaflet-image-transform.min.js"></script>
+          <script src="https://unpkg.com/leaflet.distortableimage@latest/dist/leaflet.distortableimage.js"></script>
+          <!-- Floor Plans Data -->
+          <script src="{{ url_for('static', filename='../LeafletJS/floorPlansScript.js') }}"></script>
+          <!-- Map Controller -->
+          <script src="{{ url_for('static', filename='map-controller.js') }}"></script>
+          <!-- Chat Script -->
           <script src="{{ url_for('static', filename='script.js') }}"></script>
         </body>
       </html>

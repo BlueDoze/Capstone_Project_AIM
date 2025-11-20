@@ -1,0 +1,222 @@
+{
+  "Building M": {
+    "aliases": {
+      "1003": "Room_1003",
+      "1004": "Room_1004",
+      "1006": "Room_1006",
+      "1018": "Room_1018",
+      "1030": "Room_1030",
+      "1033": "Room_1033",
+      "1035": "Room_1035",
+      "1037": "Room_1037",
+      "1040": "Room_1040",
+      "1041": "Room_1041",
+      "1045": "Room_1045",
+      "1049": "Room_1049",
+      "room 1003": "Room_1003",
+      "room 1004": "Room_1004",
+      "room 1006": "Room_1006",
+      "room 1018": "Room_1018",
+      "room 1030": "Room_1030",
+      "room 1033": "Room_1033",
+      "room 1035": "Room_1035",
+      "room 1037": "Room_1037",
+      "room 1040": "Room_1040",
+      "room 1041": "Room_1041",
+      "room 1045": "Room_1045",
+      "room 1049": "Room_1049",
+      "bathroom men": "Bathroom-Men",
+      "men's bathroom": "Bathroom-Men",
+      "men bathroom": "Bathroom-Men",
+      "bathroom-men": "Bathroom-Men",
+      "bathroom women": "Bathroom-Women",
+      "women's bathroom": "Bathroom-Women",
+      "women bathroom": "Bathroom-Women",
+      "bathroom-women": "Bathroom-Women",
+      "accessible bathroom": "Bathroom-Accessible",
+      "bathroom-accessible": "Bathroom-Accessible",
+      "washroom": "Bathroom-Women",
+      "elevator": "Elevator-M",
+      "elevador": "Elevator-M",
+      "stairwell": "Stairs_1",
+      "stairs": "Stairs_1",
+      "stair": "Stairs_1",
+      "main entrance": "H-Building",
+      "h building": "H-Building",
+      "h building entrance": "H-Building",
+      "building h": "H-Building",
+      "entrance h": "H-Building",
+      "entrance to h": "H-Building",
+      "h entrance": "H-Building",
+      "entrance": "H-Building",
+      "exit": "Outside-Exit_1",
+      "outside": "Outside-Exit_1",
+      "exit 1": "Outside-Exit_1",
+      "exit 2": "Outside-Exit_2",
+      "exit 3": "Outside-Exit_3",
+      "exit 4": "Outside-Exit_4"
+    },
+    "roomToNode": {
+      "Room_1003": "M1_6",
+      "Room_1004": "M1_4",
+      "Room_1006": "M1_3",
+      "Room_1018": "M1_8",
+      "Room_1030": "M1_16",
+      "Room_1033": "M1_12",
+      "Room_1035": "M1_14",
+      "Room_1037": "M1_15",
+      "Room_1040": "M1_17",
+      "Room_1041": "M1_16",
+      "Room_1045": "M1_Turn_2",
+      "Room_1049": "M1_18",
+      "Bathroom-Men": "M1_9",
+      "Bathroom-Accessible": "M1_10",
+      "Bathroom-Women": "M1_11",
+      "Elevator-M": "M1_5",
+      "Stairs_1": "M1_2",
+      "Stairs_2": "M1_13",
+      "Stairs_3": "M1_19",
+      "H-Building": "H_entry",
+      "Outside-Exit_1": "M1_7",
+      "Outside-Exit_2": "M1_1",
+      "Outside-Exit_3": "M1_13",
+      "Outside-Exit_4": "M1_19"
+    },
+    "roomDescriptions": {
+      "Room_1003": "Room 1003 - Computer Lab",
+      "Room_1004": "Room 1004 - Classroom",
+      "Room_1006": "Room 1006 - Conference Room",
+      "Room_1018": "Room 1018 - Study Room",
+      "Room_1030": "Room 1030 - Lab",
+      "Room_1033": "Room 1033 - Classroom",
+      "Room_1035": "Room 1035 - Office",
+      "Room_1037": "Room 1037 - Meeting Room",
+      "Room_1040": "Room 1040 - Workshop",
+      "Room_1041": "Room 1041 - Lab",
+      "Room_1045": "Room 1045 - Studio",
+      "Room_1049": "Room 1049 - Resource Center",
+      "Bathroom-Men": "Men's Restroom",
+      "Bathroom-Women": "Women's Restroom",
+      "Bathroom-Accessible": "Accessible Restroom",
+      "Elevator-M": "Elevator - Access to Floors 2 & 3",
+      "Stairs_1": "Stairwell 1 - Access to Floors 2 & 3",
+      "Stairs_2": "Stairwell 2 - Access to Floors 2 & 3",
+      "Stairs_3": "Stairwell 3 - Access to Floors 2 & 3",
+      "H-Building": "Main Building Entrance",
+      "Outside-Exit_1": "Exit 1 - South Entrance",
+      "Outside-Exit_2": "Exit 2 - East Entrance",
+      "Outside-Exit_3": "Exit 3 - North Entrance",
+      "Outside-Exit_4": "Exit 4 - West Entrance"
+    },
+    "navigationInstructions": {
+      "Room_1003": "The Computer Lab is located along the main corridor near the elevators.",
+      "Room_1004": "Room 1004 is a classroom located near the main corridor entrance area.",
+      "Bathroom-Men": "The Men's Restroom is located along the left corridor.",
+      "Bathroom-Women": "The Women's Restroom is located along the left corridor.",
+      "Bathroom-Accessible": "The Accessible Restroom is located between the other restrooms.",
+      "Elevator-M": "The main elevator is located in the central corridor area.",
+      "Stairs_1": "Stairwell 1 is located near the reception area."
+    },
+    "roomCentersSVG": {
+      "_comment": "Manual override for room center coordinates in SVG space. Format: {x, y} in SVG units. Leave empty {} to use automatic calculation from room polygon.",
+      "_instructions": "To find SVG coordinates: 1) Open M1_official.svg in Inkscape/browser, 2) Use measuring tool to find center point, 3) Add coordinates here. These will override automatic getBBox() calculations.",
+      "_example_format": "\"Room_1003\": { \"x\": 250.5, \"y\": 600.3 }",
+      "Room_1003": {
+        "x": 399.84,
+        "y": 522.62
+      },
+      "Room_1004": {
+        "x": 560,
+        "y": 765
+      },
+      "Room_1006": {
+        "x": 480,
+        "y": 833
+      },
+      "Room_1018": {
+        "x": 285.6,
+        "y": 556.06
+      },
+      "Room_1030": {
+        "x": 163.2,
+        "y": 343.06
+      },
+      "Room_1033": {
+        "x": 522.24,
+        "y": 373.48
+      },
+      "Room_1035": {
+        "x": 244.8,
+        "y": 341.85
+      },
+      "Room_1037": {
+        "x": 220.32,
+        "y": 312.36
+      },
+      "Room_1040": {
+        "x": 81.6,
+        "y": 296.73
+      },
+      "Room_1041": {
+        "x": 204,
+        "y": 298.64
+      },
+      "Room_1045": {
+        "x": 106.08,
+        "y": 241.55
+      },
+      "Room_1049": {
+        "x": 24.48,
+        "y": 310.42
+      },
+      "Bathroom-Men": {
+        "x": 408,
+        "y": 454.91
+      },
+      "Bathroom-Women": {
+        "x": 481.44,
+        "y": 393.52
+      },
+      "Bathroom-Accessible": {
+        "x": 465.12,
+        "y": 408.19
+      },
+      "Elevator-M": {
+        "x": 628.32,
+        "y": 767.28
+      },
+      "Stairs_1": {
+        "x": 367.2,
+        "y": 768.47
+      },
+      "Stairs_2": {
+        "x": 612,
+        "y": 431.93
+      },
+      "Stairs_3": {
+        "x": 8.16,
+        "y": 428.6
+      },
+      "H-Building": {
+        "x": 704,
+        "y": 850
+      },
+      "Outside-Exit_1": {
+        "x": 386,
+        "y": 495
+      },
+      "Outside-Exit_2": {
+        "x": 704,
+        "y": 850
+      },
+      "Outside-Exit_3": {
+        "x": 612,
+        "y": 431.93
+      },
+      "Outside-Exit_4": {
+        "x": 8.16,
+        "y": 428.6
+      }
+    }
+  }
+}

@@ -444,11 +444,8 @@
                     // PATH 3: After first turn
                     "M1_Int_2": {
                         "connections": ["M1_8", "M1_9", "M1_14"], // Another intersection
-                        "represents": [
-                            { type: "intersection" },
-                            { type: "room", id: "Room_1003", door: "Door_1003_2" }
-                        ],
-                        "note": "Intersection: connects to 2nd door of Room_1003, Path 3 continues to M1_8, Path 4 starts to M1_10"
+                        "represents": { type: "intersection" },
+                        "note": "Intersection: Path 3 continues to M1_8, Path 4 starts to M1_10"
                     },
                     "M1_9": {
                         "connections": ["M1_Int_2", "M1_10"],
@@ -523,7 +520,7 @@
 
                 },
                 "roomToNode": {
-                    "Room_1003": "M1_6", //Need to add second door at M1_Int_2
+                    "Room_1003": "M1_6", // Main door entrance
                     "Room_1004": "M1_4",
                     "Room_1006": "M1_3",
                     "Room_1018" : "M1_8",

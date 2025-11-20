@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coordinate Compensator - Fix Room Centers</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 { color: #333; margin-bottom: 10px; }
+        .subtitle { color: #666; margin-bottom: 20px; font-size: 14px; }
+
+        .panel {
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: #fafafa;
+        }
+
+        .panel h2 {
+            color: #2196f3;
+            margin-bottom: 15px;
+            font-size: 16px;
+            border-bottom: 2px solid #2196f3;
+            padding-bottom: 10px;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin: 12px 0;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        label {
+            font-weight: bold;
+            min-width: 100px;
+            color: #555;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            flex: 1;
+        }
+
+        button {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        button:hover { background: #1976d2; }
+
+        .success { background: #4caf50; }
+        .success:hover { background: #45a049; }
+
+        .error { background: #f44336; }
+        .error:hover { background: #da190b; }
+
+        .output {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 12px;
+            line-height: 1.6;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .result {
+            background: #f0f7ff;
+            border: 2px solid #2196f3;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .formula {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #f5f5f5;
+            font-weight: bold;
+        }
+
+        .copy-btn {
+            background: #4caf50;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        .copy-btn:hover { background: #45a049; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Coordinate Compensator</h1>
+        <p class="subtitle">Fix misaligned room coordinates using calibration data</p>
+
+        <!-- CALIBRATION DATA -->
+        <div class="panel">
+            <h2>📊 Step 1: Calibration Data (from diagnostic tool)</h2>
+
+            <div class="info-box">
+                <strong>You captured:</strong><br>
+                • LEFT (SVG puro): X=523.04, Y=438.85<br>
+                • RIGHT (com rotação): X=-368.1, Y=588.2<br>
+                • Distância: 137.40 unidades
+            </div>
+
+            <div class="input-group">
+                <label>LEFT X:</label>
+                <input type="number" id="leftX" value="523.04" step="0.01">
+            </div>
+            <div class="input-group">
+                <label>LEFT Y:</label>
+                <input type="number" id="leftY" value="438.85" step="0.01">
+            </div>
+            <div class="input-group">
+                <label>RIGHT X:</label>
+                <input type="number" id="rightX" value="-368.1" step="0.01">
+            </div>
+            <div class="input-group">
+                <label>RIGHT Y:</label>
+                <input type="number" id="rightY" value="588.2" step="0.01">
+            </div>
+
+            <button class="success" onclick="calculateTransformation()">
+                📐 Calculate Transformation Matrix
+            </button>
+
+            <div id="transformResult" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- TEST TRANSFORMATION -->
+        <div class="panel">
+            <h2>🧪 Step 2: Test Transformation</h2>
+
+            <div class="info-box">
+                Test if transformation works correctly by entering a known coordinate
+            </div>
+
+            <div class="input-group">
+                <label>Test X:</label>
+                <input type="number" id="testX" value="402.13" step="0.01">
+            </div>
+            <div class="input-group">
+                <label>Test Y:</label>
+                <input type="number" id="testY" value="514.13" step="0.01">
+            </div>
+
+            <button onclick="applyTransformation()">
+                🔄 Apply Transformation
+            </button>
+
+            <div id="testResult" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- BATCH CONVERSION -->
+        <div class="panel">
+            <h2>📋 Step 3: Convert All Rooms</h2>
+
+            <div class="warning">
+                ⚠️ <strong>Paste the JSON from building_m_rooms.json</strong><br>
+                Just the roomCentersSVG section with all room coordinates
+            </div>
+
+            <textarea id="batchInput" style="width: 100%; height: 200px; padding: 10px; font-family: monospace; border: 1px solid #ddd; border-radius: 4px;" placeholder='{
+  "Room_1003": { "x": 402.13, "y": 514.13 },
+  "Room_1004": { "x": 432.83, "y": 792.23 },
+  ...
+}'></textarea>
+
+            <button class="success" onclick="convertBatch()">
+                ⚡ Convert All Rooms
+            </button>
+
+            <button class="copy-btn" onclick="copyBatchOutput()">
+                📋 Copy Result to Clipboard
+            </button>
+
+            <div id="batchResult" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- FORMULA EXPLANATION -->
+        <div class="panel">
+            <h2>🧮 How It Works</h2>
+
+            <div class="info-box">
+                The transformation uses the calibration data to calculate an affine transformation matrix
+                that maps SVG coordinates to rotated coordinates automatically.
+            </div>
+
+            <h3 style="margin-top: 15px;">Affine Transformation Formula:</h3>
+            <div class="formula">
+x' = a*x + b*y + e<br>
+y' = c*x + d*y + f<br>
+<br>
+Where [a, b, c, d, e, f] is calculated from calibration points
+            </div>
+
+            <h3 style="margin-top: 15px;">Advantages:</h3>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>✅ Automatic compensation for rotation</li>
+                <li>✅ Works for any scale/offset</li>
+                <li>✅ Can be applied to all rooms at once</li>
+                <li>✅ No manual calculations needed</li>
+            </ul>
+        </div>
+
+        <!-- INSTRUCTIONS -->
+        <div class="panel">
+            <h2>📖 Full Process</h2>
+
+            <ol style="margin-left: 20px; line-height: 2;">
+                <li><strong>Use coordinate_diagnostic.html</strong> to get calibration data</li>
+                <li><strong>Paste calibration data</strong> in Step 1 above</li>
+                <li><strong>Click "Calculate Transformation Matrix"</strong></li>
+                <li><strong>Test with a known room</strong> (Room 1003: 402.13, 514.13)</li>
+                <li><strong>Paste roomCentersSVG JSON</strong> in Step 3</li>
+                <li><strong>Click "Convert All Rooms"</strong></li>
+                <li><strong>Copy the result</strong> and paste into building_m_rooms.json</li>
+                <li><strong>Restart the application</strong> and test</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        let transformMatrix = null;
+
+        function calculateTransformation() {
+            const leftX = parseFloat(document.getElementById('leftX').value);
+            const leftY = parseFloat(document.getElementById('leftY').value);
+            const rightX = parseFloat(document.getElementById('rightX').value);
+            const rightY = parseFloat(document.getElementById('rightY').value);
+
+            // We need at least 3 points for affine transformation
+            // We'll use center (408, 528) as reference and scale/rotation
+            const centerX = 408;  // SVG viewBox center
+            const centerY = 528;
+
+            // Calculate transformation from calibration point
+            const dx_svg = leftX - centerX;
+            const dy_svg = leftY - centerY;
+            const dx_rot = rightX - centerX;
+            const dy_rot = rightY - centerY;
+
+            // Estimate scale and rotation
+            const scale = Math.sqrt(dx_rot * dx_rot + dy_rot * dy_rot) / Math.sqrt(dx_svg * dx_svg + dy_svg * dy_svg) || 1;
+            const angle = Math.atan2(dy_rot, dx_rot) - Math.atan2(dy_svg, dx_svg);
+
+            const cos_a = Math.cos(angle);
+            const sin_a = Math.sin(angle);
+
+            // Affine transformation matrix
+            transformMatrix = {
+                a: scale * cos_a,
+                b: -scale * sin_a,
+                c: scale * sin_a,
+                d: scale * cos_a,
+                e: rightX - (scale * cos_a * leftX - scale * sin_a * leftY),
+                f: rightY - (scale * sin_a * leftX + scale * cos_a * leftY)
+            };
+
+            const result = `
+✅ TRANSFORMATION MATRIX CALCULATED
+═════════════════════════════════════
+
+Calibration Point:
+  Input (SVG):  (${leftX}, ${leftY})
+  Output (Rot): (${rightX}, ${rightY})
+
+Transformation Matrix:
+  a = ${transformMatrix.a.toFixed(6)}
+  b = ${transformMatrix.b.toFixed(6)}
+  c = ${transformMatrix.c.toFixed(6)}
+  d = ${transformMatrix.d.toFixed(6)}
+  e = ${transformMatrix.e.toFixed(6)}
+  f = ${transformMatrix.f.toFixed(6)}
+
+Formula:
+  x' = ${transformMatrix.a.toFixed(4)}*x + ${transformMatrix.b.toFixed(4)}*y + ${transformMatrix.e.toFixed(4)}
+  y' = ${transformMatrix.c.toFixed(4)}*x + ${transformMatrix.d.toFixed(4)}*y + ${transformMatrix.f.toFixed(4)}
+
+📌 Ready to test and apply transformation!
+            `;
+
+            document.getElementById('transformResult').textContent = result;
+            document.getElementById('transformResult').style.display = 'block';
+        }
+
+        function applyTransformation() {
+            if (!transformMatrix) {
+                alert('❌ Calculate transformation matrix first!');
+                return;
+            }
+
+            const testX = parseFloat(document.getElementById('testX').value);
+            const testY = parseFloat(document.getElementById('testY').value);
+
+            const x_new = transformMatrix.a * testX + transformMatrix.b * testY + transformMatrix.e;
+            const y_new = transformMatrix.c * testX + transformMatrix.d * testY + transformMatrix.f;
+
+            const result = `
+🧪 TRANSFORMATION TEST
+═════════════════════════════════════
+
+Input Coordinates:
+  X = ${testX}
+  Y = ${testY}
+
+Transformed Coordinates:
+  X' = ${x_new.toFixed(2)}
+  Y' = ${y_new.toFixed(2)}
+
+Verification:
+✓ Should match the position when clicked on map with rotation
+✓ If correct, transformation is ready to apply to all rooms
+            `;
+
+            document.getElementById('testResult').textContent = result;
+            document.getElementById('testResult').style.display = 'block';
+        }
+
+        function convertBatch() {
+            if (!transformMatrix) {
+                alert('❌ Calculate transformation matrix first!');
+                return;
+            }
+
+            const input = document.getElementById('batchInput').value.trim();
+            if (!input) {
+                alert('❌ Paste JSON in the textarea first!');
+                return;
+            }
+
+            try {
+                const data = JSON.parse(input);
+                const converted = {};
+
+                for (const [room, coords] of Object.entries(data)) {
+                    if (typeof coords === 'object' && coords.x !== undefined && coords.y !== undefined) {
+                        const x = coords.x;
+                        const y = coords.y;
+
+                        const x_new = transformMatrix.a * x + transformMatrix.b * y + transformMatrix.e;
+                        const y_new = transformMatrix.c * x + transformMatrix.d * y + transformMatrix.f;
+
+                        converted[room] = {
+                            x: Math.round(x_new * 100) / 100,
+                            y: Math.round(y_new * 100) / 100
+                        };
+                    } else {
+                        converted[room] = coords;  // Keep non-coordinate entries
+                    }
+                }
+
+                const result = JSON.stringify(converted, null, 2);
+                document.getElementById('batchResult').textContent = result;
+                document.getElementById('batchResult').style.display = 'block';
+
+            } catch (error) {
+                alert(`❌ Invalid JSON: ${error.message}`);
+            }
+        }
+
+        function copyBatchOutput() {
+            const output = document.getElementById('batchResult').textContent;
+            if (!output) {
+                alert('❌ Convert rooms first!');
+                return;
+            }
+
+            navigator.clipboard.writeText(output).then(() => {
+                alert('✅ Copied to clipboard! Paste in building_m_rooms.json');
+            });
+        }
+    </script>
+</body>
+</html>

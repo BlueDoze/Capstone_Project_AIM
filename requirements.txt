@@ -7,6 +7,7 @@ flask
 google-generativeai
 python-dotenv
 markdown2
+python-docx
 
 # RAG Multimodal System
 google-cloud-aiplatform
@@ -16,3 +17,8 @@ pandas
 Pillow
 PyMuPDF
 rich
+IPython
+watchdog
+
+# Web Scraping
+playwright>=1.40.0
