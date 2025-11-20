@@ -10,22 +10,91 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-async def wait_for_2fa_approval(page, timeout=180000):
-    """Aguarda aprovação do 2FA detectando redirecionamento."""
+async def wait_for_2fa_approval(page, timeout=300000):
+    """Aguarda aprovação do 2FA detectando redirecionamento e mostrando código."""
     print("\n" + "╔" + "="*78 + "╗")
     print("║" + " 🔐 AUTENTICAÇÃO DE DOIS FATORES NECESSÁRIA ".center(78) + "║")
     print("╚" + "="*78 + "╝")
     print()
-    print("📱 AÇÃO NECESSÁRIA:")
-    print("   1. Abra o app Microsoft Authenticator no seu celular")
-    print("   2. Procure pela notificação de aprovação")
-    print("   3. Toque em 'Aprovar' ou digite o código se solicitado")
-    print()
+
+    # Tentar extrair o código de verificação da página
+    try:
+        await asyncio.sleep(1)
+
+        # Procurar por código numérico na página
+        verification_code = await page.evaluate("""
+            () => {
+                // Procurar por diferentes padrões de código
+                const codeSelectors = [
+                    '#idRichContext_DisplaySign',
+                    '[data-value]',
+                    '.text-title',
+                    '.request-description-content',
+                    'div[role="heading"]'
+                ];
+
+                for (const selector of codeSelectors) {
+                    const element = document.querySelector(selector);
+                    if (element) {
+                        const text = element.innerText || element.textContent;
+                        // Procurar por número de 2 dígitos
+                        const match = text.match(/\\b(\\d{2})\\b/);
+                        if (match) {
+                            return match[1];
+                        }
+                    }
+                }
+
+                // Procurar em todo o body por padrão "número é XX"
+                const bodyText = document.body.innerText;
+                const patterns = [
+                    /number is (\\d{2})/i,
+                    /código.*?(\\d{2})/i,
+                    /digite.*?(\\d{2})/i,
+                    /enter.*?(\\d{2})/i
+                ];
+
+                for (const pattern of patterns) {
+                    const match = bodyText.match(pattern);
+                    if (match) {
+                        return match[1];
+                    }
+                }
+
+                return null;
+            }
+        """)
+
+        if verification_code:
+            print("╔" + "="*78 + "╗")
+            print("║" + f"  🔢 CÓDIGO DE VERIFICAÇÃO: {verification_code}  ".center(78) + "║")
+            print("╚" + "="*78 + "╝")
+            print()
+            print(f"📱 No app Microsoft Authenticator:")
+            print(f"   1. Abra a notificação de aprovação")
+            print(f"   2. Digite o código: {verification_code}")
+            print(f"   3. Ou simplesmente toque em 'Aprovar' se o código {verification_code} aparecer")
+            print()
+        else:
+            print("📱 AÇÃO NECESSÁRIA:")
+            print("   1. Abra o app Microsoft Authenticator no seu celular")
+            print("   2. Procure pela notificação de aprovação")
+            print("   3. Toque em 'Aprovar' ou digite o código se solicitado")
+            print()
+
+    except Exception as e:
+        print("📱 AÇÃO NECESSÁRIA:")
+        print("   1. Abra o app Microsoft Authenticator no seu celular")
+        print("   2. Procure pela notificação de aprovação")
+        print("   3. Toque em 'Aprovar'")
+        print()
+
     print("⏳ Aguardando aprovação...\n")
 
     start_url = page.url
     elapsed = 0
     dots = 0
+    last_code_check = 0
 
     while elapsed < timeout:
         current_url = page.url
@@ -34,6 +103,26 @@ async def wait_for_2fa_approval(page, timeout=180000):
         if "login.microsoftonline.com" not in current_url and "fanshaweonline.ca" in current_url:
             print("\n✅ AUTENTICAÇÃO APROVADA COM SUCESSO!\n")
             return True
+
+        # Re-verificar código periodicamente (a cada 10s)
+        if elapsed - last_code_check >= 10000:
+            try:
+                new_code = await page.evaluate("""
+                    () => {
+                        const element = document.querySelector('#idRichContext_DisplaySign');
+                        if (element) {
+                            const match = element.innerText.match(/\\b(\\d{2})\\b/);
+                            return match ? match[1] : null;
+                        }
+                        return null;
+                    }
+                """)
+                if new_code and new_code != verification_code:
+                    print(f"\n   🔄 Código atualizado: {new_code}")
+                    verification_code = new_code
+            except:
+                pass
+            last_code_check = elapsed
 
         await asyncio.sleep(2)
         elapsed += 2000
@@ -47,9 +136,10 @@ async def wait_for_2fa_approval(page, timeout=180000):
             print(f"\r   Aguardando{loading_animation} ({elapsed_sec}s)", end="", flush=True)
 
         if elapsed % 30000 == 0 and elapsed > 0:  # Lembrete a cada 30 segundos
-            print(f"\n   💡 Lembrete: Verifique seu celular - {elapsed_sec}s decorridos")
+            code_reminder = f" - Código: {verification_code}" if verification_code else ""
+            print(f"\n   💡 Lembrete: Verifique seu celular{code_reminder} - {elapsed_sec}s decorridos")
 
-    print("\n\n❌ TIMEOUT: Aprovação não detectada após 3 minutos")
+    print("\n\n❌ TIMEOUT: Aprovação não detectada após 5 minutos")
     print("   Por favor, tente novamente.\n")
     return False
 
