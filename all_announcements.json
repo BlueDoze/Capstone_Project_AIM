@@ -1,0 +1,137 @@
+{
+  "total": 16,
+  "successful": 16,
+  "failed": 0,
+  "course": "INFO-6156-(01)-25F",
+  "extracted_at": "2025-11-19T21:36:57.263491",
+  "announcements": [
+    {
+      "index": 1,
+      "title": "Reminder: Capstone Class & Agentic AI Workshop",
+      "date": "Nov 18, 2025 10:15 AM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2257918/view?ou=2001542",
+      "content": "Dear all,\nPlease note that we will be meeting in the Canada Life Village Square, F Building, for our regular capstone project class from 1–2 PM, followed by the Agentic AI workshop from 2-4 PM.\nI appreciate full attendance (I will be taking attendance before 2 pm) for this session, as it is organized exclusively for AIM students.\nThank you,Magdalene",
+      "content_length": 351
+    },
+    {
+      "index": 2,
+      "title": "Building Agentic AI using IBM Tools - 18th Nov, Tuesday, 2-4 PM",
+      "date": "Nov 13, 2025 1:24 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2255777/view?ou=2001542",
+      "content": "Hello everyone,\nHere is another exciting opportunity to learn Agentic AI building using IBM tools.\nRegister Now!\nNov 18th, 2-4 PM at Canada Life Village Square (F1027/F1029), Innovation Village\nHands-on Workshop: Building Agents with watsonx Orchestrate\nLearning Objectives\nBy the end of this session, you’ll be able to:\nUnderstand what watsonx Orchestrate is and how it works\nBuild agents without writing any code\nIntegrate tools and knowledge bases into your agents\nCreate agentic RAG (Retrieval Augmented Generation) solutions\nUse external tools like Firecrawl for web scraping\nGovern Agents\nThis is a hands-on session, so don’t forget to bring your laptop!\nIt’s also a fantastic chance to meet industry experts from IBM and gain insights into their expectations.",
+      "content_length": 766
+    },
+    {
+      "index": 3,
+      "title": "Gentle Reminder - Sprint 2",
+      "date": "Nov 4, 2025 9:36 AM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2249581/view?ou=2001542",
+      "content": "Dear all,\nPlease note that your Sprint 2 presentation will take place today, November 4th from 1:00 to 4:00 p.m.\nThe presentation is GRADED!\nThank you,\nMagdalene",
+      "content_length": 161
+    },
+    {
+      "index": 4,
+      "title": "Gentle Reminder - Building with Agentic AI: A Hands-on Workshop",
+      "date": "Oct 28, 2025 9:47 AM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2246212/view?ou=2001542",
+      "content": "Dear all,\nYou should have received the meeting invitation along with your registration confirmation. However, I’m sharing it here again in case you’re unable to locate it.\nJoin Zoom Meeting:\nhttps://fanshawec-ca.zoom.us/j/94157020641?pwd=rQsQ5PQJ9Q5CEaa5Z6xYqkTdBRdjvz.1Meeting ID: 941 5702 0641Passcode: 13937778\nDate: October 28,  1-3 PM\nPlease reach out to me at mravichandran@fanshaweonline.ca if you have any trouble joining the meeting.\nThank you,\nMagdalene",
+      "content_length": 463
+    },
+    {
+      "index": 5,
+      "title": "Sprint 2 Submission - reg",
+      "date": "Oct 27, 2025 10:36 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2246117/view?ou=2001542",
+      "content": "Dear all,\nPlease submit your Sprint 2 work by October 28th, as you will need to begin working on Sprint 3 right after.\nSince we couldn’t have our Sprint presentation due to the workshop, it has been rescheduled to November 4th but there is no change to the submission date.\nThank you,\nMagdalene",
+      "content_length": 294
+    },
+    {
+      "index": 6,
+      "title": "Gentle Reminder on dates!",
+      "date": "Oct 20, 2025 2:34 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2242864/view?ou=2001542",
+      "content": "Dear all,\nPlease note that your Sprint 2 presentation will take place on November 4th from 1:00 to 4:00 p.m.\nAlso, please note that on the following dates, you are required to submit the recordings /documentation in your respective discussion forums:(Communications → Discussions → Capstone Project - INFO-6156-01-25F - #)\nOctober 9 (Thurs), 21 (Tues) and 30 (Thurs)\nOctober 9 - Sprint 2 Planning meeting (Video/Zoom recording)\nOctober 21 - Scrum Meeting (Sprint 2) (Document)\nOctober 30 - Sprint 3 planning meeting (Video/Zoom recording)\nPlease note that I will not be available in person on those dates, so please make sure your submissions are posted on time in the respective discussion forums.\nPlease reach out if you have any questions.\nThank you,\nMagdalene",
+      "content_length": 763
+    },
+    {
+      "index": 7,
+      "title": "Sprint 2 submission and other dates",
+      "date": "Oct 8, 2025 2:26 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2239639/view?ou=2001542",
+      "content": "Dear all,\nPlease note that your Sprint 2 presentation will take place on November 4th from 1:00 to 4:00 p.m.\nAlso, please note that on the following dates, you are required to submit the recordings /documentation in your respective discussion forums:(Communications → Discussions → Capstone Project - INFO-6156-01-25F - #)\nOctober 9 (Thurs), 21 (Tues) and 30 (Thurs)\nOctober 9 - Sprint 2 Planning meeting (Video/Zoom recording)\nOctober 21 - Scrum Meeting (Sprint 2) (Document)\nOctober 30 - Sprint 3 planning meeting (Video/Zoom recording)\nPlease note that I will not be available in person on those dates, so please make sure your submissions are posted on time in the forum.\nPlease reach out if you have any questions.\nThank you,\nMagdalene",
+      "content_length": 740
+    },
+    {
+      "index": 8,
+      "title": "How To Build GenAI Applications Using Your Data, an IBM TechXchange Workshop",
+      "date": "Oct 7, 2025 6:14 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2239204/view?ou=2001542",
+      "content": "Here is the link the register for the workshop:\nIBM TechXchange Workshop\nDate: October 21st, 2025\n9:00 AM – 1:30 PM\nLocation: IBM Toronto16 York Street, 7th Floor, Rooms 070-010/020Toronto",
+      "content_length": 188
+    },
+    {
+      "index": 9,
+      "title": "Sprint 1 submission",
+      "date": "Oct 2, 2025 1:06 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2236941/view?ou=2001542",
+      "content": "Dear all,\nPlease note that the Sprint 1 presentation, including the first technical demo, will take place on October 7, 2025,  1-4 PM. All team members are required to be present in person to explain their individual contributions.\nSprint 1 Submission folder:\nProject Backlog (as per template or Screenshots from Jira/Trello)\nSprint Backlog (as per template or Screenshots from Jira/Trello)\nSprint Planning Evaluation (as per template provided)\nScrum Meeting Evaluation (as per template provided)\nAll current code as a zip file\nKindly reach out to me if you have any questions/concerns.\nThank you,\nMagdalene",
+      "content_length": 607
+    },
+    {
+      "index": 10,
+      "title": "Building with Agentic AI: A Hands-on Workshop",
+      "date": "Oct 2, 2025 1:03 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2236901/view?ou=2001542",
+      "content": "Dear all,\nHere is the registration link to the workshop:\nBuilding with Agentic AI: A Hands-on Workshop\nFeel free to reach out to me if you have questions.\nThank you,\nMagdalene",
+      "content_length": 175
+    },
+    {
+      "index": 11,
+      "title": "Wellness Break Oct 14-17",
+      "date": "Sep 25, 2025 1:23 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2234029/view?ou=2001542",
+      "content": "Dear all,\nPlease note that there will be no classes during the wellness break from October 14–17 (i.e) Tuesday, Oct 14, 1-4PM and Thursday, Oct 16, 3-6 PM. Submission dates do not fall within this week.\nFeel free to reach out if you have any questions.\nRegards,\nMagdalene",
+      "content_length": 271
+    },
+    {
+      "index": 12,
+      "title": "An Exciting Opportunity for Students Passionate About STEM – With TCS",
+      "date": "Sep 23, 2025 1:52 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2233131/view?ou=2001542",
+      "content": "Hello,\nLooking to kickstart your career and connect with industry leaders? Here’s your chance to prove your skills and get a fair chance to get interviewed and identified for Internship/Co-op or Full Time Opportunities.\nRegister now for TCS CodeVita Season 13 - https://codevita.tcsapps.com/\n🎁 Exclusive Benefits: USD 20,000 cash prize, Certificates, global rankings, and gift vouchers for participants and winners, Top Women coder Awards!\n🎁 Perks for Early Birds: The first 100 participants to register will receive exciting gift vouchers!\n🎁 Meet the Experts: Get a unique opportunity to interact with top industry professionals at the Networking event and gain insights for your career.\nDon’t miss out – your journey to innovation, networking, and prizes starts here!\nRegistration deadline: October 3 , 2025\n1. Sign up here: https://codevita.tcsapps.com/\n2. Total Time to register at platform: 60 seconds\n3. Link for Instructions: https://www.linkedin.com/feed/update/urn:li:activity:7361230268369727488/\n4.  Award ceremony  of season 12- https://youtube.com/live/vCanLT7aT_U?si=DDIZqRhYP5iOLp-b\nIn addition, you are invited to join a variety of engaging events, including networking sessions, lucky draws, and interview opportunities. These experiences are designed to give you valuable insights and connections in the STEM industry.\nPLEASE make use of this opportunity and kindly reach out to me if you have any questions or need guidance!\nHappy to help :)\n-Magdalene",
+      "content_length": 1471
+    },
+    {
+      "index": 13,
+      "title": "Collaboration Opportunity with HSY students",
+      "date": "Sep 15, 2025 10:14 AM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2229745/view?ou=2001542",
+      "content": "Dear all,\nHere’s a chance to work with HSY (Health Systems Management) students on their project! We need at least 16 AIM students to join in (you can even pair with more than one HSY student if you’d like).\nPlease sign up here: https://docs.google.com/document/d/1bOkeHNByb0IY4Qr-O7DG2GJATTavLb61HJhjmmBM8ic/edit?usp=sharing\nAll participants will receive a small micro-certificate for their involvement.\nIt’s a great way to collaborate and gain experience and I encourage everyone to participate!\nThank you,\nMagdalene",
+      "content_length": 518
+    },
+    {
+      "index": 14,
+      "title": "Proposal Presentation",
+      "date": "Sep 11, 2025 2:57 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2228551/view?ou=2001542",
+      "content": "Dear all,\nPlease note that your proposal presentation will happen on 16th September 2025 at 1 pm.\nIt is mandatory for all the students to attend the session as it will be graded.\nFeel free to reach out to me if you have any questions.\nThank you!",
+      "content_length": 245
+    },
+    {
+      "index": 15,
+      "title": "Group Enrollment",
+      "date": "Sep 4, 2025 4:11 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2224959/view?ou=2001542",
+      "content": "Dear all,\nGroup enrollment is now open!\nPlease ensure you join a group for your project. You are free to form groups with anyone you wish to work with, and the group will remain the same until the end of the term. Each group must have between 2 and 5 members, as projects will be challenging with fewer than four participants. To join a group, go to the Groups Page (Click on the course -> Communications -> Groups).\nPlease complete your group enrollment by September 9 at 1:00 pm.\nIf you have any questions, feel free to reach out to me via email.\nThank you,\nMagdalene",
+      "content_length": 569
+    },
+    {
+      "index": 16,
+      "title": "Welcome to INFO6156 Capstone Project",
+      "date": "Sep 3, 2025 8:59 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2224211/view?ou=2001542",
+      "content": "Dear Luiz Henrique,\nWelcome to INFO6156 Capstone Project ! Please take a moment to review the Course Outline (Under resources tab) to get started.\nMy name is Magdalene, and I’ll be your professor for this course.\nI’m excited to meet all of you and to begin this learning journey together. By the end of this Capstone Project, I’m confident you’ll gain the hands-on experience needed to prepare for the industry.\nIf you have any questions, please don’t hesitate to reach out. I look forward to seeing you tomorrow, September 4, 2025 in M Building M3043.\nKind regards,Magdalene",
+      "content_length": 575
+    }
+  ]
+}
