@@ -6,8 +6,10 @@ Transforms raw D2L scraper output into standardized format for chatbot consumpti
 """
 
 from datetime import datetime
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
+from pathlib import Path
 import re
+import json
 
 
 def transform_announcements(raw_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -20,6 +22,10 @@ def transform_announcements(raw_data: Dict[str, Any]) -> Dict[str, Any]:
     Returns:
         Standardized announcement data structure
     """
+    # Load professor information if available
+    course_id = raw_data.get('course_id')
+    professor_info = load_professor_info(course_id) if course_id else None
+    
     announcements = []
 
     for raw_announcement in raw_data.get('announcements', []):
@@ -33,7 +39,7 @@ def transform_announcements(raw_data: Dict[str, Any]) -> Dict[str, Any]:
             'title': raw_announcement.get('title', 'Untitled'),
             'date': parse_announcement_date(raw_announcement.get('date', '')),
             'time': extract_time_from_date(raw_announcement.get('date', '')),
-            'posted_by': extract_poster(raw_announcement.get('content', '')),
+            'posted_by': extract_poster(raw_announcement.get('content', ''), professor_info),
             'course': raw_data.get('course', 'Unknown'),
             'content': raw_announcement.get('content', ''),
             'url': raw_announcement.get('url', ''),
@@ -112,34 +118,102 @@ def extract_time_from_date(date_str: str) -> str:
     return ''
 
 
-def extract_poster(content: str) -> str:
+def load_professor_info(course_id: str) -> Optional[Dict[str, Any]]:
+    """
+    Load professor information from cached JSON file.
+    
+    Args:
+        course_id: Course ID to load professor info for
+        
+    Returns:
+        Professor info dict or None if not found
+    """
+    if not course_id:
+        return None
+    
+    professor_file = Path(f'data/course_{course_id}/professor_info.json')
+    
+    if not professor_file.exists():
+        return None
+    
+    try:
+        with open(professor_file, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except:
+        return None
+
+
+def extract_poster(content: str, professor_info: Optional[Dict[str, Any]] = None) -> str:
     """
     Extract who posted the announcement from content.
+    
+    Uses professor information if available, otherwise falls back to pattern matching.
 
     Looks for patterns like:
-        - "Dear all," -> "Instructor"
-        - "Hello students," -> "Instructor"
-        - Default: "Instructor"
+        - Signature at end: "Thank you,\nJohn Smith" -> "John Smith"
+        - Start greeting: "Dear all," -> Use professor_info name
+        - "Professor/Dr. Name" -> Extract name
+        - Default: Use professor_info name or "Instructor"
+    
+    Args:
+        content: Announcement content
+        professor_info: Cached professor information (optional)
+    
+    Returns:
+        Name of poster or "Instructor"
     """
     if not content:
-        return 'Instructor'
+        return professor_info.get('name', 'Instructor') if professor_info else 'Instructor'
 
-    # Common patterns
-    patterns = [
-        (r'(?:Dear|Hi|Hello)\s+(?:all|students|everyone)', 'Instructor'),
-        (r'(?:Professor|Dr\.)\s+\w+', 'match'),  # Extract actual name
+    # Strategy 1: Look for signature at the end of content
+    # Common patterns: "Thank you,\nName", "Best regards,\nName", "Sincerely,\nName"
+    signature_patterns = [
+        r'(?:Thank you|Thanks|Best regards|Regards|Sincerely|Cheers),?\s*\n\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)',
+        r'(?:Thank you|Thanks|Best regards|Regards|Sincerely|Cheers),?\s*\n\s*(?:Professor|Dr\.)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)',
     ]
-
-    content_lower = content.lower()
-
-    for pattern, poster_type in patterns:
+    
+    for pattern in signature_patterns:
+        match = re.search(pattern, content, re.MULTILINE)
+        if match:
+            extracted_name = match.group(1).strip()
+            # Validate extracted name (should be 2-4 words, capitalized)
+            if 2 <= len(extracted_name.split()) <= 4 and extracted_name[0].isupper():
+                return extracted_name
+    
+    # Strategy 2: Look for "Professor/Dr. Name" pattern in content
+    title_patterns = [
+        r'(?:Professor|Prof\.|Dr\.)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)',
+    ]
+    
+    for pattern in title_patterns:
         match = re.search(pattern, content, re.IGNORECASE)
         if match:
-            if poster_type == 'match':
-                return match.group(0)
-            return poster_type
-
-    return 'Instructor'
+            return match.group(0)  # Return full "Professor Name" or "Dr. Name"
+    
+    # Strategy 3: Check if content has generic greeting, use professor_info name
+    generic_greeting_patterns = [
+        r'(?:Dear|Hi|Hello)\s+(?:all|students|everyone)',
+    ]
+    
+    for pattern in generic_greeting_patterns:
+        if re.search(pattern, content, re.IGNORECASE):
+            if professor_info and professor_info.get('name'):
+                return professor_info['name']
+            return 'Instructor'
+    
+    # Strategy 4: If professor_info available and content seems to be from instructor, use it
+    if professor_info and professor_info.get('name'):
+        # Check if content has instructor-like language
+        instructor_indicators = [
+            'assignment', 'grade', 'exam', 'class', 'course', 'lecture',
+            'office hours', 'please note', 'reminder', 'update'
+        ]
+        content_lower = content.lower()
+        if any(indicator in content_lower for indicator in instructor_indicators):
+            return professor_info['name']
+    
+    # Default fallback
+    return professor_info.get('name', 'Instructor') if professor_info else 'Instructor'
 
 
 def determine_priority(announcement: Dict[str, Any]) -> str:

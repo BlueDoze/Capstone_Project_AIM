@@ -1281,6 +1281,115 @@ def announcements_status():
             "message": str(e)
         }), 500
 
+# ============== PROFESSOR INFO API ENDPOINTS ==============
+
+@app.route("/api/professor/<course_id>", methods=['GET'])
+def get_professor_info(course_id):
+    """
+    Get cached professor information for a course.
+    Returns professor data from data/course_{COURSE_ID}/professor_info.json
+    """
+    try:
+        prof_file = Path(f'data/course_{course_id}/professor_info.json')
+        
+        if not prof_file.exists():
+            return jsonify({
+                "status": "not_found",
+                "message": f"Professor info not found for course {course_id}. Run extract_professor_info.py first.",
+                "course_id": course_id
+            }), 404
+        
+        with open(prof_file, 'r', encoding='utf-8') as f:
+            prof_data = json.load(f)
+        
+        # Calculate data age
+        from datetime import datetime
+        try:
+            extracted_dt = datetime.fromisoformat(prof_data.get('extracted_at', ''))
+            age_seconds = (datetime.now() - extracted_dt).total_seconds()
+            age_days = age_seconds / 86400
+            age_str = f"{age_days:.1f} days ago"
+        except:
+            age_str = "Unknown"
+        
+        return jsonify({
+            "status": "success",
+            "course_id": course_id,
+            "professor": {
+                "name": prof_data.get('name'),
+                "email": prof_data.get('email'),
+                "office": prof_data.get('office'),
+                "office_hours": prof_data.get('office_hours')
+            },
+            "metadata": {
+                "extracted_at": prof_data.get('extracted_at'),
+                "data_age": age_str,
+                "extraction_method": prof_data.get('extraction_method'),
+                "source_url": prof_data.get('source_url')
+            }
+        })
+    
+    except Exception as e:
+        print(f"❌ Error getting professor info: {e}")
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+@app.route("/api/professor/status", methods=['GET'])
+def professor_info_status():
+    """
+    Returns status of all cached professor information.
+    Lists all courses with professor data available.
+    """
+    try:
+        data_dir = Path('data')
+        professor_files = list(data_dir.glob('course_*/professor_info.json'))
+        
+        courses = []
+        for prof_file in professor_files:
+            try:
+                with open(prof_file, 'r', encoding='utf-8') as f:
+                    prof_data = json.load(f)
+                
+                course_id = prof_data.get('course_id')
+                
+                # Calculate data age
+                from datetime import datetime
+                try:
+                    extracted_dt = datetime.fromisoformat(prof_data.get('extracted_at', ''))
+                    age_seconds = (datetime.now() - extracted_dt).total_seconds()
+                    age_days = age_seconds / 86400
+                    age_str = f"{age_days:.1f} days ago"
+                except:
+                    age_str = "Unknown"
+                
+                courses.append({
+                    "course_id": course_id,
+                    "name": prof_data.get('name'),
+                    "email": prof_data.get('email'),
+                    "extracted_at": prof_data.get('extracted_at'),
+                    "data_age": age_str,
+                    "has_name": prof_data.get('name') is not None,
+                    "has_email": prof_data.get('email') is not None
+                })
+            except Exception as e:
+                print(f"⚠️ Error reading {prof_file}: {e}")
+                continue
+        
+        return jsonify({
+            "status": "success",
+            "total_courses": len(courses),
+            "courses": courses
+        })
+    
+    except Exception as e:
+        print(f"❌ Error getting professor status: {e}")
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
 # ============== NAVIGATION API ENDPOINTS ==============
 
 @app.route("/api/navigation/parse", methods=['POST'])
