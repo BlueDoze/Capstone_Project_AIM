@@ -1,0 +1,181 @@
+{
+  "metadata": {
+    "source": "sharepoint_scraper",
+    "scraped_at": "2025-11-22T14:48:13.874317",
+    "total_events": 15,
+    "endpoint": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false",
+    "date_range": {
+      "start_date": "2025-11-01",
+      "end_date": "2025-12-31"
+    },
+    "max_events_limit": 100,
+    "extraction_method": "modern_event_cards"
+  },
+  "events": [
+    {
+      "id": "sp_evt_001",
+      "name": "Daylight Saving Time ends",
+      "date": "Sat, Nov 1, 2:00 AM",
+      "time": "",
+      "location": "",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_002",
+      "name": "Fire drill: K, M and N buildings",
+      "date": "Mon, Nov 3, 8:00 AM",
+      "time": "",
+      "location": "K, M and N buildings, Blue Zone, London Campus (1001 Fanshawe College Blvd.)",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_003",
+      "name": "Fire drill: R1 (Falcon House), R2 (Peregrine House),  R3 (Merlin House)",
+      "date": "Tue, Nov 4, 8:00 AM",
+      "time": "",
+      "location": "Residence buildings (R1, R2, R3), Yellow Zone, London Campus (1001 Fanshawe College Blvd.)",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_004",
+      "name": "Salthaven Wildlife Centre presentation",
+      "date": "Tue, Nov 4, 2:00 PM",
+      "time": "",
+      "location": "Canada Life Village Square (room, F1027/F1029) in Innovation Village, F Building first floor, Red Zone, London Campus (1001 Fanshawe College Blvd.)",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_005",
+      "name": "Fire drill: A, G, J and Student Centre (SC) buildings",
+      "date": "Wed, Nov 5, 8:00 AM",
+      "time": "",
+      "location": "A building (Green Zone); G, J and SC buildings (Yellow Zone), London Campus (1001 Fanshawe College Blvd.)",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_006",
+      "name": "Fire drill: B and T buildings",
+      "date": "Thu, Nov 6, 8:00 AM",
+      "time": "",
+      "location": "B and T buildings, Orange Zone, London Campus (1001 Fanshawe College Blvd.)",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_007",
+      "name": "Fire drill: Aviation Centre and CATT",
+      "date": "Fri, Nov 7, 8:00 AM",
+      "time": "",
+      "location": "2 Cuddy Court; 1000 Air Ontario Drive; 1764 Oxford Street East, London, Ontario",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_008",
+      "name": "Fire drill: F, H and L buildings and Student Union Building (SUB)",
+      "date": "Mon, Nov 10, 8:00 AM",
+      "time": "",
+      "location": "H building (Blue Zone); F, L and SUB (Red Zone), London Campus (1001 Fanshawe College Blvd.)",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_009",
+      "name": "Remembrance Day service",
+      "date": "Tue, Nov 11, 10:30 AM",
+      "time": "",
+      "location": "London Campus (1001 Fanshawe College Blvd.), Red Zone, North Courtyard",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_010",
+      "name": "Fire drill: Woodstock/Oxford Regional Campus",
+      "date": "Mon, Nov 17, 8:00 AM",
+      "time": "",
+      "location": "Fanshawe College Woodstock/Oxford Regional Campus (Finkle Street and Metcalf Street)",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_011",
+      "name": "Fire drill: ​​London Downtown Campus",
+      "date": "Wed, Nov 19, 8:00 AM",
+      "time": "",
+      "location": "(431 Richmond Street; LDA and LDB, 130 and 137 Dundas Street)",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_012",
+      "name": "Fire drill: C building",
+      "date": "Thu, Nov 20, 8:00 AM",
+      "time": "",
+      "location": "C building, Orange Zone, London Campus (1001 Fanshawe College Blvd.)",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_013",
+      "name": "Fire drill: D and E buildings",
+      "date": "Fri, Nov 21, 8:00 AM",
+      "time": "",
+      "location": "D and E buildings, Green Zone, London Campus (1001 Fanshawe College Blvd.)",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_014",
+      "name": "Open House",
+      "date": "Sat, Nov 29, 10:00 AM",
+      "time": "",
+      "location": "all campuses",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_015",
+      "name": "National Day of Remembrance and Action on Violence Against Women",
+      "date": "Sat, Dec 6, 10:00 AM",
+      "time": "",
+      "location": "Fanshawe College, London, Ontario, Canada",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-01&EndDate=2025-12-31&AudienceTarget=false"
+    }
+  ]
+}

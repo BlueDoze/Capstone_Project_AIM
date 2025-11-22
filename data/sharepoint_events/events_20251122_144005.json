@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "source": "sharepoint_scraper",
+    "scraped_at": "2025-11-22T14:40:45.872990",
+    "total_events": 0,
+    "endpoint": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-11-22&EndDate=2025-12-22&AudienceTarget=false",
+    "date_range": {
+      "start_date": "2025-11-22",
+      "end_date": "2025-12-22"
+    },
+    "max_events_limit": 100,
+    "extraction_method": null
+  },
+  "events": []
+}

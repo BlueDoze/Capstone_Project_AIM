@@ -1,0 +1,1 @@
+- To move to test or production phase is required to provide user with a password to support the features development. Some of the feature which are running with personal credentials must be substituted to an application credential, which means is not depend of a person, created for the application purposes.
