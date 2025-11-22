@@ -14,8 +14,53 @@ This system leverages **Google's Gemini AI models**, **Vertex AI**, **Leaflet.js
 - 🔄 **Auto-Updates**: Automatically processes new images and updates embeddings
 - 📐 **Precise Positioning**: Accurate room center calculations with manual override capability
 - 📢 **D2L Integration**: Scrapes and displays course announcements from Brightspace
+- 🎓 **Professor Information**: Extracts and displays professor contact details and office hours
+- 📅 **SharePoint Events**: Automatically scrapes campus events from SharePoint Modern Events
 - 🍽️ **Campus Services**: Information about events, restaurants, and campus facilities
 - 🎯 **Intent Classification**: Intelligent routing of queries to appropriate handlers
+
+## 🏗️ Project Organization (NEW - Nov 2024)
+
+This project has been recently reorganized into a clean, modular **Feature-Based Architecture** for improved maintainability and scalability. See [REORGANIZATION_SUMMARY.md](docs/architecture/REORGANIZATION_SUMMARY.md) for complete details.
+
+### **Directory Structure**
+
+```
+Capstone_Project_AIM/
+├── 📁 docs/                        # All documentation (organized by category)
+│   ├── architecture/               # Architecture decisions and diagrams
+│   ├── guides/                     # User guides and tutorials
+│   ├── scraping/                   # Scraper documentation
+│   └── api/                        # API documentation (future)
+├── 📁 src/                         # All source code (modular organization)
+│   ├── api/                        # Flask application (app.py)
+│   ├── scrapers/                   # Data extraction modules
+│   │   ├── d2l/                   # D2L/Brightspace scrapers
+│   │   ├── sharepoint/            # SharePoint scrapers
+│   │   └── utils/                 # Shared scraping utilities
+│   ├── models/                     # ML models and embeddings
+│   ├── services/                   # Business logic
+│   ├── config/                     # Configuration management
+│   └── utils/                      # General utilities
+├── 📁 scripts/                     # Utility scripts (organized by purpose)
+│   ├── debug/                      # Debugging tools
+│   ├── processing/                 # Data processing scripts
+│   ├── generation/                 # Code/data generation
+│   └── diagnostics/                # System diagnostics
+├── 📁 tests/                       # All tests (organized by type)
+├── 📁 data/                        # Data files and databases
+├── 📁 config/                      # Configuration files
+├── run_app.py                      # Main application entry point
+├── devserver.sh                    # Development server launcher
+└── requirements.txt                # Python dependencies
+```
+
+### **Key Improvements**
+- ✅ Clean root directory (80+ files reduced to essentials)
+- ✅ Feature-based module organization
+- ✅ Backward compatibility maintained via wrapper scripts
+- ✅ Git history preserved for all files
+- ✅ Comprehensive documentation structure
 
 ## 📊 System Diagrams
 
@@ -568,7 +613,7 @@ images/
 
 ## 🚀 Running the Complete Solution
 
-This section provides step-by-step instructions to run the entire Fanshawe Navigator system.
+This section provides step-by-step instructions to run the entire Fanshawe Navigator system after the recent reorganization.
 
 ---
 
@@ -588,8 +633,8 @@ source .venv/bin/activate              # Linux/Mac
 # Step 3: Verify environment setup
 python -c "import google.generativeai; print('✅ Dependencies OK')"
 
-# Step 4: Run the application
-python main.py
+# Step 4: Run the application using the new wrapper
+python run_app.py
 ```
 
 **Expected Output:**
@@ -626,7 +671,7 @@ chmod +x devserver.sh
 This script automatically:
 - Activates the virtual environment
 - Checks for required dependencies
-- Starts the Flask server with debug mode
+- Starts the Flask server using `run_app.py`
 - Displays startup information
 
 ---
@@ -664,14 +709,14 @@ export FLASK_DEBUG=0
 # Step 2: Install production server (gunicorn)
 pip install gunicorn
 
-# Step 3: Run with gunicorn
-gunicorn -w 4 -b 0.0.0.0:8081 main:app
+# Step 3: Run with gunicorn using the new app location
+gunicorn -w 4 -b 0.0.0.0:8081 'src.api.app:app'
 ```
 
 **Explanation:**
 - `-w 4`: Use 4 worker processes
 - `-b 0.0.0.0:8081`: Bind to all interfaces on port 8081
-- `main:app`: Application entry point
+- `'src.api.app:app'`: Application entry point (new location after reorganization)
 
 ---
 
@@ -742,7 +787,7 @@ kill <PID>
 
 ## 🔧 Running Individual Components
 
-This section explains how to run specific parts of the system independently for development or testing.
+This section explains how to run specific parts of the system independently for development or testing after the reorganization.
 
 ---
 
@@ -767,8 +812,11 @@ source .venv/bin/activate
 # Step 2: Install Playwright browsers (first time only)
 python -m playwright install firefox
 
-# Step 3: Run the scraper
+# Step 3: Run the scraper using the wrapper script
 python extract_all_announcements.py
+
+# Or run directly from new location:
+python -m src.scrapers.d2l.announcements
 ```
 
 **Expected Behavior:**
@@ -778,7 +826,85 @@ python extract_all_announcements.py
 4. **If 2FA is required**: Displays verification code in terminal
 5. Navigates to course pages
 6. Extracts announcements from multiple courses
-7. Saves to `all_announcements.json`
+7. Saves to `data/d2l_announcements.json`
+
+---
+
+### **Component 2: SharePoint Events Scraper (NEW)**
+
+The SharePoint scraper extracts campus events from Fanshawe's SharePoint Modern Events page.
+
+#### **Run the SharePoint Scraper**
+
+```bash
+# Step 1: Activate virtual environment
+source .venv/bin/activate
+
+# Step 2: Run the scraper using the wrapper script
+python extract_sharepoint_events.py
+
+# Or run directly from new location:
+python -m src.scrapers.sharepoint.events
+
+# With date range (optional):
+python extract_sharepoint_events.py --start-date 2024-11-01 --end-date 2024-12-31
+```
+
+**Expected Behavior:**
+1. Opens Firefox browser with Playwright
+2. Handles Microsoft SSO authentication
+3. Supports 2FA verification if required
+4. Navigates to SharePoint Events page
+5. Extracts event details (title, date, location, description)
+6. Saves to `data/sharepoint_events/events_YYYYMMDD_HHMMSS.json`
+
+**Output Structure:**
+```json
+{
+  "metadata": {
+    "source": "SharePoint Modern Events",
+    "scraped_at": "2024-11-22T14:47:16",
+    "total_events": 15,
+    "date_range": "2024-11-01 to 2024-12-31"
+  },
+  "events": [
+    {
+      "title": "Open House - November 29",
+      "date": "Nov 29, 2024",
+      "location": "Campus",
+      "description": "Join us for our Open House..."
+    }
+  ]
+}
+```
+
+---
+
+### **Component 3: Professor Information Scraper (NEW)**
+
+Extracts professor contact information and office hours from D2L course pages.
+
+#### **Run the Professor Scraper**
+
+```bash
+# Step 1: Activate virtual environment
+source .venv/bin/activate
+
+# Step 2: Run the scraper using the wrapper script
+python extract_professor_info.py
+
+# Or run directly from new location:
+python -m src.scrapers.d2l.professor_info
+
+# For a specific course:
+python extract_professor_info.py --course-id 2001540
+```
+
+**Expected Behavior:**
+1. Authenticates with D2L
+2. Navigates to course homepage
+3. Extracts professor information from content sections
+4. Saves to `data/course_XXXXXX/professor_info.json`
 
 **Output File Structure:**
 ```json
@@ -799,7 +925,7 @@ Convert raw scraper output to processed format:
 
 ```bash
 # This runs automatically via API, but you can test manually:
-python src/services/announcement_transformer.py
+python -m src.services.announcement_transformer
 ```
 
 **Or via API:**
@@ -809,7 +935,7 @@ curl -X POST http://localhost:8081/api/announcements/refresh
 
 ---
 
-### **Component 2: RAG System (Image Embeddings)**
+### **Component 4: RAG System (Image Embeddings)**
 
 The RAG system processes floor plan images and creates searchable embeddings.
 
@@ -881,25 +1007,31 @@ curl -X POST http://localhost:8081/images/auto-monitor/stop
 
 ---
 
-### **Component 3: Navigation System**
+### **Component 5: Navigation System**
 
 Test the navigation and pathfinding system independently.
 
 #### **Test Room Resolution**
 
 ```bash
-python -c "
-from main import resolve_room_name
-print(resolve_room_name('1003'))       # Should return 'Room_1003'
-print(resolve_room_name('bathroom men'))  # Should return 'Bathroom-Men'
-"
+# Test with the updated import path
+python << 'EOF'
+import sys
+sys.path.insert(0, '.')
+from src.api.app import resolve_room_name
+
+print(resolve_room_name('1003'))           # Should return 'Room_1003'
+print(resolve_room_name('bathroom men'))   # Should return 'Bathroom-Men'
+EOF
 ```
 
 #### **Test Navigation Parsing**
 
 ```bash
 python << 'EOF'
-from main import parse_navigation_request
+import sys
+sys.path.insert(0, '.')
+from src.api.app import parse_navigation_request
 
 result = parse_navigation_request('Navigate from Room 1003 to Room 1018')
 print(f"Is Navigation: {result['is_navigation']}")
@@ -935,7 +1067,7 @@ curl -X POST http://localhost:8081/api/navigation/from-clicks \
 
 ---
 
-### **Component 4: Gemini AI Integration**
+### **Component 6: Gemini AI Integration**
 
 Test the Gemini AI models independently.
 
@@ -992,7 +1124,7 @@ EOF
 
 ---
 
-### **Component 5: Map Visualization**
+### **Component 7: Map Visualization**
 
 The map component runs entirely in the browser, but you can test it independently.
 
@@ -1038,7 +1170,7 @@ console.log('Room center:', center);
 
 ---
 
-### **Component 6: Event and Restaurant Queries**
+### **Component 8: Event and Restaurant Queries**
 
 Test the JSON database query system.
 
@@ -1098,7 +1230,7 @@ curl -X POST http://localhost:8081/chat \
 
 ---
 
-### **Component 7: System Health Monitoring**
+### **Component 9: System Health Monitoring**
 
 Monitor system health and performance.
 
@@ -1279,62 +1411,131 @@ Provides utility functions and validators:
 
 ```
 Capstone_Project_AIM/
+├── 📁 docs/                         # Documentation (organized by category)
+│   ├── 📁 architecture/             # Architecture decisions & diagrams
+│   │   ├── PROFESSOR_ARCHITECTURE_VISUAL.md
+│   │   ├── REORGANIZATION_PLAN.md
+│   │   └── REORGANIZATION_SUMMARY.md
+│   ├── 📁 guides/                   # User guides & tutorials
+│   │   ├── ANNOUNCEMENTS_INTEGRATION.md
+│   │   ├── QUICK_START_ANNOUNCEMENTS.md
+│   │   ├── PROFESSOR_EXTRACTION_GUIDE.md
+│   │   └── ... (8 total guide files)
+│   ├── 📁 scraping/                 # Scraper documentation
+│   │   ├── D2L_AGENT_INTEGRATION.md
+│   │   ├── D2L_SCRAPER_README.md
+│   │   └── sharepoint_scraper.md
+│   └── 📁 api/                      # API documentation (future)
 ├── 📁 src/                          # Modular source code
-│   ├── 📁 config/
-│   │   ├── __init__.py              # Configuration initialization
-│   │   ├── environment.py           # Environment variables management
-│   │   └── settings.py              # RAG system settings
-│   ├── 📁 models/
-│   │   ├── __init__.py              # Models initialization
-│   │   ├── embedding_models.py      # Embedding model wrapper
+│   ├── 📁 api/                      # Flask application
+│   │   ├── app.py                   # Main Flask server (was main.py)
+│   │   └── routes/                  # Route modules (future split)
+│   ├── 📁 scrapers/                 # Data extraction modules
+│   │   ├── 📁 d2l/                  # D2L/Brightspace scrapers
+│   │   │   ├── announcements.py     # Course announcements
+│   │   │   ├── content_home.py      # Course content
+│   │   │   ├── professor_info.py    # Professor information
+│   │   │   ├── announcement_content.py
+│   │   │   └── links_crawler.py
+│   │   ├── 📁 sharepoint/           # SharePoint scrapers
+│   │   │   └── events.py            # Campus events
+│   │   └── 📁 utils/                # Shared scraping utilities
+│   ├── 📁 models/                   # ML models and embeddings
+│   │   ├── embedding_models.py      # Sentence Transformer wrapper
 │   │   └── gemini_models.py         # Gemini model manager
-│   ├── 📁 services/
-│   │   ├── __init__.py              # Services initialization
-│   │   ├── initialization_service.py # Model initialization logic
-│   │   └── validation_service.py    # Data validation services
-│   └── 📁 utils/
-│       ├── __init__.py              # Utils initialization
-│       └── validators.py            # Utility validators
+│   ├── 📁 services/                 # Business logic
+│   │   ├── initialization_service.py
+│   │   ├── validation_service.py
+│   │   ├── announcement_transformer.py
+│   │   └── d2l_scraper.py
+│   ├── 📁 config/                   # Configuration management
+│   │   ├── environment.py
+│   │   └── settings.py
+│   └── 📁 utils/                    # General utilities
+│       └── validators.py
+├── 📁 scripts/                      # Utility scripts (organized)
+│   ├── 📁 debug/                    # Debugging tools
+│   │   ├── debug_announcement.py
+│   │   ├── debug_login_page.py
+│   │   ├── debug_sharepoint_page.py
+│   │   └── demo_auto_update.py
+│   ├── 📁 processing/               # Data processing
+│   │   ├── process_course.py
+│   │   ├── transform_cache.py
+│   │   └── update_embeddings.py
+│   ├── 📁 generation/               # Code/data generation
+│   │   ├── generate_route_templates.py
+│   │   ├── generate_route_viewer.py
+│   │   └── parse_news_html.py
+│   └── 📁 diagnostics/              # System diagnostics
+│       ├── diagnose_routes.py
+│       ├── check_map_routes.py
+│       ├── list_routes.py
+│       ├── suggest_next_routes.py
+│       └── validate_map_embeddings.py
+├── 📁 tests/                        # Comprehensive test suite
+│   ├── 📁 unit/                     # Unit tests
+│   ├── 📁 integration/              # Integration tests
+│   ├── 📁 integration_root/         # Root-level integration tests
+│   ├── 📁 system/                   # System tests
+│   ├── 📁 performance/              # Performance tests
+│   └── conftest.py                  # Pytest configuration
 ├── 📁 templates/                    # HTML templates
 │   └── index.html                   # Main chat interface
 ├── 📁 static/                       # Static web assets
 │   ├── style.css                    # Application styling
-│   └── script.js                    # Frontend JavaScript
-├── 📁 images/                       # Building floor plans and images
-│   ├── M1.jpeg                      # Main floor plan
-│   ├── M2.jpeg                      # Additional views
-│   └── M3.jpeg                      # Detailed sections
-├── 📁 tests/                        # Comprehensive test suite
-│   ├── 📁 unit/                     # Unit tests
-│   │   ├── test_configuration.py    # Configuration tests
-│   │   └── test_models.py           # Model tests
-│   ├── 📁 integration/              # Integration tests
-│   │   ├── test_complete_system.py  # Full system integration
-│   │   ├── test_embedding_evidence.py
-│   │   └── test_integrated_system.py
-│   ├── 📁 system/                   # System-level tests
-│   │   ├── test_auto_update.py      # Auto-update functionality
-│   │   ├── test_final_system.py     # End-to-end tests
-│   │   └── test_real_gemini.py      # Real Gemini API tests
-│   ├── 📁 performance/              # Performance tests
-│   │   ├── test_gemini_real_vs_mock.py
-│   │   └── test_models_simulation.py
-│   ├── conftest.py                  # Pytest configuration
-│   └── test_runner.py               # Test execution script
-├── 📁 scripts/                      # Utility scripts
-│   ├── run_tests.py                 # Run all tests
-│   └── setup_environment.py         # Environment setup
+│   ├── script.js                    # Frontend JavaScript
+│   └── map-controller.js            # Map & navigation logic
+├── 📁 data/                         # Data files & databases
+│   ├── campus_events.json
+│   ├── campus_restaurants.json
+│   ├── d2l_announcements.json
+│   ├── 📁 course_2001539/           # Course-specific data
+│   ├── 📁 course_2001540/
+│   └── 📁 sharepoint_events/        # SharePoint events cache
 ├── 📁 config/                       # Configuration files
-│   └── pytest.ini                   # Pytest settings
-├── main.py                          # Main Flask application
+│   ├── building_m_rooms.json
+│   └── pytest.ini
+├── 📁 images/                       # Building floor plans
+│   ├── M1.jpeg
+│   ├── M2.jpeg
+│   └── M3.jpeg
+├── 📁 LeafletJS/                    # Map assets
+│   └── Floorplans/Building M/
+│       ├── M1_official.svg
+│       └── building_m_floor1_navigation.json
+├── run_app.py                       # Main application entry point (NEW)
+├── devserver.sh                     # Development server script
+├── extract_all_announcements.py     # Wrapper for D2L scraper
+├── extract_sharepoint_events.py     # Wrapper for SharePoint scraper
+├── extract_professor_info.py        # Wrapper for professor scraper
 ├── multimodal_rag_complete.py       # RAG system implementation
-├── demo_auto_update.py              # Auto-update demonstration
-├── update_embeddings.py             # Embedding update and testing script
+├── update_embeddings.py             # Embedding update script
 ├── requirements.txt                 # Python dependencies
 ├── pyproject.toml                   # Project configuration
-├── devserver.sh                     # Development server script
 └── README.md                        # This file
 ```
+
+### **Architecture Highlights**
+
+#### **Feature-Based Organization**
+- **docs/**: All documentation organized by purpose (architecture, guides, scraping)
+- **src/**: All source code organized by feature (api, scrapers, models, services)
+- **scripts/**: Utility scripts organized by function (debug, processing, generation, diagnostics)
+- **tests/**: Tests organized by type (unit, integration, system, performance)
+
+#### **Backward Compatibility**
+- Wrapper scripts in root maintain old import paths
+- `run_app.py` replaces `main.py` as entry point
+- `devserver.sh` updated to use new structure
+- Git history preserved for all moved files
+
+#### **Benefits**
+- ✅ Clean root directory (10 essential files vs. 80+)
+- ✅ Clear separation of concerns
+- ✅ Easy navigation and discovery
+- ✅ Modular and maintainable
+- ✅ Ready for team collaboration
 
 ## 🔍 System Components
 
@@ -1367,6 +1568,8 @@ Capstone_Project_AIM/
 ### **1. main.py** - Core Flask Application Server
 
 **Purpose**: Main web server orchestrating all system components
+
+**Location**: Now at `src/api/app.py` (moved during reorganization, wrapper at `run_app.py`)
 
 **Key Functions**:
 ```python
@@ -1637,6 +1840,8 @@ const floorPlans = {
 ### **6. update_embeddings.py** - Embedding Management & Testing
 
 **Purpose**: Comprehensive testing and updating of image embeddings
+
+**Location**: Root directory (can also be found in `scripts/processing/update_embeddings.py`)
 
 **Functionality**:
 ```python
@@ -2028,7 +2233,7 @@ python extract_all_announcements.py
 
 #### **Step 4: Increase Timeouts**
 
-Edit `src/services/d2l_scraper.py`:
+Edit `src/scrapers/d2l/announcements.py` (or relevant scraper):
 ```python
 # Find this line:
 await page.wait_for_selector('input[type="email"]', timeout=5000)
@@ -2182,7 +2387,7 @@ python update_embeddings.py
 
 #### **Step 4: Use Faster Model**
 
-Edit `main.py` to use faster model:
+Edit `src/api/app.py` to use faster model:
 ```python
 # Find this line:
 model = genai.GenerativeModel('gemini-2.5-pro')
@@ -2291,7 +2496,7 @@ pip install -r requirements.txt
 
 #### **Enable Verbose Logging**
 ```python
-# Add to main.py at the top:
+# Add to src/api/app.py at the top:
 import logging
 logging.basicConfig(level=logging.DEBUG)
 ```
@@ -2307,7 +2512,7 @@ curl http://localhost:8081/system/status | python -m json.tool
 #### **Review Application Logs**
 ```bash
 # Run with output redirection
-python main.py 2>&1 | tee application.log
+python run_app.py 2>&1 | tee application.log
 
 # Search logs for errors
 grep -i error application.log
@@ -2326,7 +2531,7 @@ EOF
 # Test with minimal config
 cp .env .env.backup
 cp .env.minimal .env
-python main.py
+python run_app.py
 ```
 
 ---
@@ -2335,7 +2540,12 @@ python main.py
 
 If you're still experiencing issues:
 
-1. **Check Documentation**: Review [README.md](README.md:1), [QUICK_START_ANNOUNCEMENTS.md](QUICK_START_ANNOUNCEMENTS.md), and other docs
+1. **Check Documentation**: 
+   - [README.md](README.md) - This file (complete system overview)
+   - [REORGANIZATION_SUMMARY.md](docs/architecture/REORGANIZATION_SUMMARY.md) - Project reorganization details
+   - [QUICK_START_ANNOUNCEMENTS.md](docs/guides/QUICK_START_ANNOUNCEMENTS.md) - Announcements guide
+   - [sharepoint_scraper.md](docs/scraping/sharepoint_scraper.md) - SharePoint scraper guide
+   - Other guides in `docs/guides/` and `docs/scraping/`
 2. **Review Error Messages**: Copy the full error traceback
 3. **Check GitHub Issues**: [Project Repository Issues](https://github.com/BlueDoze/Capstone_Project_AIM/issues)
 4. **Contact Support**: Email support with:
@@ -2349,11 +2559,11 @@ If you're still experiencing issues:
 ### **Debug Mode**
 ```bash
 # Run with debug output
-FLASK_DEBUG=1 python main.py
+FLASK_DEBUG=1 python run_app.py
 
 # Or set in .env
 echo "FLASK_DEBUG=1" >> .env
-python main.py
+python run_app.py
 ```
 
 ## 📊 Performance Metrics
@@ -2401,7 +2611,8 @@ This project is developed for educational purposes as part of the Fanshawe Colle
 
 | Component | File Path | Purpose |
 |-----------|-----------|---------|
-| **Main Server** | `main.py` | Flask application entry point |
+| **Main Server** | `src/api/app.py` | Flask application (was `main.py`) |
+| **Entry Point** | `run_app.py` | Application wrapper & launcher |
 | **Map Controller** | `static/map-controller.js` | Frontend navigation logic |
 | **Chat Interface** | `static/script.js` | Chat UI interaction |
 | **RAG System** | `multimodal_rag_complete.py` | Image-text search engine |
@@ -2409,6 +2620,9 @@ This project is developed for educational purposes as part of the Fanshawe Colle
 | **Configuration** | `config/building_m_rooms.json` | Room mappings and centers |
 | **Navigation Graph** | `LeafletJS/floorPlansScript.js` | Building structure definition |
 | **Room Center Tool** | `tools/find_room_centers.html` | Visual coordinate finder |
+| **D2L Announcements** | `src/scrapers/d2l/announcements.py` | Announcement scraper |
+| **SharePoint Events** | `src/scrapers/sharepoint/events.py` | Events scraper |
+| **Professor Info** | `src/scrapers/d2l/professor_info.py` | Professor scraper |
 
 ### **Key Endpoints**
 
@@ -2502,8 +2716,8 @@ For technical support or questions:
 
 ---
 
-**Last Updated**: November 15, 2025  
-**Version**: 2.0 (Interactive Navigation System)  
+**Last Updated**: November 22, 2025  
+**Version**: 3.0 (Reorganized Architecture + Interactive Navigation System)  
 **Status**: ✅ Production Ready
 
 ---
