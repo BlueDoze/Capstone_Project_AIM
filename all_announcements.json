@@ -3,11 +3,11 @@
   "successful": 5,
   "failed": 0,
   "course": "INFO-6156-(01)-25F",
-  "extracted_at": "2025-11-19T23:22:09.747707",
+  "extracted_at": "2025-11-22T11:14:25.409452",
   "home_page": {
     "url": "https://www.fanshaweonline.ca/d2l/home",
-    "content": "Fanshawe College\nAnnouncements\nWinner - FOL Ambassador Draw!\nPosted Nov 19, 2025 3:42 PM\n2025 Fall Exam Schedule\nPosted Nov 12, 2025 11:57 AM\nShow All Announcements\nMy Courses\nFanshaweOnline Email\nUser Links\nTasks\nAdd a task...\nAdd a task...\nFOL and Email Access",
-    "content_length": 262
+    "content": "Fanshawe College\nAnnouncements\nLoading...\nMy Courses\nFanshaweOnline Email\nUser Links\nTasks\nAdd a task...\nAdd a task...\nFOL and Email Access",
+    "content_length": 139
   },
   "announcements": [
     {

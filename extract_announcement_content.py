@@ -5,7 +5,9 @@ Script para extrair o conteúdo completo dos 5 primeiros anúncios do D2L.
 import asyncio
 import os
 import json
+import random
 from playwright.async_api import async_playwright
+from playwright_stealth import Stealth
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -49,37 +51,65 @@ async def extract_top_5_announcements():
     ]
 
     async with async_playwright() as p:
-        browser = await p.firefox.launch(headless=False)
-        context = await browser.new_context(viewport={'width': 1920, 'height': 1080})
+        browser = await p.firefox.launch(
+            headless=False,
+            args=['--disable-blink-features=AutomationControlled']
+        )
+        context = await browser.new_context(
+            viewport={'width': 1920, 'height': 1080},
+            user_agent='Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
+            locale='en-US',
+            timezone_id='America/Toronto',
+            extra_http_headers={
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'DNT': '1',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1',
+                'Sec-Fetch-Dest': 'document',
+                'Sec-Fetch-Mode': 'navigate',
+                'Sec-Fetch-Site': 'none',
+                'Sec-Fetch-User': '?1',
+                'Cache-Control': 'max-age=0'
+            }
+        )
+
+        # Bloquear recursos desnecessários
+        await context.route("**/*", lambda route: route.abort() if route.request.resource_type in ["image", "font", "media"] else route.continue_())
+
         page = await context.new_page()
+
+        # Aplicar stealth mode
+        stealth = Stealth()
+        await stealth.apply_stealth_async(page)
 
         try:
             # ETAPA 1: Login
             print("[Extractor] Acessando página de login...")
             login_url = "https://www.fanshaweonline.ca/d2l/login"
-            await page.goto(login_url, wait_until="networkidle", timeout=30000)
+            await page.goto(login_url, wait_until="domcontentloaded", timeout=60000)
+            await asyncio.sleep(random.uniform(2.0, 3.5))
 
             print("[Extractor] Preenchendo email...")
             await page.wait_for_selector("input#i0116", timeout=10000)
             await page.fill("input#i0116", username)
+            await asyncio.sleep(random.uniform(0.8, 1.5))
             await page.click("input#idSIButton9")
 
             print("[Extractor] Aguardando tela de senha...")
-            await page.wait_for_load_state("networkidle", timeout=15000)
-            await asyncio.sleep(2)
+            await page.wait_for_load_state("domcontentloaded", timeout=20000)
+            await asyncio.sleep(random.uniform(1.5, 2.5))
 
             print("[Extractor] Preenchendo senha...")
             await page.wait_for_selector("input#i0118", timeout=10000)
             await page.fill("input#i0118", password)
+            await asyncio.sleep(random.uniform(0.8, 1.5))
             await page.click("input#idSIButton9")
 
             print("[Extractor] Aguardando conclusão do login...")
-            try:
-                await page.wait_for_load_state("networkidle", timeout=15000)
-            except:
-                print("[Extractor] Timeout na espera, continuando...")
-                await page.wait_for_load_state("domcontentloaded", timeout=5000)
-            await asyncio.sleep(3)
+            await page.wait_for_load_state("domcontentloaded", timeout=60000)
+            await asyncio.sleep(random.uniform(2.5, 4.0))
 
             print("[Extractor] Login completado!\n")
 
@@ -94,8 +124,8 @@ async def extract_top_5_announcements():
                 try:
                     # Acessar a página do anúncio
                     print(f"[Extractor] Acessando anúncio {idx}...")
-                    await page.goto(announcement['url'], wait_until="networkidle", timeout=30000)
-                    await asyncio.sleep(2)
+                    await page.goto(announcement['url'], wait_until="domcontentloaded", timeout=60000)
+                    await asyncio.sleep(random.uniform(1.5, 3.0))
 
                     # Extrair conteúdo completo
                     print(f"[Extractor] Extraindo conteúdo...")

@@ -6,9 +6,11 @@ Extrai eventos da plataforma D2L usando Playwright para navegação autenticada.
 import asyncio
 import os
 import re
+import random
 from datetime import datetime
 from typing import List, Dict, Any, Optional
 from playwright.async_api import async_playwright, Page, Browser, TimeoutError as PlaywrightTimeout
+from playwright_stealth import Stealth
 
 
 class D2LEventScraper:
@@ -55,11 +57,38 @@ class D2LEventScraper:
         print(f"[D2L Scraper] Iniciando scraping para curso {course_id}...")
 
         async with async_playwright() as p:
-            browser = await p.firefox.launch(headless=self.headless)
-            context = await browser.new_context(
-                viewport={'width': 1920, 'height': 1080}
+            browser = await p.firefox.launch(
+                headless=self.headless,
+                args=['--disable-blink-features=AutomationControlled']
             )
+            context = await browser.new_context(
+                viewport={'width': 1920, 'height': 1080},
+                user_agent='Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
+                locale='en-US',
+                timezone_id='America/Toronto',
+                extra_http_headers={
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                    'Accept-Language': 'en-US,en;q=0.9',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'DNT': '1',
+                    'Connection': 'keep-alive',
+                    'Upgrade-Insecure-Requests': '1',
+                    'Sec-Fetch-Dest': 'document',
+                    'Sec-Fetch-Mode': 'navigate',
+                    'Sec-Fetch-Site': 'none',
+                    'Sec-Fetch-User': '?1',
+                    'Cache-Control': 'max-age=0'
+                }
+            )
+
+            # Bloquear recursos desnecessários para acelerar carregamento
+            await context.route("**/*", lambda route: route.abort() if route.request.resource_type in ["image", "font", "media"] else route.continue_())
+
             page = await context.new_page()
+
+            # Aplicar stealth mode para evitar detecção de bot
+            stealth = Stealth()
+            await stealth.apply_stealth_async(page)
 
             try:
                 # Etapa 1: Login
@@ -70,7 +99,8 @@ class D2LEventScraper:
                 # Etapa 2: Navegar para a página do curso
                 print(f"[D2L Scraper] Navegando para curso {course_id}...")
                 course_url = f"{self.base_url}/d2l/le/content/{course_id}/Home"
-                await page.goto(course_url, wait_until="networkidle", timeout=30000)
+                await page.goto(course_url, wait_until="domcontentloaded", timeout=60000)
+                await asyncio.sleep(random.uniform(1.5, 3.0))
                 print("[D2L Scraper] Página do curso carregada!")
 
                 # Etapa 3: Extrair eventos
@@ -109,13 +139,13 @@ class D2LEventScraper:
             # Navegar para página de login
             login_url = f"{self.base_url}/d2l/login"
             print(f"[D2L Scraper] Navegando para: {login_url}")
-            await page.goto(login_url, wait_until="networkidle", timeout=30000)
+            await page.goto(login_url, wait_until="domcontentloaded", timeout=60000)
 
             current_url = page.url
             print(f"[D2L Scraper] URL atual após redirect: {current_url}")
 
-            # Aguardar um pouco para página carregar completamente
-            await asyncio.sleep(2)
+            # Aguardar um pouco para página carregar completamente (tempo aleatório para simular humano)
+            await asyncio.sleep(random.uniform(2.0, 3.5))
 
             # ETAPA 1: Preencher email (Microsoft SSO)
             # O Fanshawe redireciona para login.microsoftonline.com
@@ -127,14 +157,15 @@ class D2LEventScraper:
 
             await page.fill("input#i0116", self.username)
             print(f"[D2L Scraper] Email preenchido: {self.username[:3]}***")
+            await asyncio.sleep(random.uniform(0.8, 1.5))
 
             # Clicar no botão "Next" (id="idSIButton9")
             await page.click("input#idSIButton9")
             print("[D2L Scraper] Botão 'Next' clicado")
 
             # Aguardar navegação para tela de senha
-            await page.wait_for_load_state("networkidle", timeout=15000)
-            await asyncio.sleep(2)
+            await page.wait_for_load_state("domcontentloaded", timeout=20000)
+            await asyncio.sleep(random.uniform(1.5, 2.5))
 
             # ETAPA 2: Preencher senha (Microsoft SSO)
             print("[D2L Scraper] Aguardando campo de senha...")
@@ -145,14 +176,15 @@ class D2LEventScraper:
 
             await page.fill("input#i0118", self.password)
             print("[D2L Scraper] Senha preenchida")
+            await asyncio.sleep(random.uniform(0.8, 1.5))
 
             # Clicar no botão "Sign in" (id="idSIButton9")
             await page.click("input#idSIButton9")
             print("[D2L Scraper] Botão 'Sign in' clicado")
 
             # Aguardar login completar
-            await page.wait_for_load_state("networkidle", timeout=30000)
-            await asyncio.sleep(2)
+            await page.wait_for_load_state("domcontentloaded", timeout=60000)
+            await asyncio.sleep(random.uniform(2.0, 3.5))
 
             # ETAPA 3: Verificar se há tela "Stay signed in?"
             print("[D2L Scraper] Verificando tela 'Stay signed in?'...")
@@ -163,14 +195,15 @@ class D2LEventScraper:
                     button_text = await page.text_content("div#lightbox")
                     if "stay signed in" in button_text.lower():
                         print("[D2L Scraper] Tela 'Stay signed in?' detectada - clicando 'Yes'")
+                        await asyncio.sleep(random.uniform(0.5, 1.0))
                         await stay_signed_in_button.click()
-                        await page.wait_for_load_state("networkidle", timeout=15000)
+                        await page.wait_for_load_state("domcontentloaded", timeout=20000)
             except:
                 # Se não houver tela "stay signed in", continuar normalmente
                 pass
 
-            # Aguardar redirecionamento de volta para D2L
-            await asyncio.sleep(3)
+            # Aguardar redirecionamento de volta para D2L (tempo aleatório)
+            await asyncio.sleep(random.uniform(2.5, 4.0))
             current_url = page.url
             print(f"[D2L Scraper] Login completado. URL atual: {current_url}")
 
@@ -215,10 +248,10 @@ class D2LEventScraper:
 
         try:
             # Aguardar conteúdo principal carregar
-            await page.wait_for_selector("[role='main'], .d2l-page-main, #ContentView", timeout=15000)
+            await page.wait_for_selector("[role='main'], .d2l-page-main, #ContentView", timeout=20000)
 
-            # Aguardar um pouco para JavaScript dinâmico carregar
-            await asyncio.sleep(2)
+            # Aguardar um pouco para JavaScript dinâmico carregar (tempo aleatório)
+            await asyncio.sleep(random.uniform(2.0, 3.5))
 
             # Obter HTML completo para análise
             html_content = await page.content()
@@ -419,17 +452,45 @@ class D2LEventScraper:
         print(f"[D2L Scraper] Iniciando scraping com screenshot...")
 
         async with async_playwright() as p:
-            browser = await p.firefox.launch(headless=self.headless)
-            context = await browser.new_context(
-                viewport={'width': 1920, 'height': 1080}
+            browser = await p.firefox.launch(
+                headless=self.headless,
+                args=['--disable-blink-features=AutomationControlled']
             )
+            context = await browser.new_context(
+                viewport={'width': 1920, 'height': 1080},
+                user_agent='Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
+                locale='en-US',
+                timezone_id='America/Toronto',
+                extra_http_headers={
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                    'Accept-Language': 'en-US,en;q=0.9',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'DNT': '1',
+                    'Connection': 'keep-alive',
+                    'Upgrade-Insecure-Requests': '1',
+                    'Sec-Fetch-Dest': 'document',
+                    'Sec-Fetch-Mode': 'navigate',
+                    'Sec-Fetch-Site': 'none',
+                    'Sec-Fetch-User': '?1',
+                    'Cache-Control': 'max-age=0'
+                }
+            )
+
+            # Bloquear recursos desnecessários
+            await context.route("**/*", lambda route: route.abort() if route.request.resource_type in ["image", "font", "media"] else route.continue_())
+
             page = await context.new_page()
+
+            # Aplicar stealth mode
+            stealth_obj = Stealth()
+            await stealth_obj.apply_stealth_async(page)
 
             try:
                 await self._login(page)
 
                 course_url = f"{self.base_url}/d2l/le/content/{course_id}/Home"
-                await page.goto(course_url, wait_until="networkidle", timeout=30000)
+                await page.goto(course_url, wait_until="domcontentloaded", timeout=60000)
+                await asyncio.sleep(random.uniform(1.5, 3.0))
 
                 # Capturar screenshot
                 await page.screenshot(path=screenshot_path, full_page=True)

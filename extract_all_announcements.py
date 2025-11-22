@@ -5,21 +5,23 @@ Script para extrair a página home e os 5 primeiros anúncios do D2L com um úni
 import asyncio
 import os
 import json
+import random
 from playwright.async_api import async_playwright
+from playwright_stealth import Stealth
 from dotenv import load_dotenv
 
 load_dotenv()
 
 async def wait_for_2fa_approval(page, timeout=300000):
-    """Aguarda aprovação do 2FA detectando redirecionamento e mostrando código."""
+    """Aguarda aprovação do 2FA detectando redirecionamento, mostrando código e preenchendo automaticamente."""
     print("\n" + "╔" + "="*78 + "╗")
     print("║" + " 🔐 AUTENTICAÇÃO DE DOIS FATORES NECESSÁRIA ".center(78) + "║")
     print("╚" + "="*78 + "╝")
     print()
 
-    # Tentar extrair o código de verificação da página
+    # Tentar extrair e preencher o código de verificação automaticamente
     try:
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.uniform(1.0, 2.0))
 
         # Procurar por código numérico na página
         verification_code = await page.evaluate("""
@@ -67,13 +69,67 @@ async def wait_for_2fa_approval(page, timeout=300000):
 
         if verification_code:
             print("╔" + "="*78 + "╗")
-            print("║" + f"  🔢 CÓDIGO DE VERIFICAÇÃO: {verification_code}  ".center(78) + "║")
+            print("║" + f"  🔢 CÓDIGO DE VERIFICAÇÃO DETECTADO: {verification_code}  ".center(78) + "║")
             print("╚" + "="*78 + "╝")
             print()
-            print(f"📱 No app Microsoft Authenticator:")
-            print(f"   1. Abra a notificação de aprovação")
-            print(f"   2. Digite o código: {verification_code}")
-            print(f"   3. Ou simplesmente toque em 'Aprovar' se o código {verification_code} aparecer")
+
+            # Tentar preencher o código automaticamente
+            try:
+                # Procurar campo de input para o código
+                code_input_selectors = [
+                    'input[name="otc"]',
+                    'input[type="tel"]',
+                    'input[aria-label*="code"]',
+                    'input[placeholder*="code"]',
+                    '#idTxtBx_SAOTCC_OTC'
+                ]
+
+                code_filled = False
+                for selector in code_input_selectors:
+                    try:
+                        await page.wait_for_selector(selector, timeout=2000)
+                        print(f"✅ Campo de código encontrado: {selector}")
+                        await asyncio.sleep(random.uniform(0.5, 1.0))
+                        await page.fill(selector, verification_code)
+                        print(f"✅ Código {verification_code} preenchido automaticamente!")
+                        await asyncio.sleep(random.uniform(0.5, 1.0))
+
+                        # Procurar e clicar no botão de verificação
+                        verify_button_selectors = [
+                            'input[type="submit"]',
+                            'button[type="submit"]',
+                            '#idSubmit_SAOTCC_Continue'
+                        ]
+
+                        for btn_selector in verify_button_selectors:
+                            try:
+                                verify_button = await page.query_selector(btn_selector)
+                                if verify_button:
+                                    print(f"✅ Botão de verificação encontrado, clicando...")
+                                    await asyncio.sleep(random.uniform(0.5, 1.0))
+                                    await verify_button.click()
+                                    print(f"✅ Código enviado automaticamente!")
+                                    code_filled = True
+                                    break
+                            except:
+                                continue
+
+                        if code_filled:
+                            break
+
+                    except:
+                        continue
+
+                if not code_filled:
+                    print("⚠️  Não foi possível preencher o código automaticamente.")
+                    print(f"📱 Por favor, digite manualmente: {verification_code}")
+
+            except Exception as e:
+                print(f"⚠️  Erro ao preencher código automaticamente: {str(e)[:100]}")
+                print(f"📱 Por favor, use o app Microsoft Authenticator:")
+                print(f"   - Digite o código: {verification_code}")
+                print(f"   - Ou toque em 'Aprovar'")
+
             print()
         else:
             print("📱 AÇÃO NECESSÁRIA:")
@@ -154,9 +210,38 @@ async def extract_all_announcements():
 
     async with async_playwright() as p:
         # Browser INVISÍVEL - tudo via terminal
-        browser = await p.firefox.launch(headless=True)
-        context = await browser.new_context(viewport={'width': 1920, 'height': 1080})
+        browser = await p.firefox.launch(
+            headless=True,
+            args=['--disable-blink-features=AutomationControlled']
+        )
+        context = await browser.new_context(
+            viewport={'width': 1920, 'height': 1080},
+            user_agent='Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
+            locale='en-US',
+            timezone_id='America/Toronto',
+            extra_http_headers={
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'DNT': '1',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1',
+                'Sec-Fetch-Dest': 'document',
+                'Sec-Fetch-Mode': 'navigate',
+                'Sec-Fetch-Site': 'none',
+                'Sec-Fetch-User': '?1',
+                'Cache-Control': 'max-age=0'
+            }
+        )
+
+        # Bloquear recursos desnecessários
+        await context.route("**/*", lambda route: route.abort() if route.request.resource_type in ["image", "font", "media"] else route.continue_())
+
         page = await context.new_page()
+
+        # Aplicar stealth mode
+        stealth = Stealth()
+        await stealth.apply_stealth_async(page)
 
         all_announcements = []
 
@@ -168,21 +253,24 @@ async def extract_all_announcements():
             # ETAPA 1: Login
             print("\n[1/5] Iniciando login...")
             login_url = "https://www.fanshaweonline.ca/d2l/login"
-            await page.goto(login_url, wait_until="networkidle", timeout=30000)
+            await page.goto(login_url, wait_until="domcontentloaded", timeout=60000)
+            await asyncio.sleep(random.uniform(2.0, 3.5))
 
             # Preencher email
             print("  → Preenchendo email...")
             await page.wait_for_selector("input#i0116", timeout=10000)
             await page.fill("input#i0116", username)
+            await asyncio.sleep(random.uniform(0.8, 1.5))
             await page.click("input#idSIButton9")
 
-            await page.wait_for_load_state("networkidle", timeout=15000)
-            await asyncio.sleep(2)
+            await page.wait_for_load_state("domcontentloaded", timeout=20000)
+            await asyncio.sleep(random.uniform(1.5, 2.5))
 
             # Preencher senha
             print("  → Preenchendo senha...")
             await page.wait_for_selector("input#i0118", timeout=10000)
             await page.fill("input#i0118", password)
+            await asyncio.sleep(random.uniform(0.8, 1.5))
             await page.click("input#idSIButton9")
 
             # Aguardar e detectar 2FA
@@ -204,9 +292,10 @@ async def extract_all_announcements():
                         button_value = await stay_button.get_attribute("value")
                         if button_value and ("Yes" in button_value or "No" in button_value):
                             print("   → Detectada tela 'Stay signed in?' - clicando 'Yes'...")
+                            await asyncio.sleep(random.uniform(0.5, 1.0))
                             await stay_button.click()
-                            await page.wait_for_load_state("networkidle", timeout=10000)
-                            await asyncio.sleep(2)
+                            await page.wait_for_load_state("domcontentloaded", timeout=15000)
+                            await asyncio.sleep(random.uniform(1.5, 2.5))
                 except:
                     pass
 
@@ -224,8 +313,8 @@ async def extract_all_announcements():
             # ETAPA 2: Acessar e extrair página home
             print("[2/5] Acessando página home...")
             home_url = "https://www.fanshaweonline.ca/d2l/home"
-            await page.goto(home_url, wait_until="networkidle", timeout=30000)
-            await asyncio.sleep(2)
+            await page.goto(home_url, wait_until="domcontentloaded", timeout=60000)
+            await asyncio.sleep(random.uniform(2.0, 3.5))
             print("✓ Página home carregada!\n")
 
             # Extrair conteúdo da home
@@ -254,8 +343,8 @@ async def extract_all_announcements():
             # ETAPA 3: Acessar página de notícias
             print("[3/5] Acessando página de notícias...")
             news_url = "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001542"
-            await page.goto(news_url, wait_until="networkidle", timeout=30000)
-            await asyncio.sleep(2)
+            await page.goto(news_url, wait_until="domcontentloaded", timeout=60000)
+            await asyncio.sleep(random.uniform(2.0, 3.5))
             print("✓ Página de notícias carregada!\n")
 
             # ETAPA 4: Extrair lista de anúncios
@@ -315,8 +404,8 @@ async def extract_all_announcements():
 
                     # Acessar página do anúncio
                     print(f"   → Acessando página...", end="", flush=True)
-                    await page.goto(announcement['url'], wait_until="networkidle", timeout=30000)
-                    await asyncio.sleep(1)
+                    await page.goto(announcement['url'], wait_until="domcontentloaded", timeout=60000)
+                    await asyncio.sleep(random.uniform(1.0, 2.0))
                     print(" OK")
 
                     # Extrair conteúdo
@@ -362,7 +451,7 @@ async def extract_all_announcements():
 
                     # Voltar para lista
                     await page.go_back()
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(random.uniform(0.8, 1.5))
 
                 except Exception as e:
                     print(f" FALHOU")
@@ -379,8 +468,8 @@ async def extract_all_announcements():
 
                     # Tentar voltar para lista
                     try:
-                        await page.goto(news_url, wait_until="networkidle", timeout=15000)
-                        await asyncio.sleep(1)
+                        await page.goto(news_url, wait_until="domcontentloaded", timeout=20000)
+                        await asyncio.sleep(random.uniform(1.0, 2.0))
                     except:
                         pass
 
