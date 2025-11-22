@@ -1,0 +1,49 @@
+{
+  "course_id": "2001539",
+  "processed_at": "2025-11-22T12:51:00.584405",
+  "total_links": 8,
+  "successful": 8,
+  "failed": 0,
+  "results": [
+    {
+      "link_text": "INFO-6153-(01)-25F",
+      "filename": "INFO-6153-01-25F.json",
+      "status": "success"
+    },
+    {
+      "link_text": "Profile",
+      "filename": "Profile.json",
+      "status": "success"
+    },
+    {
+      "link_text": "Notifications",
+      "filename": "Notifications.json",
+      "status": "success"
+    },
+    {
+      "link_text": "Account Settings",
+      "filename": "Account_Settings.json",
+      "status": "success"
+    },
+    {
+      "link_text": "Progress",
+      "filename": "Progress.json",
+      "status": "success"
+    },
+    {
+      "link_text": "Content",
+      "filename": "Content.json",
+      "status": "success"
+    },
+    {
+      "link_text": "Announcements",
+      "filename": "Announcements.json",
+      "status": "success"
+    },
+    {
+      "link_text": "Calendar",
+      "filename": "Calendar.json",
+      "status": "success"
+    }
+  ]
+}

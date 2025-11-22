@@ -1,0 +1,47 @@
+{
+  "url": "https://www.fanshaweonline.ca/d2l/home/2001539",
+  "course_id": "2001539",
+  "extracted_at": "2025-11-22T12:49:35.322448",
+  "page_title": "Homepage - INFO6153 Natural Language Processing 2",
+  "content": "Announcements\nLoading...\nSulaiman Aburakhia\nCalendar\nUpdates",
+  "content_length": 60,
+  "html_structure": {
+    "modules_count": 0,
+    "modules": [],
+    "links_count": 8,
+    "links": [
+      {
+        "text": "INFO-6153-(01)-25F",
+        "url": "https://www.fanshaweonline.ca/d2l/home/2001539"
+      },
+      {
+        "text": "Profile",
+        "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001539"
+      },
+      {
+        "text": "Notifications",
+        "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001539"
+      },
+      {
+        "text": "Account Settings",
+        "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001539"
+      },
+      {
+        "text": "Progress",
+        "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001539/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+      },
+      {
+        "text": "Content",
+        "url": "https://www.fanshaweonline.ca/d2l/le/content/2001539/Home"
+      },
+      {
+        "text": "Announcements",
+        "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001539"
+      },
+      {
+        "text": "Calendar",
+        "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001539"
+      }
+    ]
+  }
+}

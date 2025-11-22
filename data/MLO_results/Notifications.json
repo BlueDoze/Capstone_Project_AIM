@@ -1,0 +1,41 @@
+{
+  "link_text": "Notifications",
+  "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001540",
+  "extracted_at": "2025-11-22T11:49:04.350166",
+  "page_title": "Notifications - INFO6154 Machine Learning Optimization Strategies",
+  "content": "Notifications\nControl how you receive notifications about activity in your courses. You can receive a periodic summary of activity, or receive instant notifications as things happen.\nContact Methods\nEmail Address\nSend email notifications to: l_saraivatolentino@fanshaweonline.ca\nChange your email settings\nSummary of Activity\nEmail me a summary of activity for each of my courses.\nHow often?\nInstant Notifications\nEmail\nActivity Feed - new comments from others on a post\nEnable Email for new comments from others on a post\nActivity Feed - new posts created by others\nEnable Email for new posts created by others\nAnnouncements - announcement updated\nEnable Email for announcement updated\nAnnouncements - new announcement available\nEnable Email for new announcement available\nContent - content item created\nEnable Email for content item created\nContent - content item updated\nEnable Email for content item updated\nContent - content overview updated\nEnable Email for content overview updated\nContent Service - feedback for content service uploads\nEnable Email for feedback for content service uploads\nDiscussions - mentioned in a discussion post or thread\nEnable Email for mentioned in a discussion post or thread\nDiscussions - new post in a forum, topic, or thread that I subscribed to in instant notifications\nEnable Email for new post in a forum, topic, or thread that I subscribed to in instant notifications\nePortfolio - feedback added to subscribed items\nEnable Email for feedback added to subscribed items\nePortfolio - another user has subscribed to your updates\nEnable Email for another user has subscribed to your updates\nePortfolio - feedback added to my items\nEnable Email for feedback added to my items\nGrades - grade item released\nEnable Email for grade item released\nGrades - grade item updated\nEnable Email for grade item updated\nQuizzes - quiz due date or end date is 2 days away\nEnable Email for quiz due date or end date is 2 days away\nSubmissions - submission feedback released\nEnable Email for submission feedback released\nSubmissions - publish all feedback completion\nEnable Email for publish all feedback completion\nSubmissions - submission due date or end date is 2 days away\nEnable Email for submission due date or end date is 2 days away\nSubmissions - submission feedback updated\nEnable Email for submission feedback updated\nCustomize Notifications\nAllow future courses to send me notifications\nExclude Some Courses\nYou currently have no courses excluded.\nManage my course exclusions\nSaveCancel",
+  "content_length": 2516,
+  "html_structure": {
+    "links_count": 7,
+    "links": [
+      {
+        "text": "INFO-6154-(01)-25F",
+        "url": "https://www.fanshaweonline.ca/d2l/home/2001540"
+      },
+      {
+        "text": "Profile",
+        "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001540"
+      },
+      {
+        "text": "Notifications",
+        "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001540"
+      },
+      {
+        "text": "Account Settings",
+        "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001540"
+      },
+      {
+        "text": "Progress",
+        "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001540/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+      },
+      {
+        "text": "Log Out",
+        "url": "javascript:void(0);"
+      },
+      {
+        "text": "Content",
+        "url": "https://www.fanshaweonline.ca/d2l/le/content/2001540/Home"
+      }
+    ]
+  }
+}

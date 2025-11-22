@@ -1,0 +1,47 @@
+{
+  "url": "https://www.fanshaweonline.ca/d2l/home/2001540",
+  "course_id": "2001540",
+  "extracted_at": "2025-11-22T12:46:28.550834",
+  "page_title": "Homepage - INFO6154 Machine Learning Optimization Strategies",
+  "content": "INFO6154 Machine Learning Optimization Strategies\nAnnouncements\nLoading...\nProfessor Information\nCalendar\nLoading...\nUpdates",
+  "content_length": 124,
+  "html_structure": {
+    "modules_count": 0,
+    "modules": [],
+    "links_count": 8,
+    "links": [
+      {
+        "text": "INFO-6154-(01)-25F",
+        "url": "https://www.fanshaweonline.ca/d2l/home/2001540"
+      },
+      {
+        "text": "Profile",
+        "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001540"
+      },
+      {
+        "text": "Notifications",
+        "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001540"
+      },
+      {
+        "text": "Account Settings",
+        "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001540"
+      },
+      {
+        "text": "Progress",
+        "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001540/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+      },
+      {
+        "text": "Content",
+        "url": "https://www.fanshaweonline.ca/d2l/le/content/2001540/Home"
+      },
+      {
+        "text": "Announcements",
+        "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001540"
+      },
+      {
+        "text": "Calendar",
+        "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001540"
+      }
+    ]
+  }
+}

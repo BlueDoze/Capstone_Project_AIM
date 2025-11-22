@@ -1,0 +1,49 @@
+{
+  "link_text": "Account Settings",
+  "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001539",
+  "extracted_at": "2025-11-22T12:50:34.051144",
+  "page_title": "Account Settings - INFO6153 Natural Language Processing 2 - Fanshawe College",
+  "content": "Account Settings\nAccount Settings\nDiscussions\nEmail\nPronouns\nWhen enabled, your pronouns can appear to others in areas such as your profile card or Classlist.\nPronoun Settings\nPronoun Settings:\nAllow others to see my pronouns\nSelect which pronouns to use\nUse what my organization has on record: None\nUse different pronouns:\nCommon pronouns include She/Her, He/Him, They/Them\nFont Settings\nFont Size\nThe quick brown fox jumps over the lazy dog.\nReading Content\nSome tools automatically mark content as read as you scroll it into view. If you use an assistive technology such as a screen reader then you may wish to disable this feature by checking the box below.\nDo not automatically mark items as read as the page scrolls\nVideo Settings\nThis setting ensures assistive technologies can detect videos. As a consequence, videos will overlap menus. It does not influence the accessibility of specific players.\nOptimize video presentation for programmatically driven assistive technologies\nTime Zone\nYou can set your preferred time zone, which will show all of your times with dates in that time zone.\nContinent\nSelect a continent to populate the list of time zones.\nTime Zone\nOffset in hours from UTC, time zone name.\nSigning In\nOnline Status\nAppear online (when I'm logged in)\nAlways appear offline\nWhich option should I choose?\nApplication Settings\nApplications registered to your account can access the system on your behalf.\nOAuth 2.0\nYou can revoke authentication of each application registered using OAuth 2.0 individually.\nManage applications registered with OAuth 2.0\nID Key Authorization\nYou can revoke the authentication of all applications registered through the ID Key Authorization system by clicking the Revoke Access button below. This will force all applications registered through ID Key Authorization to renew their authentication.\nRevoke Access\nSave and Close\nSave\nCancel",
+  "content_length": 1886,
+  "html_structure": {
+    "links_count": 9,
+    "links": [
+      {
+        "text": "INFO-6153-(01)-25F",
+        "url": "https://www.fanshaweonline.ca/d2l/home/2001539"
+      },
+      {
+        "text": "Profile",
+        "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001539"
+      },
+      {
+        "text": "Notifications",
+        "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001539"
+      },
+      {
+        "text": "Account Settings",
+        "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001539"
+      },
+      {
+        "text": "Progress",
+        "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001539/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+      },
+      {
+        "text": "Log Out",
+        "url": "javascript:void(0);"
+      },
+      {
+        "text": "Content",
+        "url": "https://www.fanshaweonline.ca/d2l/le/content/2001539/Home"
+      },
+      {
+        "text": "Account Settings",
+        "url": "javascript://"
+      },
+      {
+        "text": "Manage applications registered with OAuth 2.0",
+        "url": "https://www.fanshaweonline.ca/d2l/lp/auth/oauth2/apps?ou=2001539"
+      }
+    ]
+  }
+}

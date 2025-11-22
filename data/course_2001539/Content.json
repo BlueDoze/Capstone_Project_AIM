@@ -1,0 +1,41 @@
+{
+  "link_text": "Content",
+  "url": "https://www.fanshaweonline.ca/d2l/le/content/2001539/Home",
+  "extracted_at": "2025-11-22T12:50:49.348594",
+  "page_title": "Course Dates - INFO6153 Natural Language Processing 2",
+  "content": "Course Dates\nUpcomingFull Schedule\nToday\nTomorrow\nNext 7 days",
+  "content_length": 61,
+  "html_structure": {
+    "links_count": 7,
+    "links": [
+      {
+        "text": "INFO-6153-(01)-25F",
+        "url": "https://www.fanshaweonline.ca/d2l/home/2001539"
+      },
+      {
+        "text": "Profile",
+        "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001539"
+      },
+      {
+        "text": "Notifications",
+        "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001539"
+      },
+      {
+        "text": "Account Settings",
+        "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001539"
+      },
+      {
+        "text": "Progress",
+        "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001539/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+      },
+      {
+        "text": "Log Out",
+        "url": "javascript:void(0);"
+      },
+      {
+        "text": "Content",
+        "url": "https://www.fanshaweonline.ca/d2l/le/content/2001539/Home"
+      }
+    ]
+  }
+}
