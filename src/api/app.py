@@ -44,8 +44,15 @@ except ImportError as e:
 
 load_dotenv()
 
-# The 'templates' folder is the default for Flask, so we just need to tell it where the static files are.
-app = Flask(__name__, static_folder='static')
+# Configure Flask to find templates and static files from project root
+# Since app is now in src/api/, we need to specify absolute paths
+project_root = Path(__file__).parent.parent.parent
+template_dir = project_root / 'templates'
+static_dir = project_root / 'static'
+
+app = Flask(__name__, 
+            template_folder=str(template_dir),
+            static_folder=str(static_dir))
 
 # Load Building M room configuration
 try:
