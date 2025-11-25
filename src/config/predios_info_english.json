@@ -1,0 +1,182 @@
+{
+  "A": {
+    "nome": "Building A",
+    "ref": "A",
+    "andares": [1, 2, 3],
+    "descricao": "Main administration and classroom building",
+    "facilidades": [
+      "Classrooms",
+      "Administrative Offices",
+      "Restrooms",
+      "Elevators"
+    ],
+    "salas_principais": [
+      {"numero": "A101", "tipo": "Classroom", "andar": 1},
+      {"numero": "A102", "tipo": "Classroom", "andar": 1},
+      {"numero": "A201", "tipo": "Laboratory", "andar": 2},
+      {"numero": "A301", "tipo": "Office", "andar": 3}
+    ],
+    "horario_funcionamento": "Monday to Friday: 7am - 10pm"
+  },
+  "B": {
+    "nome": "Building B",
+    "ref": "B",
+    "andares": [1, 2],
+    "descricao": "Technology and laboratory building",
+    "facilidades": [
+      "Computer Labs",
+      "Classrooms",
+      "Restrooms"
+    ],
+    "salas_principais": [
+      {"numero": "B101", "tipo": "Computer Lab", "andar": 1},
+      {"numero": "B102", "tipo": "Computer Lab", "andar": 1},
+      {"numero": "B201", "tipo": "Classroom", "andar": 2}
+    ],
+    "horario_funcionamento": "Monday to Friday: 8am - 8pm"
+  },
+  "C": {
+    "nome": "Building C",
+    "ref": "C",
+    "andares": [1, 2],
+    "descricao": "Academic building with classrooms",
+    "facilidades": [
+      "Classrooms",
+      "Restrooms",
+      "Study Room"
+    ],
+    "salas_principais": [],
+    "horario_funcionamento": "Monday to Friday: 7am - 10pm"
+  },
+  "D": {
+    "nome": "Building D",
+    "ref": "D",
+    "andares": [1],
+    "descricao": "Arts and design building",
+    "facilidades": [
+      "Art Studios",
+      "Design Rooms",
+      "Gallery"
+    ],
+    "salas_principais": [],
+    "horario_funcionamento": "Monday to Friday: 8am - 8pm"
+  },
+  "E": {
+    "nome": "Building E",
+    "ref": "E",
+    "andares": [1, 2],
+    "descricao": "Engineering building",
+    "facilidades": [
+      "Engineering Labs",
+      "Workshops",
+      "Project Rooms"
+    ],
+    "salas_principais": [],
+    "horario_funcionamento": "Monday to Friday: 7am - 10pm"
+  },
+  "F": {
+    "nome": "F Building",
+    "ref": "F",
+    "andares": [1, 2],
+    "descricao": "Health sciences building",
+    "facilidades": [
+      "Health Labs",
+      "Training Clinic",
+      "Simulation Rooms"
+    ],
+    "salas_principais": [],
+    "horario_funcionamento": "Monday to Friday: 7am - 9pm"
+  },
+  "G": {
+    "nome": "Building G",
+    "ref": "G",
+    "andares": [1, 2],
+    "descricao": "Business building",
+    "facilidades": [
+      "Classrooms",
+      "Auditorium",
+      "Conference Room"
+    ],
+    "salas_principais": [],
+    "horario_funcionamento": "Monday to Friday: 7am - 10pm"
+  },
+  "H": {
+    "nome": "Building H",
+    "ref": "H",
+    "andares": [1, 2, 3],
+    "descricao": "Hospitality and tourism building",
+    "facilidades": [
+      "Culinary Labs",
+      "Teaching Restaurant",
+      "Reception Classrooms"
+    ],
+    "salas_principais": [],
+    "horario_funcionamento": "Monday to Friday: 8am - 9pm"
+  },
+  "J": {
+    "nome": "Building J",
+    "ref": "J",
+    "andares": [1, 2],
+    "descricao": "Sciences building",
+    "facilidades": [
+      "Science Labs",
+      "Classrooms",
+      "Study Areas"
+    ],
+    "salas_principais": [],
+    "horario_funcionamento": "Monday to Friday: 7am - 10pm"
+  },
+  "K": {
+    "nome": "Building K",
+    "ref": "K",
+    "andares": [1],
+    "descricao": "Student services building",
+    "facilidades": [
+      "Student Services",
+      "Counseling",
+      "Financial Aid"
+    ],
+    "salas_principais": [],
+    "horario_funcionamento": "Monday to Friday: 8:30am - 4:30pm"
+  },
+  "M": {
+    "nome": "Building M",
+    "ref": "M",
+    "andares": [1, 2],
+    "descricao": "Media and entertainment building",
+    "facilidades": [
+      "Recording Studios",
+      "Editing Labs",
+      "Production Rooms"
+    ],
+    "salas_principais": [],
+    "horario_funcionamento": "Monday to Friday: 8am - 8pm"
+  },
+  "SC": {
+    "nome": "Student Centre (SC)",
+    "ref": "SC",
+    "andares": [1, 2, 3],
+    "descricao": "Main student center with multiple services",
+    "facilidades": [
+      "Cafeteria",
+      "Student Lounge",
+      "Bookstore",
+      "Recreation Area"
+    ],
+    "salas_principais": [],
+    "horario_funcionamento": "Monday to Friday: 7am - 11pm"
+  },
+  "T": {
+    "nome": "Building T",
+    "ref": "T",
+    "andares": [1, 2],
+    "descricao": "Technology and trades building",
+    "facilidades": [
+      "Trade Workshops",
+      "Tech Labs",
+      "Equipment Storage"
+    ],
+    "salas_principais": [],
+    "horario_funcionamento": "Monday to Friday: 7am - 9pm"
+  }
+}

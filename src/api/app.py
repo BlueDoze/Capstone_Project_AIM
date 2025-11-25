@@ -44,15 +44,18 @@ except ImportError as e:
 
 load_dotenv()
 
-# Configure Flask to find templates and static files from project root
+# Configure Flask to serve React build from frontend/dist
 # Since app is now in src/api/, we need to specify absolute paths
 project_root = Path(__file__).parent.parent.parent
+react_build_dir = project_root / 'Fanshawe_Navigator-main' / 'frontend' / 'dist'
+
+# Keep old directories for backup/reference
 template_dir = project_root / 'templates'
 static_dir = project_root / 'static'
 
-app = Flask(__name__, 
-            template_folder=str(template_dir),
-            static_folder=str(static_dir))
+app = Flask(__name__,
+            static_folder=str(react_build_dir),
+            static_url_path='')
 
 # Load Building M room configuration
 try:
@@ -995,8 +998,8 @@ auto_updater.start_monitoring()
 
 @app.route("/")
 def index():
-    # Use render_template to serve the HTML file from the 'templates' directory
-    return render_template('index.html')
+    """Serve React app entry point"""
+    return send_from_directory(str(react_build_dir), 'index.html')
 
 @app.route('/LeafletJS/<path:path>')
 def send_leaflet(path):
@@ -1009,6 +1012,158 @@ def send_tools(path):
 @app.route('/map/<path:path>')
 def send_map(path):
     return send_from_directory('map', path)
+
+# ===== API Compatibility Routes for React Frontend =====
+
+@app.route("/api/chat", methods=['POST'])
+def api_chat():
+    """Endpoint compatível com o frontend React"""
+    if model is None:
+        return jsonify({"reply": "The AI model is not configured. Please set the GEMINI_API_KEY environment variable."}), 500
+
+    # Frontend React envia "mensagem", backend original espera "message"
+    user_message = request.json.get("mensagem") or request.json.get("message")
+    if not user_message:
+        return jsonify({"reply": "Please provide a message."}), 400
+
+    try:
+        # Step 1: Classify user intent
+        intent_result = classify_user_intent(user_message)
+        intent_type = intent_result['intent']
+
+        print(f"🎯 Intent classified: {intent_type} (confidence: {intent_result['confidence']:.2f})")
+
+        # Step 2: Route to appropriate handler based on intent
+        if intent_type == "NAVIGATION":
+            # Handle navigation queries
+            nav_result = parse_navigation_request(user_message)
+
+            # Get image context if available
+            image_context = image_manager.get_image_context_for_prompt(user_message)
+
+            # Combine map info + image context + user message
+            if image_context:
+                prompt = f'{map_info}{image_context}\n\nUser: {user_message}\nAI:'
+                print(f"🔍 Using visual information for navigation: {user_message[:50]}...")
+            else:
+                prompt = f'{map_info}\n\nUser: {user_message}\nAI:'
+                print(f"📝 Using only textual information for navigation: {user_message[:50]}...")
+
+            # Generate a response from the AI model
+            response = model.generate_content(prompt)
+
+            # Convert Markdown to HTML
+            html_response = markdown2.markdown(response.text)
+
+            # If navigation request detected, include map action
+            if nav_result.get('is_navigation'):
+                print(f"🗺️ Navigation route: {nav_result['start']} → {nav_result['end']}")
+                return jsonify({
+                    "reply": html_response,
+                    "mapAction": {
+                        "type": "SHOW_ROUTE",
+                        "building": "M",
+                        "floor": 1,
+                        "startRoom": nav_result['start'],
+                        "endRoom": nav_result['end'],
+                        "startNode": nav_result['startNode'],
+                        "endNode": nav_result['endNode']
+                    }
+                })
+            else:
+                return jsonify({"reply": html_response})
+
+        elif intent_type == "EVENTS":
+            # Handle event queries
+            result = handle_event_query(user_message, intent_result['entities'])
+            return jsonify(result)
+
+        elif intent_type == "RESTAURANTS":
+            # Handle restaurant queries
+            result = handle_restaurant_query(user_message, intent_result['entities'])
+            return jsonify(result)
+
+        elif intent_type == "ANNOUNCEMENTS":
+            # Handle announcement queries
+            result = handle_announcement_query(user_message, intent_result['entities'])
+            return jsonify(result)
+
+        else:  # OUT_OF_SCOPE
+            # Handle out-of-scope queries with fallback message
+            result = handle_out_of_scope_query(user_message)
+            return jsonify(result)
+
+    except Exception as e:
+        print(f"⚠️ Error generating content: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"reply": f"An error occurred: {e}"}), 500
+
+@app.route("/api/geojson", methods=['GET'])
+def api_geojson():
+    """Retorna dados GeoJSON dos prédios do campus"""
+    try:
+        # Procurar arquivo GeoJSON em vários locais possíveis
+        possible_paths = [
+            project_root / 'Fanshawe_Navigator-main' / 'backend' / 'dados' / 'campus.geojson',
+            project_root / 'LeafletJS' / 'campus.geojson',
+            project_root / 'data' / 'campus.geojson',
+        ]
+
+        for geojson_path in possible_paths:
+            if geojson_path.exists():
+                with open(geojson_path, 'r', encoding='utf-8') as f:
+                    return jsonify(json.load(f))
+
+        # Se nenhum arquivo foi encontrado, retornar estrutura vazia
+        return jsonify({
+            "type": "FeatureCollection",
+            "features": []
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/calcular-rota", methods=['POST'])
+def api_calcular_rota():
+    """Calcula rota entre dois prédios"""
+    try:
+        data = request.json
+        origem = data.get('origem')
+        destino = data.get('destino')
+
+        # Por enquanto, retornar estrutura básica
+        # TODO: Implementar lógica real de cálculo de rota
+        return jsonify({
+            "origem": origem,
+            "destino": destino,
+            "rota": {
+                "type": "LineString",
+                "coordinates": []
+            },
+            "distancia": 0,
+            "tempo_estimado": 0
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/predios/<predio_ref>/info", methods=['GET'])
+def api_predio_info(predio_ref):
+    """Retorna informações detalhadas de um prédio"""
+    try:
+        # Por enquanto, retornar estrutura básica
+        # TODO: Conectar com dados reais dos prédios
+        return jsonify({
+            "ref": predio_ref,
+            "nome": f"Prédio {predio_ref}",
+            "andares": [],
+            "instalacoes": [],
+            "horarios": {
+                "abertura": "08:00",
+                "fechamento": "22:00"
+            }
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/chat", methods=['POST'])
 def chat():
@@ -1600,6 +1755,19 @@ def update_room_centers():
             "status": "error",
             "message": str(e)
         }), 500
+
+# ===== React Router Support - Catch-all route =====
+@app.route('/<path:path>')
+def catch_all(path):
+    """Serve React app for client-side routing (must be last route)"""
+    file_path = os.path.join(react_build_dir, path)
+
+    # Se arquivo existe (CSS, JS, imagens, etc), servir diretamente
+    if os.path.exists(file_path) and os.path.isfile(file_path):
+        return send_from_directory(str(react_build_dir), path)
+
+    # Se não existe, servir index.html (React Router irá gerenciar)
+    return send_from_directory(str(react_build_dir), 'index.html')
 
 def main():
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8081)))
