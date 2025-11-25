@@ -1,4 +1,5 @@
 import os
+import sys
 import google.generativeai as genai
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from dotenv import load_dotenv
@@ -15,13 +16,14 @@ import markdown2
 import json
 import re
 
-# Import functions from the multimodal RAG system
-import sys
-from pathlib import Path
-
-# Add project root to Python path for imports
+# Add project root to Python path for imports BEFORE importing local modules
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
+
+# Now import local modules
+from src.api.utils.text_cleaner import clean_html_to_text
+
+# Import functions from the multimodal RAG system
 
 try:
     from multimodal_rag_complete import (
@@ -775,11 +777,11 @@ def handle_event_query(user_message: str, entities: Dict[str, Any]) -> Dict[str,
 
         # Generate response
         response = model.generate_content(prompt)
-        html_response = markdown2.markdown(response.text)
+        clean_response = clean_html_to_text(response.text, keep_emojis=False)
 
         print(f"📅 Event query handled: {user_message[:50]}...")
 
-        return {'reply': html_response}
+        return {'reply': clean_response}
 
     except Exception as e:
         print(f"⚠️ Error handling event query: {e}")
@@ -833,11 +835,11 @@ def handle_restaurant_query(user_message: str, entities: Dict[str, Any]) -> Dict
 
         # Generate response
         response = model.generate_content(prompt)
-        html_response = markdown2.markdown(response.text)
+        clean_response = clean_html_to_text(response.text, keep_emojis=False)
 
         print(f"🍽️ Restaurant query handled: {user_message[:50]}...")
 
-        return {'reply': html_response}
+        return {'reply': clean_response}
 
     except Exception as e:
         print(f"⚠️ Error handling restaurant query: {e}")
@@ -892,11 +894,11 @@ def handle_announcement_query(user_message: str, entities: Dict[str, Any]) -> Di
 
         # Generate response
         response = model.generate_content(prompt)
-        html_response = markdown2.markdown(response.text)
+        clean_response = clean_html_to_text(response.text, keep_emojis=False)
 
         print(f"📢 Announcement query handled: {user_message[:50]}...")
 
-        return {'reply': html_response}
+        return {'reply': clean_response}
 
     except Exception as e:
         print(f"⚠️ Error handling announcement query: {e}")
@@ -910,22 +912,23 @@ def handle_out_of_scope_query(user_message: str) -> Dict[str, Any]:
     """
     fallback_message = """I'm Fanshawe Navigator, your campus assistant! I specialize in helping you with:
 
-- 🗺️ **Navigation & Directions** - Finding your way around campus
-- 📅 **Campus Events** - Discovering activities and schedules
-- 🍽️ **Dining & Restaurants** - Locating food services on campus
-- 📢 **Course Announcements** - D2L updates and class news
+- Navigation & Directions - Finding your way around campus
+- Campus Events - Discovering activities and schedules
+- Dining & Restaurants - Locating food services on campus
+- Course Announcements - D2L updates and class news
 
 Your question seems to be outside these areas. For other assistance, please visit:
-- **Student Services**: [www.fanshawec.ca/student-services](https://www.fanshawec.ca/student-services)
-- **Academic Support**: Contact your program coordinator
-- **General Inquiries**: Visit the Information Desk at the Student Centre
+- Student Services: www.fanshawec.ca/student-services
+- Academic Support: Contact your program coordinator
+- General Inquiries: Visit the Information Desk at the Student Centre
 
 How else can I help you with navigation, events, dining, or announcements?"""
 
-    html_response = markdown2.markdown(fallback_message)
+    # Return clean text without HTML tags or emojis
+    clean_response = clean_html_to_text(fallback_message, keep_emojis=False)
     print(f"❌ Out-of-scope query: {user_message[:50]}...")
 
-    return {'reply': html_response}
+    return {'reply': clean_response}
 
 def parse_docx_event(docx_path: str) -> Dict[str, Any]:
     """
@@ -1056,13 +1059,13 @@ def api_chat():
             response = model.generate_content(prompt)
 
             # Convert Markdown to HTML
-            html_response = markdown2.markdown(response.text)
+            clean_response = clean_html_to_text(response.text, keep_emojis=False)
 
             # If navigation request detected, include map action
             if nav_result.get('is_navigation'):
                 print(f"🗺️ Navigation route: {nav_result['start']} → {nav_result['end']}")
                 return jsonify({
-                    "reply": html_response,
+                    "reply": clean_response,
                     "mapAction": {
                         "type": "SHOW_ROUTE",
                         "building": "M",
@@ -1074,7 +1077,7 @@ def api_chat():
                     }
                 })
             else:
-                return jsonify({"reply": html_response})
+                return jsonify({"reply": clean_response})
 
         elif intent_type == "EVENTS":
             # Handle event queries
@@ -1236,14 +1239,14 @@ def chat():
             # Generate a response from the AI model
             response = model.generate_content(prompt)
 
-            # Convert Markdown to HTML
-            html_response = markdown2.markdown(response.text)
+            # Clean response text (remove HTML tags and emojis)
+            clean_response = clean_html_to_text(response.text, keep_emojis=False)
 
             # If navigation request detected, include map action
             if nav_result.get('is_navigation'):
                 print(f"🗺️ Navigation route: {nav_result['start']} → {nav_result['end']}")
                 return jsonify({
-                    "reply": html_response,
+                    "reply": clean_response,
                     "mapAction": {
                         "type": "SHOW_ROUTE",
                         "building": "M",
@@ -1255,7 +1258,7 @@ def chat():
                     }
                 })
             else:
-                return jsonify({"reply": html_response})
+                return jsonify({"reply": clean_response})
 
         elif intent_type == "EVENTS":
             # Handle event queries
@@ -1649,10 +1652,10 @@ def api_navigation_from_clicks():
             print(f"📝 Using textual information for navigation...")
 
         response = model.generate_content(prompt)
-        html_response = markdown2.markdown(response.text)
+        clean_response = clean_html_to_text(response.text, keep_emojis=False)
 
         return jsonify({
-            "reply": html_response,
+            "reply": clean_response,
             "startRoom": start_room,
             "endRoom": end_room,
             "startNode": start_node,
