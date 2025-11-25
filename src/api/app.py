@@ -78,7 +78,7 @@ try:
     
     # Configure generation settings with temperature 0.5 for balanced navigation instructions
     generation_config = genai.types.GenerationConfig(
-        temperature=0.5,
+        temperature=0.3,
         max_output_tokens=2048,
         top_p=0.95,
         top_k=40
@@ -231,6 +231,8 @@ When answering about announcements:
 
 Be helpful, organized, and ensure students don't miss important information!
 '''
+
+
 
 class ImageFileHandler(FileSystemEventHandler):
     """Handler to monitor changes in the images folder"""
@@ -1007,18 +1009,6 @@ def index():
     """Serve React app entry point"""
     return send_from_directory(str(react_build_dir), 'index.html')
 
-@app.route('/LeafletJS/<path:path>')
-def send_leaflet(path):
-    return send_from_directory('LeafletJS', path)
-
-@app.route('/tools/<path:path>')
-def send_tools(path):
-    return send_from_directory('tools', path)
-
-@app.route('/map/<path:path>')
-def send_map(path):
-    return send_from_directory('map', path)
-
 # ===== API Compatibility Routes for React Frontend =====
 
 @app.route("/api/chat", methods=['POST'])
@@ -1112,7 +1102,6 @@ def api_geojson():
         # Procurar arquivo GeoJSON em vários locais possíveis
         possible_paths = [
             project_root / 'Fanshawe_Navigator-main' / 'backend' / 'dados' / 'campus.geojson',
-            project_root / 'LeafletJS' / 'campus.geojson',
             project_root / 'data' / 'campus.geojson',
         ]
 
