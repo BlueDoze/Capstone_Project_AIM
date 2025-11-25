@@ -194,15 +194,16 @@ export default function FanshaweNavigator() {
     if (feature.properties) {
       const props = feature.properties;
       const nome = props.name || props.nome || 'Building';
-      const ref = props.ref ? ` (${props.ref})` : '';
-      
+      const ref = props.ref;
+
+      // CLICK - Detailed info
       layer.on('click', async () => {
-        if (props.ref) {
+        if (ref) {
           try {
-            const response = await fetch(`${API_URL}/api/predios/${props.ref}/info`);
+            const response = await fetch(`${API_URL}/api/predios/${ref}/info`);
             const data = await response.json();
-            
-            if (data.info) {
+
+            if (data.success && data.info) {
               setBuildingInfo(data);
             }
           } catch (error) {
@@ -211,7 +212,7 @@ export default function FanshaweNavigator() {
         }
       });
 
-      // Hover effects
+      // Hover effects - only visual
       layer.on('mouseover', function() {
         this.setStyle({
           weight: 5,

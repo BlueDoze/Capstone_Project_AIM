@@ -98,6 +98,9 @@ gemini_manager = None
 multimodal_model = None
 rag_models_initialized = False
 
+# Building info cache
+building_info_data = None
+
 if RAG_SYSTEM_AVAILABLE:
     try:
         # Initialize configuration
@@ -1146,24 +1149,57 @@ def api_calcular_rota():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+def load_building_info():
+    """Load building information from JSON file"""
+    global building_info_data
+
+    if building_info_data is not None:
+        return building_info_data
+
+    possible_paths = [
+        project_root / 'Fanshawe_Navigator-main' / 'backend' / 'dados' / 'predios_info_english.json',
+        project_root / 'src' / 'config' / 'predios_info_english.json',
+    ]
+
+    for json_path in possible_paths:
+        if json_path.exists():
+            with open(json_path, 'r', encoding='utf-8') as f:
+                building_info_data = json.load(f)
+                print(f"✅ Building info loaded from {json_path}")
+                print(f"📊 Buildings available: {', '.join(building_info_data.keys())}")
+                return building_info_data
+
+    print("⚠️ Building info JSON not found")
+    return {}
+
 @app.route("/api/predios/<predio_ref>/info", methods=['GET'])
 def api_predio_info(predio_ref):
     """Retorna informações detalhadas de um prédio"""
     try:
-        # Por enquanto, retornar estrutura básica
-        # TODO: Conectar com dados reais dos prédios
-        return jsonify({
-            "ref": predio_ref,
-            "nome": f"Prédio {predio_ref}",
-            "andares": [],
-            "instalacoes": [],
-            "horarios": {
-                "abertura": "08:00",
-                "fechamento": "22:00"
-            }
-        })
+        # Load building data
+        building_data = load_building_info()
+
+        # Get info for specific building
+        if predio_ref.upper() in building_data:
+            info = building_data[predio_ref.upper()]
+
+            return jsonify({
+                "success": True,
+                "info": info
+            })
+        else:
+            return jsonify({
+                "success": False,
+                "error": f"Building {predio_ref} not found",
+                "available_buildings": list(building_data.keys())
+            }), 404
+
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print(f"❌ Error getting building info: {str(e)}")
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
 
 @app.route("/chat", methods=['POST'])
 def chat():
@@ -1770,6 +1806,9 @@ def catch_all(path):
     return send_from_directory(str(react_build_dir), 'index.html')
 
 def main():
+    # Initialize building info on startup
+    load_building_info()
+
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8081)))
 
 
