@@ -314,15 +314,16 @@ export default function FanshaweNavigator() {
       }`}>
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto p-6 bg-fanshawe-cream relative">
-          {/* Watermark background */}
+          {/* Watermark background - Fixed position */}
           <div 
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            className="fixed inset-0 flex items-center justify-center pointer-events-none"
             style={{
               backgroundImage: 'url(/Fanshawe_Icons/Fanshawe-removebg-preview.png)',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               backgroundSize: '50%',
-              opacity: 0.05
+              opacity: 0.05,
+              zIndex: 0
             }}
           />
           <div className="max-w-3xl mx-auto space-y-6 relative z-10">
