@@ -314,7 +314,7 @@ export default function FanshaweNavigator() {
           </div>
 
           {/* Input Area with Quick Actions - Fixed at Bottom */}
-          <div className="border-t border-gray-300 dark:border-gray-700 p-4 transition-colors duration-200 bg-gray-50 dark:bg-gray-900">
+          <div className="p-4 transition-colors duration-200 bg-gray-50 dark:bg-gray-900">
             <div className="max-w-full px-4 md:max-w-2xl md:px-6 lg:max-w-3xl lg:px-8 mx-auto space-y-3">
               {/* Input Bar - Gemini Style Pill */}
               <div className="flex items-center gap-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-full shadow-xl px-6 py-4 transition-all duration-200 focus-within:border-fanshawe-red focus-within:ring-2 focus-within:ring-fanshawe-red">
@@ -340,6 +340,13 @@ export default function FanshaweNavigator() {
               {/* Quick Action Chips - Single Row */}
               <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
                 <button
+                  onClick={toggleMap}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
+                >
+                  <MapIcon size={16} />
+                  <span>Show Campus Map</span>
+                </button>
+                <button
                   onClick={() => setInput("How do I get from building A to building B?")}
                   className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
                 >
@@ -352,20 +359,6 @@ export default function FanshaweNavigator() {
                 >
                   <Building2 size={16} />
                   <span>Building Information</span>
-                </button>
-                <button
-                  onClick={toggleMap}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
-                >
-                  <MapIcon size={16} />
-                  <span>Show Campus Map</span>
-                </button>
-                <button
-                  onClick={() => setInput("What events are happening on campus?")}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
-                >
-                  <Calendar size={16} />
-                  <span>Campus Events</span>
                 </button>
               </div>
             </div>
