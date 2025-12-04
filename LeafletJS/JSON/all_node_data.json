@@ -1,0 +1,1112 @@
+{
+    "Building A": {
+        "path": "Floorplans/Building A",
+        "floors": {
+            "1": {
+                "plan": "A1.svg",
+                "navigationGraph": {},
+                "roomToNode": {},
+                "exitToNode": {},
+                "objects": {
+                    "rooms": {},
+                    "exits": {}
+                }
+            }
+        }
+    },
+    "Building B": {
+        "path": "Floorplans/Building B",
+        "floors": {
+            "1": {
+                "plan": "B1.svg",
+                "navigationGraph": {},
+                "roomToNode": {},
+                "exitToNode": {},
+                "objects": {
+                    "rooms": {},
+                    "exits": {}
+                }
+            }
+        }
+    },
+    "Building H": {
+        "path": "Floorplans/Building H",
+        "floors": {
+            "1": {
+                "plan": "H1.svg",
+                "navigationGraph": {
+                    "M1_entry": {
+                        "connections": [
+                            "H1_Turn_1"
+                        ],
+                        "represents": [
+                            {
+                                "type": "building_connection",
+                                "id": "M1_entry",
+                                "goesTo": [
+                                    "M1"
+                                ]
+                            }
+                        ]
+                    },
+                    "H1_Turn_1": {
+                        "connections": [
+                            "M1_entry",
+                            "H1_1"
+                        ],
+                        "represents": [
+                            {
+                                "type": "turn"
+                            }
+                        ]
+                    },
+                    "H1_1": {
+                        "connections": [
+                            "H1_Turn_1",
+                            "H1_2"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_misc",
+                                "door": "Door_misc"
+                            }
+                        ]
+                    },
+                    "H1_2": {
+                        "connections": [
+                            "H1_1",
+                            "H1_Int_1"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1017",
+                                "door": "Door_1017"
+                            }
+                        ]
+                    },
+                    "H1_Int_1": {
+                        "connections": [
+                            "H1_2",
+                            "H1_3",
+                            "H1_5",
+                            "H1_19"
+                        ],
+                        "represents": [
+                            {
+                                "type": "intersection"
+                            }
+                        ]
+                    },
+                    "H1_3": {
+                        "connections": [
+                            "H1_Int_1",
+                            "H1_4"
+                        ],
+                        "represents": [
+                            {
+                                "type": "elevator",
+                                "id": "Elevator-H",
+                                "goesTo": [
+                                    "H2",
+                                    "H3"
+                                ]
+                            }
+                        ]
+                    },
+                    "H1_4": {
+                        "connections": [
+                            "H1_3"
+                        ],
+                        "represents": [
+                            {
+                                "type": "stairs",
+                                "id": "Stairs_1",
+                                "goesTo": [
+                                    "H2",
+                                    "H3"
+                                ]
+                            },
+                            {
+                                "type": "outside_exit",
+                                "id": "Outside-Exit_1",
+                                "goesTo": [
+                                    "outside"
+                                ]
+                            }
+                        ]
+                    },
+                    "H1_5": {
+                        "connections": [
+                            "H1_Int_1",
+                            "H1_6"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1016",
+                                "door": "Door_1016"
+                            }
+                        ]
+                    },
+                    "H1_6": {
+                        "connections": [
+                            "H1_5",
+                            "H1_7"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1015",
+                                "door": "Door_1015"
+                            }
+                        ]
+                    },
+                    "H1_7": {
+                        "connections": [
+                            "H1_6",
+                            "H1_8"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1014",
+                                "door": "Door_1014"
+                            }
+                        ]
+                    },
+                    "H1_8": {
+                        "connections": [
+                            "H1_7",
+                            "H1_9"
+                        ],
+                        "represents": [
+                            {
+                                "type": "bathroom",
+                                "id": "Bathroom-Men",
+                                "door": "Door_Bathroom-Men"
+                            }
+                        ]
+                    },
+                    "H1_9": {
+                        "connections": [
+                            "H1_8",
+                            "H1_10"
+                        ],
+                        "represents": [
+                            {
+                                "type": "bathroom",
+                                "id": "Bathroom-Accessible",
+                                "door": "Door_Bathroom-Accessible"
+                            }
+                        ]
+                    },
+                    "H1_10": {
+                        "connections": [
+                            "H1_9",
+                            "H1_11"
+                        ],
+                        "represents": [
+                            {
+                                "type": "bathroom",
+                                "id": "Bathroom-Women",
+                                "door": "Door_Bathroom-Women"
+                            },
+                            {
+                                "type": "eatery",
+                                "id": "Cafeteria-H",
+                                "door": "Door_Cafe_1"
+                            }
+                        ]
+                    },
+                    "H1_11": {
+                        "connections": [
+                            "H1_10",
+                            "H1_12"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1017",
+                                "door": "Door_1017"
+                            }
+                        ]
+                    },
+                    "H1_12": {
+                        "connections": [
+                            "H1_11",
+                            "H1_13"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1006",
+                                "door": "Door_1006"
+                            }
+                        ]
+                    },
+                    "H1_13": {
+                        "connections": [
+                            "H1_12",
+                            "H1_14"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1005",
+                                "door": "Door_1005_2"
+                            }
+                        ]
+                    },
+                    "H1_14": {
+                        "connections": [
+                            "H1_13",
+                            "H1_15"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1005",
+                                "door": "Door_1005_1"
+                            },
+                            {
+                                "type": "room",
+                                "id": "Room_1004",
+                                "door": "Door_1004"
+                            }
+                        ]
+                    },
+                    "H1_15": {
+                        "connections": [
+                            "H1_14",
+                            "H1_16"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1003",
+                                "door": "Door_1003"
+                            }
+                        ]
+                    },
+                    "H1_16": {
+                        "connections": [
+                            "H1_15",
+                            "H1_17"
+                        ],
+                        "represents": [
+                            {
+                                "type": "stairs",
+                                "id": "Stairs_2",
+                                "goesTo": [
+                                    "H2",
+                                    "H3"
+                                ]
+                            }
+                        ]
+                    },
+                    "H1_Int_2": {
+                        "connections": [
+                            "H1_16",
+                            "H1_17",
+                            "H1_18"
+                        ],
+                        "represents": [
+                            {
+                                "type": "intersection"
+                            }
+                        ]
+                    },
+                    "H1_17": {
+                        "connections": [
+                            "H1_Int_2"
+                        ],
+                        "represents": [
+                            {
+                                "type": "outside_exit",
+                                "id": "Outside-Exit_2",
+                                "goesTo": [
+                                    "outside"
+                                ]
+                            },
+                            {
+                                "type": "building_connection",
+                                "id": "F-Building",
+                                "goesTo": [
+                                    "F1"
+                                ]
+                            }
+                        ]
+                    },
+                    "H1_18": {
+                        "connections": [
+                            "H1_Int_2"
+                        ],
+                        "represents": [
+                            {
+                                "type": "outside_exit",
+                                "id": "Outside-Exit_3",
+                                "goesTo": [
+                                    "outside"
+                                ]
+                            }
+                        ]
+                    },
+                    "H1_19": {
+                        "connections": [
+                            "H1_Int_1",
+                            "H1_20"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1019",
+                                "door": "Door_1019"
+                            },
+                            {
+                                "type": "room",
+                                "id": "Room_1022",
+                                "door": "Door_1022"
+                            }
+                        ]
+                    },
+                    "H1_20": {
+                        "connections": [
+                            "H1_19",
+                            "H1_21"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1023",
+                                "door": "Door_1023"
+                            }
+                        ]
+                    },
+                    "H1_21": {
+                        "connections": [
+                            "H1_20",
+                            "H1_22"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1024",
+                                "door": "Door_1024"
+                            }
+                        ]
+                    },
+                    "H1_22": {
+                        "connections": [
+                            "H1_21",
+                            "H1_23"
+                        ],
+                        "represents": [
+                            {
+                                "type": "eatery",
+                                "id": "Cafeteria-H",
+                                "door": "Door_Cafe_2"
+                            }
+                        ]
+                    },
+                    "H1_23": {
+                        "connections": [
+                            "H1_22",
+                            "H1_24"
+                        ],
+                        "represents": []
+                    },
+                    "H1_24": {
+                        "connections": [
+                            "H1_23",
+                            "H1_25"
+                        ],
+                        "represents": []
+                    },
+                    "H1_25": {
+                        "connections": [
+                            "H1_24",
+                            "H1_26"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1032",
+                                "door": "Door_1032"
+                            }
+                        ]
+                    },
+                    "H1_26": {
+                        "connections": [
+                            "H1_25",
+                            "H1_27"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1034",
+                                "door": "Door_1034"
+                            }
+                        ]
+                    },
+                    "H1_27": {
+                        "connections": [
+                            "H1_26",
+                            "H1_28"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1033",
+                                "door": "Door_1033"
+                            }
+                        ]
+                    },
+                    "H1_28": {
+                        "connections": [
+                            "H1_27"
+                        ],
+                        "represents": [
+                            {
+                                "type": "stairs",
+                                "id": "Stairs_3",
+                                "goesTo": [
+                                    "H2",
+                                    "H3"
+                                ]
+                            },
+                            {
+                                "type": "outside_exit",
+                                "id": "Outside-Exit_4",
+                                "goesTo": [
+                                    "outside"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "roomToNode": {
+                    "Room_misc": "H1_1",
+                    "Room_1017": "H1_11",
+                    "Room_1016": "H1_5",
+                    "Room_1015": "H1_6",
+                    "Room_1014": "H1_7",
+                    "Bathroom-Men": "H1_8",
+                    "Bathroom-Accessible": "H1_9",
+                    "Bathroom-Women": "H1_10",
+                    "Cafeteria-H": "H1_22",
+                    "Room_1006": "H1_12",
+                    "Room_1005": "H1_14",
+                    "Room_1004": "H1_14",
+                    "Room_1003": "H1_15",
+                    "Room_1019": "H1_19",
+                    "Room_1022": "H1_19",
+                    "Room_1023": "H1_20",
+                    "Room_1024": "H1_21",
+                    "Room_1032": "H1_25",
+                    "Room_1034": "H1_26",
+                    "Room_1033": "H1_27"
+                },
+                "exitToNode": {
+                    "M1_entry": "M1_entry",
+                    "Elevator-H": "H1_3",
+                    "Stairs_1": "H1_4",
+                    "Outside-Exit_1": "H1_4",
+                    "Stairs_2": "H1_16",
+                    "Outside-Exit_2": "H1_17",
+                    "F-Building": "H1_17",
+                    "Outside-Exit_3": "H1_18",
+                    "Stairs_3": "H1_28",
+                    "Outside-Exit_4": "H1_28"
+                },
+                "objects": {
+                    "rooms": {
+                        "Room_misc": [
+                            "Door_misc"
+                        ],
+                        "Room_1017": [
+                            "Door_1017",
+                            "Door_1017"
+                        ],
+                        "Room_1016": [
+                            "Door_1016"
+                        ],
+                        "Room_1015": [
+                            "Door_1015"
+                        ],
+                        "Room_1014": [
+                            "Door_1014"
+                        ],
+                        "Bathroom-Men": [
+                            "Door_Bathroom-Men"
+                        ],
+                        "Bathroom-Accessible": [
+                            "Door_Bathroom-Accessible"
+                        ],
+                        "Bathroom-Women": [
+                            "Door_Bathroom-Women"
+                        ],
+                        "Cafeteria-H": [
+                            "Door_Cafe_1",
+                            "Door_Cafe_2"
+                        ],
+                        "Room_1006": [
+                            "Door_1006"
+                        ],
+                        "Room_1005": [
+                            "Door_1005_2",
+                            "Door_1005_1"
+                        ],
+                        "Room_1004": [
+                            "Door_1004"
+                        ],
+                        "Room_1003": [
+                            "Door_1003"
+                        ],
+                        "Room_1019": [
+                            "Door_1019"
+                        ],
+                        "Room_1022": [
+                            "Door_1022"
+                        ],
+                        "Room_1023": [
+                            "Door_1023"
+                        ],
+                        "Room_1024": [
+                            "Door_1024"
+                        ],
+                        "Room_1032": [
+                            "Door_1032"
+                        ],
+                        "Room_1034": [
+                            "Door_1034"
+                        ],
+                        "Room_1033": [
+                            "Door_1033"
+                        ]
+                    },
+                    "exits": {
+                        "M1_entry": [
+                            "M1"
+                        ],
+                        "Elevator-H": [
+                            "H2",
+                            "H3"
+                        ],
+                        "Stairs_1": [
+                            "H2",
+                            "H3"
+                        ],
+                        "Outside-Exit_1": [
+                            "outside"
+                        ],
+                        "Stairs_2": [
+                            "H2",
+                            "H3"
+                        ],
+                        "Outside-Exit_2": [
+                            "outside"
+                        ],
+                        "F-Building": [
+                            "F1"
+                        ],
+                        "Outside-Exit_3": [
+                            "outside"
+                        ],
+                        "Stairs_3": [
+                            "H2",
+                            "H3"
+                        ],
+                        "Outside-Exit_4": [
+                            "outside"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "Building M": {
+        "path": "Floorplans/Building M",
+        "floors": {
+            "1": {
+                "plan": "M1.svg",
+                "navigationGraph": {
+                    "H_entry": {
+                        "connections": [
+                            "M1_1"
+                        ],
+                        "represents": [
+                            {
+                                "type": "building_connection",
+                                "id": "H-Building",
+                                "goesTo": [
+                                    "H1"
+                                ]
+                            }
+                        ]
+                    },
+                    "M1_1": {
+                        "connections": [
+                            "H_entry",
+                            "M1_2"
+                        ],
+                        "represents": []
+                    },
+                    "M1_2": {
+                        "connections": [
+                            "M1_1",
+                            "M1_3"
+                        ],
+                        "represents": [
+                            {
+                                "type": "stairs",
+                                "id": "Stairs_1",
+                                "goesTo": [
+                                    "M2",
+                                    "M3"
+                                ]
+                            },
+                            {
+                                "type": "outside_exit",
+                                "id": "Outside-Exit_2",
+                                "goesTo": [
+                                    "outside"
+                                ]
+                            }
+                        ]
+                    },
+                    "M1_3": {
+                        "connections": [
+                            "M1_2",
+                            "M1_4"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1006",
+                                "door": "Door_1006"
+                            }
+                        ]
+                    },
+                    "M1_Int_1": {
+                        "connections": [
+                            "M1_3",
+                            "M1_4",
+                            "M1_Turn_1"
+                        ],
+                        "represents": [
+                            {
+                                "type": "intersection"
+                            }
+                        ]
+                    },
+                    "M1_4": {
+                        "connections": [
+                            "M1_Int_1",
+                            "M1_5"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1004",
+                                "door": "Door_1004"
+                            }
+                        ]
+                    },
+                    "M1_5": {
+                        "connections": [
+                            "M1_4",
+                            "M1_6"
+                        ],
+                        "represents": [
+                            {
+                                "type": "elevator",
+                                "id": "Elevator-M",
+                                "goesTo": [
+                                    "M2",
+                                    "M3"
+                                ]
+                            }
+                        ]
+                    },
+                    "M1_6": {
+                        "connections": [
+                            "M1_5",
+                            "M1_7"
+                        ],
+                        "represents": [
+                            {
+                                "type": "turn"
+                            },
+                            {
+                                "type": "room",
+                                "id": "Room_1003",
+                                "door": "Door_1003_1"
+                            }
+                        ]
+                    },
+                    "M1_7": {
+                        "connections": [
+                            "M1_6"
+                        ],
+                        "represents": [
+                            {
+                                "type": "outside_exit",
+                                "id": "Outside-Exit_1",
+                                "goesTo": [
+                                    "outside"
+                                ]
+                            }
+                        ]
+                    },
+                    "M1_Turn_1": {
+                        "connections": [
+                            "M1_Int_1",
+                            "M1_8"
+                        ],
+                        "represents": [
+                            {
+                                "type": "turn"
+                            }
+                        ]
+                    },
+                    "M1_8": {
+                        "connections": [
+                            "M1_Turn_1",
+                            "M1_Int_2"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1018",
+                                "door": "Door_1018"
+                            }
+                        ]
+                    },
+                    "M1_Int_2": {
+                        "connections": [
+                            "M1_8",
+                            "M1_9",
+                            "M1_14"
+                        ],
+                        "represents": [
+                            {
+                                "type": "intersection"
+                            },
+                            {
+                                "type": "room",
+                                "id": "Room_1003",
+                                "door": "Door_1003_2"
+                            }
+                        ]
+                    },
+                    "M1_9": {
+                        "connections": [
+                            "M1_Int_2",
+                            "M1_10"
+                        ],
+                        "represents": [
+                            {
+                                "type": "bathroom",
+                                "id": "Bathroom-Men",
+                                "door": "Door_Bathroom-Men"
+                            }
+                        ]
+                    },
+                    "M1_10": {
+                        "connections": [
+                            "M1_9",
+                            "M1_11"
+                        ],
+                        "represents": [
+                            {
+                                "type": "bathroom",
+                                "id": "Bathroom-Accessible",
+                                "door": "Door_Bathroom-Accessible"
+                            }
+                        ]
+                    },
+                    "M1_11": {
+                        "connections": [
+                            "M1_10",
+                            "M1_12"
+                        ],
+                        "represents": [
+                            {
+                                "type": "bathroom",
+                                "id": "Bathroom-Women",
+                                "door": "Door_Bathroom-Women"
+                            }
+                        ]
+                    },
+                    "M1_12": {
+                        "connections": [
+                            "M1_11",
+                            "M1_Turn_2"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1033",
+                                "door": "Door_1033"
+                            }
+                        ]
+                    },
+                    "M1_Turn_2": {
+                        "connections": [
+                            "M1_12",
+                            "M1_13"
+                        ],
+                        "represents": [
+                            {
+                                "type": "turn"
+                            }
+                        ]
+                    },
+                    "M1_13": {
+                        "connections": [
+                            "M1_Turn_2"
+                        ],
+                        "represents": [
+                            {
+                                "type": "stairs",
+                                "id": "Stairs_2",
+                                "goesTo": [
+                                    "M2",
+                                    "M3"
+                                ]
+                            },
+                            {
+                                "type": "outside_exit",
+                                "id": "Outside-Exit_3",
+                                "goesTo": [
+                                    "outside"
+                                ]
+                            }
+                        ]
+                    },
+                    "M1_14": {
+                        "connections": [
+                            "M1_Int_2",
+                            "M1_15"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1035",
+                                "door": "Door_1035"
+                            }
+                        ]
+                    },
+                    "M1_15": {
+                        "connections": [
+                            "M1_14",
+                            "M1_16"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1037",
+                                "door": "Door_1037"
+                            }
+                        ]
+                    },
+                    "M1_16": {
+                        "connections": [
+                            "M1_15",
+                            "M1_Turn_3"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1030",
+                                "door": "Door_1030"
+                            },
+                            {
+                                "type": "room",
+                                "id": "Room_1041",
+                                "door": "Door_1041"
+                            }
+                        ]
+                    },
+                    "M1_Turn_3": {
+                        "connections": [
+                            "M1_16",
+                            "M1_17"
+                        ],
+                        "represents": [
+                            {
+                                "type": "turn"
+                            },
+                            {
+                                "type": "room",
+                                "id": "Room_1045",
+                                "door": "Door_1045"
+                            }
+                        ]
+                    },
+                    "M1_17": {
+                        "connections": [
+                            "M1_Turn_3",
+                            "M1_18"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1040",
+                                "door": "Door_1040"
+                            }
+                        ]
+                    },
+                    "M1_18": {
+                        "connections": [
+                            "M1_17",
+                            "M1_19"
+                        ],
+                        "represents": [
+                            {
+                                "type": "room",
+                                "id": "Room_1049",
+                                "door": "Door_1049"
+                            }
+                        ]
+                    },
+                    "M1_19": {
+                        "connections": [
+                            "M1_18"
+                        ],
+                        "represents": [
+                            {
+                                "type": "outside_exit",
+                                "id": "Outside-Exit_4",
+                                "goesTo": [
+                                    "outside"
+                                ]
+                            },
+                            {
+                                "type": "stairs",
+                                "id": "Stairs_3",
+                                "goesTo": [
+                                    "M2",
+                                    "M3"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "roomToNode": {
+                    "Room_1006": "M1_3",
+                    "Room_1004": "M1_4",
+                    "Room_1003": "M1_Int_2",
+                    "Room_1018": "M1_8",
+                    "Bathroom-Men": "M1_9",
+                    "Bathroom-Accessible": "M1_10",
+                    "Bathroom-Women": "M1_11",
+                    "Room_1033": "M1_12",
+                    "Room_1035": "M1_14",
+                    "Room_1037": "M1_15",
+                    "Room_1030": "M1_16",
+                    "Room_1041": "M1_16",
+                    "Room_1045": "M1_Turn_3",
+                    "Room_1040": "M1_17",
+                    "Room_1049": "M1_18"
+                },
+                "exitToNode": {
+                    "H-Building": "H_entry",
+                    "Stairs_1": "M1_2",
+                    "Outside-Exit_2": "M1_2",
+                    "Elevator-M": "M1_5",
+                    "Outside-Exit_1": "M1_7",
+                    "Stairs_2": "M1_13",
+                    "Outside-Exit_3": "M1_13",
+                    "Outside-Exit_4": "M1_19",
+                    "Stairs_3": "M1_19"
+                },
+                "objects": {
+                    "rooms": {
+                        "Room_1006": [
+                            "Door_1006"
+                        ],
+                        "Room_1004": [
+                            "Door_1004"
+                        ],
+                        "Room_1003": [
+                            "Door_1003_1",
+                            "Door_1003_2"
+                        ],
+                        "Room_1018": [
+                            "Door_1018"
+                        ],
+                        "Bathroom-Men": [
+                            "Door_Bathroom-Men"
+                        ],
+                        "Bathroom-Accessible": [
+                            "Door_Bathroom-Accessible"
+                        ],
+                        "Bathroom-Women": [
+                            "Door_Bathroom-Women"
+                        ],
+                        "Room_1033": [
+                            "Door_1033"
+                        ],
+                        "Room_1035": [
+                            "Door_1035"
+                        ],
+                        "Room_1037": [
+                            "Door_1037"
+                        ],
+                        "Room_1030": [
+                            "Door_1030"
+                        ],
+                        "Room_1041": [
+                            "Door_1041"
+                        ],
+                        "Room_1045": [
+                            "Door_1045"
+                        ],
+                        "Room_1040": [
+                            "Door_1040"
+                        ],
+                        "Room_1049": [
+                            "Door_1049"
+                        ]
+                    },
+                    "exits": {
+                        "H-Building": [
+                            "H1"
+                        ],
+                        "Stairs_1": [
+                            "M2",
+                            "M3"
+                        ],
+                        "Outside-Exit_2": [
+                            "outside"
+                        ],
+                        "Elevator-M": [
+                            "M2",
+                            "M3"
+                        ],
+                        "Outside-Exit_1": [
+                            "outside"
+                        ],
+                        "Stairs_2": [
+                            "M2",
+                            "M3"
+                        ],
+                        "Outside-Exit_3": [
+                            "outside"
+                        ],
+                        "Outside-Exit_4": [
+                            "outside"
+                        ],
+                        "Stairs_3": [
+                            "M2",
+                            "M3"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

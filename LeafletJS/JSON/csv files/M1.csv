@@ -1,0 +1,26 @@
+﻿Node,Node_type,Node_connections,Object,Door,Object_category_type,Object_type,Exit_Connections
+H_entry,object,M1_1,H-Building,,exit,building_connection,H1
+M1_1,,"H_entry, M1_2",,,,,
+M1_2,"object, object","M1_1, M1_3","Stairs_1, Outside-Exit_2",,"exit, exit","stairs, outside_exit","[M2| M3], outside"
+M1_3,object,"M1_2, M1_4",Room_1006,Door_1006,room,room,
+M1_Int_1,int,"M1_3, M1_4, M1_Turn_1 ",,,,,
+M1_4,object,"M1_Int_1, M1_5",Room_1004,Door_1004,room,room,
+M1_5,object,"M1_4, M1_6",Elevator-M,,exit,elevator,[M2|M3]
+M1_6,"object, turn","M1_5, M1_7",Room_1003,Door_1003_1,room,room,
+M1_7,object,M1_6,Outside-Exit_1,,exit,outside_exit,outside
+M1_Turn_1,turn,"M1_Int_1, M1_8",,,,,
+M1_8,object,"M1_Turn_1, M1_Int_2",Room_1018,Door_1018,room,room,
+M1_Int_2,"int, object","M1_8, M1_9, M1_14",Room_1003,Door_1003_2,room,room,
+M1_9,object,"M1_Int_2, M1_10",Bathroom-Men,Door_Bathroom-Men,room,bathroom,
+M1_10,object,"M1_9, M1_11",Bathroom-Accessible,Door_Bathroom-Accessible,room,bathroom,
+M1_11,object,"M1_10, M1_12",Bathroom-Women,Door_Bathroom-Women,room,bathroom,
+M1_12,object,"M1_11, M1_Turn_2",Room_1033,Door_1033,room,room,
+M1_Turn_2,turn,"M1_12, M1_13",,,,,
+M1_13,object,M1_Turn_2,"Stairs_2, Outside-Exit_3",,"exit, exit","stairs, outside_exit","[M2|M3], outside "
+M1_14,object,"M1_Int_2, M1_15",Room_1035,Door_1035,room,room,
+M1_15,object,"M1_14, M1_16",Room_1037,Door_1037,room,room,
+M1_16,object,"M1_15, M1_Turn_3","Room_1030, Room_1041","Door_1030, Door_1041","room, room","room, room",
+M1_Turn_3,"object, turn","M1_16, M1_17",Room_1045,Door_1045,room,room,
+M1_17,object,"M1_Turn_3, M1_18",Room_1040,Door_1040,room,room,
+M1_18,object,"M1_17, M1_19",Room_1049,Door_1049,room,room,
+M1_19,object,M1_18,"Outside-Exit_4, Stairs_3",,"exit, exit","outside_exit, stairs"," outside, [M2| M3]"

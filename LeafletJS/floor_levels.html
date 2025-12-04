@@ -1,0 +1,381 @@
+<!-- cd "C:\Users\Lukeg\Desktop\Capstone Project\LeafletJS" -->
+<!-- python -m http.server 8000 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Campus Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate.css" />
+    <script src="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate-src.js"></script>
+    <script src="https://unpkg.com/leaflet-image-transform/leaflet-image-transform.min.js"></script>
+    <style>
+        #map {
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 0; right: 0;
+        }
+        #rotation-display {
+		position: absolute;
+		bottom: 10px;
+		left: 10px;
+		background: rgba(255, 255, 255, 0.9);
+		padding: 10px 15px;
+		border-radius: 5px;
+		font-family: Arial, sans-serif;
+		font-size: 16px;
+		font-weight: bold;
+		box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+		z-index: 1000;
+    }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="rotation-display">Rotation: 21.3°</div>
+    <div style="position: absolute; top: 50px; right: 10px; background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 5px; z-index: 1000;">
+		<label for="bearingInput">Map Bearing:</label>
+		<input type="number" id="bearingInput" value="21.3" step="0.1" style="width: 70px;" />
+		<button onclick="updateMapBearing()">Apply</button>
+	</div>
+    <div style="position:absolute; top:10px; right:10px; z-index:1000; background:white; padding:6px; border-radius:8px; box-shadow:0 0 5px rgba(0,0,0,0.3);">
+        <label for="floorSelect"><b>Choose Floor:</b></label>
+        <select id="floorSelect">
+            <option value="floor1">Floor 1</option>
+            <option value="floor2">Floor 2</option>
+            <option value="floor3">Floor 3</option>
+        </select>
+        <button id="loadFloorBtn">Load Floor</button>
+    </div>
+    <button id="restoreZoomBtn"
+        style="position:absolute; bottom:20px; right:20px; z-index:1000;
+            background:white; padding:8px 12px; border-radius:8px;
+            box-shadow:0 0 5px rgba(0,0,0,0.3); cursor:pointer;">
+        Restore Zoom
+    </button>
+    <button id="clearPlans"
+        style="position:absolute; bottom:60px; right:20px; z-index:1000;
+            background:white; padding:8px 12px; border-radius:8px;
+            box-shadow:0 0 5px rgba(0,0,0,0.3); cursor:pointer;">
+        Clear
+    </button>
+    <script>
+		//Functions
+        //Not currently in use
+		function doorToLatLng(doorElement, svgMap, corners) {
+			const bbox = doorElement.getBBox();
+			const doorCenterX = bbox.x + bbox.width / 2;
+			const doorCenterY = bbox.y + bbox.height / 2;
+
+			const svgBBox = svgMap.viewBox.baseVal || {
+				x: 0,
+				y: 0,
+				width: svgMap.width.baseVal.value,
+				height: svgMap.height.baseVal.value
+			};
+
+			const normX = (doorCenterX - svgBBox.x) / svgBBox.width;
+			const normY = (doorCenterY - svgBBox.y) / svgBBox.height;
+
+			const topLeft = corners[0], topRight = corners[1],
+				bottomRight = corners[2], bottomLeft = corners[3];
+
+			const latTop = topLeft.lat + normX * (topRight.lat - topLeft.lat);
+			const lngTop = topLeft.lng + normX * (topRight.lng - topLeft.lng);
+			const latBottom = bottomLeft.lat + normX * (bottomRight.lat - bottomLeft.lat);
+			const lngBottom = bottomLeft.lng + normX * (bottomRight.lng - bottomLeft.lng);
+
+			const doorLat = latTop + normY * (latBottom - latTop);
+			const doorLng = lngTop + normY * (lngBottom - lngTop);
+
+			return L.latLng(doorLat, doorLng);
+		}
+
+        //Not currently in use
+		// --- Helper: Find closest hallway node to a given point ---
+		function findClosestNode(latlng, nodeList) {
+			let closest = null, minDist = Infinity;
+			nodeList.forEach(node => {
+				const d = latlng.distanceTo(node);
+				if (d < minDist) {
+					minDist = d;
+					closest = node;
+				}
+			});
+			return closest;
+		}
+
+
+
+
+
+        //Loading floorplan JSON
+
+        async function loadFloorPlans() {
+            try {
+                const response = await fetch('JSON/all_node_data.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                window.floorPlans = await response.json();
+            } catch (error) {
+                console.error('Failed to load floor plans:', error);
+            }
+        }
+
+        //Rotation based functions
+
+        function updateMapBearing() {
+			const input = document.getElementById('bearingInput');
+			const newBearing = parseFloat(input.value) || 0;
+			map.setBearing(newBearing);
+			
+			// Update any existing overlays
+			if (currentOverlay) {
+				const overlayPane = currentOverlay.getElement();
+				if (overlayPane) {
+					overlayPane.style.transform = `rotate(${newBearing}deg)`;
+				}
+			}
+		}
+        //manually clearing overlays
+        function clearPlans(){
+            map.eachLayer(layer => {
+                if (layer instanceof L.SVGOverlay) {
+                    map.removeLayer(layer);
+                }
+            });
+        }
+
+        function interactiveElements(svgMap, buildingName, floorKey) {
+            let rooms = floorPlans[buildingName]["floors"][floorKey]["objects"]["rooms"]  
+            Object.entries(rooms).forEach(([roomId, doorList]) => {
+                const room = svgMap.getElementById(roomId);
+                if (room) {
+                    room.style.pointerEvents = 'all';
+                    room.style.cursor = 'pointer';
+                    room.addEventListener('click', (e) => {
+                        // simple demo popup
+                        alert(`You clicked Room ${roomId} !`);
+                        svgMap.querySelectorAll('.highlighted-door').forEach(prevDoor =>{
+                            prevDoor.classList.remove('highlighted-door');
+                            prevDoor.style.stroke = '';
+                            prevDoor.style.strokeWidth = '';
+                        });
+
+
+                        //Highlight doors
+                        if (doorList.length > 0){
+                            doorList.forEach(doorId => {
+                                const door = svgMap.getElementById(doorId);
+                                if (door) {
+                                    door.classList.add('highlighted-door');
+                                    door.style.stroke = 'red';
+                                    door.style.strokeWidth = '2px';
+                                } else {
+                                    alert(`Door label for ${roomId} is not the same in SVG and code`);
+                                }
+                            });
+                        } else {
+                            alert(`No doors currently exist for ${roomId}`);
+                        }
+                    });
+                } else {
+                    console.warn(`Room ID ${roomId} not found`);
+                }
+            });
+        }
+           
+        function loadFloorLevel(floorKey) {
+            // Remove any previous overlays
+            clearPlans()
+            currentOverlays.forEach(ov => map.removeLayer(ov));
+            currentOverlays = [];
+
+                    
+            Object.entries(floorPlans).forEach(([buildingName, buildingInfo]) =>{
+                const buildingFeature = geojsonData.features.find(
+                    f => f.properties.name === buildingName
+                );
+                
+                //Getting Building path
+                let prePath = buildingInfo["path"]
+                //Getting specific SVG file name
+                let fileName = buildingInfo["floors"][floorKey]["plan"]
+
+                //Making path to SVG to access
+                let svgPath = prePath + "/" + fileName + "?ts=" + new Date().getTime();
+                
+
+                let bounds = buildingInfoCache[buildingName]["bounds"]
+
+                let corners = [
+                    L.latLng(bounds.getNorth(), bounds.getWest()),  // top-left
+                    L.latLng(bounds.getNorth(), bounds.getEast()),  // top-right
+                    L.latLng(bounds.getSouth(), bounds.getEast()),  // bottom-right
+                    L.latLng(bounds.getSouth(), bounds.getWest())   // bottom-left
+                ];
+
+                fetch(svgPath)
+                    .then(r => {
+                        if (!r.ok) {
+                            console.warn(`SVG file for ${buildingName} not present`)
+                            return null;
+                        }
+                        return r.text()
+                    })
+                    .then(svgText => {
+                        if (!svgText) return;
+                        const svgDoc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+                        const svgMap = svgDoc.documentElement; 
+                        //console.log([...svgMap.querySelectorAll('[id]')].map(el => el.id));
+                        
+
+                        //if (currentOverlay) map.removeLayer(currentOverlay); // remove old overlay
+                        newOverlay = L.svgOverlay(svgMap, corners, {interactive: true, opacity: 0.5 }).addTo(map);
+
+                        interactiveElements(svgMap, buildingName, floorKey)
+                    })
+                    .catch(err => {
+                        console.error(`Error loading ${buildingName}:`, err);
+                    });
+            });
+        }
+
+
+         async function initApp() {
+            await loadFloorPlans();
+            console.log("Floor plans loaded:", window.floorPlans);
+        // Step 1: Initialize the map
+
+            const initialCenter = [43.0125, -81.2002];
+            const initialZoom = 18;
+            const mapBearing = 21.3;
+            //const map = L.map('map', { maxZoom: 22 }).setView(initialCenter, initialZoom);
+
+            // Step 1: Initialize the map
+            let map = L.map('map', {
+                maxZoom: 22,   // allow very close zoom
+                minZoom: 16,
+                rotate: true,
+                bearing: mapBearing,
+                touchRotate: true,
+                shiftKeyRotate: true
+            }).setView(initialCenter, initialZoom);
+
+            // Step 2: Add tile layer (the actual map)
+            L.tileLayer(
+                "https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=d3JSA6Uq18jaERqMgDqq",
+                {
+                attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+                maxZoom: 22
+                }
+            ).addTo(map);
+            
+
+            // Test (User starting location)
+
+            let startPoint = L.latLng(43.0143425, -81.19856355); // Example coordinate near Building M
+            let startMarker = L.marker(startPoint, {
+                title: "You are here",
+                draggable: false
+            }).addTo(map);
+
+            startMarker.bindPopup("<b>You are here</b>").openPopup();
+
+            let currentOverlay = null;
+            let currentOverlays = [];
+
+            window.hallwayLatLngs = []; // store hallway nodes globally
+            window.currentPathLine = null;
+            const buildings = ["A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "M", "T"]
+            const levels = {
+                "floor1" : ["A1", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "J1", "K1", "M1", "T1"],
+                "floor2" : ["A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "J2", "K2", "M2", "T2"],
+                "floor3" : ["A3", "B3", "C3", "D3", "E3", "F3", "G3", "H3", "J3", "K3", "M3", "T3"]
+            }
+
+
+            // Step 3: Load GeoJSON buildings
+            let geojsonData = null;
+            let buildingInfoCache = {}
+            fetch('campus.geojson?ts=' + new Date().getTime())
+                .then(response => response.json())
+                .then(data => {
+                    geojsonData = data;
+                    console.log("GeoJSON loaded:", data); // <-- This checks if the file is loading
+                    
+                    // Log all building names and their center coordinates
+                    data.features.forEach(f => {
+                        if (f.geometry.type === "Polygon" || f.geometry.type === "MultiPolygon") {
+                            const layer = L.geoJSON(f);
+                            const bounds = layer.getBounds();
+                            console.log(
+                                f.properties.name,
+                                "center:",
+                                bounds.getCenter()
+                            );
+                        }
+                    });
+
+
+
+                    L.geoJSON(data, {
+                        onEachFeature: function(feature, layer) {
+                            let buildingName = feature.properties.name || "Unknown Building";
+                            //COMMENT CHECK
+                            
+                            let bounds = layer.getBounds();
+                            buildingInfoCache[buildingName] = {
+                                "layer": layer,
+                                "bounds": bounds
+                            };
+                            
+                            layer.bindPopup("<b>" + buildingName);
+
+                            layer.on('click', function() {
+
+                                
+                                console.log(bounds);
+
+                                map.fitBounds(bounds);	
+                                let zoom = map.getBoundsZoom(bounds, true);
+                                map.setView(bounds.getCenter(), zoom);
+                            });	
+                        },
+                    style: {
+                        color: "blue",
+                        weight: 2,
+                        fillOpacity: 0.2
+                    }
+                    }).addTo(map);
+                })
+                .catch(err => console.error("Error loading GeoJSON:", err));
+                
+            // Step 4: Add floor button click handler
+            document.getElementById("loadFloorBtn").addEventListener("click", () => {
+                const floorKey = document.getElementById("floorSelect").value;
+                alert(floorKey + "Clicked")
+                if (geojsonData) {
+                    loadFloorLevel(floorKey);
+                } else {
+                    alert("GeoJSON not loaded yet.");
+                }
+            });
+
+            document.getElementById("restoreZoomBtn").addEventListener("click", () => {
+                map.flyTo(initialCenter, initialZoom);
+                map.setBearing(mapBearing);
+                document.getElementById('bearingInput').value = mapBearing;
+            });
+
+
+            document.getElementById("clearPlans").addEventListener("click", clearPlans)
+        }
+        initApp();
+
+    </script>
+</body>
+</html>

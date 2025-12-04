@@ -8,6 +8,8 @@ google-generativeai
 python-dotenv
 markdown2
 python-docx
+beautifulsoup4
+lxml
 
 # RAG Multimodal System
 google-cloud-aiplatform

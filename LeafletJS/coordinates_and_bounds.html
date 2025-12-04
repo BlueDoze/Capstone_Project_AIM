@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Campus Map - Debug Version</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate.css" />
+    <script src="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate-src.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        #map {
+            position: absolute;
+            top: 0; 
+            bottom: 0;
+            left: 0; 
+            right: 0;
+        }
+        #rotation-display {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        #coordinate-display {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            min-width: 350px;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        #coordinate-display h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: #333;
+        }
+        .coord-row {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+        }
+        .coord-label {
+            font-weight: bold;
+            color: #555;
+            margin-right: 10px;
+        }
+        .coord-value {
+            font-family: 'Courier New', monospace;
+            color: #0066cc;
+            background: #f0f0f0;
+            padding: 3px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            flex: 1;
+            text-align: right;
+            font-size: 11px;
+        }
+        .coord-value:hover {
+            background: #e0e0e0;
+        }
+        .copy-btn {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 10px;
+            margin-left: 5px;
+        }
+        .copy-btn:hover {
+            background: #0052a3;
+        }
+        #bearing-control {
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        #bearing-control label {
+            font-size: 13px;
+            font-weight: bold;
+        }
+        #bearing-control input {
+            width: 70px;
+            margin: 0 5px;
+        }
+        #bearing-control button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .corner-section {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        .corner-section h4 {
+            margin: 5px 0;
+            font-size: 13px;
+            color: #333;
+        }
+        #click-marker-info {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+            font-size: 11px;
+            color: #666;
+        }
+        .toggle-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-top: 5px;
+            width: 100%;
+        }
+        .toggle-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="rotation-display">Rotation: 21.3°</div>
+    
+    <div id="bearing-control">
+        <label for="bearingInput">Map Bearing:</label>
+        <input type="number" id="bearingInput" value="21.3" step="0.1" />
+        <button onclick="updateMapBearing()">Apply</button>
+    </div>
+
+    <div id="coordinate-display">
+        <h3>📍 Click Coordinates</h3>
+        <div class="coord-row">
+            <span class="coord-label">Latitude:</span>
+            <span class="coord-value" id="click-lat" onclick="copyToClipboard('click-lat')">Click map</span>
+            <button class="copy-btn" onclick="copyToClipboard('click-lat')">Copy</button>
+        </div>
+        <div class="coord-row">
+            <span class="coord-label">Longitude:</span>
+            <span class="coord-value" id="click-lng" onclick="copyToClipboard('click-lng')">-</span>
+            <button class="copy-btn" onclick="copyToClipboard('click-lng')">Copy</button>
+        </div>
+        <div class="coord-row">
+            <span class="coord-label">Zoom:</span>
+            <span class="coord-value" id="zoom-level">-</span>
+        </div>
+        
+        <div class="corner-section" id="corner-display" style="display:none;">
+            <h4>🏢 Building Corners (Click building first)</h4>
+            <div class="coord-row">
+                <span class="coord-label">NW:</span>
+                <span class="coord-value" id="corner-nw">-</span>
+                <button class="copy-btn" onclick="copyToClipboard('corner-nw')">Copy</button>
+            </div>
+            <div class="coord-row">
+                <span class="coord-label">NE:</span>
+                <span class="coord-value" id="corner-ne">-</span>
+                <button class="copy-btn" onclick="copyToClipboard('corner-ne')">Copy</button>
+            </div>
+            <div class="coord-row">
+                <span class="coord-label">SE:</span>
+                <span class="coord-value" id="corner-se">-</span>
+                <button class="copy-btn" onclick="copyToClipboard('corner-se')">Copy</button>
+            </div>
+            <div class="coord-row">
+                <span class="coord-label">SW:</span>
+                <span class="coord-value" id="corner-sw">-</span>
+                <button class="copy-btn" onclick="copyToClipboard('corner-sw')">Copy</button>
+            </div>
+            <button class="copy-btn" style="width:100%; margin-top:5px;" onclick="copyAllCorners()">Copy All Corners</button>
+        </div>
+        
+        <button class="toggle-btn" onclick="toggleCoordMarkers()">Toggle Markers</button>
+        <div id="click-marker-info">
+            💡 Click map for coords. Click buildings to see corners.
+        </div>
+    </div>
+
+    <script>
+        const mapBearing = 21.3;
+        let clickMarkers = [];
+        let showCoordMarkers = true;
+        let currentOverlay = null;
+        let isDragging = false;
+        let dragStartTime = 0;
+        let currentBuildingCorners = null;
+
+        // Initialize the map
+        let map = L.map('map', {
+            maxZoom: 22,
+            minZoom: 16,
+            rotate: true,
+            bearing: mapBearing,
+            touchRotate: true,
+            shiftKeyRotate: true
+        }).setView([43.0125, -81.2002], 18);
+
+        // Add tile layer
+        L.tileLayer(
+            "https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=d3JSA6Uq18jaERqMgDqq",
+            {
+                attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+                maxZoom: 22
+            }
+        ).addTo(map);
+
+        // Update rotation display
+        map.on('rotate', function() {
+            let bearing = map.getBearing();
+            document.getElementById('rotation-display').textContent = 
+                'Rotation: ' + bearing.toFixed(1) + '°';
+        });
+
+        // Update zoom level display
+        map.on('zoomend', function() {
+            document.getElementById('zoom-level').textContent = map.getZoom().toFixed(1);
+        });
+        document.getElementById('zoom-level').textContent = map.getZoom().toFixed(1);
+
+        // Drag detection
+        map.on('mousedown touchstart', function() {
+            isDragging = false;
+            dragStartTime = Date.now();
+        });
+
+        map.on('mousemove touchmove', function() {
+            if (Date.now() - dragStartTime > 100) {
+                isDragging = true;
+            }
+        });
+
+        map.on('mouseup touchend', function() {
+            setTimeout(() => {
+                isDragging = false;
+            }, 50);
+        });
+
+        // Update map bearing
+        function updateMapBearing() {
+            const input = document.getElementById('bearingInput');
+            const newBearing = parseFloat(input.value) || 0;
+            map.setBearing(newBearing);
+            
+            if (currentOverlay) {
+                const overlayPane = currentOverlay.getElement();
+                if (overlayPane) {
+                    overlayPane.style.transform = `rotate(${newBearing}deg)`;
+                }
+            }
+        }
+
+        // Copy coordinate to clipboard
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            
+            if (text === '-' || text === 'Click map' || text === 'Click building first') {
+                return;
+            }
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = element.textContent;
+                element.textContent = 'Copied!';
+                element.style.background = '#90EE90';
+                setTimeout(() => {
+                    element.textContent = originalText;
+                    element.style.background = '#f0f0f0';
+                }, 1000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        // Copy all corners
+        function copyAllCorners() {
+            if (!currentBuildingCorners) return;
+            
+            const cornersText = `Corners (NW, NE, SE, SW):\n` +
+                `[${currentBuildingCorners[0].lat.toFixed(8)}, ${currentBuildingCorners[0].lng.toFixed(8)}],\n` +
+                `[${currentBuildingCorners[1].lat.toFixed(8)}, ${currentBuildingCorners[1].lng.toFixed(8)}],\n` +
+                `[${currentBuildingCorners[2].lat.toFixed(8)}, ${currentBuildingCorners[2].lng.toFixed(8)}],\n` +
+                `[${currentBuildingCorners[3].lat.toFixed(8)}, ${currentBuildingCorners[3].lng.toFixed(8)}]`;
+            
+            navigator.clipboard.writeText(cornersText).then(() => {
+                alert('All corners copied to clipboard!');
+            });
+        }
+
+        // Toggle coordinate markers
+        function toggleCoordMarkers() {
+            showCoordMarkers = !showCoordMarkers;
+            clickMarkers.forEach(marker => {
+                if (showCoordMarkers) {
+                    map.addLayer(marker);
+                } else {
+                    map.removeLayer(marker);
+                }
+            });
+        }
+
+        // Handle map clicks to show coordinates
+        map.on('click', function(e) {
+            const lat = e.latlng.lat;
+            const lng = e.latlng.lng;
+            
+            // Update coordinate display
+            document.getElementById('click-lat').textContent = lat.toFixed(8);
+            document.getElementById('click-lng').textContent = lng.toFixed(8);
+            
+            // Place a marker at click location
+            const marker = L.circleMarker(e.latlng, {
+                radius: 6,
+                fillColor: "#ff0000",
+                color: "#ffffff",
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map);
+            
+            // Add popup with coordinates
+            marker.bindPopup(`
+                <b>Coordinates:</b><br>
+                Lat: ${lat.toFixed(8)}<br>
+                Lng: ${lng.toFixed(8)}
+            `);
+            
+            clickMarkers.push(marker);
+            
+            // Keep only last 10 markers
+            if (clickMarkers.length > 10) {
+                map.removeLayer(clickMarkers.shift());
+            }
+            
+            console.log(`📍 Clicked at: [${lat.toFixed(8)}, ${lng.toFixed(8)}]`);
+        });
+
+        // Utility functions
+        function rotatePoint(point, center, angleDeg) {
+            const angleRad = (angleDeg * Math.PI) / 180;
+            const cos = Math.cos(angleRad);
+            const sin = Math.sin(angleRad);
+
+            const dx = point.lng - center.lng;
+            const dy = point.lat - center.lat;
+
+            return L.latLng(
+                center.lat + (dy * cos - dx * sin),
+                center.lng + (dx * cos + dy * sin)
+            );
+        }
+
+        // Load GeoJSON buildings
+        fetch('campus.geojson?ts=' + new Date().getTime())
+            .then(response => response.json())
+            .then(data => {
+                console.log("✅ GeoJSON loaded:", data);
+                
+                // Log all building centers
+                data.features.forEach(f => {
+                    if (f.geometry.type === "Polygon" || f.geometry.type === "MultiPolygon") {
+                        const layer = L.geoJSON(f);
+                        const bounds = layer.getBounds();
+                        console.log(
+                            `Building: ${f.properties.name}`,
+                            `Center: [${bounds.getCenter().lat.toFixed(8)}, ${bounds.getCenter().lng.toFixed(8)}]`
+                        );
+                    }
+                });
+
+                L.geoJSON(data, {
+                    onEachFeature: function(feature, layer) {
+                        let buildingName = feature.properties.name || "Unknown Building";
+                        layer.bindPopup("<b>" + buildingName + "</b><br>Click to see corners");
+
+                        layer.on('click', function(e) {
+                            if (isDragging) {
+                                console.log("Ignoring - user was dragging");
+                                return;
+                            }
+
+                            let bounds = layer.getBounds();
+                            let center = bounds.getCenter();
+
+                            let corners = [
+                                L.latLng(bounds.getNorth(), bounds.getWest()),  // NW
+                                L.latLng(bounds.getNorth(), bounds.getEast()),  // NE
+                                L.latLng(bounds.getSouth(), bounds.getEast()),  // SE
+                                L.latLng(bounds.getSouth(), bounds.getWest())   // SW
+                            ];
+                            
+                            console.log("🏢 BUILDING CLICKED:", buildingName);
+                            console.log("📐 Original corners:", corners);
+                            
+                            // Store corners for copying
+                            currentBuildingCorners = corners;
+                            
+                            // Display corners in UI
+                            document.getElementById('corner-display').style.display = 'block';
+                            document.getElementById('corner-nw').textContent = 
+                                `${corners[0].lat.toFixed(8)}, ${corners[0].lng.toFixed(8)}`;
+                            document.getElementById('corner-ne').textContent = 
+                                `${corners[1].lat.toFixed(8)}, ${corners[1].lng.toFixed(8)}`;
+                            document.getElementById('corner-se').textContent = 
+                                `${corners[2].lat.toFixed(8)}, ${corners[2].lng.toFixed(8)}`;
+                            document.getElementById('corner-sw').textContent = 
+                                `${corners[3].lat.toFixed(8)}, ${corners[3].lng.toFixed(8)}`;
+                            
+                            // Apply rotation to corners
+                            corners = corners.map(corner => rotatePoint(corner, center, mapBearing));
+                            console.log("🔄 Rotated corners:", corners);
+
+                            // Draw corner markers
+                            corners.forEach((corner, index) => {
+                                const labels = ['NW', 'NE', 'SE', 'SW'];
+                                L.circleMarker(corner, {
+                                    radius: 8,
+                                    fillColor: "#00ff00",
+                                    color: "#ffffff",
+                                    weight: 2,
+                                    opacity: 1,
+                                    fillOpacity: 0.8
+                                }).addTo(map).bindPopup(`<b>${labels[index]} Corner</b><br>
+                                    ${corner.lat.toFixed(8)}, ${corner.lng.toFixed(8)}`);
+                            });
+
+                            console.log(`✅ ${buildingName} corners displayed!`);
+                        });
+                    },
+                    style: {
+                        color: "blue",
+                        weight: 2,
+                        fillOpacity: 0.2
+                    }
+                }).addTo(map);
+            })
+            .catch(err => console.error("❌ Error loading GeoJSON:", err));
+
+        console.log("🗺️ Map initialized!");
+        console.log("Current map center:", map.getCenter());
+        console.log("Current zoom:", map.getZoom());
+        console.log("💡 Click any building to see its corners!");
+    </script>
+</body>
+</html>

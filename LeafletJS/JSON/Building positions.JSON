@@ -1,0 +1,19 @@
+{
+  "Building M": {
+  	"positionAdjustments": {
+  	"latOffset": -0.00003,
+  	"lngOffset": 0.000084,
+  	"scale": 1.48,
+  	"rotation": -21.5
+  	}
+  },
+  
+  "Building H": {
+  	"positionAdjustments": {
+  	"latOffset": -0.000023,
+  	"lngOffset": -0.000038,
+  	"scale": 1.2,
+  	"rotation": -20.5
+  	}
+  }
+}

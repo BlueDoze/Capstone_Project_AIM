@@ -3,7 +3,7 @@ set -e
 
 echo "🔨 Building Fanshawe Navigator Frontend..."
 
-cd Fanshawe_Navigator-main/frontend
+cd Frontend_Data/frontend
 
 # Instalar dependências
 echo "📦 Installing dependencies..."
@@ -24,5 +24,5 @@ npm run build
 cd ../..
 
 echo "✅ Frontend build complete!"
-echo "📂 Build output: Fanshawe_Navigator-main/frontend/dist/"
+echo "📂 Build output: Frontend_Data/frontend/dist/"
 echo "▶️  Start backend with: python src/api/app.py"
