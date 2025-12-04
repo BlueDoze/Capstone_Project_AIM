@@ -1,0 +1,72 @@
+{
+  "service_name": "Fanshawe Career Services",
+  "description": "Career Services provides comprehensive support for students' career development, including job search assistance, resume and cover letter help, interview preparation, co-op and internship support, and career counseling.",
+  "main_portal": {
+    "name": "Career Services Online Resources",
+    "url": "https://www.fanshaweonline.ca/d2l/home/906769",
+    "description": "Access all Career Services resources, tools, and information in one place"
+  },
+  "resources": [
+    {
+      "name": "Industry Mentorship Opportunities",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/2249242/view",
+      "category": "mentorship",
+      "description": "Connect with industry professionals for guidance and networking"
+    },
+    {
+      "name": "Peer Mentorship Program",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/2243703/view",
+      "category": "mentorship",
+      "description": "Get support from experienced students in your program"
+    },
+    {
+      "name": "Career Services Virtual Workshops",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1658663/view",
+      "category": "workshops",
+      "description": "Attend workshops on resume writing, interview skills, job search strategies, and more"
+    },
+    {
+      "name": "Career Fair Events",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1289437/view",
+      "category": "events",
+      "description": "Connect with employers at career fairs and networking events"
+    },
+    {
+      "name": "Professional Headshot Events",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1579036/view",
+      "category": "events",
+      "description": "Get professional photos for your resume and LinkedIn profile"
+    }
+  ],
+  "topics": {
+    "resume_help": {
+      "keywords": ["resume", "cv", "curriculum vitae"],
+      "response": "Career Services offers resume review and writing assistance through workshops and one-on-one appointments."
+    },
+    "interview_prep": {
+      "keywords": ["interview", "interviewing", "mock interview"],
+      "response": "Practice your interview skills with Career Services through mock interviews and preparation workshops."
+    },
+    "job_search": {
+      "keywords": ["job", "employment", "hiring", "job search"],
+      "response": "Career Services provides job search strategies, access to job postings, and connection to employers."
+    },
+    "coop_internship": {
+      "keywords": ["co-op", "coop", "internship", "work placement"],
+      "response": "Get support finding and securing co-op placements and internship opportunities."
+    },
+    "career_counseling": {
+      "keywords": ["career counseling", "career advice", "career path"],
+      "response": "Book an appointment with a career counselor to discuss your career goals and options."
+    },
+    "networking": {
+      "keywords": ["networking", "mentorship", "industry connections"],
+      "response": "Build your professional network through mentorship programs and industry events."
+    }
+  },
+  "contact": {
+    "website": "https://www.fanshawec.ca/student-life-services/career-services",
+    "location": "Student Services - Main Campus"
+  },
+  "extracted_at": "2025-12-04T00:00:00.000000"
+}

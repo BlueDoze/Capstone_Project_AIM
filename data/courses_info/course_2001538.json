@@ -1,0 +1,93 @@
+{
+  "title": "Homepage - INFO6152 Deep Learning with Tensorflow & Keras 2",
+  "code": "INFO-6152-(01)-25F",
+  "widgets": [
+    {
+      "index": 1,
+      "title": "Announcements",
+      "type": "d2l-widget d2l-tile"
+    },
+    {
+      "index": 2,
+      "title": "Professor Information",
+      "type": "d2l-widget d2l-tile d2l-custom-widget"
+    },
+    {
+      "index": 3,
+      "title": "Calendar",
+      "type": "d2l-widget d2l-tile"
+    },
+    {
+      "index": 4,
+      "title": "Updates",
+      "type": "d2l-widget d2l-tile"
+    }
+  ],
+  "links": [
+    {
+      "text": "INFO-6152-(01)-25F",
+      "url": "https://www.fanshaweonline.ca/d2l/home/2001538"
+    },
+    {
+      "text": "Profile",
+      "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001538"
+    },
+    {
+      "text": "Notifications",
+      "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001538"
+    },
+    {
+      "text": "Account Settings",
+      "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001538"
+    },
+    {
+      "text": "Progress",
+      "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001538/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+    },
+    {
+      "text": "Content",
+      "url": "https://www.fanshaweonline.ca/d2l/le/content/2001538/Home"
+    },
+    {
+      "text": "Announcements",
+      "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001538"
+    },
+    {
+      "text": "Final Exam and Presentation Details",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001538/2266438/view"
+    },
+    {
+      "text": "Quiz Details and Seating Arrangement",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001538/2263019/view"
+    },
+    {
+      "text": "Show All Announcements",
+      "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001538"
+    },
+    {
+      "text": "Calendar",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001538"
+    },
+    {
+      "text": "View Event - 👨‍💻Final Project - Code - Due",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001538/event/7189436/detailsview#7189436"
+    },
+    {
+      "text": "View Event - 📝Final Project - Report - Due",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001538/event/7189438/detailsview#7189438"
+    },
+    {
+      "text": "View Event - 📊Final Project - Presentation File - Due",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001538/event/7189439/detailsview#7189439"
+    }
+  ],
+  "announcements": [],
+  "content": {
+    "text_length": 674,
+    "total_links": 21,
+    "total_images": 2
+  },
+  "course_id": "2001538",
+  "url": "https://www.fanshaweonline.ca/d2l/home/2001538",
+  "extracted_at": "2025-12-03T23:57:59.668599"
+}

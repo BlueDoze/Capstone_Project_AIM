@@ -135,6 +135,49 @@ if RAG_SYSTEM_AVAILABLE:
 
 # Store the map information for the AI model
 
+# Helper function to safely extract text from Gemini responses
+def safe_get_response_text(response, default_message="I apologize, but I couldn't generate a proper response. Please try rephrasing your question."):
+    """
+    Safely extract text from Gemini API response, handling various error cases.
+    
+    Args:
+        response: Gemini API response object
+        default_message: Fallback message if extraction fails
+        
+    Returns:
+        str: Response text or default message
+    """
+    try:
+        # Try to access response.text
+        return response.text
+    except ValueError as e:
+        # Handle cases where response.text is not available
+        print(f"⚠️ Gemini response error: {e}")
+        
+        # Check finish_reason
+        if hasattr(response, 'candidates') and response.candidates:
+            candidate = response.candidates[0]
+            finish_reason = getattr(candidate, 'finish_reason', None)
+            
+            # Log the finish reason for debugging
+            print(f"   Finish reason: {finish_reason}")
+            
+            # Provide specific messages based on finish_reason
+            if finish_reason == 2:  # SAFETY
+                print("   Response blocked by safety filters")
+                return "I apologize, but I couldn't generate a response due to content safety policies. Please rephrase your question."
+            elif finish_reason == 3:  # RECITATION
+                print("   Response blocked due to recitation")
+                return "I apologize, but I couldn't generate an original response. Please try asking in a different way."
+            elif finish_reason == 4:  # OTHER
+                print("   Response blocked for other reasons")
+                return default_message
+        
+        return default_message
+    except Exception as e:
+        print(f"⚠️ Unexpected error extracting response text: {e}")
+        return default_message
+
 map_info ='''You are the Fanshawe Navigator for the Campus. Provide step-by-step walking directions based on the information you have.
 
 You will provide directions in a clear and concise manner. Tell the user putting yourself in the map's perspective where to go. 
@@ -230,6 +273,39 @@ When answering about announcements:
 - Be aware of deadlines and time-sensitive information
 
 Be helpful, organized, and ensure students don't miss important information!
+'''
+
+# Career Services information prompt for AI model
+career_services_prompt = '''You are the Fanshawe Career Services Assistant. You help students access career development resources, job search support, and professional development opportunities.
+
+You have access to information about:
+- Career Services portal and online resources
+- Resume and cover letter assistance
+- Interview preparation and mock interviews
+- Job search strategies and employer connections
+- Co-op and internship support
+- Career counseling and guidance
+- Mentorship programs (industry and peer)
+- Career workshops and events
+- Professional headshot services
+- Career fairs and networking opportunities
+
+When answering about Career Services:
+- Provide direct links to the main Career Services portal and specific resources
+- Explain what services are available (workshops, one-on-one appointments, etc.)
+- Mention relevant programs like mentorship opportunities
+- Include information about upcoming events when relevant
+- Be encouraging and supportive about career development
+- Suggest specific next steps (visit portal, book appointment, attend workshop)
+- Job search tips and resources
+Be helpful, professional, and empower students to take charge of their career development!
+Provide clear and concise information about Career Services resources and support.
+
+For example:
+- To get help with your resume, visit the Career Services portal at [insert link] where you can find templates and book an appointment with a career advisor.
+- I would like to find a job
+- I want to improve my resume
+- Where can I find co-op opportunities?
 '''
 
 
@@ -602,7 +678,7 @@ def parse_navigation_request(user_message: str) -> Dict[str, Any]:
         If no navigation intent, set is_navigation to false."""
 
         response = model.generate_content(parse_prompt)
-        response_text = response.text.strip()
+        response_text = safe_get_response_text(response, "{}").strip()
 
         # Try to extract JSON
         import re
@@ -668,9 +744,9 @@ def classify_user_intent(user_message: str) -> Dict[str, Any]:
         # Use keyword pre-filtering for faster classification
         message_lower = user_message.lower()
 
-        # Navigation keywords
+        # Navigation keywords (removed 'find' as it's too generic)
         nav_keywords = ['how', 'get', 'go', 'navigate', 'path', 'way', 'direction',
-                        'from', 'to', 'reach', 'find', 'where', 'location', 'room',
+                        'from', 'to', 'reach', 'where', 'location', 'room',
                         'como', 'ir', 'chegar', 'onde']
 
         # Event keywords
@@ -688,39 +764,61 @@ def classify_user_intent(user_message: str) -> Dict[str, Any]:
                                 'd2l', 'brightspace', 'message', 'aviso', 'noticia',
                                 'posted', 'instructor', 'professor', 'class update']
 
+        # Career Services keywords
+        career_keywords = ['career', 'job', 'resume', 'cv', 'interview', 'co-op', 'coop',
+                          'internship', 'employment', 'hiring', 'work placement',
+                          'career counseling', 'career advice', 'mentorship', 'networking',
+                          'job search', 'cover letter', 'professional development',
+                          'career fair', 'headshot', 'carreira', 'emprego']
+
         # Count keyword matches
         nav_score = sum(1 for kw in nav_keywords if kw in message_lower)
         event_score = sum(1 for kw in event_keywords if kw in message_lower)
         restaurant_score = sum(1 for kw in restaurant_keywords if kw in message_lower)
         announcement_score = sum(1 for kw in announcement_keywords if kw in message_lower)
+        career_score = sum(1 for kw in career_keywords if kw in message_lower)
+
+        # Log keyword scores
+        print(f"🔍 Keyword scores for '{user_message[:50]}...':")
+        print(f"   Navigation: {nav_score} | Events: {event_score} | Restaurants: {restaurant_score}")
+        print(f"   Announcements: {announcement_score} | Career Services: {career_score}")
 
         # If clear winner from keywords, use it
-        max_score = max(nav_score, event_score, restaurant_score, announcement_score)
+        max_score = max(nav_score, event_score, restaurant_score, announcement_score, career_score)
         if max_score >= 2:
             if nav_score == max_score:
+                print(f"✅ Intent detected by KEYWORDS: NAVIGATION (score: {nav_score})")
                 return {'intent': 'NAVIGATION', 'confidence': 0.8, 'entities': {}}
             elif event_score == max_score:
+                print(f"✅ Intent detected by KEYWORDS: EVENTS (score: {event_score})")
                 return {'intent': 'EVENTS', 'confidence': 0.8, 'entities': {}}
             elif restaurant_score == max_score:
+                print(f"✅ Intent detected by KEYWORDS: RESTAURANTS (score: {restaurant_score})")
                 return {'intent': 'RESTAURANTS', 'confidence': 0.8, 'entities': {}}
             elif announcement_score == max_score:
+                print(f"✅ Intent detected by KEYWORDS: ANNOUNCEMENTS (score: {announcement_score})")
                 return {'intent': 'ANNOUNCEMENTS', 'confidence': 0.8, 'entities': {}}
+            elif career_score == max_score:
+                print(f"✅ Intent detected by KEYWORDS: CAREER_SERVICES (score: {career_score})")
+                return {'intent': 'CAREER_SERVICES', 'confidence': 0.8, 'entities': {}}
 
         # Use Gemini for more nuanced classification
+        print(f"🤖 Using Gemini AI for classification (max keyword score: {max_score} < 2)")
         classify_prompt = f"""Classify this user query into ONE of these categories:
         - NAVIGATION: Questions about directions, finding locations, wayfinding on campus
         - EVENTS: Questions about campus events, activities, schedules, workshops
         - RESTAURANTS: Questions about food, dining, cafeterias, restaurants on campus
         - ANNOUNCEMENTS: Questions about course announcements, D2L news, class updates, instructor messages
+        - CAREER_SERVICES: Questions about career services, job search, resumes, interviews, co-op, internships, career counseling, mentorship
         - OUT_OF_SCOPE: Anything else not related to the above categories
 
         Return ONLY a JSON response with this format (no other text):
-        {{"intent": "NAVIGATION|EVENTS|RESTAURANTS|ANNOUNCEMENTS|OUT_OF_SCOPE", "confidence": 0.0-1.0}}
+        {{"intent": "NAVIGATION|EVENTS|RESTAURANTS|ANNOUNCEMENTS|CAREER_SERVICES|OUT_OF_SCOPE", "confidence": 0.0-1.0}}
 
         User query: {user_message}"""
 
         response = model.generate_content(classify_prompt)
-        response_text = response.text.strip()
+        response_text = safe_get_response_text(response, "{}").strip()
 
         # Extract JSON
         json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
@@ -729,12 +827,15 @@ def classify_user_intent(user_message: str) -> Dict[str, Any]:
             intent = parsed.get('intent', 'OUT_OF_SCOPE')
             confidence = parsed.get('confidence', 0.5)
 
+            print(f"✅ Intent detected by GEMINI AI: {intent} (confidence: {confidence:.2f})")
+
             return {
                 'intent': intent,
                 'confidence': confidence,
                 'entities': {}
             }
 
+        print(f"⚠️ Failed to parse Gemini response, defaulting to OUT_OF_SCOPE")
         return {'intent': 'OUT_OF_SCOPE', 'confidence': 0.5, 'entities': {}}
 
     except Exception as e:
@@ -779,7 +880,8 @@ def handle_event_query(user_message: str, entities: Dict[str, Any]) -> Dict[str,
 
         # Generate response
         response = model.generate_content(prompt)
-        clean_response = clean_html_to_text(response.text, keep_emojis=False)
+        response_text = safe_get_response_text(response)
+        clean_response = clean_html_to_text(response_text, keep_emojis=False)
 
         print(f"📅 Event query handled: {user_message[:50]}...")
 
@@ -837,7 +939,8 @@ def handle_restaurant_query(user_message: str, entities: Dict[str, Any]) -> Dict
 
         # Generate response
         response = model.generate_content(prompt)
-        clean_response = clean_html_to_text(response.text, keep_emojis=False)
+        response_text = safe_get_response_text(response)
+        clean_response = clean_html_to_text(response_text, keep_emojis=False)
 
         print(f"🍽️ Restaurant query handled: {user_message[:50]}...")
 
@@ -896,7 +999,8 @@ def handle_announcement_query(user_message: str, entities: Dict[str, Any]) -> Di
 
         # Generate response
         response = model.generate_content(prompt)
-        clean_response = clean_html_to_text(response.text, keep_emojis=False)
+        response_text = safe_get_response_text(response)
+        clean_response = clean_html_to_text(response_text, keep_emojis=False)
 
         print(f"📢 Announcement query handled: {user_message[:50]}...")
 
@@ -908,6 +1012,36 @@ def handle_announcement_query(user_message: str, entities: Dict[str, Any]) -> Di
         traceback.print_exc()
         return {'reply': 'Sorry, I encountered an error while searching for announcements. Please try again.'}
 
+def handle_career_services_query(user_message: str, entities: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Handles career services queries by providing a standard message
+    with the Career Services portal link
+    """
+    # Standard message with Career Services link
+    standard_message = """I can help you with career services!
+
+Fanshawe Career Services provides comprehensive support for your career development, including:
+
+- Resume and cover letter assistance
+- Interview preparation and mock interviews
+- Job search strategies and employer connections
+- Co-op and internship support
+- Career counseling and guidance
+- Mentorship programs (industry and peer)
+- Career workshops and networking events
+- Professional headshot services
+
+Visit the Career Services portal to access all resources and book appointments:
+https://www.fanshaweonline.ca/d2l/home/906769
+
+For more information, you can also visit: www.fanshawec.ca/student-life-services/career-services"""
+
+    clean_response = clean_html_to_text(standard_message, keep_emojis=False)
+    
+    print(f"💼 Career Services query handled: {user_message[:50]}...")
+    
+    return {'reply': clean_response}
+
 def handle_out_of_scope_query(user_message: str) -> Dict[str, Any]:
     """
     Provides a standard response for queries outside the supported categories
@@ -918,13 +1052,14 @@ def handle_out_of_scope_query(user_message: str) -> Dict[str, Any]:
 - Campus Events - Discovering activities and schedules
 - Dining & Restaurants - Locating food services on campus
 - Course Announcements - D2L updates and class news
+- Career Services - Job search, resume help, interviews, co-op support
 
 Your question seems to be outside these areas. For other assistance, please visit:
 - Student Services: www.fanshawec.ca/student-services
 - Academic Support: Contact your program coordinator
 - General Inquiries: Visit the Information Desk at the Student Centre
 
-How else can I help you with navigation, events, dining, or announcements?"""
+How else can I help you with navigation, events, dining, announcements, or career services?"""
 
     # Return clean text without HTML tags or emojis
     clean_response = clean_html_to_text(fallback_message, keep_emojis=False)
@@ -978,7 +1113,7 @@ Event text:
 {full_text}"""
 
         response = model.generate_content(extract_prompt)
-        response_text = response.text.strip()
+        response_text = safe_get_response_text(response, "{}").strip()
 
         # Extract JSON
         json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
@@ -1049,7 +1184,9 @@ def api_chat():
             response = model.generate_content(prompt)
 
             # Convert Markdown to HTML
-            clean_response = clean_html_to_text(response.text, keep_emojis=False)
+            response_text = safe_get_response_text(response)
+            clean_response = clean_html_to_text(response_text, keep_emojis=False)
+            clean_response = clean_html_to_text(response_text, keep_emojis=False)
 
             # If navigation request detected, include map action
             if nav_result.get('is_navigation'):
@@ -1082,6 +1219,11 @@ def api_chat():
         elif intent_type == "ANNOUNCEMENTS":
             # Handle announcement queries
             result = handle_announcement_query(user_message, intent_result['entities'])
+            return jsonify(result)
+
+        elif intent_type == "CAREER_SERVICES":
+            # Handle career services queries
+            result = handle_career_services_query(user_message, intent_result['entities'])
             return jsonify(result)
 
         else:  # OUT_OF_SCOPE
@@ -1229,7 +1371,8 @@ def chat():
             response = model.generate_content(prompt)
 
             # Clean response text (remove HTML tags and emojis)
-            clean_response = clean_html_to_text(response.text, keep_emojis=False)
+            response_text = safe_get_response_text(response)
+            clean_response = clean_html_to_text(response_text, keep_emojis=False)
 
             # If navigation request detected, include map action
             if nav_result.get('is_navigation'):
@@ -1262,6 +1405,11 @@ def chat():
         elif intent_type == "ANNOUNCEMENTS":
             # Handle announcement queries
             result = handle_announcement_query(user_message, intent_result['entities'])
+            return jsonify(result)
+
+        elif intent_type == "CAREER_SERVICES":
+            # Handle career services queries
+            result = handle_career_services_query(user_message, intent_result['entities'])
             return jsonify(result)
 
         else:  # OUT_OF_SCOPE
@@ -1641,7 +1789,8 @@ def api_navigation_from_clicks():
             print(f"📝 Using textual information for navigation...")
 
         response = model.generate_content(prompt)
-        clean_response = clean_html_to_text(response.text, keep_emojis=False)
+        response_text = safe_get_response_text(response)
+        clean_response = clean_html_to_text(response_text, keep_emojis=False)
 
         return jsonify({
             "reply": clean_response,
