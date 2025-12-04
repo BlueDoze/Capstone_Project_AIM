@@ -1,3 +1,3 @@
 #!/bin/sh
 source .venv/bin/activate
-python -u main.py
+python -u run_app.py

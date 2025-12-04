@@ -1,0 +1,696 @@
+{
+  "extracted_at": "2025-12-03T23:57:59.669071",
+  "total_courses": 7,
+  "processed": 7,
+  "failed": 0,
+  "courses": [
+    {
+      "title": "INFO6154 Machine Learning Optimization Strategies",
+      "code": "INFO-6154-(01)-25F",
+      "widgets": [
+        {
+          "index": 1,
+          "title": "Announcements",
+          "type": "d2l-widget d2l-tile"
+        },
+        {
+          "index": 2,
+          "title": "Professor Information",
+          "type": "d2l-widget d2l-tile d2l-custom-widget"
+        },
+        {
+          "index": 3,
+          "title": "Calendar",
+          "type": "d2l-widget d2l-tile"
+        },
+        {
+          "index": 4,
+          "title": "Updates",
+          "type": "d2l-widget d2l-tile"
+        }
+      ],
+      "links": [
+        {
+          "text": "INFO-6154-(01)-25F",
+          "url": "https://www.fanshaweonline.ca/d2l/home/2001540"
+        },
+        {
+          "text": "Profile",
+          "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001540"
+        },
+        {
+          "text": "Notifications",
+          "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001540"
+        },
+        {
+          "text": "Account Settings",
+          "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001540"
+        },
+        {
+          "text": "Progress",
+          "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001540/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+        },
+        {
+          "text": "Content",
+          "url": "https://www.fanshaweonline.ca/d2l/le/content/2001540/Home"
+        },
+        {
+          "text": "Announcements",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001540"
+        },
+        {
+          "text": "Final Exam and Presentation Details",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001540/2266439/view"
+        },
+        {
+          "text": "Quiz Details and Seating Arrangement",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001540/2263208/view"
+        },
+        {
+          "text": "Show All Announcements",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001540"
+        },
+        {
+          "text": "Calendar",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001540"
+        },
+        {
+          "text": "View Event - 📝Final Project - Report - Due",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001540/event/7189476/detailsview#7189476"
+        },
+        {
+          "text": "View Event - 👨‍💻Final Project - Code - Due",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001540/event/7189479/detailsview#7189479"
+        },
+        {
+          "text": "View Event - 📊Final Project - Presentation File - Due",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001540/event/7189488/detailsview#7189488"
+        }
+      ],
+      "announcements": [],
+      "content": {
+        "text_length": 750,
+        "total_links": 21,
+        "total_images": 1
+      },
+      "course_id": "2001540",
+      "url": "https://www.fanshaweonline.ca/d2l/home/2001540",
+      "extracted_at": "2025-12-03T23:57:06.992482"
+    },
+    {
+      "title": "Welcome Luiz Henrique to Career Services Online Resources",
+      "code": null,
+      "widgets": [
+        {
+          "index": 1,
+          "title": "Please click below",
+          "type": "d2l-widget d2l-tile d2l-custom-widget"
+        },
+        {
+          "index": 2,
+          "title": "Announcements",
+          "type": "d2l-widget d2l-tile"
+        },
+        {
+          "index": 3,
+          "title": "Career Services Infographics",
+          "type": "d2l-widget d2l-tile d2l-widget-padding-full d2l-custom-widget"
+        },
+        {
+          "index": 4,
+          "title": "Twitter",
+          "type": "d2l-widget d2l-tile d2l-widget-padding-full d2l-custom-widget"
+        },
+        {
+          "index": 5,
+          "title": "Instructor Information",
+          "type": "d2l-widget d2l-tile d2l-custom-widget"
+        }
+      ],
+      "links": [
+        {
+          "text": "Career Services Online Resources",
+          "url": "https://www.fanshaweonline.ca/d2l/home/906769"
+        },
+        {
+          "text": "Profile",
+          "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=906769"
+        },
+        {
+          "text": "Notifications",
+          "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=906769"
+        },
+        {
+          "text": "Account Settings",
+          "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=906769"
+        },
+        {
+          "text": "Progress",
+          "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/906769/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+        },
+        {
+          "text": "Checklist",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/checklist/checklists.d2l?ou=906769"
+        },
+        {
+          "text": "Content",
+          "url": "https://www.fanshaweonline.ca/d2l/le/content/906769/Home"
+        },
+        {
+          "text": "Virtual Classroom",
+          "url": "https://www.fanshaweonline.ca/d2l/ext/rp/906769/lti/framedlaunch/b2f121b1-b1d3-420e-a16d-50738999b2e6"
+        },
+        {
+          "text": "Announcements",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=906769"
+        },
+        {
+          "text": "Industry Mentorship Opportunities for Students!",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/2249242/view"
+        },
+        {
+          "text": "Peer Mentorship",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/2243703/view"
+        },
+        {
+          "text": "Career Services - September Virtual Workshops",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1658663/view"
+        },
+        {
+          "text": "Headshot Event",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1579036/view"
+        },
+        {
+          "text": "CAREER FAIR by PHEEDLOOP",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1289437/view"
+        },
+        {
+          "text": "Show All Announcements",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=906769"
+        }
+      ],
+      "announcements": [],
+      "content": {
+        "text_length": 729,
+        "total_links": 29,
+        "total_images": 2
+      },
+      "course_id": "906769",
+      "url": "https://www.fanshaweonline.ca/d2l/home/906769",
+      "extracted_at": "2025-12-03T23:57:15.235392"
+    },
+    {
+      "title": "Homepage - INFO6153 Natural Language Processing 2",
+      "code": "INFO-6153-(01)-25F",
+      "widgets": [
+        {
+          "index": 1,
+          "title": "Announcements",
+          "type": "d2l-widget d2l-tile"
+        },
+        {
+          "index": 2,
+          "title": "Sulaiman Aburakhia",
+          "type": "d2l-widget d2l-tile d2l-custom-widget"
+        },
+        {
+          "index": 3,
+          "title": "Calendar",
+          "type": "d2l-widget d2l-tile"
+        },
+        {
+          "index": 4,
+          "title": "Updates",
+          "type": "d2l-widget d2l-tile"
+        }
+      ],
+      "links": [
+        {
+          "text": "INFO-6153-(01)-25F",
+          "url": "https://www.fanshaweonline.ca/d2l/home/2001539"
+        },
+        {
+          "text": "Profile",
+          "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001539"
+        },
+        {
+          "text": "Notifications",
+          "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001539"
+        },
+        {
+          "text": "Account Settings",
+          "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001539"
+        },
+        {
+          "text": "Progress",
+          "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001539/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+        },
+        {
+          "text": "Content",
+          "url": "https://www.fanshaweonline.ca/d2l/le/content/2001539/Home"
+        },
+        {
+          "text": "Announcements",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001539"
+        },
+        {
+          "text": "Lab activity tomorrow!",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2264951/view"
+        },
+        {
+          "text": "Quiz 2!",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2264907/view"
+        },
+        {
+          "text": "Project Submission!",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2263560/view"
+        },
+        {
+          "text": "Submission of Assignment 2",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2261797/view"
+        },
+        {
+          "text": "Quiz 2 will be on Friday, November 28.",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2256285/view"
+        },
+        {
+          "text": "Show All Announcements",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001539"
+        },
+        {
+          "text": "Calendar",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001539"
+        },
+        {
+          "text": "View Event - Project - Availability Ends",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001539/event/7189447/detailsview#7189447"
+        },
+        {
+          "text": "View Event - Project - Due",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001539/event/7189455/detailsview#7189455"
+        }
+      ],
+      "announcements": [],
+      "content": {
+        "text_length": 711,
+        "total_links": 26,
+        "total_images": 1
+      },
+      "course_id": "2001539",
+      "url": "https://www.fanshaweonline.ca/d2l/home/2001539",
+      "extracted_at": "2025-12-03T23:57:23.887659"
+    },
+    {
+      "title": "Homepage - INFO6156 Capstone Project",
+      "code": "INFO-6156-(01)-25F",
+      "widgets": [
+        {
+          "index": 1,
+          "title": "Announcements",
+          "type": "d2l-widget d2l-tile"
+        },
+        {
+          "index": 2,
+          "title": "Professor Information",
+          "type": "d2l-widget d2l-tile d2l-custom-widget"
+        },
+        {
+          "index": 3,
+          "title": "Calendar",
+          "type": "d2l-widget d2l-tile"
+        },
+        {
+          "index": 4,
+          "title": "Updates",
+          "type": "d2l-widget d2l-tile"
+        }
+      ],
+      "links": [
+        {
+          "text": "INFO-6156-(01)-25F",
+          "url": "https://www.fanshaweonline.ca/d2l/home/2001542"
+        },
+        {
+          "text": "Profile",
+          "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001542"
+        },
+        {
+          "text": "Notifications",
+          "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001542"
+        },
+        {
+          "text": "Account Settings",
+          "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001542"
+        },
+        {
+          "text": "Progress",
+          "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001542/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+        },
+        {
+          "text": "Content",
+          "url": "https://www.fanshaweonline.ca/d2l/le/content/2001542/Home"
+        },
+        {
+          "text": "Announcements",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001542"
+        },
+        {
+          "text": "Sprint 4 Presentation - reg",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2270052/view"
+        },
+        {
+          "text": "Reminder: Capstone Class & Agentic AI Workshop",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2257918/view"
+        },
+        {
+          "text": "Building Agentic AI using IBM Tools - 18th Nov, Tuesday, 2-4 PM",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2255777/view"
+        },
+        {
+          "text": "Gentle Reminder - Sprint 2",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2249581/view"
+        },
+        {
+          "text": "Gentle Reminder - Building with Agentic AI: A Hands-on Workshop",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2246212/view"
+        },
+        {
+          "text": "Show All Announcements",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001542"
+        },
+        {
+          "text": "Calendar",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001542"
+        },
+        {
+          "text": "View Event - Presentation and Final Code - Due",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001542/event/7132447/detailsview#7132447"
+        }
+      ],
+      "announcements": [],
+      "content": {
+        "text_length": 828,
+        "total_links": 25,
+        "total_images": 3
+      },
+      "course_id": "2001542",
+      "url": "https://www.fanshaweonline.ca/d2l/home/2001542",
+      "extracted_at": "2025-12-03T23:57:32.422488"
+    },
+    {
+      "title": "25F Homeroom - Artificial Intelligence (AI) and Machine Learning (AIM)",
+      "code": null,
+      "widgets": [
+        {
+          "index": 1,
+          "title": "Announcements",
+          "type": "d2l-widget d2l-tile"
+        },
+        {
+          "index": 2,
+          "title": "Professor Information",
+          "type": "d2l-widget d2l-tile d2l-custom-widget"
+        },
+        {
+          "index": 3,
+          "title": "Calendar",
+          "type": "d2l-widget d2l-tile"
+        },
+        {
+          "index": 4,
+          "title": "Updates",
+          "type": "d2l-widget d2l-tile"
+        }
+      ],
+      "links": [
+        {
+          "text": "AIM-HOMEROOM-FALL-2025",
+          "url": "https://www.fanshaweonline.ca/d2l/home/2014765"
+        },
+        {
+          "text": "Profile",
+          "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2014765"
+        },
+        {
+          "text": "Notifications",
+          "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2014765"
+        },
+        {
+          "text": "Account Settings",
+          "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2014765"
+        },
+        {
+          "text": "Progress",
+          "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2014765/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+        },
+        {
+          "text": "Content",
+          "url": "https://www.fanshaweonline.ca/d2l/le/content/2014765/Home"
+        },
+        {
+          "text": "Announcements",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2014765"
+        },
+        {
+          "text": "Co-op Status Survey – IMPORTANT!",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2263929/view"
+        },
+        {
+          "text": "Building Agentic AI using IBM Tools - 18th Nov, Tuesday, 2-4 PM",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2255780/view"
+        },
+        {
+          "text": "Gentle Reminder - Building with Agentic AI: A Hands-on Workshop",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2246213/view"
+        },
+        {
+          "text": "Agentic AI Hackathon with IBM watsonx Orchestrate",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2239214/view"
+        },
+        {
+          "text": "How To Build GenAI Applications Using Your Data, an IBM TechXchange Workshop",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2239207/view"
+        },
+        {
+          "text": "Show All Announcements",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2014765"
+        },
+        {
+          "text": "Calendar",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2014765"
+        },
+        {
+          "text": "View Event - Co-op - Survey Due",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2014765/event/7393343/detailsview#7393343"
+        }
+      ],
+      "announcements": [],
+      "content": {
+        "text_length": 915,
+        "total_links": 25,
+        "total_images": 0
+      },
+      "course_id": "2014765",
+      "url": "https://www.fanshaweonline.ca/d2l/home/2014765",
+      "extracted_at": "2025-12-03T23:57:41.966361"
+    },
+    {
+      "title": "Homepage - INFO6155 Social Media Analytics",
+      "code": "INFO-6155-(01)-25F",
+      "widgets": [
+        {
+          "index": 1,
+          "title": "Announcements",
+          "type": "d2l-widget d2l-tile"
+        },
+        {
+          "index": 2,
+          "title": "Christie Ramos",
+          "type": "d2l-widget d2l-tile d2l-custom-widget"
+        },
+        {
+          "index": 3,
+          "title": "Calendar",
+          "type": "d2l-widget d2l-tile"
+        },
+        {
+          "index": 4,
+          "title": "Updates",
+          "type": "d2l-widget d2l-tile"
+        }
+      ],
+      "links": [
+        {
+          "text": "INFO-6155-(01)-25F",
+          "url": "https://www.fanshaweonline.ca/d2l/home/2001541"
+        },
+        {
+          "text": "Profile",
+          "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001541"
+        },
+        {
+          "text": "Notifications",
+          "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001541"
+        },
+        {
+          "text": "Account Settings",
+          "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001541"
+        },
+        {
+          "text": "Progress",
+          "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001541/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+        },
+        {
+          "text": "Content",
+          "url": "https://www.fanshaweonline.ca/d2l/le/content/2001541/Home"
+        },
+        {
+          "text": "Announcements",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001541"
+        },
+        {
+          "text": "Brandwatch Assignment Reminder & Class Recording",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2269685/view"
+        },
+        {
+          "text": "Brandwatch Access & Class Recording",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2260435/view"
+        },
+        {
+          "text": "Updated Midterm Time",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2250208/view"
+        },
+        {
+          "text": "Midterm Today",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2250182/view"
+        },
+        {
+          "text": "Practice Dataset Released — Class Recording",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2248218/view"
+        },
+        {
+          "text": "Show All Announcements",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001541"
+        },
+        {
+          "text": "Calendar",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001541"
+        },
+        {
+          "text": "View Event - Brandwatch Academy Course Work - Due",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001541/event/7145080/detailsview#7145080"
+        },
+        {
+          "text": "View Event - Brandwatch Academy Certification - Due",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001541/event/7145087/detailsview#7145087"
+        },
+        {
+          "text": "View Event - Brandwatch Social Listening & Sentiment Analysis Walkthrough - Due",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001541/event/7145092/detailsview#7145092"
+        }
+      ],
+      "announcements": [],
+      "content": {
+        "text_length": 1050,
+        "total_links": 27,
+        "total_images": 6
+      },
+      "course_id": "2001541",
+      "url": "https://www.fanshaweonline.ca/d2l/home/2001541",
+      "extracted_at": "2025-12-03T23:57:50.514574"
+    },
+    {
+      "title": "Homepage - INFO6152 Deep Learning with Tensorflow & Keras 2",
+      "code": "INFO-6152-(01)-25F",
+      "widgets": [
+        {
+          "index": 1,
+          "title": "Announcements",
+          "type": "d2l-widget d2l-tile"
+        },
+        {
+          "index": 2,
+          "title": "Professor Information",
+          "type": "d2l-widget d2l-tile d2l-custom-widget"
+        },
+        {
+          "index": 3,
+          "title": "Calendar",
+          "type": "d2l-widget d2l-tile"
+        },
+        {
+          "index": 4,
+          "title": "Updates",
+          "type": "d2l-widget d2l-tile"
+        }
+      ],
+      "links": [
+        {
+          "text": "INFO-6152-(01)-25F",
+          "url": "https://www.fanshaweonline.ca/d2l/home/2001538"
+        },
+        {
+          "text": "Profile",
+          "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001538"
+        },
+        {
+          "text": "Notifications",
+          "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001538"
+        },
+        {
+          "text": "Account Settings",
+          "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001538"
+        },
+        {
+          "text": "Progress",
+          "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001538/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+        },
+        {
+          "text": "Content",
+          "url": "https://www.fanshaweonline.ca/d2l/le/content/2001538/Home"
+        },
+        {
+          "text": "Announcements",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001538"
+        },
+        {
+          "text": "Final Exam and Presentation Details",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001538/2266438/view"
+        },
+        {
+          "text": "Quiz Details and Seating Arrangement",
+          "url": "https://www.fanshaweonline.ca/d2l/le/news/2001538/2263019/view"
+        },
+        {
+          "text": "Show All Announcements",
+          "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001538"
+        },
+        {
+          "text": "Calendar",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001538"
+        },
+        {
+          "text": "View Event - 👨‍💻Final Project - Code - Due",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001538/event/7189436/detailsview#7189436"
+        },
+        {
+          "text": "View Event - 📝Final Project - Report - Due",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001538/event/7189438/detailsview#7189438"
+        },
+        {
+          "text": "View Event - 📊Final Project - Presentation File - Due",
+          "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001538/event/7189439/detailsview#7189439"
+        }
+      ],
+      "announcements": [],
+      "content": {
+        "text_length": 674,
+        "total_links": 21,
+        "total_images": 2
+      },
+      "course_id": "2001538",
+      "url": "https://www.fanshaweonline.ca/d2l/home/2001538",
+      "extracted_at": "2025-12-03T23:57:59.668599"
+    }
+  ]
+}

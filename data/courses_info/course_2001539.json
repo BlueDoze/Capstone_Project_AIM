@@ -1,0 +1,101 @@
+{
+  "title": "Homepage - INFO6153 Natural Language Processing 2",
+  "code": "INFO-6153-(01)-25F",
+  "widgets": [
+    {
+      "index": 1,
+      "title": "Announcements",
+      "type": "d2l-widget d2l-tile"
+    },
+    {
+      "index": 2,
+      "title": "Sulaiman Aburakhia",
+      "type": "d2l-widget d2l-tile d2l-custom-widget"
+    },
+    {
+      "index": 3,
+      "title": "Calendar",
+      "type": "d2l-widget d2l-tile"
+    },
+    {
+      "index": 4,
+      "title": "Updates",
+      "type": "d2l-widget d2l-tile"
+    }
+  ],
+  "links": [
+    {
+      "text": "INFO-6153-(01)-25F",
+      "url": "https://www.fanshaweonline.ca/d2l/home/2001539"
+    },
+    {
+      "text": "Profile",
+      "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001539"
+    },
+    {
+      "text": "Notifications",
+      "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001539"
+    },
+    {
+      "text": "Account Settings",
+      "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001539"
+    },
+    {
+      "text": "Progress",
+      "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001539/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+    },
+    {
+      "text": "Content",
+      "url": "https://www.fanshaweonline.ca/d2l/le/content/2001539/Home"
+    },
+    {
+      "text": "Announcements",
+      "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001539"
+    },
+    {
+      "text": "Lab activity tomorrow!",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2264951/view"
+    },
+    {
+      "text": "Quiz 2!",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2264907/view"
+    },
+    {
+      "text": "Project Submission!",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2263560/view"
+    },
+    {
+      "text": "Submission of Assignment 2",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2261797/view"
+    },
+    {
+      "text": "Quiz 2 will be on Friday, November 28.",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2256285/view"
+    },
+    {
+      "text": "Show All Announcements",
+      "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001539"
+    },
+    {
+      "text": "Calendar",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001539"
+    },
+    {
+      "text": "View Event - Project - Availability Ends",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001539/event/7189447/detailsview#7189447"
+    },
+    {
+      "text": "View Event - Project - Due",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001539/event/7189455/detailsview#7189455"
+    }
+  ],
+  "announcements": [],
+  "content": {
+    "text_length": 711,
+    "total_links": 26,
+    "total_images": 1
+  },
+  "course_id": "2001539",
+  "url": "https://www.fanshaweonline.ca/d2l/home/2001539",
+  "extracted_at": "2025-12-03T23:57:23.887659"
+}

@@ -1,0 +1,93 @@
+{
+  "title": "INFO6154 Machine Learning Optimization Strategies",
+  "code": "INFO-6154-(01)-25F",
+  "widgets": [
+    {
+      "index": 1,
+      "title": "Announcements",
+      "type": "d2l-widget d2l-tile"
+    },
+    {
+      "index": 2,
+      "title": "Professor Information",
+      "type": "d2l-widget d2l-tile d2l-custom-widget"
+    },
+    {
+      "index": 3,
+      "title": "Calendar",
+      "type": "d2l-widget d2l-tile"
+    },
+    {
+      "index": 4,
+      "title": "Updates",
+      "type": "d2l-widget d2l-tile"
+    }
+  ],
+  "links": [
+    {
+      "text": "INFO-6154-(01)-25F",
+      "url": "https://www.fanshaweonline.ca/d2l/home/2001540"
+    },
+    {
+      "text": "Profile",
+      "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001540"
+    },
+    {
+      "text": "Notifications",
+      "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001540"
+    },
+    {
+      "text": "Account Settings",
+      "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001540"
+    },
+    {
+      "text": "Progress",
+      "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001540/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+    },
+    {
+      "text": "Content",
+      "url": "https://www.fanshaweonline.ca/d2l/le/content/2001540/Home"
+    },
+    {
+      "text": "Announcements",
+      "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001540"
+    },
+    {
+      "text": "Final Exam and Presentation Details",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001540/2266439/view"
+    },
+    {
+      "text": "Quiz Details and Seating Arrangement",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001540/2263208/view"
+    },
+    {
+      "text": "Show All Announcements",
+      "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001540"
+    },
+    {
+      "text": "Calendar",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001540"
+    },
+    {
+      "text": "View Event - 📝Final Project - Report - Due",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001540/event/7189476/detailsview#7189476"
+    },
+    {
+      "text": "View Event - 👨‍💻Final Project - Code - Due",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001540/event/7189479/detailsview#7189479"
+    },
+    {
+      "text": "View Event - 📊Final Project - Presentation File - Due",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001540/event/7189488/detailsview#7189488"
+    }
+  ],
+  "announcements": [],
+  "content": {
+    "text_length": 750,
+    "total_links": 21,
+    "total_images": 1
+  },
+  "course_id": "2001540",
+  "url": "https://www.fanshaweonline.ca/d2l/home/2001540",
+  "extracted_at": "2025-12-03T23:57:06.992482"
+}

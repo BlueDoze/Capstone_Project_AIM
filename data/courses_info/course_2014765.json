@@ -1,0 +1,97 @@
+{
+  "title": "25F Homeroom - Artificial Intelligence (AI) and Machine Learning (AIM)",
+  "code": null,
+  "widgets": [
+    {
+      "index": 1,
+      "title": "Announcements",
+      "type": "d2l-widget d2l-tile"
+    },
+    {
+      "index": 2,
+      "title": "Professor Information",
+      "type": "d2l-widget d2l-tile d2l-custom-widget"
+    },
+    {
+      "index": 3,
+      "title": "Calendar",
+      "type": "d2l-widget d2l-tile"
+    },
+    {
+      "index": 4,
+      "title": "Updates",
+      "type": "d2l-widget d2l-tile"
+    }
+  ],
+  "links": [
+    {
+      "text": "AIM-HOMEROOM-FALL-2025",
+      "url": "https://www.fanshaweonline.ca/d2l/home/2014765"
+    },
+    {
+      "text": "Profile",
+      "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2014765"
+    },
+    {
+      "text": "Notifications",
+      "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2014765"
+    },
+    {
+      "text": "Account Settings",
+      "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2014765"
+    },
+    {
+      "text": "Progress",
+      "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2014765/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+    },
+    {
+      "text": "Content",
+      "url": "https://www.fanshaweonline.ca/d2l/le/content/2014765/Home"
+    },
+    {
+      "text": "Announcements",
+      "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2014765"
+    },
+    {
+      "text": "Co-op Status Survey – IMPORTANT!",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2263929/view"
+    },
+    {
+      "text": "Building Agentic AI using IBM Tools - 18th Nov, Tuesday, 2-4 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2255780/view"
+    },
+    {
+      "text": "Gentle Reminder - Building with Agentic AI: A Hands-on Workshop",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2246213/view"
+    },
+    {
+      "text": "Agentic AI Hackathon with IBM watsonx Orchestrate",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2239214/view"
+    },
+    {
+      "text": "How To Build GenAI Applications Using Your Data, an IBM TechXchange Workshop",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2239207/view"
+    },
+    {
+      "text": "Show All Announcements",
+      "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2014765"
+    },
+    {
+      "text": "Calendar",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2014765"
+    },
+    {
+      "text": "View Event - Co-op - Survey Due",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2014765/event/7393343/detailsview#7393343"
+    }
+  ],
+  "announcements": [],
+  "content": {
+    "text_length": 915,
+    "total_links": 25,
+    "total_images": 0
+  },
+  "course_id": "2014765",
+  "url": "https://www.fanshaweonline.ca/d2l/home/2014765",
+  "extracted_at": "2025-12-03T23:57:41.966361"
+}

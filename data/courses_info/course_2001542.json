@@ -1,0 +1,97 @@
+{
+  "title": "Homepage - INFO6156 Capstone Project",
+  "code": "INFO-6156-(01)-25F",
+  "widgets": [
+    {
+      "index": 1,
+      "title": "Announcements",
+      "type": "d2l-widget d2l-tile"
+    },
+    {
+      "index": 2,
+      "title": "Professor Information",
+      "type": "d2l-widget d2l-tile d2l-custom-widget"
+    },
+    {
+      "index": 3,
+      "title": "Calendar",
+      "type": "d2l-widget d2l-tile"
+    },
+    {
+      "index": 4,
+      "title": "Updates",
+      "type": "d2l-widget d2l-tile"
+    }
+  ],
+  "links": [
+    {
+      "text": "INFO-6156-(01)-25F",
+      "url": "https://www.fanshaweonline.ca/d2l/home/2001542"
+    },
+    {
+      "text": "Profile",
+      "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001542"
+    },
+    {
+      "text": "Notifications",
+      "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001542"
+    },
+    {
+      "text": "Account Settings",
+      "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001542"
+    },
+    {
+      "text": "Progress",
+      "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001542/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+    },
+    {
+      "text": "Content",
+      "url": "https://www.fanshaweonline.ca/d2l/le/content/2001542/Home"
+    },
+    {
+      "text": "Announcements",
+      "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001542"
+    },
+    {
+      "text": "Sprint 4 Presentation - reg",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2270052/view"
+    },
+    {
+      "text": "Reminder: Capstone Class & Agentic AI Workshop",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2257918/view"
+    },
+    {
+      "text": "Building Agentic AI using IBM Tools - 18th Nov, Tuesday, 2-4 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2255777/view"
+    },
+    {
+      "text": "Gentle Reminder - Sprint 2",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2249581/view"
+    },
+    {
+      "text": "Gentle Reminder - Building with Agentic AI: A Hands-on Workshop",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2246212/view"
+    },
+    {
+      "text": "Show All Announcements",
+      "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001542"
+    },
+    {
+      "text": "Calendar",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001542"
+    },
+    {
+      "text": "View Event - Presentation and Final Code - Due",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001542/event/7132447/detailsview#7132447"
+    }
+  ],
+  "announcements": [],
+  "content": {
+    "text_length": 828,
+    "total_links": 25,
+    "total_images": 3
+  },
+  "course_id": "2001542",
+  "url": "https://www.fanshaweonline.ca/d2l/home/2001542",
+  "extracted_at": "2025-12-03T23:57:32.422488"
+}

@@ -1,0 +1,105 @@
+{
+  "title": "Homepage - INFO6155 Social Media Analytics",
+  "code": "INFO-6155-(01)-25F",
+  "widgets": [
+    {
+      "index": 1,
+      "title": "Announcements",
+      "type": "d2l-widget d2l-tile"
+    },
+    {
+      "index": 2,
+      "title": "Christie Ramos",
+      "type": "d2l-widget d2l-tile d2l-custom-widget"
+    },
+    {
+      "index": 3,
+      "title": "Calendar",
+      "type": "d2l-widget d2l-tile"
+    },
+    {
+      "index": 4,
+      "title": "Updates",
+      "type": "d2l-widget d2l-tile"
+    }
+  ],
+  "links": [
+    {
+      "text": "INFO-6155-(01)-25F",
+      "url": "https://www.fanshaweonline.ca/d2l/home/2001541"
+    },
+    {
+      "text": "Profile",
+      "url": "https://www.fanshaweonline.ca/d2l/lp/profile/profile_edit.d2l?ou=2001541"
+    },
+    {
+      "text": "Notifications",
+      "url": "https://www.fanshaweonline.ca/d2l/Notifications/Settings?ou=2001541"
+    },
+    {
+      "text": "Account Settings",
+      "url": "https://www.fanshaweonline.ca/d2l/lp/preferences/preferences_main/preferences_main.d2l?ou=2001541"
+    },
+    {
+      "text": "Progress",
+      "url": "https://www.fanshaweonline.ca/d2l/le/userprogress/507906/2001541/Summary?searchString=&sortField=SortLastName&sortDirection=0"
+    },
+    {
+      "text": "Content",
+      "url": "https://www.fanshaweonline.ca/d2l/le/content/2001541/Home"
+    },
+    {
+      "text": "Announcements",
+      "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001541"
+    },
+    {
+      "text": "Brandwatch Assignment Reminder & Class Recording",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2269685/view"
+    },
+    {
+      "text": "Brandwatch Access & Class Recording",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2260435/view"
+    },
+    {
+      "text": "Updated Midterm Time",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2250208/view"
+    },
+    {
+      "text": "Midterm Today",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2250182/view"
+    },
+    {
+      "text": "Practice Dataset Released — Class Recording",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2248218/view"
+    },
+    {
+      "text": "Show All Announcements",
+      "url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001541"
+    },
+    {
+      "text": "Calendar",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001541"
+    },
+    {
+      "text": "View Event - Brandwatch Academy Course Work - Due",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001541/event/7145080/detailsview#7145080"
+    },
+    {
+      "text": "View Event - Brandwatch Academy Certification - Due",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001541/event/7145087/detailsview#7145087"
+    },
+    {
+      "text": "View Event - Brandwatch Social Listening & Sentiment Analysis Walkthrough - Due",
+      "url": "https://www.fanshaweonline.ca/d2l/le/calendar/2001541/event/7145092/detailsview#7145092"
+    }
+  ],
+  "announcements": [],
+  "content": {
+    "text_length": 1050,
+    "total_links": 27,
+    "total_images": 6
+  },
+  "course_id": "2001541",
+  "url": "https://www.fanshaweonline.ca/d2l/home/2001541",
+  "extracted_at": "2025-12-03T23:57:50.514574"
+}

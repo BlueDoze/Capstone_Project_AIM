@@ -1,20 +1,34 @@
-# Use an official Python runtime as a parent image
+# Use Python 3.10 slim image
 FROM python:3.10-slim
 
-# Set the working directory in the container
+# Install Node.js for building React
+RUN apt-get update && apt-get install -y \
+    nodejs \
+    npm \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Copy the dependencies file to the working directory
+# Copy and install Python dependencies
 COPY requirements.txt .
-
-# Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application's code to the working directory
+# Copy application code
 COPY . .
 
-# Expose the port the app runs on
+# Build React frontend
+WORKDIR /app/Fanshawe_Navigator-main/frontend
+RUN npm install && \
+    chmod +x node_modules/.bin/* && \
+    mkdir -p public/Fanshawe_Icons && \
+    cp -r Fanshawe_Icons/* public/Fanshawe_Icons/ && \
+    npm run build
+
+# Return to app root
+WORKDIR /app
+
+# Expose port
 EXPOSE 8081
 
-# Define the command to run the application
-CMD ["python", "main.py"]
+# Start Flask app (CORREÇÃO: main.py → src/api/app.py)
+CMD ["python", "src/api/app.py"]
