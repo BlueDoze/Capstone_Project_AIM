@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Map as MapIcon, X, MessageSquare, Loader2 } from 'lucide-react';
+import { Send, Map as MapIcon, X, Navigation, Building2, Calendar, Moon, Sun, MessageSquare } from 'lucide-react';
 import { MapContainer, TileLayer, GeoJSON, Polyline, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -27,6 +27,7 @@ export default function FanshaweNavigator() {
   const [originBuilding, setOriginBuilding] = useState(null);
   const [destBuilding, setDestBuilding] = useState(null);
   const [buildingInfo, setBuildingInfo] = useState(null);
+  const [darkMode, setDarkMode] = useState(false);
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const messagesEndRef = useRef(null);
 
@@ -227,272 +228,261 @@ export default function FanshaweNavigator() {
   };
 
   return (
-    <div className="flex h-screen bg-fanshawe-cream text-gray-800">
-      {/* Sidebar */}
-      <div 
-        className={`w-64 bg-[#d4d6ce] border-r border-gray-300 flex flex-col fixed left-0 top-0 h-full transition-transform duration-300 ease-in-out z-20 ${
-          sidebarVisible ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
-        <div className="p-4 border-b border-gray-300">
-          <div className="flex items-center justify-center mb-4">
-            <img 
-              src="/Fanshawe_Icons/Pressbooks_Icon_Fanshawe-NorthStar_Red-removebg-preview.png" 
-              alt="Fanshawe Logo" 
-              className="w-12 h-12"
-            />
-          </div>
-          <button 
-            onClick={() => {
-              setMessages([
-                { role: 'assistant', content: 'Hello! I\'m Fanshawe Navigator. How can I help you find your way around campus today?' }
-              ]);
-              setRouteData(null);
-            }}
-            className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded transition-colors"
-          >
-            New Chat
-          </button>
-        </div>
-        <div className="flex-1 overflow-y-auto p-4">
-          <div className="text-sm text-gray-600">
-            <p className="mb-2 font-semibold">Quick Actions</p>
-            <div className="space-y-2">
-              <button 
-                onClick={() => setInput("How do I get from building A to building B?")}
-                className="w-full text-left p-2 rounded hover:bg-gray-200 cursor-pointer transition-colors"
-              >
-                Campus Navigation
-              </button>
-              <button 
-                onClick={() => setInput("What's in building A?")}
-                className="w-full text-left p-2 rounded hover:bg-gray-200 cursor-pointer transition-colors"
-              >
-                Building Information
-              </button>
-              <button
-                onClick={toggleMap}
-                className="w-full flex items-center justify-center gap-2 bg-fanshawe-red hover:bg-fanshawe-red-dark px-4 py-2 rounded transition-colors text-white mt-2"
-              >
-                <MapIcon size={20} />
-                {showMap ? 'Hide Map' : 'Show Map'}
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        {/* Login Button at Bottom */}
-        <div className="p-4 border-t border-gray-300">
-          <button
-            onClick={() => {
-              // Add login functionality here
-              console.log('Login clicked');
-            }}
-            className="w-full flex items-center justify-center gap-2 bg-fanshawe-red hover:bg-fanshawe-red-dark px-4 py-2 rounded transition-colors text-white"
-          >
-            <svg 
-              className="w-5 h-5" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" 
+    <div className={darkMode ? 'dark' : ''}>
+      <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-200">
+        {/* Header */}
+        <div className="h-16 border-b border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 flex items-center transition-colors duration-200">
+          <div className="max-w-full px-4 md:max-w-2xl md:px-6 lg:max-w-3xl lg:px-8 mx-auto w-full flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img 
+                src="/Fanshawe_Icons/Pressbooks_Icon_Fanshawe-NorthStar_Red-removebg-preview.png" 
+                alt="Fanshawe Logo" 
+                className="w-10 h-10"
               />
-            </svg>
-            Log In
-          </button>
-        </div>
-      </div>
-
-      {/* Main Chat Area */}
-      <div className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
-        sidebarVisible ? 'ml-64' : 'ml-0'
-      }`}>
-        {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto p-6 bg-fanshawe-cream relative">
-          {/* Watermark background - Fixed position */}
-          <div 
-            className="fixed inset-0 flex items-center justify-center pointer-events-none"
-            style={{
-              backgroundImage: 'url(/Fanshawe_Icons/Fanshawe-removebg-preview.png)',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: '50%',
-              opacity: 0.05,
-              zIndex: 0
-            }}
-          />
-          <div className="max-w-3xl mx-auto space-y-6 relative z-10">
-            {messages.map((msg, idx) => (
-              <div
-                key={idx}
-                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-[80%] rounded-lg p-4 shadow-md ${
-                    msg.role === 'user'
-                      ? 'bg-fanshawe-red text-white border border-fanshawe-red-dark'
-                      : 'bg-white text-gray-800 border border-gray-300'
-                  }`}
-                >
-                  <p className="whitespace-pre-wrap">{msg.content}</p>
-                </div>
-              </div>
-            ))}
-            {loading && (
-              <div className="flex justify-start">
-                <div className="bg-white text-gray-800 border border-gray-300 rounded-lg p-4 shadow-md flex items-center gap-3">
-                  <img 
-                    src="/Fanshawe_Icons/Pressbooks_Icon_Fanshawe-NorthStar_Red-removebg-preview.png" 
-                    alt="Loading" 
-                    className="w-6 h-6 animate-spin"
-                  />
-                  <p className="text-gray-600 font-semibold">Thinking...</p>
-                </div>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-        </div>
-
-        {/* Input Area */}
-        <div className="border-t border-gray-300 p-4 bg-fanshawe-cream">
-          <div className="max-w-3xl mx-auto flex gap-3">
-            <button
-              onClick={() => setSidebarVisible(!sidebarVisible)}
-              className="bg-fanshawe-red-dark hover:bg-fanshawe-red p-3 rounded-lg transition-colors flex-shrink-0"
-              aria-label="Toggle Menu"
-            >
-              <MessageSquare className="text-white" size={20} />
-            </button>
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyPress={handleKeyPress}
-              disabled={loading}
-              placeholder="Ask about campus locations, buildings, directions..."
-              className="flex-1 bg-white text-gray-800 border-2 border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-fanshawe-red placeholder-gray-500"
-            />
-            <button
-              onClick={handleSend}
-              disabled={loading}
-              className="bg-fanshawe-red hover:bg-fanshawe-red-dark text-white p-3 rounded-lg transition-colors disabled:opacity-50"
-            >
-              <Send size={20} />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Map Modal */}
-      {showMap && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-fanshawe-cream rounded-lg w-[90%] h-[90%] flex flex-col border-2 border-gray-400">
-            <div className="flex justify-between items-center p-4 border-b border-gray-300">
-              <h3 className="text-xl font-bold text-gray-800">Campus Map</h3>
+              <h1 className="text-xl font-bold text-fanshawe-red">Fanshawe Navigator</h1>
+            </div>
+            <div className="flex items-center gap-2">
               <button
-                onClick={toggleMap}
-                className="text-gray-800 hover:text-gray-600 transition-colors"
+                onClick={() => setDarkMode(!darkMode)}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
+                aria-label="Toggle Dark Mode"
               >
-                <X size={24} />
+                {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+              <button
+                onClick={() => {
+                  setMessages([
+                    { role: 'assistant', content: 'Hello! I\'m Fanshawe Navigator. How can I help you find your way around campus today?' }
+                  ]);
+                  setRouteData(null);
+                }}
+                className="bg-fanshawe-red hover:bg-fanshawe-red-dark text-white px-4 py-2 rounded-lg transition-all duration-200"
+              >
+                New Chat
               </button>
             </div>
-            <div className="flex-1 overflow-hidden relative">
-              {geoJsonData ? (
-                <>
-                  <MapContainer
-                    center={[43.0125, -81.2002]}
-                    zoom={16}
-                    style={{ height: '100%', width: '100%' }}
-                    className="z-0"
+          </div>
+        </div>
+
+        {/* Main Chat Area */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Messages Area - Scrollable */}
+          <div className="flex-1 overflow-y-auto p-6 relative">
+            {/* Watermark background - Fixed position */}
+            <div 
+              className="fixed inset-0 flex items-center justify-center pointer-events-none"
+              style={{
+                backgroundImage: 'url(/Fanshawe_Icons/Fanshawe-removebg-preview.png)',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '50%',
+                opacity: darkMode ? 0.02 : 0.05,
+                zIndex: 0
+              }}
+            />
+            <div className="max-w-full px-4 md:max-w-2xl md:px-6 lg:max-w-3xl lg:px-8 mx-auto space-y-6 relative z-10">
+              {messages.map((msg, idx) => (
+                <div
+                  key={idx}
+                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[80%] rounded-lg p-4 shadow-md transition-all duration-200 ${
+                      msg.role === 'user'
+                        ? 'bg-fanshawe-red text-white border border-fanshawe-red-dark'
+                        : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 border border-gray-300 dark:border-gray-600'
+                    }`}
                   >
-                    <TileLayer
-                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    <p className="whitespace-pre-wrap">{msg.content}</p>
+                  </div>
+                </div>
+              ))}
+              {loading && (
+                <div className="flex justify-start">
+                  <div className="bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg p-4 shadow-md flex items-center gap-3 transition-all duration-200">
+                    <img 
+                      src="/Fanshawe_Icons/Pressbooks_Icon_Fanshawe-NorthStar_Red-removebg-preview.png" 
+                      alt="Loading" 
+                      className="w-6 h-6 animate-spin"
                     />
-                    <GeoJSON 
-                      data={geoJsonData} 
-                      style={getFeatureStyle}
-                      onEachFeature={onEachFeature}
-                    />
-                    {mapBounds && <FitBounds bounds={mapBounds} />}
-                  </MapContainer>
-                  
-                  {/* Building Info Popup */}
-                  {buildingInfo && (
-                    <div className="absolute top-4 right-4 bg-white rounded-lg shadow-2xl p-6 max-w-md z-10 border-2 border-fanshawe-red">
-                      <div className="flex justify-between items-start mb-4">
-                        <h4 className="text-xl font-bold text-fanshawe-red">
-                          {buildingInfo.info.nome}
-                        </h4>
-                        <button
-                          onClick={() => setBuildingInfo(null)}
-                          className="text-gray-500 hover:text-fanshawe-red transition-colors"
-                        >
-                          <X size={20} />
-                        </button>
-                      </div>
-                      
-                      <div className="space-y-3 text-gray-700">
-                        {buildingInfo.info.descricao && (
-                          <p className="text-sm">{buildingInfo.info.descricao}</p>
-                        )}
-                        
-                        {buildingInfo.info.andares && buildingInfo.info.andares.length > 0 && (
-                          <div>
-                            <p className="font-semibold text-sm">🏢 Floors:</p>
-                            <p className="text-sm">{buildingInfo.info.andares.join(', ')}</p>
-                          </div>
-                        )}
-                        
-                        {buildingInfo.info.facilidades && buildingInfo.info.facilidades.length > 0 && (
-                          <div>
-                            <p className="font-semibold text-sm">✨ Facilities:</p>
-                            <ul className="text-sm list-disc list-inside">
-                              {buildingInfo.info.facilidades.map((fac, idx) => (
-                                <li key={idx}>{fac}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                        
-                        {buildingInfo.info.salas_principais && buildingInfo.info.salas_principais.length > 0 && (
-                          <div>
-                            <p className="font-semibold text-sm">📚 Main Rooms:</p>
-                            <ul className="text-sm list-disc list-inside">
-                              {buildingInfo.info.salas_principais.slice(0, 5).map((sala, idx) => (
-                                <li key={idx}>
-                                  {sala.numero} - {sala.tipo} (Floor {sala.andar})
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                        
-                        {buildingInfo.info.horario_funcionamento && (
-                          <div>
-                            <p className="font-semibold text-sm">🕐 Hours:</p>
-                            <p className="text-sm">{buildingInfo.info.horario_funcionamento}</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="flex items-center justify-center h-full">
-                  <p className="text-gray-800">Loading map...</p>
+                    <p className="text-gray-600 dark:text-gray-400 font-semibold">Thinking...</p>
+                  </div>
                 </div>
               )}
+              <div ref={messagesEndRef} />
+            </div>
+          </div>
+
+          {/* Input Area with Quick Actions - Fixed at Bottom */}
+          <div className="border-t border-gray-300 dark:border-gray-700 p-4 transition-colors duration-200 bg-gray-50 dark:bg-gray-900">
+            <div className="max-w-full px-4 md:max-w-2xl md:px-6 lg:max-w-3xl lg:px-8 mx-auto space-y-3">
+              {/* Input Bar - Gemini Style Pill */}
+              <div className="flex items-center gap-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-full shadow-xl px-6 py-4 transition-all duration-200 focus-within:border-fanshawe-red focus-within:ring-2 focus-within:ring-fanshawe-red">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  disabled={loading}
+                  placeholder="Ask about campus locations, buildings, directions..."
+                  className="flex-1 bg-transparent text-gray-800 dark:text-gray-100 focus:outline-none placeholder-gray-500 dark:placeholder-gray-400"
+                />
+                <button
+                  onClick={handleSend}
+                  disabled={loading}
+                  className="bg-fanshawe-red hover:bg-fanshawe-red-dark text-white p-2 rounded-full transition-all duration-200 disabled:opacity-50 flex-shrink-0"
+                  aria-label="Send Message"
+                >
+                  <Send size={20} />
+                </button>
+              </div>
+
+              {/* Quick Action Chips - Single Row */}
+              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+                <button
+                  onClick={() => setInput("How do I get from building A to building B?")}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
+                >
+                  <Navigation size={16} />
+                  <span>Campus Navigation</span>
+                </button>
+                <button
+                  onClick={() => setInput("What's in building A?")}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
+                >
+                  <Building2 size={16} />
+                  <span>Building Information</span>
+                </button>
+                <button
+                  onClick={toggleMap}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
+                >
+                  <MapIcon size={16} />
+                  <span>Show Campus Map</span>
+                </button>
+                <button
+                  onClick={() => setInput("What events are happening on campus?")}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
+                >
+                  <Calendar size={16} />
+                  <span>Campus Events</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      )}
+
+        {/* Map Modal */}
+        {showMap && (
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            onClick={toggleMap}
+          >
+            <div 
+              className="bg-white dark:bg-gray-800 rounded-lg w-[90%] h-[90%] flex flex-col border-2 border-gray-400 dark:border-gray-600 transition-colors duration-200"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center p-4 border-b border-gray-300 dark:border-gray-700">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Campus Map</h3>
+                <button
+                  onClick={toggleMap}
+                  className="text-gray-800 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              <div className="flex-1 overflow-hidden relative">
+                {geoJsonData ? (
+                  <>
+                    <MapContainer
+                      center={[43.0125, -81.2002]}
+                      zoom={16}
+                      style={{ height: '100%', width: '100%' }}
+                      className="z-0"
+                    >
+                      <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                      <GeoJSON 
+                        data={geoJsonData} 
+                        style={getFeatureStyle}
+                        onEachFeature={onEachFeature}
+                      />
+                      {mapBounds && <FitBounds bounds={mapBounds} />}
+                    </MapContainer>
+                    
+                    {/* Building Info Popup */}
+                    {buildingInfo && (
+                      <div className="absolute top-4 right-4 bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-6 max-w-md z-10 border-2 border-fanshawe-red transition-colors duration-200">
+                        <div className="flex justify-between items-start mb-4">
+                          <h4 className="text-xl font-bold text-fanshawe-red">
+                            {buildingInfo.info.nome}
+                          </h4>
+                          <button
+                            onClick={() => setBuildingInfo(null)}
+                            className="text-gray-500 dark:text-gray-400 hover:text-fanshawe-red transition-colors"
+                          >
+                            <X size={20} />
+                          </button>
+                        </div>
+                        
+                        <div className="space-y-3 text-gray-700 dark:text-gray-300">
+                          {buildingInfo.info.descricao && (
+                            <p className="text-sm">{buildingInfo.info.descricao}</p>
+                          )}
+                          
+                          {buildingInfo.info.andares && buildingInfo.info.andares.length > 0 && (
+                            <div>
+                              <p className="font-semibold text-sm">🏢 Floors:</p>
+                              <p className="text-sm">{buildingInfo.info.andares.join(', ')}</p>
+                            </div>
+                          )}
+                          
+                          {buildingInfo.info.facilidades && buildingInfo.info.facilidades.length > 0 && (
+                            <div>
+                              <p className="font-semibold text-sm">✨ Facilities:</p>
+                              <ul className="text-sm list-disc list-inside">
+                                {buildingInfo.info.facilidades.map((fac, idx) => (
+                                  <li key={idx}>{fac}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          
+                          {buildingInfo.info.salas_principais && buildingInfo.info.salas_principais.length > 0 && (
+                            <div>
+                              <p className="font-semibold text-sm">📚 Main Rooms:</p>
+                              <ul className="text-sm list-disc list-inside">
+                                {buildingInfo.info.salas_principais.slice(0, 5).map((sala, idx) => (
+                                  <li key={idx}>
+                                    {sala.numero} - {sala.tipo} (Floor {sala.andar})
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          
+                          {buildingInfo.info.horario_funcionamento && (
+                            <div>
+                              <p className="font-semibold text-sm">🕐 Hours:</p>
+                              <p className="text-sm">{buildingInfo.info.horario_funcionamento}</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <p className="text-gray-800 dark:text-gray-100">Loading map...</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
