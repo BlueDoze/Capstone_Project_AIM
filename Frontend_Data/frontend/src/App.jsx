@@ -304,14 +304,14 @@ export default function FanshaweNavigator() {
                   >
                     <p className="whitespace-pre-wrap">{msg.content}</p>
                     
-                    {/* Show Map Button for navigation responses */}
-                    {msg.role === 'assistant' && idx === messages.length - 1 && mapAction && (
+                    {/* Open Indoor Navigation Map Button */}
+                    {msg.role === 'assistant' && idx === messages.length - 1 && mapAction && mapAction.type === 'OPEN_MAP' && (
                       <button
                         onClick={() => setShowIndoorMap(true)}
                         className="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-md"
                       >
                         <span className="text-xl">🗺️</span>
-                        <span>Show Map</span>
+                        <span>View Indoor Navigation</span>
                       </button>
                     )}
                   </div>
@@ -365,6 +365,16 @@ export default function FanshaweNavigator() {
                 >
                   <MapIcon size={16} />
                   <span>Show Campus Map</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setShowIndoorMap(true);
+                    setMapAction({ type: 'INTERACTIVE_MODE', mode: 'selection' });
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-fanshawe-red dark:border-fanshawe-red bg-transparent hover:bg-fanshawe-red hover:text-white dark:hover:bg-fanshawe-red-dark text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
+                >
+                  <Navigation size={16} />
+                  <span>Indoor Navigation</span>
                 </button>
                 <button
                   onClick={() => setInput("How do I get from building A to building B?")}
@@ -497,39 +507,43 @@ export default function FanshaweNavigator() {
         )}
 
         {/* Indoor Navigation Map Modal */}
-        {showIndoorMap && mapAction && (
+        {showIndoorMap && (
           <div 
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-            onClick={() => setShowIndoorMap(false)}
+            className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4"
+            onClick={() => {
+              setShowIndoorMap(false);
+              setMapAction(null);
+            }}
           >
             <div 
-              className="bg-white dark:bg-gray-800 rounded-lg w-[75%] h-[75%] flex flex-col border-2 border-gray-400 dark:border-gray-600 transition-colors duration-200"
+              className="bg-white dark:bg-gray-800 rounded-lg w-full h-full max-w-7xl max-h-[95vh] flex flex-col shadow-2xl border-2 border-gray-400 dark:border-gray-600 overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex justify-between items-center p-4 border-b border-gray-300 dark:border-gray-700">
-                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">
-                  Indoor Navigation - Building {mapAction.start?.building || 'M'}
+              <div className="flex justify-between items-center px-6 py-4 border-b-2 border-gray-300 dark:border-gray-700 bg-gradient-to-r from-fanshawe-red to-red-600 flex-shrink-0">
+                <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                  <Navigation size={24} />
+                  Indoor Navigation - Building {mapAction?.building || 'M'}
                 </h3>
                 <button
                   onClick={() => {
                     setShowIndoorMap(false);
                     setMapAction(null);
                   }}
-                  className="text-gray-800 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
+                  className="text-white hover:text-gray-200 transition-colors bg-white bg-opacity-20 rounded-full p-2 hover:bg-opacity-30"
                 >
                   <X size={24} />
                 </button>
               </div>
-              <div className="flex-1 overflow-hidden p-4">
+              <div className="flex-1 overflow-hidden relative">
                 <MapNavigator
-                  building={mapAction.start?.building || 'M'}
-                  initialFloor={mapAction.start?.floor || '1'}
+                  building={mapAction?.building || 'M'}
+                  initialFloor={mapAction?.floor || '1'}
                   mapAction={mapAction}
                   onNavigationComplete={() => {
                     setShowIndoorMap(false);
                     setMapAction(null);
                   }}
-                  className="h-full"
+                  className="absolute inset-0"
                 />
               </div>
             </div>

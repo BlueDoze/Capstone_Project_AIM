@@ -28,9 +28,9 @@ export default function LocationToggle({
   // Update parent component when GPS position changes
   React.useEffect(() => {
     if (position && !isPoorSignal) {
-      onPositionUpdate(position);
+      onPositionUpdate(position, accuracy); // Pass accuracy to parent
     }
-  }, [position, isPoorSignal, onPositionUpdate]);
+  }, [position, isPoorSignal, accuracy, onPositionUpdate]);
 
   const handleToggle = () => {
     if (locationMode === 'manual') {

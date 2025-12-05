@@ -3,6 +3,7 @@ import IndoorMapView from './IndoorMapView';
 import FloorSelector, { BuildingInfo, NavigationControls } from './FloorSelector';
 import StartupModal from './StartupModal';
 import LocationToggle from './LocationToggle';
+import SelectionModeGuide from './SelectionModeGuide';
 import {
   getNavigationData,
   calculatePath,
@@ -10,12 +11,32 @@ import {
   formatPathForDisplay,
   getAllRooms,
   getAvailableFloors,
+  getAllNodeData,
+  getBuildingPositions,
+  calculateRotatedBounds,
 } from '../utils/navigationApi';
 import {
   storeUserPosition,
   retrieveUserPosition,
   findNearestNodeToGPS,
 } from '../utils/navigationUtils';
+import { parseSVGNodes, mergeNavigationData } from '../utils/svgParser';
+
+// Building configuration with actual GeoJSON coordinates
+const BUILDING_CONFIG = {
+  M: {
+    name: 'Main Building',
+    description: 'London Campus - Information Technology and Media',
+    bounds: [[43.0139203, -81.1989228], [43.0147647, -81.1982043]],
+    center: [43.0143425, -81.19856355],
+  },
+  H: {
+    name: 'H Building',
+    description: 'London Campus',
+    bounds: [[43.0139261, -81.1993256], [43.0143793, -81.1988453]],
+    center: [43.0141527, -81.19908545],
+  },
+};
 
 /**
  * MapNavigator Component
@@ -50,11 +71,66 @@ export default function MapNavigator({
   const [locationMode, setLocationMode] = useState('manual'); // 'manual' or 'gps'
   const [userFloor, setUserFloor] = useState(initialFloor);
   const [isWaitingForMapClick, setIsWaitingForMapClick] = useState(false);
+  
+  // New: GPS accuracy tracking
+  const [gpsAccuracy, setGpsAccuracy] = useState(null);
+  const [showGPSCircle, setShowGPSCircle] = useState(false);
+  
+  // New: Selection mode for interactive position setting (single-click)
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selectionStep, setSelectionStep] = useState('start'); // 'start' or 'end'
+  const [startPoint, setStartPoint] = useState(null);
+  const [endPoint, setEndPoint] = useState(null);
+  const [instructionText, setInstructionText] = useState('');
+  const [showTutorial, setShowTutorial] = useState(false);
+  
+  // New: Rotated bounds for SVG overlay (matching coordinate_system.html approach)
+  const [rotatedCorners, setRotatedCorners] = useState(null);
+  const [buildingPositions, setBuildingPositions] = useState(null);
 
   // Load initial data
   useEffect(() => {
     loadFloorData();
   }, [building, currentFloor]);
+  
+  // Load building positions and calculate rotated corners
+  useEffect(() => {
+    const loadBuildingPositions = async () => {
+      try {
+        const positions = await getBuildingPositions();
+        setBuildingPositions(positions);
+        console.log('✅ Building positions loaded:', positions);
+      } catch (error) {
+        console.error('❌ Error loading building positions:', error);
+      }
+    };
+    
+    loadBuildingPositions();
+  }, []);
+  
+  // Calculate rotated corners when building, floor, or positions change
+  useEffect(() => {
+    if (!buildingPositions) return;
+    
+    const buildingKey = `Building ${building}`;
+    const floorPositions = buildingPositions[buildingKey]?.[currentFloor];
+    
+    if (!floorPositions) {
+      console.warn(`No position adjustments for ${buildingKey} floor ${currentFloor}`);
+      return;
+    }
+    
+    const config = BUILDING_CONFIG[building];
+    if (!config) return;
+    
+    // Calculate rotated corners using rotation from Building positions.JSON
+    const rotation = floorPositions.positionAdjustments.rotation;
+    const corners = calculateRotatedBounds(config.bounds, rotation);
+    
+    setRotatedCorners(corners);
+    console.log(`🔄 Calculated rotated corners for Building ${building} floor ${currentFloor}:`, corners);
+    console.log(`   Rotation: ${rotation}°`);
+  }, [building, currentFloor, buildingPositions]);
 
   // Initialize user position
   useEffect(() => {
@@ -75,6 +151,21 @@ export default function MapNavigator({
   useEffect(() => {
     if (mapAction && mapAction.type === 'SHOW_ROUTE') {
       handleMapAction(mapAction);
+    } else if (mapAction && mapAction.type === 'INTERACTIVE_MODE') {
+      // Enable selection mode for one-click start and one-click end
+      setSelectionMode(true);
+      setSelectionStep('start');
+      setStartPoint(null);
+      setEndPoint(null);
+      setInstructionText('Tap to set START point (1/2)');
+      setCurrentPath(null);
+      setIsNavigating(false);
+      
+      // Show tutorial on first use
+      const hasSeenTutorial = localStorage.getItem('indoor_nav_tutorial_seen');
+      if (!hasSeenTutorial) {
+        setShowTutorial(true);
+      }
     }
   }, [mapAction]);
 
@@ -83,16 +174,50 @@ export default function MapNavigator({
     setError(null);
 
     try {
-      // Load floor plan URL
+      // Load complete all_node_data.json
+      const allNodeData = await getAllNodeData();
+      if (!allNodeData) {
+        throw new Error('Failed to load navigation data');
+      }
+
+      // Get building and floor data
+      const buildingKey = `Building ${building}`;
+      const buildingData = allNodeData[buildingKey];
+      
+      if (!buildingData || !buildingData.floors || !buildingData.floors[currentFloor]) {
+        throw new Error(`No data for Building ${building}, Floor ${currentFloor}`);
+      }
+
+      const floorData = buildingData.floors[currentFloor];
       const planUrl = getFloorPlanUrl(building, currentFloor);
       setFloorPlanUrl(planUrl);
 
-      // Load navigation data
-      const navData = await getNavigationData(building, currentFloor);
-      setNavigationData(navData);
+      // Parse SVG to get node positions
+      console.log('🔍 Parsing SVG for node positions...');
+      const config = BUILDING_CONFIG[building] || BUILDING_CONFIG.M;
+      const svgParsedData = await parseSVGNodes(
+        planUrl,
+        floorData.navigationGraph,
+        config.bounds
+      );
 
-      // Load available floors
-      const floors = await getAvailableFloors(building);
+      // Merge navigation graph with positions
+      const enhancedNavData = mergeNavigationData(
+        floorData.navigationGraph,
+        svgParsedData
+      );
+
+      // Set enhanced navigation data
+      setNavigationData({
+        ...floorData,
+        ...enhancedNavData,
+        nodePositions: svgParsedData.nodePositions
+      });
+
+      console.log('✅ Navigation data loaded with positions:', enhancedNavData);
+
+      // Load available floors from building data
+      const floors = Object.keys(buildingData.floors).map(f => ({ level: f }));
       setAvailableFloors(floors);
 
       // Load available rooms
@@ -243,9 +368,15 @@ export default function MapNavigator({
   }, [building, currentFloor]);
 
   // New: Handle GPS position updates
-  const handleGPSPositionUpdate = useCallback((position) => {
+  const handleGPSPositionUpdate = useCallback((position, accuracy = null) => {
     setUserPosition(position);
     storeUserPosition(position, userFloor, building);
+    
+    // Update GPS accuracy and show circle if GPS mode
+    if (accuracy !== null) {
+      setGpsAccuracy(accuracy);
+      setShowGPSCircle(locationMode === 'gps');
+    }
     
     // Find nearest node for more accurate navigation
     if (navigationData) {
@@ -254,17 +385,120 @@ export default function MapNavigator({
         console.log('User is near node:', nearestNode);
       }
     }
-  }, [building, userFloor, navigationData]);
+  }, [building, userFloor, navigationData, locationMode]);
 
-  // New: Handle map click for manual position setting
-  const handleMapClick = useCallback((latlng) => {
+  // New: Handle map click for manual position setting (single click for start, then single click for end)
+  const handleMapClick = useCallback(async (latlng) => {
+    console.log('🖱️ Map clicked:', latlng, '| Selection mode:', selectionMode, '| Step:', selectionStep, '| Floor:', currentFloor);
+    
+    // Handle manual position setting (startup modal workflow)
     if (isWaitingForMapClick) {
       setUserPosition(latlng);
       setIsWaitingForMapClick(false);
       storeUserPosition(latlng, userFloor, building);
       console.log('User position set manually:', latlng);
+      return;
     }
-  }, [isWaitingForMapClick, userFloor, building]);
+    
+    // Handle selection mode (one-click start, one-click end)
+    if (selectionMode && navigationData) {
+      console.log('🔍 Finding nearest node to:', latlng);
+      const nearestNode = findNearestNodeToGPS(latlng, navigationData, currentFloor);
+      
+      if (!nearestNode) {
+        console.warn('No node found near clicked position');
+        setInstructionText('No navigation point found. Try clicking closer to a hallway.');
+        return;
+      }
+      
+      if (selectionStep === 'start') {
+        // First click - set start point
+        setStartPoint({ node: nearestNode, position: latlng, floor: currentFloor });
+        setSelectionStep('end');
+        setInstructionText('Tap to set END point (2/2)');
+        console.log('Start point set:', nearestNode);
+      } else if (selectionStep === 'end') {
+        // Second click - set end point and calculate route
+        setEndPoint({ node: nearestNode, position: latlng, floor: currentFloor });
+        setInstructionText('Calculating route...');
+        console.log('End point set:', nearestNode);
+        
+        // Calculate path
+        await calculateRouteFromSelection(
+          { node: startPoint.node, position: startPoint.position, floor: startPoint.floor },
+          { node: nearestNode, position: latlng, floor: currentFloor }
+        );
+      }
+    }
+  }, [isWaitingForMapClick, userFloor, building, selectionMode, navigationData, currentFloor, selectionStep, startPoint]);
+
+  // Calculate route from selection mode
+  const calculateRouteFromSelection = useCallback(async (start, end) => {
+    if (!start || !end) {
+      console.error('Missing start or end point');
+      return;
+    }
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const result = await calculatePath(
+        {
+          building: building,
+          floor: start.floor,
+          node: start.node
+        },
+        {
+          building: building,
+          floor: end.floor,
+          node: end.node
+        }
+      );
+      
+      if (!result) {
+        setError('Could not calculate path');
+        setInstructionText('Failed to find route. Try different locations.');
+        return;
+      }
+      
+      displayPath(result.path, result.directions);
+      setInstructionText('Route found! Follow the path.');
+      
+      // Keep markers visible but exit selection mode
+      setSelectionMode(false);
+      
+    } catch (err) {
+      console.error('Error calculating route from selection:', err);
+      setError('Failed to calculate route');
+      setInstructionText('Error calculating route. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  }, [building]);
+
+  // New: Reset selection mode
+  const handleResetSelection = useCallback(() => {
+    setSelectionMode(false);
+    setSelectionStep('start');
+    setStartPoint(null);
+    setEndPoint(null);
+    setInstructionText('');
+    setCurrentPath(null);
+    setIsNavigating(false);
+    setPathCoordinates([]);
+    setDirections([]);
+  }, []);
+  
+  // Restart selection from beginning
+  const handleRestartSelection = useCallback(() => {
+    setSelectionStep('start');
+    setStartPoint(null);
+    setEndPoint(null);
+    setInstructionText('Tap to set START point (1/2)');
+    setCurrentPath(null);
+    setPathCoordinates([]);
+  }, []);
 
   // New: Handle node click for navigation
   const handleNodeClick = useCallback(async (node) => {
@@ -302,29 +536,28 @@ export default function MapNavigator({
   // New: Handle location mode change
   const handleLocationModeChange = useCallback((mode) => {
     setLocationMode(mode);
+    setShowGPSCircle(mode === 'gps'); // Show GPS circle only in GPS mode
   }, []);
 
-  // Building configuration
-  const buildingConfig = {
-    M: {
-      name: 'Main Building',
-      description: 'London Campus - Information Technology and Media',
-      bounds: [[43.0125, -81.2005], [43.0135, -81.1995]],
-      center: [43.013, -81.2],
-    },
-    H: {
-      name: 'H Building',
-      description: 'London Campus',
-      bounds: [[43.0128, -81.2003], [43.0138, -81.1993]],
-      center: [43.0133, -81.1998],
-    },
-  };
-
-  const config = buildingConfig[building] || buildingConfig.M;
+  const config = BUILDING_CONFIG[building] || BUILDING_CONFIG.M;
   const currentDirection = directions[currentStepIndex];
 
   return (
-    <div className={`map-navigator ${className}`}>
+    <div className={`map-navigator ${className}`} style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
+      {/* Tutorial Guide Modal */}
+      {showTutorial && (
+        <SelectionModeGuide
+          onClose={() => {
+            setShowTutorial(false);
+            localStorage.setItem('indoor_nav_tutorial_seen', 'true');
+          }}
+          onSkip={() => {
+            setShowTutorial(false);
+            localStorage.setItem('indoor_nav_tutorial_seen', 'true');
+          }}
+        />
+      )}
+      
       {/* Startup Modal */}
       {showStartupModal && (
         <StartupModal
@@ -336,12 +569,14 @@ export default function MapNavigator({
       )}
 
       {/* Building Info Header */}
-      <BuildingInfo
-        building={building}
-        floor={currentFloor}
-        buildingName={config.name}
-        description={config.description}
-      />
+      <div style={{ position: 'relative', zIndex: 100, flexShrink: 0 }}>
+        <BuildingInfo
+          building={building}
+          floor={currentFloor}
+          buildingName={config.name}
+          description={config.description}
+        />
+      </div>
 
       {/* Location Toggle */}
       <div style={{ position: 'absolute', top: '80px', right: '10px', zIndex: 1000 }}>
@@ -354,17 +589,19 @@ export default function MapNavigator({
       </div>
 
       {/* Floor Selector */}
-      <FloorSelector
-        building={building}
-        currentFloor={currentFloor}
-        availableFloors={availableFloors}
-        onFloorChange={handleFloorChange}
-      />
+      <div style={{ position: 'absolute', top: '140px', left: '10px', zIndex: 1000 }}>
+        <FloorSelector
+          building={building}
+          currentFloor={currentFloor}
+          availableFloors={availableFloors}
+          onFloorChange={handleFloorChange}
+        />
+      </div>
 
       {/* Map Display */}
-      <div className="map-container" style={{ position: 'relative', height: '500px' }}>
+      <div className="map-container" style={{ position: 'relative', flex: 1, minHeight: '400px', display: 'flex', flexDirection: 'column' }}>
         {loading && (
-          <div className="map-loading">
+          <div className="map-loading" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1001 }}>
             <p>Loading map data...</p>
           </div>
         )}
@@ -374,22 +611,148 @@ export default function MapNavigator({
             <p>Error: {error}</p>
           </div>
         )}
+        
+        {/* Selection Mode Instruction Overlay */}
+        {selectionMode && instructionText && (
+          <div style={{
+            position: 'absolute',
+            top: '10px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1000,
+            backgroundColor: '#3498db',
+            color: 'white',
+            padding: '12px 24px',
+            borderRadius: '25px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+            fontSize: '16px',
+            fontWeight: '500',
+            maxWidth: '90%',
+            textAlign: 'center',
+            animation: 'slideDown 0.3s ease-out'
+          }}>
+            {instructionText}
+          </div>
+        )}
+        
+        {/* Selection Mode Control Buttons */}
+        {selectionMode && (
+          <div style={{
+            position: 'absolute',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1000,
+            display: 'flex',
+            gap: '10px',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            maxWidth: '90%'
+          }}>
+            <button
+              onClick={() => setShowTutorial(true)}
+              style={{
+                backgroundColor: '#9b59b6',
+                color: 'white',
+                padding: '12px 24px',
+                borderRadius: '25px',
+                border: 'none',
+                fontSize: '16px',
+                fontWeight: '500',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                minWidth: '120px',
+                touchAction: 'manipulation'
+              }}
+            >
+              ❓ Help
+            </button>
+            {startPoint && (
+              <button
+                onClick={handleRestartSelection}
+                style={{
+                  backgroundColor: '#f39c12',
+                  color: 'white',
+                  padding: '12px 24px',
+                  borderRadius: '25px',
+                  border: 'none',
+                  fontSize: '16px',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                  minWidth: '120px',
+                  touchAction: 'manipulation'
+                }}
+              >
+                🔄 Restart
+              </button>
+            )}
+            <button
+              onClick={handleResetSelection}
+              style={{
+                backgroundColor: '#e74c3c',
+                color: 'white',
+                padding: '12px 24px',
+                borderRadius: '25px',
+                border: 'none',
+                fontSize: '16px',
+                fontWeight: '500',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                minWidth: '120px',
+                touchAction: 'manipulation'
+              }}
+            >
+              ✕ Cancel
+            </button>
+          </div>
+        )}
 
         {floorPlanUrl && navigationData && (
-          <IndoorMapView
-            building={building}
-            floor={currentFloor}
-            floorPlanUrl={floorPlanUrl}
-            bounds={config.bounds}
-            center={config.center}
-            nodes={navigationData.navigationGraph || {}}
-            path={pathCoordinates}
-            userPosition={userPosition}
-            highlightedNodes={currentPath ? currentPath.nodes : []}
-            onNodeClick={handleNodeClick}
-            onMapClick={handleMapClick}
-          />
+          <div style={{ flex: 1, position: 'relative', width: '100%', height: '100%' }}>
+            <IndoorMapView
+              building={building}
+              floor={currentFloor}
+              floorPlanUrl={floorPlanUrl}
+              bounds={config.bounds}
+              rotatedCorners={rotatedCorners}
+              center={config.center}
+              nodes={navigationData.navigationGraph || {}}
+              path={pathCoordinates}
+              userPosition={userPosition}
+              highlightedNodes={currentPath ? currentPath.nodes : []}
+              onNodeClick={handleNodeClick}
+              onMapClick={handleMapClick}
+              gpsAccuracy={gpsAccuracy}
+              showGPSCircle={showGPSCircle}
+              enableNodeInteraction={!isWaitingForMapClick}
+              startPoint={startPoint}
+              endPoint={endPoint}
+            />
+          </div>
         )}
+        
+        {/* CSS Animations */}
+        <style>{`
+          @keyframes slideDown {
+            from {
+              opacity: 0;
+              transform: translateX(-50%) translateY(-10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateX(-50%) translateY(0);
+            }
+          }
+          
+          /* Mobile touch target optimization */
+          @media (max-width: 768px) {
+            button {
+              min-height: 44px;
+              min-width: 44px;
+            }
+          }
+        `}</style>
       </div>
 
       {/* Navigation Controls */}

@@ -395,10 +395,23 @@ export function formatDistance(meters) {
 
 /**
  * Find nearest node to GPS position with floor filtering
+ * Works with both {lat, lng} objects and [lat, lng] arrays
  */
 export function findNearestNodeToGPS(gpsPosition, navigationData, floor = null) {
   if (!gpsPosition || !navigationData || !navigationData.nodes) {
     return null;
+  }
+
+  // Normalize position to {lat, lng} format
+  let normalizedPos = gpsPosition;
+  if (Array.isArray(gpsPosition)) {
+    normalizedPos = { lat: gpsPosition[0], lng: gpsPosition[1] };
+  } else if (gpsPosition.lat === undefined && gpsPosition.lng === undefined) {
+    // Leaflet LatLng object - has lat() and lng() methods
+    normalizedPos = { 
+      lat: typeof gpsPosition.lat === 'function' ? gpsPosition.lat() : gpsPosition.lat,
+      lng: typeof gpsPosition.lng === 'function' ? gpsPosition.lng() : gpsPosition.lng
+    };
   }
 
   let nearestNode = null;
@@ -419,7 +432,7 @@ export function findNearestNodeToGPS(gpsPosition, navigationData, floor = null) 
       lng: node.position[1] 
     };
 
-    const distance = calculateGeoDistance(gpsPosition, nodeGeoPos);
+    const distance = calculateGeoDistance(normalizedPos, nodeGeoPos);
     
     if (distance < minDistance) {
       minDistance = distance;
@@ -429,6 +442,54 @@ export function findNearestNodeToGPS(gpsPosition, navigationData, floor = null) 
 
   if (nearestNode) {
     console.log(`📍 Nearest node to GPS: ${nearestNode} (${minDistance.toFixed(2)}m away)`);
+  }
+
+  return nearestNode;
+}
+
+/**
+ * Find nearest node to a click position (simpler version for map interactions)
+ * Specifically for handling Leaflet map click events
+ */
+export function findNearestNodeToClick(clickPosition, navigationGraph, floor = null) {
+  if (!clickPosition || !navigationGraph) {
+    return null;
+  }
+
+  // Extract lat/lng from Leaflet LatLng object or array
+  const lat = typeof clickPosition.lat === 'function' ? clickPosition.lat() : clickPosition.lat || clickPosition[0];
+  const lng = typeof clickPosition.lng === 'function' ? clickPosition.lng() : clickPosition.lng || clickPosition[1];
+  
+  const clickPos = { lat, lng };
+
+  let nearestNode = null;
+  let minDistance = Infinity;
+
+  Object.entries(navigationGraph).forEach(([nodeId, node]) => {
+    // Filter by floor if specified
+    if (floor && node.floor && node.floor !== floor) {
+      return;
+    }
+
+    if (!node.position || node.position.length < 2) {
+      return;
+    }
+
+    const nodePos = { 
+      lat: node.position[0], 
+      lng: node.position[1] 
+    };
+
+    const distance = calculateGeoDistance(clickPos, nodePos);
+    
+    if (distance < minDistance) {
+      minDistance = distance;
+      nearestNode = nodeId;
+    }
+  });
+
+  if (nearestNode) {
+    console.log(`🎯 Nearest node to click: ${nearestNode} (${minDistance.toFixed(2)}m away)`);
   }
 
   return nearestNode;

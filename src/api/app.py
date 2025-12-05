@@ -915,48 +915,14 @@ def api_chat():
             print(f"📍 User position: {user_position}")
 
         if intent_type == "NAVIGATION":
-            nav_result = parse_navigation_request(user_message, user_position)
-            
-            if nav_result.get('is_navigation'):
-                # Use new navigation service to calculate path
-                nav_service = get_navigation_service()
-                dir_service = get_direction_service()
-                
-                start = nav_result['start']
-                end = nav_result['end']
-                
-                # Calculate path
-                path = nav_service.find_path(
-                    start['building'], start['floor'], start['node'],
-                    end['building'], end['floor'], end['node']
-                )
-                
-                if path:
-                    # Generate turn-by-turn directions
-                    directions = dir_service.generate_directions(path)
-                    
-                    # Changed: Instead of text summary, prompt to use map button
-                    return jsonify({
-                        "reply": f"📍 Ready to navigate to {end['location']} in Building {end['building']}! Click the 'Show Map' button below to see your route on the interactive campus map. 🗺️",
-                        "mapAction": {
-                            "type": "SHOW_ROUTE",
-                            "start": start,
-                            "end": end,
-                            "path": path,
-                            "directions": directions
-                        }
-                    })
-                else:
-                    return jsonify({
-                        "reply": f"Sorry, I couldn't find a route from {start['location']} in Building {start['building']} to {end['location']} in Building {end['building']}."
-                    })
-            else:
-                # General navigation question without specific route
-                prompt = f'{map_info}\n\nUser: {user_message}\nAI:'
-                response = model.generate_content(prompt)
-                response_text = safe_get_response_text(response)
-                clean_response = clean_html_to_text(response_text, keep_emojis=False)
-                return jsonify({"reply": clean_response})
+            # Simplified: Just direct user to interactive map
+            return jsonify({
+                "reply": "To find routes and navigate the campus, please use the Fanshawe Map. Click the 'Show Map' button below chatbar to access the complete map navigation.\n\nOn the map you'll be able to:\n• View all buildings and rooms\n• Select starting point and destination\n• Get detailed step-by-step routes\n• Visualize routes between different buildings",
+                "mapAction": {
+                    "type": "OPEN_MAP",
+                    "message": "Use the interactive map for navigation"
+                }
+            })
 
         elif intent_type == "EVENTS":
             return jsonify(handle_event_query(user_message, intent_result['entities']))
@@ -1391,6 +1357,12 @@ def serve_leaflet_assets(path):
     """Serve LeafletJS floor plans, navigation data, and plugins"""
     leaflet_dir = project_root / 'LeafletJS'
     return send_from_directory(str(leaflet_dir), path)
+
+@app.route('/interactive-map')
+def serve_interactive_map():
+    """Serve the interactive Leaflet navigation map (set_start_end.html)"""
+    leaflet_dir = project_root / 'LeafletJS'
+    return send_from_directory(str(leaflet_dir), 'set_start_end.html')
 
 @app.route('/<path:path>')
 def catch_all(path):

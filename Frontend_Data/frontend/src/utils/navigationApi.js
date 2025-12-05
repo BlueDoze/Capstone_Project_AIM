@@ -7,6 +7,22 @@
 const API_BASE = '/api/navigation';
 
 /**
+ * Get complete all_node_data.json with all buildings and floors
+ */
+export async function getAllNodeData() {
+  try {
+    const response = await fetch('/leaflet-assets/all_node_data.json');
+    if (!response.ok) throw new Error('Failed to fetch all_node_data.json');
+    const data = await response.json();
+    console.log('✅ Loaded all_node_data.json');
+    return data;
+  } catch (error) {
+    console.error('Error fetching all_node_data:', error);
+    return null;
+  }
+}
+
+/**
  * Get list of all buildings with navigation data
  */
 export async function getAvailableBuildings() {
@@ -143,7 +159,8 @@ export async function parseNavigationIntent(message) {
  * Get floor plan URL for a building and floor
  */
 export function getFloorPlanUrl(building, floor) {
-  return `/leaflet-assets/Floorplans/${building}/${building}_building_floor_${floor}.svg`;
+  // Floor plan files are named like M1.svg, M2.svg in Building M folder
+  return `/leaflet-assets/Floorplans/Building ${building}/${building}${floor}.svg`;
 }
 
 /**
@@ -157,8 +174,54 @@ export async function getBuildingPositions() {
     return data;
   } catch (error) {
     console.error('Error fetching building positions:', error);
-    return {};
+    return null;
   }
+}
+
+/**
+ * Rotate a point around a center by an angle (in degrees)
+ * Matches the coordinate_system.html implementation
+ */
+export function rotatePoint(point, center, angleDeg) {
+  const angleRad = (angleDeg * Math.PI) / 180;
+  const cos = Math.cos(angleRad);
+  const sin = Math.sin(angleRad);
+
+  const dx = point.lng - center.lng;
+  const dy = point.lat - center.lat;
+
+  return {
+    lat: center.lat + (dy * cos - dx * sin),
+    lng: center.lng + (dx * cos + dy * sin)
+  };
+}
+
+/**
+ * Calculate rotated bounds for SVG overlay
+ * Based on coordinate_system.html approach
+ */
+export function calculateRotatedBounds(bounds, rotationDeg) {
+  // bounds format: [[south, west], [north, east]]
+  const south = bounds[0][0];
+  const west = bounds[0][1];
+  const north = bounds[1][0];
+  const east = bounds[1][1];
+  
+  const center = {
+    lat: (south + north) / 2,
+    lng: (west + east) / 2
+  };
+  
+  // Calculate corners: NW, NE, SE, SW
+  const corners = [
+    { lat: north, lng: west },  // NW
+    { lat: north, lng: east },  // NE
+    { lat: south, lng: east },  // SE
+    { lat: south, lng: west }   // SW
+  ];
+  
+  // Rotate each corner around center
+  return corners.map(corner => rotatePoint(corner, center, rotationDeg));
 }
 
 /**
