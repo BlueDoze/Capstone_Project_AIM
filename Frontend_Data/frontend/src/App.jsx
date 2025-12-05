@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Map as MapIcon, X, Navigation, Building2, Calendar, Moon, Sun, MessageSquare } from 'lucide-react';
 import { MapContainer, TileLayer, GeoJSON, Polyline, useMap } from 'react-leaflet';
+import MapNavigator from './components/MapNavigator';
 import 'leaflet/dist/leaflet.css';
 
 // Component to fit map bounds when data loads
@@ -29,6 +30,8 @@ export default function FanshaweNavigator() {
   const [buildingInfo, setBuildingInfo] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [showIndoorMap, setShowIndoorMap] = useState(false);
+  const [mapAction, setMapAction] = useState(null);
   const messagesEndRef = useRef(null);
 
   // Use relative URL since Flask serves the React app (same origin)
@@ -109,6 +112,12 @@ export default function FanshaweNavigator() {
         content: data.reply || data.resposta || 'Sorry, I couldn\'t process that request.'
       };
       setMessages(prev => [...prev, botResponse]);
+
+      // Handle indoor navigation mapAction
+      if (data.mapAction && data.mapAction.type === 'SHOW_ROUTE') {
+        setMapAction(data.mapAction);
+        // Removed: setShowIndoorMap(true); - Don't auto-open, let user click button
+      }
 
       // If there's route data, handle it
       if (data.tipo === 'navegacao' && data.origem && data.destino) {
@@ -294,6 +303,17 @@ export default function FanshaweNavigator() {
                     }`}
                   >
                     <p className="whitespace-pre-wrap">{msg.content}</p>
+                    
+                    {/* Show Map Button for navigation responses */}
+                    {msg.role === 'assistant' && idx === messages.length - 1 && mapAction && (
+                      <button
+                        onClick={() => setShowIndoorMap(true)}
+                        className="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-md"
+                      >
+                        <span className="text-xl">🗺️</span>
+                        <span>Show Map</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -471,6 +491,46 @@ export default function FanshaweNavigator() {
                     <p className="text-gray-800 dark:text-gray-100">Loading map...</p>
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Indoor Navigation Map Modal */}
+        {showIndoorMap && mapAction && (
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            onClick={() => setShowIndoorMap(false)}
+          >
+            <div 
+              className="bg-white dark:bg-gray-800 rounded-lg w-[75%] h-[75%] flex flex-col border-2 border-gray-400 dark:border-gray-600 transition-colors duration-200"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center p-4 border-b border-gray-300 dark:border-gray-700">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">
+                  Indoor Navigation - Building {mapAction.start?.building || 'M'}
+                </h3>
+                <button
+                  onClick={() => {
+                    setShowIndoorMap(false);
+                    setMapAction(null);
+                  }}
+                  className="text-gray-800 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              <div className="flex-1 overflow-hidden p-4">
+                <MapNavigator
+                  building={mapAction.start?.building || 'M'}
+                  initialFloor={mapAction.start?.floor || '1'}
+                  mapAction={mapAction}
+                  onNavigationComplete={() => {
+                    setShowIndoorMap(false);
+                    setMapAction(null);
+                  }}
+                  className="h-full"
+                />
               </div>
             </div>
           </div>

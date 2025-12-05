@@ -3,6 +3,7 @@
  * 
  * Helper functions for pathfinding and navigation calculations
  * Based on the LeafletJS folder's navigation logic
+ * Enhanced with GPS positioning and interactive node features
  */
 
 /**
@@ -12,6 +13,24 @@ export function calculateDistance(point1, point2) {
   const dx = point2[0] - point1[0];
   const dy = point2[1] - point1[1];
   return Math.sqrt(dx * dx + dy * dy);
+}
+
+/**
+ * Calculate geographic distance between two lat/lng points using Haversine formula
+ */
+export function calculateGeoDistance(pos1, pos2) {
+  const R = 6371e3; // Earth radius in meters
+  const φ1 = (pos1.lat * Math.PI) / 180;
+  const φ2 = (pos2.lat * Math.PI) / 180;
+  const Δφ = ((pos2.lat - pos1.lat) * Math.PI) / 180;
+  const Δλ = ((pos2.lng - pos1.lng) * Math.PI) / 180;
+
+  const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c;
 }
 
 /**
@@ -319,4 +338,98 @@ export function getAvailableFloors(building) {
   };
 
   return floorConfigs[building] || [];
+}
+
+/**
+ * Store user position in localStorage
+ */
+export function storeUserPosition(position, floor, building) {
+  const data = {
+    position,
+    floor,
+    building,
+    timestamp: Date.now(),
+  };
+  localStorage.setItem('user_position', JSON.stringify(data));
+}
+
+/**
+ * Retrieve user position from localStorage
+ */
+export function retrieveUserPosition(maxAge = 3600000) {
+  try {
+    const stored = localStorage.getItem('user_position');
+    if (!stored) return null;
+
+    const data = JSON.parse(stored);
+    const age = Date.now() - data.timestamp;
+
+    if (age > maxAge) {
+      localStorage.removeItem('user_position');
+      return null;
+    }
+
+    return {
+      position: data.position,
+      floor: data.floor,
+      building: data.building,
+    };
+  } catch (error) {
+    console.error('Error retrieving user position:', error);
+    return null;
+  }
+}
+
+/**
+ * Format distance for display
+ */
+export function formatDistance(meters) {
+  if (meters < 1) {
+    return `${Math.round(meters * 100)} cm`;
+  } else if (meters < 1000) {
+    return `${Math.round(meters)} m`;
+  } else {
+    return `${(meters / 1000).toFixed(2)} km`;
+  }
+}
+
+/**
+ * Find nearest node to GPS position with floor filtering
+ */
+export function findNearestNodeToGPS(gpsPosition, navigationData, floor = null) {
+  if (!gpsPosition || !navigationData || !navigationData.nodes) {
+    return null;
+  }
+
+  let nearestNode = null;
+  let minDistance = Infinity;
+
+  Object.entries(navigationData.nodes).forEach(([nodeId, node]) => {
+    // Filter by floor if specified
+    if (floor && node.floor !== floor) {
+      return;
+    }
+
+    if (!node.position || node.position.length < 2) {
+      return;
+    }
+
+    const nodeGeoPos = { 
+      lat: node.position[0], 
+      lng: node.position[1] 
+    };
+
+    const distance = calculateGeoDistance(gpsPosition, nodeGeoPos);
+    
+    if (distance < minDistance) {
+      minDistance = distance;
+      nearestNode = nodeId;
+    }
+  });
+
+  if (nearestNode) {
+    console.log(`📍 Nearest node to GPS: ${nearestNode} (${minDistance.toFixed(2)}m away)`);
+  }
+
+  return nearestNode;
 }

@@ -14,6 +14,8 @@ sys.path.insert(0, str(project_root))
 
 # Import local modules
 from src.api.utils.text_cleaner import clean_html_to_text
+from src.services.navigation_service import get_navigation_service
+from src.services.direction_service import get_direction_service
 
 load_dotenv()
 
@@ -49,11 +51,21 @@ try:
         top_k=40
     )
     
+    # Configure safety settings to allow campus navigation queries
+    # These settings prevent blocking of legitimate queries containing words like "bathroom", "room", etc.
+    safety_settings = {
+        genai.types.HarmCategory.HARM_CATEGORY_HARASSMENT: genai.types.HarmBlockThreshold.BLOCK_NONE,
+        genai.types.HarmCategory.HARM_CATEGORY_HATE_SPEECH: genai.types.HarmBlockThreshold.BLOCK_ONLY_HIGH,
+        genai.types.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: genai.types.HarmBlockThreshold.BLOCK_ONLY_HIGH,
+        genai.types.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: genai.types.HarmBlockThreshold.BLOCK_NONE,
+    }
+    
     model = genai.GenerativeModel(
-        'gemini-pro-latest',
-        generation_config=generation_config
+        'gemini-2.5-flash',
+        generation_config=generation_config,
+        safety_settings=safety_settings
     )
-    print("✅ Gemini AI model configured")
+    print("✅ Gemini AI model configured with safety settings")
 except KeyError as e:
     print(f"❌ {e}")
     model = None
@@ -228,61 +240,368 @@ def resolve_room_name(room_name: str) -> Optional[str]:
 
     return None
 
-def parse_navigation_request(user_message: str) -> Dict[str, Any]:
+def parse_navigation_request(user_message: str, user_position: Dict[str, Any] = None) -> Dict[str, Any]:
     """
     Parse navigation request from user message
-    Uses Gemini to extract start and end locations
+    Uses Gemini to extract start and end locations with building/floor info
+    
+    Args:
+        user_message: User's navigation query
+        user_position: Optional dict with {"lat": float, "lng": float, "floor": str, "building": str}
     """
+    print(f"\n🔍 PARSING NAVIGATION REQUEST: '{user_message}'")
+    
     if not model:
+        print("❌ Model not initialized")
         return {'is_navigation': False}
 
     nav_keywords = ['how', 'get', 'go', 'navigate', 'path', 'way', 'direction',
-                    'from', 'to', 'reach', 'find', 'como', 'ir', 'chegar']
+                    'from', 'to', 'reach', 'find', 'como', 'ir', 'chegar', 'where']
     message_lower = user_message.lower()
     is_likely_nav = any(keyword in message_lower for keyword in nav_keywords)
 
     if not is_likely_nav:
+        print(f"❌ No navigation keywords found in: {message_lower}")
         return {'is_navigation': False}
+    
+    print(f"✅ Detected navigation keywords")
 
     try:
-        parse_prompt = f"""Extract the start location and destination from this message.
-        Return ONLY a JSON response with this format (no other text):
-        {{"is_navigation": true/false, "start": "location or null", "end": "location or null"}}
+        nav_service = get_navigation_service()
+        use_gps_start = False
+        start_location = None
+        start_node = None
+        start_building = 'M'
+        start_floor = '1'
+        
+        # If user position is provided, use it as start point
+        if user_position and user_position.get('lat') and user_position.get('lng'):
+            print(f"📍 User position provided: {user_position}")
+            # Find nearest node to GPS position
+            user_building = user_position.get('building', 'M')
+            user_floor = str(user_position.get('floor', '1'))
+            
+            # Get navigation graph for user's building/floor
+            nav_data = nav_service.navigation_data.get(user_building, {})
+            floor_data = nav_data.get('floors', {}).get(user_floor, {})
+            nodes = floor_data.get('nodes', {})
+            
+            # Find nearest node to user position
+            nearest_node = None
+            min_distance = float('inf')
+            
+            for node_id, node_data in nodes.items():
+                node_pos = node_data.get('position')
+                if node_pos and len(node_pos) >= 2:
+                    # Calculate simple distance (could use haversine for accuracy)
+                    dist = ((node_pos[0] - user_position['lat'])**2 + 
+                           (node_pos[1] - user_position['lng'])**2)**0.5
+                    if dist < min_distance:
+                        min_distance = dist
+                        nearest_node = node_id
+            
+            if nearest_node:
+                print(f"✅ Using GPS position - nearest node: {nearest_node}")
+                start_location = "your current location"
+                start_node = nearest_node
+                start_building = user_building
+                start_floor = user_floor
+                use_gps_start = True
+            else:
+                print(f"⚠️ Could not find nearest node to GPS position")
+        
+        # PATTERN-BASED PARSING: Try to extract locations directly using regex
+        # This bypasses AI content safety issues for simple queries
+        room_number_pattern = r'\b(\d{4})\b'  # Match 4-digit room numbers
+        building_pattern = r'building\s+([A-Z])\b'  # Match "building M", "building H", etc.
+        floor_pattern = r'floor\s+(\d+)\b'  # Match "floor 1", "floor 2", etc.
+        
+        # Match common location keywords
+        location_keywords = r'\b(bathroom|restroom|washroom|toilet|elevator|lift|stairs|stairwell|staircase|exit|entrance|lobby)\b'
+        keyword_match = re.search(location_keywords, user_message, re.IGNORECASE)
+        
+        room_matches = re.findall(room_number_pattern, user_message)
+        building_match = re.search(building_pattern, user_message, re.IGNORECASE)
+        floor_match = re.search(floor_pattern, user_message, re.IGNORECASE)
+        
+        # Extract building and floor with defaults
+        default_building = 'M'
+        default_floor = '1'
+        target_building = building_match.group(1).upper() if building_match else default_building
+        target_floor = floor_match.group(1) if floor_match else default_floor
+        
+        # Determine destination location from patterns
+        destination_found = False
+        end_location = None
+        end_node = None
+        
+        # Priority 1: Room number pattern
+        if len(room_matches) == 1:
+            room_number = room_matches[0]
+            print(f"🔍 Pattern match found: Room {room_number} in Building {target_building}, Floor {target_floor}")
+            
+            # Resolve room to node using building_m_rooms.json aliases
+            end_location = room_number
+            end_node = nav_service.resolve_room_to_node(
+                target_building, target_floor, room_number
+            )
+            
+            # Try with "Room_" prefix if direct match fails
+            if not end_node:
+                end_node = nav_service.resolve_room_to_node(
+                    target_building, target_floor, f"Room_{room_number}"
+                )
+                if end_node:
+                    end_location = f"Room_{room_number}"
+            
+            # Check if it's a direct node ID
+            if not end_node:
+                node_info = nav_service.get_node_info(target_building, target_floor, room_number)
+                if node_info:
+                    end_node = room_number
+                    end_location = room_number
+            
+            if end_node:
+                destination_found = True
+                print(f"🔍 Room number pattern matched: {end_location} -> {end_node}")
+        
+        # Priority 2: Location keyword pattern (bathroom, elevator, etc.)
+        if not destination_found and keyword_match:
+            keyword = keyword_match.group(1).lower()
+            print(f"🔍 Location keyword found: {keyword}")
+            
+            # Map keywords to room aliases based on common naming patterns
+            keyword_mappings = {
+                'bathroom': ['Bathroom-Men', 'Bathroom-Women', 'Bathroom'],
+                'restroom': ['Bathroom-Men', 'Bathroom-Women', 'Bathroom'],
+                'washroom': ['Bathroom-Men', 'Bathroom-Women', 'Bathroom'],
+                'toilet': ['Bathroom-Men', 'Bathroom-Women', 'Bathroom'],
+                'elevator': ['Elevator-M', 'Elevator'],
+                'lift': ['Elevator-M', 'Elevator'],
+                'stairs': ['Stairs', 'Stairwell'],
+                'stairwell': ['Stairs', 'Stairwell'],
+                'staircase': ['Stairs', 'Stairwell'],
+                'exit': ['Exit', 'Main-Exit'],
+                'entrance': ['Entrance', 'Main-Entrance'],
+                'lobby': ['Lobby', 'Main-Lobby']
+            }
+            
+            # Check for gender-specific bathroom terms
+            if keyword in ['bathroom', 'restroom', 'washroom', 'toilet']:
+                if re.search(r"\b(men|men's|male|boys?)\b", user_message, re.IGNORECASE):
+                    keyword_mappings[keyword] = ['Bathroom-Men']
+                elif re.search(r"\b(women|women's|female|girls?|ladies)\b", user_message, re.IGNORECASE):
+                    keyword_mappings[keyword] = ['Bathroom-Women']
+            
+            # Try to resolve keyword to a node
+            possible_rooms = keyword_mappings.get(keyword, [keyword.title()])
+            for room_name in possible_rooms:
+                end_node = nav_service.resolve_room_to_node(target_building, target_floor, room_name)
+                if end_node:
+                    end_location = room_name
+                    destination_found = True
+                    print(f"✅ Keyword matched to room: {room_name} -> {end_node}")
+                    break
+        
+        # If pattern matching found destination
+        if destination_found and end_node:
+            # If using GPS start, we already have start info
+            if use_gps_start:
+                return {
+                    'is_navigation': True,
+                    'start': {
+                        'location': start_location,
+                        'building': start_building,
+                        'floor': start_floor,
+                        'node': start_node,
+                        'from_gps': True
+                    },
+                    'end': {
+                        'location': end_location,
+                        'building': target_building,
+                        'floor': target_floor,
+                        'node': end_node
+                    }
+                }
+            else:
+                # Pattern matched destination but no GPS start - fall through to AI for start location
+                print(f"✅ Destination found via pattern matching: {end_location} -> {end_node}")
+                # Will use AI below to extract start location
+        
+        # If pattern matching didn't work or we need start location, use AI
+        print(f"🤖 Pattern matching incomplete, using AI to parse navigation request")
+        
+        parse_prompt = f"""You are parsing a campus navigation request. Extract the start and destination locations.
+        Return ONLY valid JSON (no markdown, no explanation, no code blocks):
+        {{
+            "is_navigation": true,
+            "start": {{
+                "location": "Main Entrance",
+                "building": "M",
+                "floor": "1"
+            }},
+            "end": {{
+                "location": "room number or name",
+                "building": "M or H or A or B or F",
+                "floor": "1 or 2 or 3"
+            }}
+        }}
 
-        Message: {user_message}
+        User message: {user_message}
 
-        For "location", use room numbers like "1003" or common names like "bathroom men", "elevator", "exit".
-        If no navigation intent, set is_navigation to false."""
+        IMPORTANT:
+        - For room numbers, use format like "M1003" (building + 4 digits)
+        - Default building is M if not specified
+        - Default floor is the first digit of the room number
+        - If no start location is mentioned, use "Main Entrance" in Building M, Floor 1
+        - Always set is_navigation to true for navigation requests
+        - Return ONLY the JSON, no markdown formatting
+        
+        Example: "How do I get to room 1018?" → {{"is_navigation": true, "start": {{"location": "Main Entrance", "building": "M", "floor": "1"}}, "end": {{"location": "M1018", "building": "M", "floor": "1"}}}}"""
 
-        response = model.generate_content(parse_prompt)
-        response_text = safe_get_response_text(response, "{}").strip()
+        try:
+            response = model.generate_content(parse_prompt)
+            response_text = safe_get_response_text(response, "{}").strip()
+            print(f"🤖 AI Response: {response_text[:200]}...")
+            
+            # Check if response was blocked by safety filter
+            if "content safety policies" in response_text or response_text == "{}":
+                print("⚠️ AI response blocked by safety filter, attempting pattern-based fallback")
+                # If we have any pattern-matched destination, use it with default start
+                if destination_found and end_node:
+                    print(f"✅ Using pattern-matched destination with default start location")
+                    return {
+                        'is_navigation': True,
+                        'start': {
+                            'location': 'Main Entrance',
+                            'building': 'M',
+                            'floor': '1',
+                            'node': 'M1_1'
+                        },
+                        'end': {
+                            'location': end_location,
+                            'building': target_building,
+                            'floor': target_floor,
+                            'node': end_node
+                        }
+                    }
+                else:
+                    print("❌ Safety filter triggered with no pattern match")
+                    return {'is_navigation': False, 'error': 'safety_filter', 'message': user_message}
+        except Exception as e:
+            print(f"❌ Error calling Gemini API: {e}")
+            import traceback
+            traceback.print_exc()
+            # Fall back to pattern matching if available
+            if destination_found and end_node:
+                print(f"✅ Falling back to pattern match result")
+                return {
+                    'is_navigation': True,
+                    'start': {'location': 'Main Entrance', 'building': 'M', 'floor': '1', 'node': 'M1_1'},
+                    'end': {'location': end_location, 'building': target_building, 'floor': target_floor, 'node': end_node}
+                }
+            print(f"❌ No fallback available, returning is_navigation=False")
+            return {'is_navigation': False}
+        
+        response_text = response_text.strip()
+        # Remove markdown code blocks if present
+        response_text = re.sub(r'^```json\s*', '', response_text)
+        response_text = re.sub(r'\s*```$', '', response_text)
+        response_text = response_text.strip()
 
         json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
         if json_match:
-            parsed = json.loads(json_match.group())
+            try:
+                parsed = json.loads(json_match.group())
+                print(f"✅ Parsed JSON: {json.dumps(parsed, indent=2)}")
+            except json.JSONDecodeError as e:
+                print(f"❌ JSON parsing error: {e}")
+                print(f"Raw text: {json_match.group()[:200]}")
+                return {'is_navigation': False}
 
             if parsed.get('is_navigation'):
-                start_name = parsed.get('start')
-                end_name = parsed.get('end')
-
-                start_room = resolve_room_name(start_name) if start_name else None
-                end_room = resolve_room_name(end_name) if end_name else None
-
-                if start_room and end_room:
-                    room_to_node = building_m_config.get('roomToNode', {})
-                    start_node = room_to_node.get(start_room)
-                    end_node = room_to_node.get(end_room)
-
-                    if start_node and end_node:
-                        return {
-                            'is_navigation': True,
-                            'start': start_room,
-                            'end': end_room,
-                            'startNode': start_node,
-                            'endNode': end_node,
-                            'building': 'M',
-                            'floor': 1
+                # Handle start location
+                if use_gps_start:
+                    print(f"✅ Using GPS start location")
+                    # Already set from GPS position
+                    pass
+                else:
+                    start_data = parsed.get('start', {})
+                    start_building = start_data.get('building', 'M')
+                    start_floor = str(start_data.get('floor', '1'))
+                    start_location = start_data.get('location', 'Main Entrance')
+                    
+                    if not start_location:
+                        print(f"⚠️ No start location in AI response, using default")
+                        start_location = 'Main Entrance'
+                    
+                    print(f"🔍 Resolving start location: {start_location} in {start_building}/{start_floor}")
+                    # Resolve start location to node
+                    start_node = nav_service.resolve_room_to_node(
+                        start_building, start_floor, start_location
+                    )
+                    
+                    if not start_node:
+                        print(f"⚠️ Could not resolve start location, trying node info lookup")
+                        node_info = nav_service.get_node_info(start_building, start_floor, start_location)
+                        if node_info:
+                            start_node = start_location
+                            print(f"✅ Found node via get_node_info: {start_node}")
+                    
+                    if not start_node:
+                        print(f"⚠️ Using default start node M1_1")
+                        start_node = 'M1_1'
+                        start_location = 'Main Entrance'
+                
+                # Handle end location
+                end_data = parsed.get('end', {})
+                end_building = end_data.get('building', 'M')
+                end_floor = str(end_data.get('floor', '1'))
+                end_location = end_data.get('location')
+                
+                if not end_location:
+                    print(f"❌ No end location in AI response")
+                    return {'is_navigation': False}
+                
+                print(f"🔍 Resolving end location: {end_location} in {end_building}/{end_floor}")
+                # Resolve end location to node
+                end_node = nav_service.resolve_room_to_node(
+                    end_building, end_floor, end_location
+                )
+                
+                if not end_node:
+                    print(f"⚠️ Could not resolve end location, trying node info lookup")
+                    node_info = nav_service.get_node_info(end_building, end_floor, end_location)
+                    if node_info:
+                        end_node = end_location
+                        print(f"✅ Found node via get_node_info: {end_node}")
+                
+                if end_node:
+                    print(f"✅ NAVIGATION REQUEST SUCCESSFUL")
+                    print(f"   Start: {start_location} ({start_building}/{start_floor}) → {start_node}")
+                    print(f"   End: {end_location} ({end_building}/{end_floor}) → {end_node}")
+                    return {
+                        'is_navigation': True,
+                        'start': {
+                            'location': start_location,
+                            'building': start_building,
+                            'floor': start_floor,
+                            'node': start_node,
+                            'from_gps': use_gps_start
+                        },
+                        'end': {
+                            'location': end_location,
+                            'building': end_building,
+                            'floor': end_floor,
+                            'node': end_node
                         }
+                    }
+                else:
+                    print(f"❌ Could not resolve end location to node: {end_location}")
+            else:
+                print(f"❌ AI returned is_navigation=False")
+        else:
+            print(f"❌ No JSON found in AI response")
 
         return {'is_navigation': False}
 
@@ -582,6 +901,8 @@ def api_chat():
         return jsonify({"reply": "The AI model is not configured. Please set the GEMINI_API_KEY environment variable."}), 500
 
     user_message = request.json.get("mensagem") or request.json.get("message")
+    user_position = request.json.get("user_position")  # New: GPS or manual position
+    
     if not user_message:
         return jsonify({"reply": "Please provide a message."}), 400
 
@@ -590,29 +911,51 @@ def api_chat():
         intent_type = intent_result['intent']
 
         print(f"🎯 Intent: {intent_type} (confidence: {intent_result['confidence']:.2f})")
+        if user_position:
+            print(f"📍 User position: {user_position}")
 
         if intent_type == "NAVIGATION":
-            nav_result = parse_navigation_request(user_message)
-            prompt = f'{map_info}\n\nUser: {user_message}\nAI:'
-
-            response = model.generate_content(prompt)
-            response_text = safe_get_response_text(response)
-            clean_response = clean_html_to_text(response_text, keep_emojis=False)
-
+            nav_result = parse_navigation_request(user_message, user_position)
+            
             if nav_result.get('is_navigation'):
-                return jsonify({
-                    "reply": clean_response,
-                    "mapAction": {
-                        "type": "SHOW_ROUTE",
-                        "building": "M",
-                        "floor": 1,
-                        "startRoom": nav_result['start'],
-                        "endRoom": nav_result['end'],
-                        "startNode": nav_result['startNode'],
-                        "endNode": nav_result['endNode']
-                    }
-                })
+                # Use new navigation service to calculate path
+                nav_service = get_navigation_service()
+                dir_service = get_direction_service()
+                
+                start = nav_result['start']
+                end = nav_result['end']
+                
+                # Calculate path
+                path = nav_service.find_path(
+                    start['building'], start['floor'], start['node'],
+                    end['building'], end['floor'], end['node']
+                )
+                
+                if path:
+                    # Generate turn-by-turn directions
+                    directions = dir_service.generate_directions(path)
+                    
+                    # Changed: Instead of text summary, prompt to use map button
+                    return jsonify({
+                        "reply": f"📍 Ready to navigate to {end['location']} in Building {end['building']}! Click the 'Show Map' button below to see your route on the interactive campus map. 🗺️",
+                        "mapAction": {
+                            "type": "SHOW_ROUTE",
+                            "start": start,
+                            "end": end,
+                            "path": path,
+                            "directions": directions
+                        }
+                    })
+                else:
+                    return jsonify({
+                        "reply": f"Sorry, I couldn't find a route from {start['location']} in Building {start['building']} to {end['location']} in Building {end['building']}."
+                    })
             else:
+                # General navigation question without specific route
+                prompt = f'{map_info}\n\nUser: {user_message}\nAI:'
+                response = model.generate_content(prompt)
+                response_text = safe_get_response_text(response)
+                clean_response = clean_html_to_text(response_text, keep_emojis=False)
                 return jsonify({"reply": clean_response})
 
         elif intent_type == "EVENTS":
@@ -835,6 +1178,213 @@ def api_get_room_centers():
     filtered_centers = {k: v for k, v in room_centers.items() if not k.startswith('_')}
 
     return jsonify(filtered_centers)
+
+@app.route("/api/navigation/data", methods=['GET'])
+def api_get_navigation_data():
+    """Get navigation graph data for a specific building and floor"""
+    building = request.args.get('building', 'M')
+    floor = request.args.get('floor', '1')
+    
+    nav_service = get_navigation_service()
+    floor_data = nav_service.get_building_data(building, floor)
+    
+    if not floor_data:
+        return jsonify({"error": f"No data for Building {building}, Floor {floor}"}), 404
+    
+    return jsonify(floor_data)
+
+@app.route("/api/navigation/buildings", methods=['GET'])
+def api_get_buildings():
+    """Get list of all buildings with navigation data"""
+    nav_service = get_navigation_service()
+    buildings = nav_service.get_available_buildings()
+    
+    return jsonify({"buildings": buildings})
+
+@app.route("/api/navigation/floors/<building>", methods=['GET'])
+def api_get_floors(building):
+    """Get list of all floors for a building"""
+    nav_service = get_navigation_service()
+    floors = nav_service.get_available_floors(building)
+    
+    if not floors:
+        return jsonify({"error": f"No data for Building {building}"}), 404
+    
+    # Convert string array to object array with level property for frontend compatibility
+    floors_data = [{"level": floor} for floor in floors]
+    
+    return jsonify({"building": building, "floors": floors_data})
+
+@app.route("/api/navigation/building-connections", methods=['GET'])
+def api_get_building_connections():
+    """Get building-to-building connections for multi-building navigation"""
+    try:
+        connections_path = project_root / 'LeafletJS' / 'building_connections.JSON'
+        
+        if not connections_path.exists():
+            return jsonify({"error": "Building connections file not found"}), 404
+        
+        with open(connections_path, 'r') as f:
+            connections = json.load(f)
+        
+        return jsonify(connections)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/navigation/all-node-data", methods=['GET'])
+def api_get_all_node_data():
+    """Get complete all_node_data.json for client-side navigation"""
+    try:
+        all_node_data_path = project_root / 'LeafletJS' / 'all_node_data.json'
+        
+        if not all_node_data_path.exists():
+            return jsonify({"error": "all_node_data.json not found"}), 404
+        
+        with open(all_node_data_path, 'r') as f:
+            all_data = json.load(f)
+        
+        return jsonify(all_data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/navigation/svg-content/<building>/<floor>", methods=['GET'])
+def api_get_svg_content(building, floor):
+    """Get SVG floor plan content for node parsing"""
+    try:
+        svg_path = project_root / 'LeafletJS' / 'Floorplans' / f'Building {building}' / f'{building}{floor}.svg'
+        
+        if not svg_path.exists():
+            return jsonify({"error": f"SVG not found for Building {building} Floor {floor}"}), 404
+        
+        with open(svg_path, 'r', encoding='utf-8') as f:
+            svg_content = f.read()
+        
+        return jsonify({"svgContent": svg_content})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/navigation/calculate", methods=['POST'])
+def api_calculate_path():
+    """
+    Calculate navigation path between two locations
+    
+    Request JSON:
+    {
+        "start": {"building": "M", "floor": "1", "node": "M1_1"},
+        "end": {"building": "H", "floor": "1", "node": "H1_20"}
+    }
+    
+    Or:
+    {
+        "start": {"building": "M", "floor": "1", "room": "1003"},
+        "end": {"building": "M", "floor": "1", "room": "1018"}
+    }
+    """
+    data = request.json
+    if not data:
+        return jsonify({"error": "Request body required"}), 400
+    
+    start = data.get('start')
+    end = data.get('end')
+    
+    if not start or not end:
+        return jsonify({"error": "start and end locations required"}), 400
+    
+    nav_service = get_navigation_service()
+    
+    # Resolve room IDs to nodes if provided
+    start_node = start.get('node')
+    if not start_node and start.get('room'):
+        start_node = nav_service.resolve_room_to_node(
+            start['building'], start['floor'], start['room']
+        )
+        if not start_node:
+            return jsonify({"error": f"Could not find node for room {start['room']}"}), 400
+    
+    end_node = end.get('node')
+    if not end_node and end.get('room'):
+        end_node = nav_service.resolve_room_to_node(
+            end['building'], end['floor'], end['room']
+        )
+        if not end_node:
+            return jsonify({"error": f"Could not find node for room {end['room']}"}), 400
+    
+    if not start_node or not end_node:
+        return jsonify({"error": "Could not resolve start or end node"}), 400
+    
+    # Calculate path
+    path = nav_service.find_path(
+        start['building'], start['floor'], start_node,
+        end['building'], end['floor'], end_node
+    )
+    
+    if not path:
+        return jsonify({"error": "No path found"}), 404
+    
+    # Generate directions
+    dir_service = get_direction_service()
+    directions = dir_service.generate_directions(path)
+    
+    return jsonify({
+        "path": path,
+        "directions": directions,
+        "text_summary": dir_service.generate_text_summary(directions)
+    })
+
+@app.route("/api/navigation/room-lookup", methods=['POST'])
+def api_room_lookup():
+    """
+    Look up node for a room ID
+    
+    Request JSON:
+    {
+        "building": "M",
+        "floor": "1",
+        "room": "1003"
+    }
+    """
+    data = request.json
+    if not data:
+        return jsonify({"error": "Request body required"}), 400
+    
+    building = data.get('building')
+    floor = data.get('floor')
+    room = data.get('room')
+    
+    if not all([building, floor, room]):
+        return jsonify({"error": "building, floor, and room required"}), 400
+    
+    nav_service = get_navigation_service()
+    node = nav_service.resolve_room_to_node(building, floor, room)
+    
+    if not node:
+        return jsonify({"error": f"Room {room} not found"}), 404
+    
+    node_info = nav_service.get_node_info(building, floor, node)
+    
+    return jsonify({
+        "room": room,
+        "node": node,
+        "node_info": node_info
+    })
+
+@app.route("/api/navigation/all-rooms", methods=['GET'])
+def api_get_all_rooms():
+    """Get all rooms for a building and floor"""
+    building = request.args.get('building', 'M')
+    floor = request.args.get('floor', '1')
+    
+    nav_service = get_navigation_service()
+    rooms = nav_service.get_all_rooms(building, floor)
+    
+    if not rooms:
+        return jsonify({"error": f"No rooms found for Building {building}, Floor {floor}"}), 404
+    
+    return jsonify({
+        "building": building,
+        "floor": floor,
+        "rooms": rooms
+    })
 
 @app.route('/leaflet-assets/<path:path>')
 def serve_leaflet_assets(path):
