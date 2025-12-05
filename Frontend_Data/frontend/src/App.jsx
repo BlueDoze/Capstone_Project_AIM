@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Map as MapIcon, X, Navigation, Building2, Calendar, Moon, Sun, MessageSquare } from 'lucide-react';
+import { Send, Map as MapIcon, X, Navigation, Building2, Calendar, Moon, Sun, MessageSquare, MapPin } from 'lucide-react';
 import { MapContainer, TileLayer, GeoJSON, Polyline, useMap } from 'react-leaflet';
 import MapNavigator from './components/MapNavigator';
 import 'leaflet/dist/leaflet.css';
@@ -359,6 +359,14 @@ export default function FanshaweNavigator() {
 
               {/* Quick Action Chips - Single Row */}
               <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+                <button
+                  onClick={() => window.open('/interactive-map', '_blank')}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-fanshawe-red dark:border-fanshawe-red bg-fanshawe-red text-white hover:bg-fanshawe-red-dark hover:border-fanshawe-red-dark text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0 shadow-md"
+                  title="Open full-screen interactive navigation map in new window"
+                >
+                  <MapPin size={16} />
+                  <span>Interactive Map</span>
+                </button>
                 <button
                   onClick={toggleMap}
                   className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
