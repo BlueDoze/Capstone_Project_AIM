@@ -619,59 +619,26 @@ def get_room_friendly_name(room_id: str) -> str:
 
 def classify_user_intent(user_message: str) -> Dict[str, Any]:
     """
-    Classifies user intent into categories:
-    - NAVIGATION, EVENTS, RESTAURANTS, ANNOUNCEMENTS, CAREER_SERVICES, OUT_OF_SCOPE
+    Classifies user intent using AI-only classification with Gemini.
+    Categories: NAVIGATION, EVENTS, RESTAURANTS, ANNOUNCEMENTS, CAREER_SERVICES, OUT_OF_SCOPE
     """
     if not model:
         return {'intent': 'OUT_OF_SCOPE', 'confidence': 0.0, 'entities': {}}
 
     try:
-        message_lower = user_message.lower()
-
-        # Keyword matching for fast classification
-        nav_keywords = ['how', 'get', 'go', 'navigate', 'path', 'way', 'direction',
-                        'from', 'to', 'reach', 'where', 'location', 'room']
-        event_keywords = ['event', 'activity', 'happening', 'schedule', 'workshop',
-                          'seminar', 'fair', 'meeting', 'conference', 'talk', 'when']
-        restaurant_keywords = ['food', 'eat', 'restaurant', 'cafe', 'coffee', 'lunch',
-                               'dinner', 'breakfast', 'hungry', 'menu', 'dining']
-        announcement_keywords = ['announcement', 'news', 'notice', 'update',
-                                'd2l', 'brightspace', 'message', 'posted', 'instructor']
-        career_keywords = ['career', 'job', 'resume', 'cv', 'interview', 'co-op',
-                          'internship', 'employment', 'hiring', 'mentorship']
-
-        nav_score = sum(1 for kw in nav_keywords if kw in message_lower)
-        event_score = sum(1 for kw in event_keywords if kw in message_lower)
-        restaurant_score = sum(1 for kw in restaurant_keywords if kw in message_lower)
-        announcement_score = sum(1 for kw in announcement_keywords if kw in message_lower)
-        career_score = sum(1 for kw in career_keywords if kw in message_lower)
-
-        max_score = max(nav_score, event_score, restaurant_score, announcement_score, career_score)
-        
-        if max_score >= 2:
-            if nav_score == max_score:
-                return {'intent': 'NAVIGATION', 'confidence': 0.8, 'entities': {}}
-            elif event_score == max_score:
-                return {'intent': 'EVENTS', 'confidence': 0.8, 'entities': {}}
-            elif restaurant_score == max_score:
-                return {'intent': 'RESTAURANTS', 'confidence': 0.8, 'entities': {}}
-            elif announcement_score == max_score:
-                return {'intent': 'ANNOUNCEMENTS', 'confidence': 0.8, 'entities': {}}
-            elif career_score == max_score:
-                return {'intent': 'CAREER_SERVICES', 'confidence': 0.8, 'entities': {}}
-
-        # Use Gemini for nuanced classification
+        # AI-only classification using Gemini
         classify_prompt = f"""Classify this user query into ONE of these categories:
         - NAVIGATION: Questions about directions, finding locations, wayfinding on campus
         - EVENTS: Questions about campus events, activities, schedules, workshops
         - RESTAURANTS: Questions about food, dining, cafeterias, restaurants on campus
         - ANNOUNCEMENTS: Questions about course announcements, D2L news, class updates
         - CAREER_SERVICES: Questions about career services, job search, resumes, interviews
+        - CALENDAR: Questions about academic calendar, important dates, deadlines
+        - GRADES: Questions about grades, assessments, evaluations
         - OUT_OF_SCOPE: Anything else not related to the above categories
 
         Return ONLY a JSON response with this format (no other text):
-        {{"intent": "NAVIGATION|EVENTS|RESTAURANTS|ANNOUNCEMENTS|CAREER_SERVICES|OUT_OF_SCOPE", "confidence": 0.0-1.0}}
-
+        {{"intent": "NAVIGATION|EVENTS|RESTAURANTS|ANNOUNCEMENTS|CAREER_SERVICES|CALENDAR|GRADES|OUT_OF_SCOPE", "confidence": 0.0-1.0}}
         User query: {user_message}"""
 
         response = model.generate_content(classify_prompt)
@@ -845,6 +812,107 @@ For more information, you can also visit: www.fanshawec.ca/student-life-services
     clean_response = clean_html_to_text(standard_message, keep_emojis=False)
     return {'reply': clean_response}
 
+def handle_calendar_query(user_message: str, entities: Dict[str, Any]) -> Dict[str, Any]:
+    """Handles calendar and deadline queries"""
+    if not model:
+        return {'reply': 'The AI model is not configured.'}
+
+    try:
+        calendar_path = Path('data/calendar/calendar.json')
+        if not calendar_path.exists():
+            return {'reply': 'Calendar information is currently unavailable.'}
+
+        with open(calendar_path, 'r') as f:
+            calendar_data = json.load(f)
+
+        deadlines = calendar_data.get('academic_schedule', {}).get('deadlines', [])
+        semester = calendar_data.get('academic_schedule', {}).get('semester', 'Current Semester')
+        
+        calendar_context = f"\n\n**Academic Calendar - {semester}**\n\nUpcoming Deadlines:\n"
+        
+        for deadline in deadlines:
+            calendar_context += f"\n- **{deadline.get('task_name', 'Task')}**\n"
+            calendar_context += f"  Date: {deadline.get('date')} ({deadline.get('day')})\n"
+            calendar_context += f"  Time: {deadline.get('time', 'Not specified')}\n"
+            if deadline.get('course_code'):
+                calendar_context += f"  Course: {deadline.get('course_code')}\n"
+            if deadline.get('description'):
+                calendar_context += f"  Description: {deadline.get('description')}\n"
+
+        chat_prompt = f"""You are Fanshawe Navigator, a helpful campus assistant.
+
+Context: {calendar_context}
+
+User question: {user_message}
+
+Provide a clear, helpful response about the academic calendar and deadlines. Format dates naturally and highlight urgent deadlines."""
+
+        response = model.generate_content(chat_prompt)
+        response_text = safe_get_response_text(response, 'Unable to process calendar information.')
+        clean_response = clean_html_to_text(response_text)
+
+        return {'reply': clean_response}
+
+    except Exception as e:
+        print(f"⚠️ Error handling calendar query: {e}")
+        return {'reply': 'Sorry, I encountered an error retrieving calendar information.'}
+
+def handle_grades_query(user_message: str, entities: Dict[str, Any]) -> Dict[str, Any]:
+    """Handles grades and assessment queries"""
+    if not model:
+        return {'reply': 'The AI model is not configured.'}
+
+    try:
+        grades_path = Path('data/grades/grades.json')
+        if not grades_path.exists():
+            return {'reply': 'Grades information is currently unavailable.'}
+
+        with open(grades_path, 'r') as f:
+            grades_data = json.load(f)
+
+        student_log = grades_data.get('student_performance_log', {})
+        semester = student_log.get('semester', 'Current Semester')
+        courses = student_log.get('courses', [])
+        
+        grades_context = f"\n\n**Student Performance - {semester}**\n\n"
+        
+        for course in courses:
+            course_id = course.get('course_id', 'Unknown Course')
+            grades_context += f"\n**{course_id}**\n"
+            
+            assessments = course.get('assessments', [])
+            for assessment in assessments:
+                activity = assessment.get('activity', 'Assessment')
+                points_earned = assessment.get('points_earned', 0)
+                points_possible = assessment.get('points_possible', 0)
+                weight = assessment.get('weight_achieved', '')
+                feedback = assessment.get('feedback', '')
+                
+                grades_context += f"  - {activity}: {points_earned}/{points_possible}"
+                if weight:
+                    grades_context += f" (Weight: {weight})"
+                if feedback:
+                    grades_context += f"\n    Feedback: {feedback}"
+                grades_context += "\n"
+
+        chat_prompt = f"""You are Fanshawe Navigator, a helpful campus assistant.
+
+Context: {grades_context}
+
+User question: {user_message}
+
+Provide a clear, helpful response about grades and assessments. Be encouraging and specific. If asked about overall performance, calculate percentages or provide summaries."""
+
+        response = model.generate_content(chat_prompt)
+        response_text = safe_get_response_text(response, 'Unable to process grades information.')
+        clean_response = clean_html_to_text(response_text)
+
+        return {'reply': clean_response}
+
+    except Exception as e:
+        print(f"⚠️ Error handling grades query: {e}")
+        return {'reply': 'Sorry, I encountered an error retrieving grades information.'}
+
 def handle_out_of_scope_query(user_message: str) -> Dict[str, Any]:
     """Handles out-of-scope queries"""
     fallback_message = """I'm Fanshawe Navigator, your campus assistant! I specialize in helping you with:
@@ -854,13 +922,15 @@ def handle_out_of_scope_query(user_message: str) -> Dict[str, Any]:
 - Dining & Restaurants - Locating food services on campus
 - Course Announcements - D2L updates and class news
 - Career Services - Job search, resume help, interviews, co-op support
+- Academic Calendar - Deadlines and important dates
+- Grades & Assessments - Your academic performance
 
 Your question seems to be outside these areas. For other assistance, please visit:
 - Student Services: www.fanshawec.ca/student-services
 - Academic Support: Contact your program coordinator
 - General Inquiries: Visit the Information Desk at the Student Centre
 
-How else can I help you with navigation, events, dining, announcements, or career services?"""
+How else can I help you?"""
 
     clean_response = clean_html_to_text(fallback_message, keep_emojis=False)
     return {'reply': clean_response}
@@ -932,6 +1002,10 @@ def api_chat():
             return jsonify(handle_announcement_query(user_message, intent_result['entities']))
         elif intent_type == "CAREER_SERVICES":
             return jsonify(handle_career_services_query(user_message, intent_result['entities']))
+        elif intent_type == "CALENDAR":
+            return jsonify(handle_calendar_query(user_message, intent_result['entities']))
+        elif intent_type == "GRADES":
+            return jsonify(handle_grades_query(user_message, intent_result['entities']))
         else:
             return jsonify(handle_out_of_scope_query(user_message))
 
