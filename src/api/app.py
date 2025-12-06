@@ -920,11 +920,15 @@ def classify_user_intent(user_message: str) -> Dict[str, Any]:
         - EVENTS: Questions about campus events, activities, schedules, workshops
         - RESTAURANTS: Questions about food, dining, cafeterias, restaurants on campus
         - ANNOUNCEMENTS: Questions about course announcements, D2L news, class updates, reminders
-        - COURSES: Questions about courses, classes, schedules, enrollment
+        - COURSES: Questions about course information, what courses student is enrolled in, course titles, course codes (NOT about assignments or deadlines)
         - CAREER_SERVICES: Questions about career services, job search, resumes, interviews
-        - CALENDAR: Questions about academic calendar, important dates, deadlines, assignments to submit, reports to submit
+        - CALENDAR: Questions about academic calendar, important dates, deadlines, assignments to submit, reports to submit, when things are due
         - GRADES: Questions about grades, assessments, evaluations
         - OUT_OF_SCOPE: Anything else not related to the above categories
+
+        Examples to help distinguish CALENDAR vs COURSES:
+        - CALENDAR: "What are the assignments for social media?", "When are my assignments due?", "Show me upcoming deadlines", "What do I need to submit this week?"
+        - COURSES: "What courses am I enrolled in?", "Tell me about my courses", "Show me my course list", "What is the course code for web development?"
 
         Return ONLY a JSON response with this format (no other text):
         {{"intent": "NAVIGATION|BUILDING_INFO|EVENTS|RESTAURANTS|ANNOUNCEMENTS|CAREER_SERVICES|CALENDAR|GRADES|OUT_OF_SCOPE", "confidence": 0.0-1.0}}
