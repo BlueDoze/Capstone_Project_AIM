@@ -25,14 +25,14 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="2.799372"
-     inkscape:cx="418.12949"
-     inkscape:cy="286.67144"
-     inkscape:window-width="2240"
-     inkscape:window-height="1294"
-     inkscape:window-x="2869"
-     inkscape:window-y="-11"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer4">
+     inkscape:cx="308.46204"
+     inkscape:cy="642.64414"
+     inkscape:window-width="1116"
+     inkscape:window-height="1281"
+     inkscape:window-x="1102"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1">
     <inkscape:page
        x="0"
        y="0"
@@ -13207,55 +13207,55 @@
     <path
        style="opacity:0.5;fill:#0000ff;stroke:#000000"
        d="m 318.56,787.35998 -0.08,51.12003 h -44.16676 v -52.95857 l 40.08675,-0.41194 v 2.25048 z"
-       id="Room_2004" />
+       id="M2004" />
     <path
        style="opacity:0.5;fill:#0000ff;stroke:#000000"
        d="M 385.76001,749.91998 V 711.67999 H 383.84 v -4.15997 h 1.92001 v -4 H 274.88 v 44.95996 h 1.44001 v 1.45156 z"
-       id="Room_2010" />
+       id="M2010" />
     <path
        style="opacity:0.5;fill:#0000ff;stroke:#000000"
        d="m 377.28,703.52002 v -15.20001 l 8.48001,-8.64002 L 385.84,636 h -2 v -4.15997 h 1.92001 V 560.32001 H 383.84 v -4.16004 H 274.97239 L 274.88,703.52002 Z"
-       id="Room_2012" />
+       id="M2012" />
     <path
        style="opacity:0.5;fill:#0000ff;stroke:#000000"
        d="m 377.28,556.15997 v -15.19995 l 8.48001,-8.64001 v -47.68 H 383.84 v -4.16 h 2 L 385.76,455.35999 377.28,446.88 V 431.67999 H 275.17045 l -0.19806,124.47998 z"
-       id="Room_2018" />
+       id="M2018" />
     <path
        style="opacity:0.5;fill:#0000ff;stroke:#000000"
        d="m 385.76001,431.51999 v -22.56 H 383.84 v -4.16 h 1.92001 v -53.28 L 377.28,343.04001 v -20.80002 h -103.2 v 109.44 z"
-       id="Room_2022" />
+       id="M2022" />
     <path
        style="opacity:0.5;fill:#0000ff;stroke:#000000"
        d="M 377.28,322.23999 V 306.88 l 8.48001,-8.48001 0.08,-52 h -2 V 242.24 h 1.92001 V 187.2 H 274.88 v 48.8 0.48 h 0.81143 L 275.52,322.23999 Z"
-       id="Room_2028" />
+       id="M2028" />
     <path
        style="opacity:0.5;fill:#0000ff;stroke:#000000"
        d="m 275.52,154.56 h 23.52001 l 8.55998,8.39999 28.56001,0.08 v -2.07998 h 4 V 163.04 l 43.68,-1e-5 v -2.07998 h 4 v 2.07998 h 7.51999 L 403.84,154.56 h 17.28 L 421.28001,68 274.08,66.640003 274.33373,154.56 Z"
-       id="Room_2047" />
+       id="M2047" />
     <path
        style="opacity:0.5;fill:#0000ff;stroke:#000000"
        d="m 421.12,330.23999 v -2.56 h 2.08001 v -4.16 h -2 L 421.12,306.56 h 8.64001 V 291.20001 L 421.12,282.72 v -36.48 h 2.08001 v -4 h -2 l -0.08,-53.12001 8.64001,-8.63999 V 164.8 h -6.56 v -3.83999 h -2 l 0.08,-92.96001 111.59997,0.480003 -0.08,36.479997 h 3.84 v 46.72 h -3.84 l -0.0912,178.55999 z"
-       id="Room_2041" />
+       id="M2041" />
     <path
        style="opacity:0.5;fill:#0000ff;stroke:#000000"
        d="m 421.12,330.23999 v 53.44 h 3.04 V 385.28 h 106.87998 v -55.04001 z"
-       id="Room_2037" />
+       id="M2037" />
     <path
        style="opacity:0.5;fill:#0000ff;stroke:#000000"
        d="m 421.12,386.72 v 16 h 2.08001 v 6.23999 H 421.12 v 71.52002 h 2.08001 V 484 h 12 V 421.12 H 508.16 v -35.84 h -84 v 1.44 z"
-       id="Room_2035" />
+       id="M2035" />
     <path
        style="opacity:0.5;fill:#0000ff;stroke:#000000"
        d="m 508.16,385.28 v 35.84 h 8.48001 v 61.44 h 3.51996 v 1.76001 h 10.88001 l 17.44,17.44 H 565.44 v -20 h 2.40003 V 422.88 l -2.00004,1e-5 L 565.44,386.23999 H 531.03998 V 385.28 Z"
-       id="Room_2033" />
+       id="M2033" />
     <path
        style="opacity:0.5;fill:#0000ff;stroke:#000000"
        d="m 429.76001,519.67999 v 16.79999 L 421.12,545.12 l 0.08,11.03997 h 2 v 4.16004 h -2.08 v 71.52002 h 2.08001 V 636 H 421.12 v 38.71997 l 7.04,7.04004 v 15.20001 l 102.87998,0.15998 10e-6,-103.84003 1.11998,6e-5 v -73.60004 z"
-       id="Room_2017" />
+       id="M2017" />
     <path
        style="opacity:0.5;fill:#0000ff;stroke:#000000"
        d="m 421.12,696.96002 v 10.56 h 2.08001 v 4.15997 H 421.12 v 47.67999 L 429.76001,768 v 17.28003 H 470.56 v -1.92005 h 4 v 2 l 56.47998,-0.0799 V 782.88 h 3.76001 V 740 h -3.76001 v -42.88 z"
-       id="Room_2013" />
+       id="M2013" />
     <path
        style="opacity:0.5;fill:#00ffff;stroke:#000000"
        d="m 451.51999,484 h -16.31998 v -62.88 h 38.56 v 35.4333 l -16.96002,-0.0733 -5.28,11.03998 z"
@@ -13505,10 +13505,11 @@
        width="34.34351"
        height="32.067589"
        x="240.46361"
-       y="187.59291" />
+       y="187.59291"
+       inkscape:label="Stairs_3_M2" />
     <rect
        style="fill:#ccff00;stroke:#000000"
-       id="H2-Building"
+       id="H2-Building_M2"
        width="3.6875"
        height="18.625"
        x="173.5925"
