@@ -1,4 +1,4 @@
-<!-- cd "C:\Users\Lukeg\Desktop\Capstone Project\LeafletJS" -->
+﻿<!-- cd "C:\Users\Lukeg\Desktop\Capstone Project\LeafletJS" -->
 <!-- python -m http.server 8000 -->
 
 <!DOCTYPE html>
@@ -36,57 +36,10 @@
     </style>
 </head>
 <body>
-    <div id="startup-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; justify-content:center; align-items:center;">
-        <div style="background:white; padding:30px; border-radius:10px; max-width:500px; text-align:center;">
-            <h2>Welcome to Campus Navigation</h2>
-            
-            <div id="step1" style="display:block;">
-                <h3>Step 1: Select Your Current Floor</h3>
-                <select id="startFloorSelect" style="font-size:18px; padding:10px; margin:10px;">
-                    <option value="1">Floor 1</option>
-                    <option value="2">Floor 2</option>
-                    <option value="3">Floor 3</option>
-                </select>
-                <br>
-                <button onclick="startupStep2()" style="padding:15px 30px; font-size:16px; margin-top:20px;">Next</button>
-            </div>
-            
-            <div id="step2" style="display:none;">
-                <h3>Step 2: Set Your Starting Position</h3>
-                <button onclick="startupUseGPS()" style="padding:15px 30px; font-size:16px; margin:10px; background:#0066cc; color:white; border:none; border-radius:5px; cursor:pointer;">
-                    🛰️ Use GPS
-                </button>
-                <button onclick="startupManualSelect()" style="padding:15px 30px; font-size:16px; margin:10px; background:#28a745; color:white; border:none; border-radius:5px; cursor:pointer;">
-                    📍 Select Manually on Map
-                </button>
-            </div>
-            
-            <div id="step3-manual" style="display:none;">
-                <h3>Click on the map to set your position</h3>
-                <p style="color:#666;">The floor plan for your selected floor is now visible. Click where you are currently located.</p>
-                <p style="color:#999; font-size:14px;">Your marker will appear after you click.</p>
-            </div>
-        </div>
-    </div>
     <div id="map"></div>
-	<div id="rotation-display">Rotation: 0°</div>
-	<div style="position: absolute; top: 50px; right: 10px; background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 5px; z-index: 1000;">
-		<label for="bearingInput">Map Bearing:</label>
-		<input type="number" id="bearingInput" value="0" step="0.1" style="width: 70px;" />
-		<button onclick="updateMapBearing()">Apply</button>
-	</div>
-    <div style="position:absolute; top:10px; right:10px; z-index:1000; background:white; padding:6px; border-radius:8px; box-shadow:0 0 5px rgba(0,0,0,0.3);">
-        <label for="floorSelect"><b>Choose Floor:</b></label>
-        <select id="floorSelect">
-            <option value=1>Floor 1</option>
-            <option value=2>Floor 2</option>
-            <option value=3>Floor 3</option>
-        </select>
-        <button id="loadFloorBtn">Load Floor</button>
-    </div>
     <div style="position:absolute; top:80px; right:10px; z-index:1000; background:white; padding:10px; border-radius:8px; box-shadow:0 0 5px rgba(0,0,0,0.3); min-width:200px;">
         <h4 style="margin:0 0 10px 0; font-size:14px;">📍 Location Mode</h4>
-        <button id="location-mode-btn" onclick="toggleLocationMode()" style="width:100%; padding:10px; background:#0066cc; color:white; border:none; border-radius:4px; cursor:pointer; font-size:13px; margin-bottom:8px;">
+        <button id="location-mode-btn" onclick="toggleLocationMode()" style="width:100%; padding:10px; background:#A6192E; color:white; border:none; border-radius:4px; cursor:pointer; font-size:13px; margin-bottom:8px;">
             🛰️ Switch to GPS
         </button>
         <div id="location-status" style="font-size:12px; color:#666; line-height:1.5;">
@@ -471,13 +424,9 @@
 			const newBearing = parseFloat(input.value) || 0;
 			window.map.setBearing(newBearing);
 			
-			// Update any existing overlays
-			if (window.currentOverlay) {
-				const overlayPane = currentOverlay.getElement();
-				if (overlayPane) {
-					overlayPane.style.transform = `rotate(${newBearing}deg)`;
-				}
-			}
+			// Leaflet handles map rotation automatically
+			// SVG overlays have rotation baked in via <g transform="rotate(...)">
+			// No need to apply additional CSS transforms
 		}
 
         //NOT NEEDED IN THIS VERSION (WILL REMOVE)
@@ -517,50 +466,67 @@
         }
 		
         // Convert SVG circle node to lat/lng (similar to doorToLatLng but for circles)
-        function nodeToLatLng(nodeElement, svgMap, overlay) {
-            // Get the actual rendered position of the node in screen coordinates
-            const svgPoint = svgMap.createSVGPoint();
-            svgPoint.x = parseFloat(nodeElement.getAttribute('cx'));
-            svgPoint.y = parseFloat(nodeElement.getAttribute('cy'));
+        function nodeToLatLng(nodeElement, svgMap, corners, rotation = 0) {
+            let cx = parseFloat(nodeElement.getAttribute('cx'));
+            let cy = parseFloat(nodeElement.getAttribute('cy'));
             
-            // Transform through any applied transforms (including rotation)
-            const ctm = nodeElement.getCTM();
-            const transformedPoint = svgPoint.matrixTransform(ctm);
-            
-            // Get the SVG element's bounding box in screen space
-            const svgRect = svgMap.getBoundingClientRect();
-            const overlayBounds = overlay.getBounds();
-            
-            // Calculate normalized position within the SVG (0 to 1)
-            const normX = transformedPoint.x / svgRect.width;
-            const normY = transformedPoint.y / svgRect.height;
-            
-            // Map to geographic coordinates
-            const west = overlayBounds.getWest();
-            const east = overlayBounds.getEast();
-            const north = overlayBounds.getNorth();
-            const south = overlayBounds.getSouth();
-            
-            const lng = west + normX * (east - west);
-            const lat = north - normY * (north - south); // Note: Y is inverted in screen coordinates
-            
-            return L.latLng(lat, lng);
+            const svgBBox = svgMap.viewBox.baseVal || {
+                x: 0,
+                y: 0,
+                width: svgMap.width.baseVal.value,
+                height: svgMap.height.baseVal.value
+            };
+
+            // Apply rotation transformation if needed
+            if (rotation !== 0) {
+                const centerX = svgBBox.x + svgBBox.width / 2;
+                const centerY = svgBBox.y + svgBBox.height / 2;
+                
+                // Convert rotation to radians
+                const radians = (rotation * Math.PI) / 180;
+                
+                // Translate to origin, rotate, translate back
+                const dx = cx - centerX;
+                const dy = cy - centerY;
+                
+                cx = centerX + (dx * Math.cos(radians) - dy * Math.sin(radians));
+                cy = centerY + (dx * Math.sin(radians) + dy * Math.cos(radians));
+            }
+
+            const normX = (cx - svgBBox.x) / svgBBox.width;
+            const normY = (cy - svgBBox.y) / svgBBox.height;
+
+            const topLeft = corners[0], topRight = corners[1],
+                bottomRight = corners[2], bottomLeft = corners[3];
+
+            const latTop = topLeft.lat + normX * (topRight.lat - topLeft.lat);
+            const lngTop = topLeft.lng + normX * (topRight.lng - topLeft.lng);
+            const latBottom = bottomLeft.lat + normX * (bottomRight.lat - bottomLeft.lat);
+            const lngBottom = bottomLeft.lng + normX * (bottomRight.lng - bottomLeft.lng);
+
+            const nodeLat = latTop + normY * (latBottom - latTop);
+            const nodeLng = lngTop + normY * (lngBottom - lngTop);
+
+            return L.latLng(nodeLat, nodeLng);
         }
 
         // Build navigation graph from definition
-        function buildNavigationGraph(svgMap, graphDefinition, overlay) {
+        function buildNavigationGraph(svgMap, graphDefinition, corners, rotation = 0) {
             const graph = {};
             const nodePositions = {};
             const nodeMetadata = {};
             
-            console.log("🔨 Building navigation graph...");
+            console.log("ðŸ”¨ Building navigation graph...");
+            if (rotation !== 0) {
+                console.log(`   Applying ${rotation}Â° rotation to node positions`);
+            }
             
     
             Object.entries(graphDefinition).forEach(([nodeId, nodeData]) => {
                 const nodeElement = svgMap.getElementById(nodeId);
                 
                 if (nodeElement) {
-                    const geoPosition = nodeToLatLng(nodeElement, svgMap, overlay);
+                    const geoPosition = nodeToLatLng(nodeElement, svgMap, corners, rotation);
                     nodePositions[nodeId] = geoPosition;
                     
                     nodeMetadata[nodeId] = {
@@ -1269,6 +1235,12 @@
             const totalBuildings = Object.keys(window.floorPlans).length;
             
             Object.entries(window.floorPlans).forEach(([buildingName, buildingInfo]) => {
+                // 🎯 ONLY load Building H and Building M
+                if (buildingName !== 'Building H' && buildingName !== 'Building M') {
+                    skippedCount++;
+                    return;
+                }
+                
                 // ✅ CHECK: Does this building have data for the requested floor?
                 if (!buildingInfo["floors"][floorKey]) {
                     console.log(`⚠️ Skipping ${buildingName} - No data for floor ${floorKey}`);
@@ -1378,7 +1350,7 @@
 
                             // Add small delay to ensure SVG is rendered
                             setTimeout(() => {
-                                const graphData = buildNavigationGraph(svgMap, navigationGraph, newOverlay);
+                                const graphData = buildNavigationGraph(svgMap, navigationGraph, corners, rotation);
 
                                 if (!window.buildingGraphData) {
                                     window.buildingGraphData = {};
@@ -1654,7 +1626,7 @@
 
         async function loadBuildingPositions() {
             try {   
-                const response = await fetch('/leaflet-assets/JSON/Building Positions.json?ts=' + new Date().getTime());
+                const response = await fetch('/leaflet-assets/JSON/Building positions.JSON?ts=' + new Date().getTime());
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -1817,22 +1789,12 @@
                     }).addTo(map);
                 }
 
-                // Load the first floor on startup
-                // await loadFloorLevel(1);
-                // createUserMarker(L.latLng(43.0143425, -81.19856355)); // Starting position in M building
-                // updateUserLocation();
-                showStartupModal();
-
-
-                document.getElementById("loadFloorBtn").addEventListener("click", () => {
-                const floorKey = document.getElementById("floorSelect").value;
-                alert(floorKey + "Clicked")
-                if (window.geojsonData) {
-                    loadFloorLevel(floorKey);
-                } else {
-                    alert("GeoJSON not loaded yet.");
-                }
-            });
+                // Auto-load floor 1 for Buildings H and M
+                loadFloorLevel(1);
+                
+                // Start in manual mode with draggable marker
+                createUserMarker(L.latLng(43.0143425, -81.19856355));
+                updateUserLocation();
         }
         initApp();
 		
