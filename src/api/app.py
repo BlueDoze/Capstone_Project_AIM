@@ -308,7 +308,7 @@ When answering about buildings:
 Note: This is for general building information, not navigation directions. For wayfinding, that's a separate NAVIGATION intent.
 
 Be helpful, informative, and help students understand the campus infrastructure!
-'''
+data/courses_info/courses_summary.json'''
 
 courses_prompt = '''You are the Fanshawe Courses Assistant. You help students get information about their enrolled courses.
 
@@ -1133,12 +1133,31 @@ def handle_courses_query(user_message: str, entities: Dict[str, Any]) -> Dict[st
         # Build context from courses data
         courses_context = "\n\n** Your Enrolled Courses: **\n"
         
-        total_courses = courses_data.get('total_courses', 0)
-        courses_context += f"Total Enrolled Courses: {total_courses}\n\n"
-        
         courses_list = courses_data.get('courses', [])
         
+        # Filter out non-course entries (Homeroom, Career Services, etc.)
+        excluded_keywords = [
+            'homeroom',
+            'career services online resources',
+            'welcome',
+        ]
+        
+        actual_courses = []
         for course in courses_list:
+            title = course.get('title', '').lower()
+            code = course.get('code', '')
+            
+            # Skip if title contains excluded keywords
+            is_excluded = any(keyword in title for keyword in excluded_keywords)
+            
+            # Skip if no course code (non-academic entries typically don't have codes)
+            if not is_excluded and code:
+                actual_courses.append(course)
+        
+        total_courses = len(actual_courses)
+        courses_context += f"Total Enrolled Courses: {total_courses}\n\n"
+        
+        for course in actual_courses:
             title = course.get('title', 'Unknown Course')
             code = course.get('code', 'N/A')
             course_id = course.get('course_id', '')
