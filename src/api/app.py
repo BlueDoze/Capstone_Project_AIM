@@ -310,6 +310,28 @@ Note: This is for general building information, not navigation directions. For w
 Be helpful, informative, and help students understand the campus infrastructure!
 '''
 
+courses_prompt = '''You are the Fanshawe Courses Assistant. You help students get information about their enrolled courses.
+
+You have access to information about:
+- Course titles and codes
+- Course widgets (Announcements, Calendar, Professor Information, Updates)
+- Important links (Content, Profile, Notifications, Account Settings)
+- Recent announcements from instructors
+- Calendar events and deadlines
+- Course content overview
+
+When answering about courses:
+- Use emojis for visual appeal: 📚 for courses, 👨‍🏫 for professors, 📢 for announcements, 📅 for calendar, 🔗 for links, 📝 for content
+- Provide clear, organized information about the requested courses
+- List course titles with their codes when showing multiple courses
+- Highlight important announcements or upcoming deadlines
+- Include relevant links when appropriate
+- Format with clear section headers using emojis
+- Be specific about which course information belongs to
+
+Be helpful, organized, and make it easy for students to find their course information!
+'''
+
 # ============== NAVIGATION HELPER FUNCTIONS ==============
 
 def resolve_room_name(room_name: str) -> Optional[str]:
@@ -1023,6 +1045,7 @@ def handle_out_of_scope_query(user_message: str) -> Dict[str, Any]:
 
 🗺️ Navigation & Directions - Finding your way around campus
 🏢 Building Information - Learn about campus buildings and facilities
+📚 Course Information - Your enrolled courses and details
 🎉 Campus Events - Discovering activities and schedules
 🍽️ Dining & Restaurants - Locating food services on campus
 📢 Course Announcements - D2L updates and class news
@@ -1096,6 +1119,69 @@ def handle_building_info_query(user_message: str, entities: Dict[str, Any]) -> D
         print(f"⚠️ Error handling building info query: {e}")
         return {'reply': 'Sorry, I encountered an error while searching for building information.'}
 
+def handle_courses_query(user_message: str, entities: Dict[str, Any]) -> Dict[str, Any]:
+    """Handles course information queries"""
+    if not model:
+        return {'reply': 'The AI model is not configured.'}
+
+    try:
+        courses_data = load_courses_info()
+        
+        if not courses_data:
+            return {'reply': 'Course information is currently unavailable.'}
+
+        # Build context from courses data
+        courses_context = "\n\n** Your Enrolled Courses: **\n"
+        
+        total_courses = courses_data.get('total_courses', 0)
+        courses_context += f"Total Enrolled Courses: {total_courses}\n\n"
+        
+        courses_list = courses_data.get('courses', [])
+        
+        for course in courses_list:
+            title = course.get('title', 'Unknown Course')
+            code = course.get('code', 'N/A')
+            course_id = course.get('course_id', '')
+            url = course.get('url', '')
+            
+            courses_context += f"\n**{title}**\n"
+            if code:
+                courses_context += f"Code: {code}\n"
+            courses_context += f"Course ID: {course_id}\n"
+            courses_context += f"URL: {url}\n"
+            
+            # Add widgets information
+            widgets = course.get('widgets', [])
+            if widgets:
+                widget_titles = [w.get('title', '') for w in widgets]
+                courses_context += f"Available Sections: {', '.join(widget_titles)}\n"
+            
+            # Add recent announcements from links
+            links = course.get('links', [])
+            announcement_links = [link for link in links if 'announcement' in link.get('text', '').lower()]
+            if announcement_links:
+                courses_context += f"Recent Announcements:\n"
+                for ann in announcement_links[:3]:  # Limit to 3 most recent
+                    courses_context += f"  - {ann.get('text', 'Unknown')}\n"
+            
+            # Add content info
+            content = course.get('content', {})
+            if content:
+                courses_context += f"Content: {content.get('total_links', 0)} links, {content.get('total_images', 0)} images\n"
+            
+            courses_context += "\n"
+
+        prompt = f"{courses_prompt}\n{courses_context}\n\nUser: {user_message}\nAI:"
+        response = model.generate_content(prompt)
+        response_text = safe_get_response_text(response)
+        clean_response = clean_html_to_text(response_text, keep_emojis=True)
+
+        return {'reply': clean_response}
+
+    except Exception as e:
+        print(f"⚠️ Error handling courses query: {e}")
+        return {'reply': 'Sorry, I encountered an error while searching for course information.'}
+
 def load_building_info():
     """Load building information from JSON file"""
     global building_info_data
@@ -1117,6 +1203,23 @@ def load_building_info():
 
     print("⚠️ Building info JSON not found")
     return {}
+
+def load_courses_info():
+    """Load courses information from JSON file"""
+    courses_path = project_root / 'data' / 'courses_info' / 'courses_summary.json'
+    
+    if courses_path.exists():
+        try:
+            with open(courses_path, 'r', encoding='utf-8') as f:
+                courses_data = json.load(f)
+                print(f"✅ Courses info loaded from {courses_path}")
+                return courses_data
+        except Exception as e:
+            print(f"⚠️ Error loading courses info: {e}")
+            return {}
+    else:
+        print(f"⚠️ Courses info JSON not found at {courses_path}")
+        return {}
 
 # ============== FLASK ROUTES ==============
 
@@ -1156,6 +1259,8 @@ def api_chat():
             })
         elif intent_type == "BUILDING_INFO":
             return jsonify(handle_building_info_query(user_message, intent_result['entities']))
+        elif intent_type == "COURSES":
+            return jsonify(handle_courses_query(user_message, intent_result['entities']))
         elif intent_type == "EVENTS":
             return jsonify(handle_event_query(user_message, intent_result['entities']))
         elif intent_type == "RESTAURANTS":
