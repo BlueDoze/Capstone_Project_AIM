@@ -34,7 +34,11 @@ def clean_html_to_text(text: str, keep_emojis: bool = False) -> str:
     # 2. Decode HTML entities (&amp; → &, &lt; → <, etc.)
     clean_text = html.unescape(clean_text)
     
-    # 3. Remove emojis if requested
+    # 3. Remove Markdown formatting when keeping emojis
+    if keep_emojis:
+        clean_text = remove_markdown_formatting(clean_text)
+    
+    # 4. Remove emojis if requested
     if not keep_emojis:
         # Regex to remove Unicode emojis
         emoji_pattern = re.compile(
@@ -51,7 +55,7 @@ def clean_html_to_text(text: str, keep_emojis: bool = False) -> str:
         )
         clean_text = emoji_pattern.sub('', clean_text)
     
-    # 4. Clean up excessive whitespace
+    # 5. Clean up excessive whitespace
     clean_text = re.sub(r'\n{3,}', '\n\n', clean_text)  # Max 2 line breaks
     clean_text = re.sub(r' +', ' ', clean_text)  # Remove multiple spaces
     clean_text = clean_text.strip()

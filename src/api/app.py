@@ -19,6 +19,67 @@ from src.services.direction_service import get_direction_service
 
 load_dotenv()
 
+# Global emoji dictionary for chatbot responses
+CHATBOT_EMOJIS = {
+    # Navigation & Location
+    'navigation': '🗺️',
+    'location': '📍',
+    'building': '🏢',
+    'direction': '➡️',
+    'stairs': '🪜',
+    'elevator': '🛗',
+    
+    # Calendar & Time
+    'calendar': '📅',
+    'deadline': '⏰',
+    'urgent': '⚠️',
+    'date': '📆',
+    'time': '🕐',
+    'reminder': '🔔',
+    
+    # Academic & Grades
+    'grades': '📊',
+    'success': '✅',
+    'achievement': '🎯',
+    'feedback': '💬',
+    'progress': '📈',
+    'warning': '⚠️',
+    'excellent': '⭐',
+    
+    # Events & Activities
+    'event': '🎉',
+    'workshop': '🎓',
+    'meeting': '👥',
+    'registration': '📝',
+    
+    # Food & Dining
+    'food': '🍽️',
+    'restaurant': '🍴',
+    'cafe': '☕',
+    'menu': '📋',
+    
+    # Information & Help
+    'announcement': '📢',
+    'news': '📰',
+    'info': 'ℹ️',
+    'tip': '💡',
+    'help': '❓',
+    'link': '🔗',
+    
+    # Career Services
+    'career': '💼',
+    'job': '👔',
+    'resume': '📄',
+    'interview': '🤝',
+    'mentor': '👨‍🏫',
+    
+    # General
+    'highlight': '🧠',
+    'next_step': '▶️',
+    'check': '✓',
+    'important': '❗'
+}
+
 # Configure Flask to serve React build from frontend/dist
 react_build_dir = project_root / 'Frontend_Data' / 'frontend' / 'dist'
 
@@ -142,12 +203,14 @@ You have access to information about campus events including:
 - Links to more information
 
 When answering about events:
+- Use emojis for visual appeal: 🎉 for events sections, 📅 for dates, 📍 for locations, 📝 for registration requirements, 🔗 for links
 - Provide clear, concise information about the events
 - Include relevant details like date, time, location, and organizer
-- If multiple events match the query, list them clearly
+- If multiple events match the query, list them clearly with emoji headers
 - Suggest relevant events based on the user's interests
-- If an event requires registration, mention it
-- Include links when available
+- If an event requires registration, mention it with 📝
+- Include links when available with 🔗
+- Format with clear section headers using emojis
 
 Be helpful, friendly, and enthusiastic about campus events!
 '''
@@ -162,12 +225,14 @@ You have access to information about campus dining including:
 - Building and floor locations
 
 When answering about dining:
+- Use emojis for visual appeal: 🍽️ for dining sections, ☕ for cafes, 📋 for menus, 🕐 for hours, 📍 for locations
 - Provide clear information about location and hours
 - Mention what type of food is available
 - Include operating hours, especially for today
 - Suggest options based on the user's needs (quick snack, full meal, coffee, etc.)
 - Mention payment methods if relevant
 - Be aware of current day/time when suggesting options
+- Format with clear section headers using emojis
 
 Be helpful, friendly, and make it easy for students to find what they're looking for!
 '''
@@ -182,13 +247,15 @@ You have access to information about:
 - Posted dates and content of announcements
 
 When answering about announcements:
+- Use emojis for visual appeal: 📢 for announcements header, 📆 for dates, ⚠️ for urgent items, 💡 for action items, 🔗 for links
 - Provide clear, concise summaries of announcements
 - Include dates when announcements were posted
-- Highlight action items (deadlines, required attendance, submissions, etc.)
+- Highlight action items (deadlines, required attendance, submissions, etc.) with appropriate emojis
 - Prioritize recent and urgent announcements
 - Mention the instructor or source when relevant
 - If multiple announcements match, list them chronologically (most recent first)
 - Be aware of deadlines and time-sensitive information
+- Format with clear section headers using emojis
 
 Be helpful, organized, and ensure students don't miss important information!
 '''
@@ -216,6 +283,31 @@ When answering about Career Services:
 - Suggest specific next steps (visit portal, book appointment, attend workshop)
 
 Be helpful, professional, and empower students to take charge of their career development!
+'''
+
+building_info_prompt = '''You are the Fanshawe Building Information Assistant. You help students learn about campus buildings, facilities, and structures.
+
+You have access to information about:
+- Building names, codes, and locations
+- Building descriptions and purposes
+- Facilities and departments housed in each building
+- Accessibility features
+- Operating hours and general information
+- Special features or notable areas in buildings
+
+When answering about buildings:
+- Use emojis for visual appeal: 🏢 for building headers, 📍 for locations, 🚪 for entrances, ♿ for accessibility, 🕐 for hours, ℹ️ for info
+- Provide clear, informative descriptions of buildings
+- Mention key departments or facilities within the building
+- Include accessibility information when relevant
+- Highlight any unique features or services
+- If asked about multiple buildings, organize information clearly with headers
+- Format with clear section headers using emojis
+- Be descriptive about building layout and what students can find there
+
+Note: This is for general building information, not navigation directions. For wayfinding, that's a separate NAVIGATION intent.
+
+Be helpful, informative, and help students understand the campus infrastructure!
 '''
 
 # ============== NAVIGATION HELPER FUNCTIONS ==============
@@ -628,17 +720,19 @@ def classify_user_intent(user_message: str) -> Dict[str, Any]:
     try:
         # AI-only classification using Gemini
         classify_prompt = f"""Classify this user query into ONE of these categories:
-        - NAVIGATION: Questions about directions, finding locations, wayfinding on campus
+        - NAVIGATION: Questions about directions, finding locations, wayfinding, how to get somewhere on campus
+        - BUILDING_INFO: Questions about building information, what's inside buildings, building facilities, structure, departments in buildings (NOT directions)
         - EVENTS: Questions about campus events, activities, schedules, workshops
         - RESTAURANTS: Questions about food, dining, cafeterias, restaurants on campus
-        - ANNOUNCEMENTS: Questions about course announcements, D2L news, class updates
+        - ANNOUNCEMENTS: Questions about course announcements, D2L news, class updates, reminders
+        - COURSES: Questions about courses, classes, schedules, enrollment
         - CAREER_SERVICES: Questions about career services, job search, resumes, interviews
-        - CALENDAR: Questions about academic calendar, important dates, deadlines
+        - CALENDAR: Questions about academic calendar, important dates, deadlines, assignments to submit, reports to submit
         - GRADES: Questions about grades, assessments, evaluations
         - OUT_OF_SCOPE: Anything else not related to the above categories
 
         Return ONLY a JSON response with this format (no other text):
-        {{"intent": "NAVIGATION|EVENTS|RESTAURANTS|ANNOUNCEMENTS|CAREER_SERVICES|CALENDAR|GRADES|OUT_OF_SCOPE", "confidence": 0.0-1.0}}
+        {{"intent": "NAVIGATION|BUILDING_INFO|EVENTS|RESTAURANTS|ANNOUNCEMENTS|CAREER_SERVICES|CALENDAR|GRADES|OUT_OF_SCOPE", "confidence": 0.0-1.0}}
         User query: {user_message}"""
 
         response = model.generate_content(classify_prompt)
@@ -692,7 +786,7 @@ def handle_event_query(user_message: str, entities: Dict[str, Any]) -> Dict[str,
         prompt = f"{events_prompt}\n{events_context}\n\nUser: {user_message}\nAI:"
         response = model.generate_content(prompt)
         response_text = safe_get_response_text(response)
-        clean_response = clean_html_to_text(response_text, keep_emojis=False)
+        clean_response = clean_html_to_text(response_text, keep_emojis=True)
 
         return {'reply': clean_response}
 
@@ -739,7 +833,7 @@ def handle_restaurant_query(user_message: str, entities: Dict[str, Any]) -> Dict
 
         response = model.generate_content(prompt)
         response_text = safe_get_response_text(response)
-        clean_response = clean_html_to_text(response_text, keep_emojis=False)
+        clean_response = clean_html_to_text(response_text, keep_emojis=True)
 
         return {'reply': clean_response}
 
@@ -781,7 +875,7 @@ def handle_announcement_query(user_message: str, entities: Dict[str, Any]) -> Di
         prompt = f"{announcements_prompt}\n{announcements_context}\n\nUser: {user_message}\nAI:"
         response = model.generate_content(prompt)
         response_text = safe_get_response_text(response)
-        clean_response = clean_html_to_text(response_text, keep_emojis=False)
+        clean_response = clean_html_to_text(response_text, keep_emojis=True)
 
         return {'reply': clean_response}
 
@@ -791,25 +885,27 @@ def handle_announcement_query(user_message: str, entities: Dict[str, Any]) -> Di
 
 def handle_career_services_query(user_message: str, entities: Dict[str, Any]) -> Dict[str, Any]:
     """Handles career services queries"""
-    standard_message = """I can help you with career services!
+    standard_message = """💼 Career Services
+
+I can help you with career services!
 
 Fanshawe Career Services provides comprehensive support for your career development, including:
 
-- Resume and cover letter assistance
-- Interview preparation and mock interviews
-- Job search strategies and employer connections
-- Co-op and internship support
-- Career counseling and guidance
-- Mentorship programs (industry and peer)
-- Career workshops and networking events
-- Professional headshot services
+📄 Resume and cover letter assistance
+🤝 Interview preparation and mock interviews
+👔 Job search strategies and employer connections
+🎓 Co-op and internship support
+💬 Career counseling and guidance
+👨‍🏫 Mentorship programs (industry and peer)
+🎉 Career workshops and networking events
+📸 Professional headshot services
 
-Visit the Career Services portal to access all resources and book appointments:
+🔗 Visit the Career Services portal to access all resources and book appointments:
 https://www.fanshaweonline.ca/d2l/home/906769
 
-For more information, you can also visit: www.fanshawec.ca/student-life-services/career-services"""
+💡 For more information, you can also visit: www.fanshawec.ca/student-life-services/career-services"""
 
-    clean_response = clean_html_to_text(standard_message, keep_emojis=False)
+    clean_response = clean_html_to_text(standard_message, keep_emojis=True)
     return {'reply': clean_response}
 
 def handle_calendar_query(user_message: str, entities: Dict[str, Any]) -> Dict[str, Any]:
@@ -845,11 +941,15 @@ Context: {calendar_context}
 
 User question: {user_message}
 
+Use emojis for visual appeal: 📅 for calendar sections, ⏰ for deadlines, ⚠️ for urgent items, 💡 for tips. Format with clear section headers using emojis.
+
+Include a 'Next Step' section with 💡 suggesting practical actions like exporting to .ics format for calendar apps.
+
 Provide a clear, helpful response about the academic calendar and deadlines. Format dates naturally and highlight urgent deadlines."""
 
         response = model.generate_content(chat_prompt)
         response_text = safe_get_response_text(response, 'Unable to process calendar information.')
-        clean_response = clean_html_to_text(response_text)
+        clean_response = clean_html_to_text(response_text, keep_emojis=True)
 
         return {'reply': clean_response}
 
@@ -901,11 +1001,15 @@ Context: {grades_context}
 
 User question: {user_message}
 
+Use emojis for visual appeal: 📊 for grades overview, ✅ for completed work, ⭐ for excellent performance, ⚠️ for areas needing attention, 💡 for tips. Be encouraging and specific.
+
+Start with '📊 Academic Performance' header and include performance insights with appropriate emojis.
+
 Provide a clear, helpful response about grades and assessments. Be encouraging and specific. If asked about overall performance, calculate percentages or provide summaries."""
 
         response = model.generate_content(chat_prompt)
         response_text = safe_get_response_text(response, 'Unable to process grades information.')
-        clean_response = clean_html_to_text(response_text)
+        clean_response = clean_html_to_text(response_text, keep_emojis=True)
 
         return {'reply': clean_response}
 
@@ -917,23 +1021,80 @@ def handle_out_of_scope_query(user_message: str) -> Dict[str, Any]:
     """Handles out-of-scope queries"""
     fallback_message = """I'm Fanshawe Navigator, your campus assistant! I specialize in helping you with:
 
-- Navigation & Directions - Finding your way around campus
-- Campus Events - Discovering activities and schedules
-- Dining & Restaurants - Locating food services on campus
-- Course Announcements - D2L updates and class news
-- Career Services - Job search, resume help, interviews, co-op support
-- Academic Calendar - Deadlines and important dates
-- Grades & Assessments - Your academic performance
+🗺️ Navigation & Directions - Finding your way around campus
+🏢 Building Information - Learn about campus buildings and facilities
+🎉 Campus Events - Discovering activities and schedules
+🍽️ Dining & Restaurants - Locating food services on campus
+📢 Course Announcements - D2L updates and class news
+💼 Career Services - Job search, resume help, interviews, co-op support
+📅 Academic Calendar - Deadlines and important dates
+📊 Grades & Assessments - Your academic performance
 
 Your question seems to be outside these areas. For other assistance, please visit:
-- Student Services: www.fanshawec.ca/student-services
-- Academic Support: Contact your program coordinator
-- General Inquiries: Visit the Information Desk at the Student Centre
+🔗 Student Services: www.fanshawec.ca/student-services
+🔗 Academic Support: Contact your program coordinator
+ℹ️ General Inquiries: Visit the Information Desk at the Student Centre
 
 How else can I help you?"""
 
-    clean_response = clean_html_to_text(fallback_message, keep_emojis=False)
+    clean_response = clean_html_to_text(fallback_message, keep_emojis=True)
     return {'reply': clean_response}
+
+def handle_building_info_query(user_message: str, entities: Dict[str, Any]) -> Dict[str, Any]:
+    """Handles building information queries"""
+    if not model:
+        return {'reply': 'The AI model is not configured.'}
+
+    try:
+        building_data = load_building_info()
+        
+        if not building_data:
+            return {'reply': 'Building information is currently unavailable.'}
+
+        # Build context from building data
+        buildings_context = "\n\n** Fanshawe Campus Buildings Information: **\n"
+        
+        for building_code, building_info in building_data.items():
+            buildings_context += f"\n**Building {building_code}**\n"
+            
+            if building_info.get('name'):
+                buildings_context += f"Name: {building_info['name']}\n"
+            
+            if building_info.get('description'):
+                buildings_context += f"Description: {building_info['description']}\n"
+            
+            if building_info.get('facilities'):
+                facilities = building_info['facilities']
+                if isinstance(facilities, list):
+                    buildings_context += f"Facilities: {', '.join(facilities)}\n"
+                elif isinstance(facilities, str):
+                    buildings_context += f"Facilities: {facilities}\n"
+            
+            if building_info.get('departments'):
+                departments = building_info['departments']
+                if isinstance(departments, list):
+                    buildings_context += f"Departments: {', '.join(departments)}\n"
+                elif isinstance(departments, str):
+                    buildings_context += f"Departments: {departments}\n"
+            
+            if building_info.get('floors'):
+                buildings_context += f"Floors: {building_info['floors']}\n"
+            
+            if building_info.get('accessibility'):
+                buildings_context += f"Accessibility: {building_info['accessibility']}\n"
+            
+            buildings_context += "\n"
+
+        prompt = f"{building_info_prompt}\n{buildings_context}\n\nUser: {user_message}\nAI:"
+        response = model.generate_content(prompt)
+        response_text = safe_get_response_text(response)
+        clean_response = clean_html_to_text(response_text, keep_emojis=True)
+
+        return {'reply': clean_response}
+
+    except Exception as e:
+        print(f"⚠️ Error handling building info query: {e}")
+        return {'reply': 'Sorry, I encountered an error while searching for building information.'}
 
 def load_building_info():
     """Load building information from JSON file"""
@@ -993,7 +1154,8 @@ def api_chat():
                     "message": "Use the interactive map for navigation"
                 }
             })
-
+        elif intent_type == "BUILDING_INFO":
+            return jsonify(handle_building_info_query(user_message, intent_result['entities']))
         elif intent_type == "EVENTS":
             return jsonify(handle_event_query(user_message, intent_result['entities']))
         elif intent_type == "RESTAURANTS":
@@ -1175,7 +1337,7 @@ def api_navigation_from_clicks():
 
         response = model.generate_content(prompt)
         response_text = safe_get_response_text(response)
-        clean_response = clean_html_to_text(response_text, keep_emojis=False)
+        clean_response = clean_html_to_text(response_text, keep_emojis=True)
 
         room_to_node = building_m_config.get('roomToNode', {})
 
