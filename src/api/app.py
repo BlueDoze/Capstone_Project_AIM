@@ -3,10 +3,14 @@ import sys
 import google.generativeai as genai
 from flask import Flask, request, jsonify, send_from_directory
 from dotenv import load_dotenv
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from pathlib import Path
 import json
 import re
+import uuid
+from datetime import datetime, timedelta
+import threading
+import time
 
 # Add project root to Python path for imports
 project_root = Path(__file__).parent.parent.parent
@@ -97,11 +101,13 @@ except Exception as e:
     print(f"⚠️ Failed to load room configuration: {e}")
     building_m_config = {}
 
-# Configure the generative AI model
+# Configure the generative AI client and model
 try:
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise KeyError("GEMINI_API_KEY environment variable not set.")
+    
+    # Configure standard genai with API key for all operations
     genai.configure(api_key=api_key)
     
     # Configure generation settings
@@ -121,6 +127,7 @@ try:
         genai.types.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: genai.types.HarmBlockThreshold.BLOCK_NONE,
     }
     
+    # Create model for chat operations
     model = genai.GenerativeModel(
         'gemini-2.5-flash',
         generation_config=generation_config,
@@ -131,8 +138,174 @@ except KeyError as e:
     print(f"❌ {e}")
     model = None
 
+# Session storage and cache management
+sessions = {}  # {session_id: {"messages": [], "archived_messages": [], "created_at": datetime, "last_accessed": datetime}}
+session_lock = threading.Lock()
+
 # Building info cache
 building_info_data = None
+
+# ============== SESSION CACHE MANAGER ==============
+
+class SessionCacheManager:
+    """Manages session-based conversation caching with 10-message limit"""
+    
+    MAX_ACTIVE_MESSAGES = 10
+    SESSION_TTL_HOURS = 24
+    ARCHIVE_DIR = project_root / 'data' / 'sessions'
+    
+    def __init__(self):
+        self.ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
+    
+    def create_session(self) -> str:
+        """Create a new session with unique ID"""
+        session_id = str(uuid.uuid4())
+        with session_lock:
+            sessions[session_id] = {
+                "messages": [],
+                "archived_messages": [],
+                "created_at": datetime.now(),
+                "last_accessed": datetime.now()
+            }
+        print(f"📝 Created session: {session_id}")
+        return session_id
+    
+    def get_session(self, session_id: str) -> Optional[Dict[str, Any]]:
+        """Get session data, create if doesn't exist"""
+        with session_lock:
+            if session_id not in sessions:
+                # Try to load from archive
+                self._load_session_from_archive(session_id)
+            
+            if session_id in sessions:
+                sessions[session_id]["last_accessed"] = datetime.now()
+                return sessions[session_id]
+        
+        return None
+    
+    def add_message(self, session_id: str, role: str, content: str):
+        """Add message to session, archive if limit exceeded"""
+        with session_lock:
+            if session_id not in sessions:
+                sessions[session_id] = {
+                    "messages": [],
+                    "archived_messages": [],
+                    "created_at": datetime.now(),
+                    "last_accessed": datetime.now()
+                }
+            
+            session = sessions[session_id]
+            message = {
+                "role": role,
+                "content": content,
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            session["messages"].append(message)
+            
+            # If exceeded limit, archive oldest pair (user + assistant)
+            if len(session["messages"]) > self.MAX_ACTIVE_MESSAGES:
+                archived = session["messages"][:2]  # Remove oldest 2 messages
+                session["messages"] = session["messages"][2:]
+                session["archived_messages"].extend(archived)
+                
+                # Save archived messages to disk
+                self._save_archived_messages(session_id, session["archived_messages"])
+                print(f"📦 Archived 2 messages for session {session_id[:8]}... (total archived: {len(session['archived_messages'])})")
+    
+    def get_active_messages(self, session_id: str) -> List[Dict[str, str]]:
+        """Get active messages (last 10) for session"""
+        session = self.get_session(session_id)
+        if session:
+            return session["messages"]
+        return []
+    
+    def get_message_count(self, session_id: str) -> Dict[str, int]:
+        """Get message counts for session"""
+        session = self.get_session(session_id)
+        if session:
+            return {
+                "active": len(session["messages"]),
+                "archived": len(session["archived_messages"]),
+                "total": len(session["messages"]) + len(session["archived_messages"])
+            }
+        return {"active": 0, "archived": 0, "total": 0}
+    
+    def clear_session(self, session_id: str, keep_archive: bool = True):
+        """Clear session messages"""
+        with session_lock:
+            if session_id in sessions:
+                if not keep_archive:
+                    sessions[session_id]["archived_messages"] = []
+                    # Delete archive file
+                    archive_file = self.ARCHIVE_DIR / f"{session_id}_archive.json"
+                    if archive_file.exists():
+                        archive_file.unlink()
+                sessions[session_id]["messages"] = []
+                print(f"🗑️ Cleared session {session_id[:8]}...")
+    
+    def _save_archived_messages(self, session_id: str, archived_messages: List[Dict[str, str]]):
+        """Save archived messages to disk"""
+        try:
+            archive_file = self.ARCHIVE_DIR / f"{session_id}_archive.json"
+            with open(archive_file, 'w', encoding='utf-8') as f:
+                json.dump({
+                    "session_id": session_id,
+                    "archived_at": datetime.now().isoformat(),
+                    "message_count": len(archived_messages),
+                    "messages": archived_messages
+                }, f, indent=2)
+        except Exception as e:
+            print(f"⚠️ Error saving archived messages: {e}")
+    
+    def _load_session_from_archive(self, session_id: str):
+        """Load session from archive file"""
+        try:
+            archive_file = self.ARCHIVE_DIR / f"{session_id}_archive.json"
+            if archive_file.exists():
+                with open(archive_file, 'r', encoding='utf-8') as f:
+                    archive_data = json.load(f)
+                sessions[session_id] = {
+                    "messages": [],
+                    "archived_messages": archive_data.get("messages", []),
+                    "created_at": datetime.now(),
+                    "last_accessed": datetime.now()
+                }
+                print(f"📂 Loaded session {session_id[:8]}... from archive")
+        except Exception as e:
+            print(f"⚠️ Error loading session from archive: {e}")
+    
+    def cleanup_expired_sessions(self):
+        """Remove sessions older than TTL"""
+        with session_lock:
+            now = datetime.now()
+            expired = []
+            for session_id, session in sessions.items():
+                if (now - session["last_accessed"]).total_seconds() > (self.SESSION_TTL_HOURS * 3600):
+                    expired.append(session_id)
+            
+            for session_id in expired:
+                del sessions[session_id]
+                print(f"🧹 Cleaned up expired session: {session_id[:8]}...")
+            
+            return len(expired)
+
+# Initialize session manager
+session_manager = SessionCacheManager()
+
+# Background cleanup task
+def cleanup_sessions_task():
+    """Background task to cleanup expired sessions"""
+    while True:
+        time.sleep(3600)  # Run every hour
+        try:
+            session_manager.cleanup_expired_sessions()
+        except Exception as e:
+            print(f"⚠️ Error in cleanup task: {e}")
+
+# Start cleanup thread
+cleanup_thread = threading.Thread(target=cleanup_sessions_task, daemon=True)
+cleanup_thread.start()
 
 # ============== HELPER FUNCTIONS ==============
 
@@ -1260,45 +1433,71 @@ def api_chat():
 
     user_message = request.json.get("mensagem") or request.json.get("message")
     user_position = request.json.get("user_position")  # New: GPS or manual position
+    session_id = request.json.get("session_id")  # Session ID from frontend
     
     if not user_message:
         return jsonify({"reply": "Please provide a message."}), 400
 
     try:
+        # Get or create session
+        if not session_id or session_id not in sessions:
+            session_id = session_manager.create_session()
+        
+        # Add user message to session
+        session_manager.add_message(session_id, "user", user_message)
+        
         intent_result = classify_user_intent(user_message)
         intent_type = intent_result['intent']
 
-        print(f"🎯 Intent: {intent_type} (confidence: {intent_result['confidence']:.2f})")
+        print(f"🎯 Intent: {intent_type} (confidence: {intent_result['confidence']:.2f}) [Session: {session_id[:8]}...]")
         if user_position:
             print(f"📍 User position: {user_position}")
 
+        # Route to appropriate handler
         if intent_type == "NAVIGATION":
             # Simplified: Just direct user to interactive map
-            return jsonify({
-                "reply": "To find routes and navigate the campus, please use the Fanshawe Map. Click the 'Show Map' button below chatbar to access the complete map navigation.\n\nOn the map you'll be able to:\n• View all buildings and rooms\n• Select starting point and destination\n• Get detailed step-by-step routes\n• Visualize routes between different buildings",
+            reply_message = "To find routes and navigate the campus, please use the Fanshawe Map. Click the 'Show Map' button below chatbar to access the complete map navigation.\\n\\nOn the map you'll be able to:\\n• View all buildings and rooms\\n• Select starting point and destination\\n• Get detailed step-by-step routes\\n• Visualize routes between different buildings"
+            response_data = {
+                "reply": reply_message,
+                "session_id": session_id,
+                "message_count": session_manager.get_message_count(session_id),
                 "mapAction": {
                     "type": "OPEN_MAP",
                     "message": "Use the interactive map for navigation"
                 }
-            })
+            }
         elif intent_type == "BUILDING_INFO":
-            return jsonify(handle_building_info_query(user_message, intent_result['entities']))
+            result = handle_building_info_query(user_message, intent_result['entities'])
+            response_data = {**result, "session_id": session_id, "message_count": session_manager.get_message_count(session_id)}
         elif intent_type == "COURSES":
-            return jsonify(handle_courses_query(user_message, intent_result['entities']))
+            result = handle_courses_query(user_message, intent_result['entities'])
+            response_data = {**result, "session_id": session_id, "message_count": session_manager.get_message_count(session_id)}
         elif intent_type == "EVENTS":
-            return jsonify(handle_event_query(user_message, intent_result['entities']))
+            result = handle_event_query(user_message, intent_result['entities'])
+            response_data = {**result, "session_id": session_id, "message_count": session_manager.get_message_count(session_id)}
         elif intent_type == "RESTAURANTS":
-            return jsonify(handle_restaurant_query(user_message, intent_result['entities']))
+            result = handle_restaurant_query(user_message, intent_result['entities'])
+            response_data = {**result, "session_id": session_id, "message_count": session_manager.get_message_count(session_id)}
         elif intent_type == "ANNOUNCEMENTS":
-            return jsonify(handle_announcement_query(user_message, intent_result['entities']))
+            result = handle_announcement_query(user_message, intent_result['entities'])
+            response_data = {**result, "session_id": session_id, "message_count": session_manager.get_message_count(session_id)}
         elif intent_type == "CAREER_SERVICES":
-            return jsonify(handle_career_services_query(user_message, intent_result['entities']))
+            result = handle_career_services_query(user_message, intent_result['entities'])
+            response_data = {**result, "session_id": session_id, "message_count": session_manager.get_message_count(session_id)}
         elif intent_type == "CALENDAR":
-            return jsonify(handle_calendar_query(user_message, intent_result['entities']))
+            result = handle_calendar_query(user_message, intent_result['entities'])
+            response_data = {**result, "session_id": session_id, "message_count": session_manager.get_message_count(session_id)}
         elif intent_type == "GRADES":
-            return jsonify(handle_grades_query(user_message, intent_result['entities']))
+            result = handle_grades_query(user_message, intent_result['entities'])
+            response_data = {**result, "session_id": session_id, "message_count": session_manager.get_message_count(session_id)}
         else:
-            return jsonify(handle_out_of_scope_query(user_message))
+            result = handle_out_of_scope_query(user_message)
+            response_data = {**result, "session_id": session_id, "message_count": session_manager.get_message_count(session_id)}
+        
+        # Add assistant response to session
+        session_manager.add_message(session_id, "assistant", response_data.get("reply", ""))
+        
+        return jsonify(response_data)
 
     except Exception as e:
         print(f"⚠️ Error: {e}")
@@ -1308,6 +1507,90 @@ def api_chat():
 def chat():
     """Legacy chat endpoint"""
     return api_chat()
+
+# ============== SESSION MANAGEMENT ENDPOINTS ==============
+
+@app.route("/api/session/new", methods=['POST'])
+def api_session_new():
+    """Create a new session"""
+    try:
+        session_id = session_manager.create_session()
+        return jsonify({
+            "session_id": session_id,
+            "message_count": session_manager.get_message_count(session_id),
+            "created_at": datetime.now().isoformat()
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/session/<session_id>/info", methods=['GET'])
+def api_session_info(session_id):
+    """Get session information"""
+    try:
+        session = session_manager.get_session(session_id)
+        if not session:
+            return jsonify({"error": "Session not found"}), 404
+        
+        return jsonify({
+            "session_id": session_id,
+            "message_count": session_manager.get_message_count(session_id),
+            "created_at": session["created_at"].isoformat(),
+            "last_accessed": session["last_accessed"].isoformat()
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/session/<session_id>/history", methods=['GET'])
+def api_session_history(session_id):
+    """Get full session history (active + archived)"""
+    try:
+        session = session_manager.get_session(session_id)
+        if not session:
+            return jsonify({"error": "Session not found"}), 404
+        
+        return jsonify({
+            "session_id": session_id,
+            "active_messages": session["messages"],
+            "archived_messages": session["archived_messages"],
+            "message_count": session_manager.get_message_count(session_id)
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/session/<session_id>/clear", methods=['DELETE'])
+def api_session_clear(session_id):
+    """Clear session messages"""
+    try:
+        keep_archive = request.args.get('keep_archive', 'true').lower() == 'true'
+        session_manager.clear_session(session_id, keep_archive=keep_archive)
+        return jsonify({
+            "success": True,
+            "session_id": session_id,
+            "message": f"Session cleared (archive {'kept' if keep_archive else 'deleted'})"
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/session/stats", methods=['GET'])
+def api_session_stats():
+    """Get overall session statistics"""
+    try:
+        with session_lock:
+            total_sessions = len(sessions)
+            total_active_messages = sum(len(s["messages"]) for s in sessions.values())
+            total_archived_messages = sum(len(s["archived_messages"]) for s in sessions.values())
+        
+        return jsonify({
+            "total_sessions": total_sessions,
+            "total_active_messages": total_active_messages,
+            "total_archived_messages": total_archived_messages,
+            "max_active_messages_per_session": SessionCacheManager.MAX_ACTIVE_MESSAGES,
+            "session_ttl_hours": SessionCacheManager.SESSION_TTL_HOURS
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# ============== EXISTING ROUTES ==============
 
 @app.route("/api/geojson", methods=['GET'])
 def api_geojson():
