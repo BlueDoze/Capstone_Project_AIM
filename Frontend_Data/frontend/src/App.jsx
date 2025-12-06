@@ -375,23 +375,6 @@ export default function FanshaweNavigator() {
                   <span>Show Campus Map</span>
                 </button>
                 <button
-                  onClick={() => {
-                    setShowIndoorMap(true);
-                    setMapAction({ type: 'INTERACTIVE_MODE', mode: 'selection' });
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-fanshawe-red dark:border-fanshawe-red bg-transparent hover:bg-fanshawe-red hover:text-white dark:hover:bg-fanshawe-red-dark text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
-                >
-                  <Navigation size={16} />
-                  <span>Indoor Navigation</span>
-                </button>
-                <button
-                  onClick={() => setInput("How do I get from building A to building B?")}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
-                >
-                  <Navigation size={16} />
-                  <span>Campus Navigation</span>
-                </button>
-                <button
                   onClick={() => setInput("What's in building A?")}
                   className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
                 >
