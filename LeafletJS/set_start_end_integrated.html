@@ -165,6 +165,9 @@
         </div>
     </div>
     <div id="map"></div>
+    <button id="change-floor-btn" onclick="showFloorChangeModal()" class="btn btn-outline btn-sm" style="position:absolute; top:20px; right:390px; z-index:1000;">
+        🏢 Change Floor
+    </button>
     <button id="clear-path-btn" onclick="clearPath()" class="btn btn-outline btn-sm" style="position:absolute; top:20px; right:200px; z-index:1000;">
         🗑️ Clear Path
     </button>
@@ -195,6 +198,73 @@
         window.GPS_ACCURACY_THRESHOLD = 20;
 
 
+        //Persistence functions using sessionStorage (clears when browser closes)
+        function saveUserState() {
+            // Save path data if it exists
+            const pathData = [];
+            if (window.pathPolylines && window.pathPolylines.length > 0) {
+                window.pathPolylines.forEach(polyline => {
+                    const latLngs = polyline.getLatLngs().map(ll => ({lat: ll.lat, lng: ll.lng}));
+                    pathData.push(latLngs);
+                });
+            }
+            
+            const state = {
+                floor: window.userCurrentFloor,
+                position: {
+                    lat: window.userPosition.lat,
+                    lng: window.userPosition.lng
+                },
+                mode: window.locationMode,
+                paths: pathData,
+                highlightedNodes: window.highlightedNodes || []
+            };
+            sessionStorage.setItem('campusMapState', JSON.stringify(state));
+            console.log('💾 User state saved:', state);
+        }
+
+        function loadUserState() {
+            try {
+                const saved = sessionStorage.getItem('campusMapState');
+                if (!saved) return null;
+                
+                const state = JSON.parse(saved);
+                
+                // Validate structure
+                if (!state.floor || !state.position || !state.mode) {
+                    console.warn('⚠️ Invalid saved state structure');
+                    return null;
+                }
+                
+                // Validate floor is valid (1-3)
+                if (!["1", "2", "3", 1, 2, 3].includes(state.floor)) {
+                    console.warn('⚠️ Invalid floor number:', state.floor);
+                    return null;
+                }
+                
+                // Validate position has lat/lng
+                if (typeof state.position.lat !== 'number' || typeof state.position.lng !== 'number') {
+                    console.warn('⚠️ Invalid position coordinates');
+                    return null;
+                }
+                
+                // Ensure paths and highlightedNodes exist (backwards compatibility)
+                state.paths = state.paths || [];
+                state.highlightedNodes = state.highlightedNodes || [];
+                
+                console.log('✅ Loaded saved state:', state);
+                return state;
+            } catch (error) {
+                console.error('❌ Error loading saved state:', error);
+                return null;
+            }
+        }
+
+        function clearUserState() {
+            sessionStorage.removeItem('campusMapState');
+            console.log('🗑️ User state cleared');
+        }
+
         //Functions
 
         function toggleLocationMode() {
@@ -205,6 +275,8 @@
                 // Switch to manual mode
                 stopGPSTracking();
             }
+            // Save state after mode change
+            saveUserState();
         }
 
         function startGPSTracking() {
@@ -389,6 +461,9 @@
             }
             
             console.log("✅ Path cleared!");
+            
+            // Save state after clearing path
+            saveUserState();
         }
 
         function debugShowNodePositions(buildingName) {
@@ -457,6 +532,9 @@
             
             // Determine which building/floor user is in
             updateUserLocation();
+            
+            // Save state after dragging marker
+            saveUserState();
         });
         
         console.log("✅ User marker created at:", latlng);
@@ -860,6 +938,9 @@
             
             //console.log(`✅ Drew ${window.pathLines.length} path lines in SVG!`);
             //console.log(`✅ Highlighted ${window.highlightedNodes.length} nodes!`);
+            
+            // Save state after drawing path
+            saveUserState();
         }
 
         function drawMultiBuildingPath(pathResult) {
@@ -900,6 +981,9 @@
             });
             
             console.log("✅ Multi-building path drawing complete");
+            
+            // Save state after drawing multi-building path
+            saveUserState();
         }
         
         // Find path to object
@@ -1681,6 +1765,44 @@
             const modal = document.getElementById('startup-modal');
             modal.style.display = 'flex';
         }
+        
+        function showFloorChangeModal() {
+            // Check if user already has a position set
+            const hasPosition = window.userMarker !== null;
+            
+            if (hasPosition) {
+                // User already has position - just change floor directly
+                const currentFloor = window.userCurrentFloor || "1";
+                const newFloor = prompt(`Current floor: ${currentFloor}\n\nEnter new floor number (1, 2, or 3):`, currentFloor);
+                
+                if (newFloor && ["1", "2", "3"].includes(newFloor)) {
+                    console.log(`🔄 Changing from floor ${currentFloor} to floor ${newFloor}`);
+                    window.userCurrentFloor = newFloor;
+                    
+                    // Load the new floor
+                    loadFloorLevel(parseInt(newFloor));
+                    
+                    // Save state with new floor
+                    saveUserState();
+                    
+                    console.log(`✅ Floor changed to ${newFloor}`);
+                } else if (newFloor) {
+                    alert('Invalid floor number. Please enter 1, 2, or 3.');
+                }
+            } else {
+                // No position yet - show full startup modal
+                document.getElementById('step1').style.display = 'block';
+                document.getElementById('step2').style.display = 'none';
+                document.getElementById('step3-manual').style.display = 'none';
+                
+                if (window.userCurrentFloor) {
+                    document.getElementById('startFloorSelect').value = window.userCurrentFloor;
+                }
+                
+                const modal = document.getElementById('startup-modal');
+                modal.style.display = 'flex';
+            }
+        }
 
         function startupStep2() {
             const selectedFloor = document.getElementById('startFloorSelect').value;
@@ -1691,6 +1813,9 @@
             
             // Load the selected floor in the background
             loadFloorLevel(parseInt(selectedFloor));
+            
+            // Save state after floor selection
+            saveUserState();
         }
 
         function startupUseGPS() {
@@ -1700,6 +1825,9 @@
             // Create marker at default position initially
             createUserMarker(L.latLng(43.0143425, -81.19856355));
             updateUserLocation();
+            
+            // Save state after GPS mode selected
+            saveUserState();
         }
 
         function startupManualSelect() {
@@ -1723,6 +1851,9 @@
                     
                     // Remove the click handler
                     map.off('click', clickHandler);
+                    
+                    // Save state after manual position selected
+                    saveUserState();
                     
                     console.log("✅ Manual position set:", e.latlng);
                 }
@@ -1953,11 +2084,107 @@
                     }).addTo(map);
                 }
 
-                // Auto-load floor 1 for Buildings H and M
-                loadFloorLevel(1);
+                // Check for saved session state
+                const savedState = loadUserState();
                 
-                // Show startup modal for user to select floor and position
-                showStartupModal();
+                if (savedState) {
+                    // Restore from saved state
+                    console.log('🔄 Restoring session state...');
+                    
+                    window.userCurrentFloor = String(savedState.floor);
+                    window.locationMode = savedState.mode === 'gps' ? 'manual' : savedState.mode; // GPS requires user permission, restore as manual
+                    
+                    // Load the saved floor
+                    loadFloorLevel(parseInt(savedState.floor));
+                    
+                    // Restore user position
+                    window.userPosition = L.latLng(savedState.position.lat, savedState.position.lng);
+                    createUserMarker(window.userPosition);
+                    updateUserLocation();
+                    
+                    // Restore paths if they exist
+                    if (savedState.paths && savedState.paths.length > 0) {
+                        setTimeout(() => {
+                            console.log('🔄 Restoring saved paths...');
+                            
+                            // Clear any existing paths first
+                            if (window.pathPolylines) {
+                                window.pathPolylines.forEach(line => map.removeLayer(line));
+                            }
+                            window.pathPolylines = [];
+                            
+                            // Redraw saved paths
+                            savedState.paths.forEach(pathLatLngs => {
+                                const latLngs = pathLatLngs.map(ll => L.latLng(ll.lat, ll.lng));
+                                const pathLine = L.polyline(latLngs, {
+                                    color: '#FF0000',
+                                    weight: 4,
+                                    opacity: 0.8,
+                                    dashArray: '10, 10',
+                                    lineCap: 'round',
+                                    lineJoin: 'round'
+                                }).addTo(map);
+                                window.pathPolylines.push(pathLine);
+                            });
+                            
+                            // Restore highlighted nodes if available
+                            if (savedState.highlightedNodes && window.buildingSVGElements) {
+                                window.highlightedNodes = savedState.highlightedNodes;
+                                Object.values(window.buildingSVGElements).forEach(svgElement => {
+                                    savedState.highlightedNodes.forEach((nodeId, index) => {
+                                        const node = svgElement.getElementById(nodeId);
+                                        if (node) {
+                                            node.parentNode.appendChild(node);
+                                            if (index === 0) {
+                                                node.style.fill = '#00FF00';
+                                                node.style.stroke = '#00AA00';
+                                            } else if (index === savedState.highlightedNodes.length - 1) {
+                                                node.style.fill = '#FF0000';
+                                                node.style.stroke = '#AA0000';
+                                            } else {
+                                                node.style.fill = '#FFFF00';
+                                                node.style.stroke = '#AAAA00';
+                                            }
+                                            node.style.strokeWidth = '2';
+                                        }
+                                    });
+                                });
+                            }
+                            
+                            console.log(`✅ Restored ${savedState.paths.length} path(s)`);
+                        }, 2500); // Wait for floor plans to load
+                    }
+                    
+                    // If they had GPS mode, show a notification they can resume it
+                    if (savedState.mode === 'gps') {
+                        setTimeout(() => {
+                            const statusEl = document.getElementById('location-status');
+                            statusEl.style.display = 'block';
+                            statusEl.innerHTML = `
+                                📍 Session Restored (Manual Mode)<br>
+                                <button onclick="startGPSTracking(); saveUserState();" class="btn btn-primary btn-sm" style="margin-top:5px; font-size:11px; padding:5px 10px;">
+                                    Resume GPS Tracking
+                                </button>
+                            `;
+                            
+                            // Auto-hide after 10 seconds
+                            setTimeout(() => {
+                                if (window.locationMode === 'manual') {
+                                    statusEl.style.display = 'none';
+                                }
+                            }, 10000);
+                        }, 2000);
+                    }
+                    
+                    console.log('✅ Session restored successfully');
+                } else {
+                    // No saved state - show startup modal
+                    // Auto-load floor 1 for Buildings H and M
+                    loadFloorLevel(1);
+                    
+                    // Show startup modal for user to select floor and position
+                    showStartupModal();
+                }
         }
         initApp();
 		
