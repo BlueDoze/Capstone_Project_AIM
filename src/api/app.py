@@ -956,12 +956,17 @@ def handle_calendar_query(user_message: str, entities: Dict[str, Any]) -> Dict[s
                 calendar_context += f"  Course: {deadline.get('course_code')}\n"
             if deadline.get('description'):
                 calendar_context += f"  Description: {deadline.get('description')}\n"
+        
+        course = deadline.get('course_code')
+        print(f"📅 Handling calendar query for course: {course}")
 
         chat_prompt = f"""You are Fanshawe Navigator, a helpful campus assistant.
 
 Context: {calendar_context}
 
 User question: {user_message}
+
+Filter by course or date if specified.
 
 Use emojis for visual appeal: 📅 for calendar sections, ⏰ for deadlines, ⚠️ for urgent items, 💡 for tips. Format with clear section headers using emojis.
 
