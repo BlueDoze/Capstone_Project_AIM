@@ -138,7 +138,7 @@
             
             <div id="step1" style="display:block;">
                 <h4 style="margin:0 0 10px 0; font-size:14px;">Step 1: Select Your Current Floor</h4>
-                <select id="startFloorSelect" style="font-size:18px; padding:10px; margin:10px;">
+                <select id="startFloorSelect" onchange="updateStartupFloor()" style="font-size:18px; padding:10px; margin:10px;">
                     <option value="1">Floor 1</option>
                     <option value="2">Floor 2</option>
                     <option value="3">Floor 3</option>
@@ -227,6 +227,73 @@
         window.GPS_ACCURACY_THRESHOLD = 20;
 
 
+        //Persistence functions using sessionStorage (clears when browser closes)
+        function saveUserState() {
+            // Save path data if it exists
+            const pathData = [];
+            if (window.pathPolylines && window.pathPolylines.length > 0) {
+                window.pathPolylines.forEach(polyline => {
+                    const latLngs = polyline.getLatLngs().map(ll => ({lat: ll.lat, lng: ll.lng}));
+                    pathData.push(latLngs);
+                });
+            }
+            
+            const state = {
+                floor: window.userCurrentFloor,
+                position: {
+                    lat: window.userPosition.lat,
+                    lng: window.userPosition.lng
+                },
+                mode: window.locationMode,
+                paths: pathData,
+                highlightedNodes: window.highlightedNodes || []
+            };
+            sessionStorage.setItem('campusMapState', JSON.stringify(state));
+            console.log('💾 User state saved:', state);
+        }
+
+        function loadUserState() {
+            try {
+                const saved = sessionStorage.getItem('campusMapState');
+                if (!saved) return null;
+                
+                const state = JSON.parse(saved);
+                
+                // Validate structure
+                if (!state.floor || !state.position || !state.mode) {
+                    console.warn('⚠️ Invalid saved state structure');
+                    return null;
+                }
+                
+                // Validate floor is valid (1-3)
+                if (!["1", "2", "3", 1, 2, 3].includes(state.floor)) {
+                    console.warn('⚠️ Invalid floor number:', state.floor);
+                    return null;
+                }
+                
+                // Validate position has lat/lng
+                if (typeof state.position.lat !== 'number' || typeof state.position.lng !== 'number') {
+                    console.warn('⚠️ Invalid position coordinates');
+                    return null;
+                }
+                
+                // Ensure paths and highlightedNodes exist (backwards compatibility)
+                state.paths = state.paths || [];
+                state.highlightedNodes = state.highlightedNodes || [];
+                
+                console.log('✅ Loaded saved state:', state);
+                return state;
+            } catch (error) {
+                console.error('❌ Error loading saved state:', error);
+                return null;
+            }
+        }
+
+        function clearUserState() {
+            sessionStorage.removeItem('campusMapState');
+            console.log('🗑️ User state cleared');
+        }
+
         //Functions
 
         function clearPath() {
@@ -265,22 +332,17 @@
             // Clear any existing paths when switching floors
             clearPath();
             
-            // Only change if user has a position
-            if (window.userMarker) {
-                console.log(`🔄 Changing to floor ${newFloor}`);
-                window.userCurrentFloor = newFloor;
-                
-                // Load the new floor
-                loadFloorLevel(parseInt(newFloor));
-                
-                // Save state with new floor
-                saveUserState();
-                
-                console.log(`✅ Floor changed to ${newFloor}`);
-            } else {
-                // If no position set yet, just update the value and it will be used when position is set
-                window.userCurrentFloor = newFloor;
-            }
+            // Update the current floor
+            console.log(`🔄 Changing to floor ${newFloor}`);
+            window.userCurrentFloor = newFloor;
+            
+            // Load the new floor
+            loadFloorLevel(parseInt(newFloor));
+            
+            // Save state with new floor
+            saveUserState();
+            
+            console.log(`✅ Floor changed to ${newFloor}`);
         }
 
         function toggleLocationMode() {
@@ -714,6 +776,43 @@
             return L.latLng(lat, lng);
         }
 
+        // Convert door/exit SVG element to lat/lng (for final destination)
+        function objectToLatLng(objectElement, svgMap, overlay) {
+            // Get bounding box of the object (works for rectangles, polygons, circles, etc.)
+            const bbox = objectElement.getBBox();
+            const centerX = bbox.x + bbox.width / 2;
+            const centerY = bbox.y + bbox.height / 2;
+            
+            // Create SVG point at center
+            const svgPoint = svgMap.createSVGPoint();
+            svgPoint.x = centerX;
+            svgPoint.y = centerY;
+            
+            // Transform through any applied transforms
+            const ctm = objectElement.getCTM();
+            const transformedPoint = svgPoint.matrixTransform(ctm);
+            
+            // Get the SVG element's bounding box in screen space
+            const svgRect = svgMap.getBoundingClientRect();
+            const overlayBounds = overlay.getBounds();
+            
+            // Calculate normalized position within the SVG (0 to 1)
+            const normX = transformedPoint.x / svgRect.width;
+            const normY = transformedPoint.y / svgRect.height;
+            
+            // Map to geographic coordinates
+            const west = overlayBounds.getWest();
+            const east = overlayBounds.getEast();
+            const north = overlayBounds.getNorth();
+            const south = overlayBounds.getSouth();
+            
+            const lng = west + normX * (east - west);
+            const lat = north - normY * (north - south);
+            
+            console.log(`📍 Object center: [${lat.toFixed(6)}, ${lng.toFixed(6)}]`);
+            return L.latLng(lat, lng);
+        }
+
         // Build navigation graph from definition
         function buildNavigationGraph(svgMap, graphDefinition, overlay) {
             const graph = {};
@@ -826,9 +925,12 @@
             return path;
         }
 
-        function drawPathOnMap(path, nodePositions, map, svgMap, clearPrevious = true) {
+        function drawPathOnMap(path, nodePositions, map, svgMap, clearPrevious = true, finalObjectId = null, overlay = null) {
             console.log("🎨 Drawing path in SVG...");
             console.log("Path:", path);
+            if (finalObjectId) {
+                console.log("🎯 Final destination object:", finalObjectId);
+            }
             
             // Only clear if requested
             if (clearPrevious) {
@@ -876,6 +978,7 @@
                 return;
             }
 
+            // Draw main path (nodes to nodes)
             const pathLine = L.polyline(latLngs, {
                 color: '#FF0000',
                 weight: 4,
@@ -887,6 +990,41 @@
             
             window.pathPolylines.push(pathLine);
             console.log(`✅ Drew polyline with ${latLngs.length} points`);
+
+            // Draw final line from last node to actual object center
+            if (finalObjectId && overlay) {
+                const finalObject = svgMap.getElementById(finalObjectId);
+                if (finalObject) {
+                    const objectCenter = objectToLatLng(finalObject, svgMap, overlay);
+                    const lastNodePosition = latLngs[latLngs.length - 1];
+                    
+                    const finalLine = L.polyline([lastNodePosition, objectCenter], {
+                        color: '#0000FF',  // Blue to distinguish from main path
+                        weight: 4,
+                        opacity: 0.9,
+                        dashArray: '5, 5',
+                        lineCap: 'round',
+                        lineJoin: 'round'
+                    }).addTo(map);
+                    
+                    window.pathPolylines.push(finalLine);
+                    console.log(`✅ Drew final line to object center: ${finalObjectId}`);
+                    
+                    // Add a destination marker at the object center
+                    const destMarker = L.circleMarker(objectCenter, {
+                        radius: 8,
+                        color: '#0000FF',
+                        fillColor: '#0000FF',
+                        fillOpacity: 0.7,
+                        weight: 2
+                    }).addTo(map);
+                    
+                    destMarker.bindPopup(`<b>🎯 Destination</b><br>${finalObjectId}`);
+                    window.pathPolylines.push(destMarker);
+                } else {
+                    console.warn(`⚠️ Final object ${finalObjectId} not found in SVG`);
+                }
+            }
 
             // Highlight each node in the path
             path.forEach((nodeId, index) => {
@@ -1263,26 +1401,51 @@
                         //     });
                         // }
                         
-                        // Find path to room
+                        // Find path to room - select closest node if multiple exist
+                        console.log(`🎯 Finding best node for room: ${roomId}`);
                         
-                        //This is a placeholder to test functionality (Will be removed when proper functionality is confirmed)
-                        //const startNode = window.buildingStartNode[buildingName];
-                        
-                        let destinationNode = null;
-                        
+                        // Collect all nodes that represent this room
+                        const candidateNodes = [];
                         Object.entries(graphData.nodeMetadata).forEach(([nodeId, data]) => {
                             if (!data.represents) return;
                             const represents = Array.isArray(data.represents) ? data.represents : [data.represents];
                             represents.forEach(rep => {
                                 if (rep.id === roomId) {
-                                    destinationNode = nodeId;
+                                    candidateNodes.push({ nodeId, door: rep.door });
                                 }
                             });
                         });
 
-                        if (!destinationNode) {
-                            console.error(`No Node for ${roomId}`);
+                        if (candidateNodes.length === 0) {
+                            console.error(`❌ No nodes found for ${roomId}`);
                             alert(`No navigation node for ${roomId}`);
+                            return;
+                        }
+                        
+                        console.log(`📍 Found ${candidateNodes.length} node(s) for ${roomId}:`, candidateNodes);
+                        
+                        // Select the closest node to user's position
+                        let destinationNode = null;
+                        let minDistance = Infinity;
+                        
+                        candidateNodes.forEach(({ nodeId, door }) => {
+                            const nodePos = graphData.nodePositions[nodeId];
+                            if (nodePos) {
+                                const distance = window.userPosition.distanceTo(nodePos);
+                                console.log(`   Node ${nodeId} (${door || 'N/A'}): ${distance.toFixed(2)}m away`);
+                                
+                                if (distance < minDistance) {
+                                    minDistance = distance;
+                                    destinationNode = nodeId;
+                                }
+                            }
+                        });
+                        
+                        console.log(`✅ Selected closest node: ${destinationNode} (${minDistance.toFixed(2)}m away)`);
+
+                        if (!destinationNode) {
+                            console.error(`❌ Could not determine best node for ${roomId}`);
+                            alert(`Navigation error for ${roomId}`);
                             return;
                         }
 
@@ -1300,7 +1463,42 @@
                         if (pathResult) {
                             if (pathResult.type == 'single-building') {
                                 if (pathResult.path && pathResult.path.length > 0) {
-                                    drawPathOnMap(pathResult.path, graphData.nodePositions, map, svgMap);
+                                    // Get the overlay for this building
+                                    const buildingOverlay = window.currentOverlays.find(overlay => {
+                                        return overlay.getElement().querySelector(`#${buildingName}`);
+                                    }) || window.currentOverlays[0];
+                                    
+                                    // 🔍 DEBUG: Log room and door information
+                                    console.log(`🚪 Room ${roomId} contains ${doorList.length} door(s)`);
+                                    console.log(`📍 User position: [${window.userPosition.lat.toFixed(6)}, ${window.userPosition.lng.toFixed(6)}]`);
+                                    
+                                    // Find the closest door to the user's position
+                                    let closestDoorId = null;
+                                    let minDistance = Infinity;
+                                    
+                                    doorList.forEach((doorId, index) => {
+                                        const doorElement = svgMap.getElementById(doorId);
+                                        if (doorElement) {
+                                            const doorCenter = objectToLatLng(doorElement, svgMap, buildingOverlay);
+                                            const distance = window.userPosition.distanceTo(doorCenter);
+                                            
+                                            console.log(`   Door ${index + 1} (${doorId}): [${doorCenter.lat.toFixed(6)}, ${doorCenter.lng.toFixed(6)}] - Distance: ${distance.toFixed(2)}m`);
+                                            
+                                            if (distance < minDistance) {
+                                                minDistance = distance;
+                                                closestDoorId = doorId;
+                                            }
+                                        } else {
+                                            console.warn(`⚠️ Door ${doorId} not found in SVG`);
+                                        }
+                                    });
+                                    
+                                    console.log(`✅ Selected closest door: ${closestDoorId} (${minDistance.toFixed(2)}m away)`);
+                                    
+                                    // Use the closest door as the final destination
+                                    const finalDoorId = closestDoorId || (doorList && doorList.length > 0 ? doorList[0] : null);
+                                    
+                                    drawPathOnMap(pathResult.path, graphData.nodePositions, map, svgMap, true, finalDoorId, buildingOverlay);
                                 } else {
                                     console.error("❌ Path is empty!");
                                     alert("Could not generate path");
@@ -1310,6 +1508,7 @@
                                 alert(`Route: ${pathResult.segments.map(s => s.description).join(' → ')}`);
                                 
                                 // ✅ Draw multi-building path (both segments)
+                                // TODO: Add finalObjectId support for multi-building paths
                                 drawMultiBuildingPath(pathResult);
                             } else {
                                 alert(`Could not find path to ${roomId}`)
@@ -1354,22 +1553,51 @@
                         exit.style.strokeWidth = '3px';
                         exit.style.fill = 'rgba(0, 0, 255, 0.3)';
 
-                        // Find destination node for this exit
-                        let destinationNode = null;
-
+                        // Find destination node for this exit - select closest if multiple exist
+                        console.log(`🎯 Finding best node for exit: ${exitId}`);
+                        
+                        // Collect all nodes that represent this exit
+                        const candidateNodes = [];
                         Object.entries(graphData.nodeMetadata).forEach(([nodeId, data]) => {
                             if (!data.represents) return;
                             const represents = Array.isArray(data.represents) ? data.represents : [data.represents];
                             represents.forEach(rep => {
                                 if (rep.id === exitId) {
-                                    destinationNode = nodeId;
+                                    candidateNodes.push({ nodeId, goesTo: rep.goesTo });
                                 }
                             });
                         });
 
-                        if (!destinationNode) {
-                            console.error(`No Node for ${exitId}`);
+                        if (candidateNodes.length === 0) {
+                            console.error(`❌ No nodes found for ${exitId}`);
                             alert(`No navigation node for ${exitId}`);
+                            return;
+                        }
+                        
+                        console.log(`📍 Found ${candidateNodes.length} node(s) for ${exitId}:`, candidateNodes);
+                        
+                        // Select the closest node to user's position
+                        let destinationNode = null;
+                        let minDistance = Infinity;
+                        
+                        candidateNodes.forEach(({ nodeId, goesTo }) => {
+                            const nodePos = graphData.nodePositions[nodeId];
+                            if (nodePos) {
+                                const distance = window.userPosition.distanceTo(nodePos);
+                                console.log(`   Node ${nodeId} (→ ${goesTo || 'N/A'}): ${distance.toFixed(2)}m away`);
+                                
+                                if (distance < minDistance) {
+                                    minDistance = distance;
+                                    destinationNode = nodeId;
+                                }
+                            }
+                        });
+                        
+                        console.log(`✅ Selected closest node: ${destinationNode} (${minDistance.toFixed(2)}m away)`);
+
+                        if (!destinationNode) {
+                            console.error(`❌ Could not determine best node for ${exitId}`);
+                            alert(`Navigation error for ${exitId}`);
                             return;
                         }
 
@@ -1388,7 +1616,15 @@
                         if (pathResult) {
                             if (pathResult.type === 'single-building') {
                                 if (pathResult.path && pathResult.path.length > 0) {
-                                    drawPathOnMap(pathResult.path, graphData.nodePositions, map, svgMap);
+                                    // For exits, the exit itself is the final destination
+                                    const finalExitId = exitId;
+                                    
+                                    // Get the overlay for this building
+                                    const buildingOverlay = window.currentOverlays.find(overlay => {
+                                        return overlay.getElement().querySelector(`#${buildingName}`);
+                                    }) || window.currentOverlays[0];
+                                    
+                                    drawPathOnMap(pathResult.path, graphData.nodePositions, map, svgMap, true, finalExitId, buildingOverlay);
                                 } else {
                                     console.error("❌ Path is empty!");
                                     alert("Could not generate path");
@@ -1729,27 +1965,59 @@
             modal.style.display = 'flex';
         }
 
+        function updateStartupFloor() {
+            const selectedFloor = document.getElementById('startFloorSelect').value;
+            window.userCurrentFloor = selectedFloor;
+            
+            // Sync the main floor selector dropdown
+            document.getElementById('floor-selector').value = selectedFloor;
+            
+            // Load the selected floor immediately
+            loadFloorLevel(parseInt(selectedFloor));
+            
+            console.log(`✅ Startup floor changed to ${selectedFloor}`);
+        }
+
         function startupStep2() {
             const selectedFloor = document.getElementById('startFloorSelect').value;
             window.userCurrentFloor = selectedFloor;
+            
+            // Sync the main floor selector dropdown
+            document.getElementById('floor-selector').value = selectedFloor;
             
             document.getElementById('step1').style.display = 'none';
             document.getElementById('step2').style.display = 'block';
             
             // Load the selected floor in the background
             loadFloorLevel(parseInt(selectedFloor));
+            
+            // Save state after floor selection
+            saveUserState();
         }
 
         function startupUseGPS() {
+            // Sync floor selector if a floor was selected
+            if (window.userCurrentFloor) {
+                document.getElementById('floor-selector').value = window.userCurrentFloor;
+            }
+            
             document.getElementById('startup-modal').style.display = 'none';
             startGPSTracking();
             
             // Create marker at default position initially
             createUserMarker(L.latLng(43.0143425, -81.19856355));
             updateUserLocation();
+            
+            // Save state
+            saveUserState();
         }
 
         function startupManualSelect() {
+            // Sync floor selector if a floor was selected
+            if (window.userCurrentFloor) {
+                document.getElementById('floor-selector').value = window.userCurrentFloor;
+            }
+            
             // Hide the modal completely to avoid blocking
             document.getElementById('startup-modal').style.display = 'none';
             
@@ -1778,6 +2046,9 @@
                     if (instructionBanner) {
                         instructionBanner.remove();
                     }
+                    
+                    // Save state after user sets position
+                    saveUserState();
                     
                     console.log("✅ Manual position set:", e.latlng);
                 }
@@ -2130,18 +2401,34 @@
                                 targetBuilding = buildingName;
                                 targetFloor = floorKey;
                                 
-                                // Find the node that represents this room
+                                // Find the closest node that represents this room
                                 const graphData = window.buildingGraphData[buildingName];
                                 if (graphData) {
+                                    const candidateNodes = [];
                                     Object.entries(graphData.nodeMetadata).forEach(([nodeId, data]) => {
                                         if (!data.represents) return;
                                         const represents = Array.isArray(data.represents) ? data.represents : [data.represents];
                                         represents.forEach(rep => {
                                             if (rep.id === objectId) {
-                                                destinationNode = nodeId;
+                                                candidateNodes.push(nodeId);
                                             }
                                         });
                                     });
+                                    
+                                    // Select closest node to user
+                                    if (candidateNodes.length > 0) {
+                                        let minDist = Infinity;
+                                        candidateNodes.forEach(nodeId => {
+                                            const nodePos = graphData.nodePositions[nodeId];
+                                            if (nodePos) {
+                                                const dist = window.userPosition.distanceTo(nodePos);
+                                                if (dist < minDist) {
+                                                    minDist = dist;
+                                                    destinationNode = nodeId;
+                                                }
+                                            }
+                                        });
+                                    }
                                 }
                             }
                             
@@ -2151,18 +2438,34 @@
                                 targetBuilding = buildingName;
                                 targetFloor = floorKey;
                                 
-                                // Find the node that represents this exit
+                                // Find the closest node that represents this exit
                                 const graphData = window.buildingGraphData[buildingName];
                                 if (graphData) {
+                                    const candidateNodes = [];
                                     Object.entries(graphData.nodeMetadata).forEach(([nodeId, data]) => {
                                         if (!data.represents) return;
                                         const represents = Array.isArray(data.represents) ? data.represents : [data.represents];
                                         represents.forEach(rep => {
                                             if (rep.id === objectId) {
-                                                destinationNode = nodeId;
+                                                candidateNodes.push(nodeId);
                                             }
                                         });
                                     });
+                                    
+                                    // Select closest node to user
+                                    if (candidateNodes.length > 0) {
+                                        let minDist = Infinity;
+                                        candidateNodes.forEach(nodeId => {
+                                            const nodePos = graphData.nodePositions[nodeId];
+                                            if (nodePos) {
+                                                const dist = window.userPosition.distanceTo(nodePos);
+                                                if (dist < minDist) {
+                                                    minDist = dist;
+                                                    destinationNode = nodeId;
+                                                }
+                                            }
+                                        });
+                                    }
                                 }
                             }
                         });

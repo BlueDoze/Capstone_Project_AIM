@@ -487,39 +487,103 @@
                     }
                 },
                 "roomToNode": {
-                    "Hmisc": "H1_1",
-                    "H1017": "H1_11",
-                    "H1016": "H1_5",
-                    "H1015": "H1_6",
-                    "H1014": "H1_7",
-                    "Bathroom-Men_H1": "H1_8",
-                    "Bathroom-Accessible_H1": "H1_9",
-                    "Bathroom-Women_H1": "H1_10",
-                    "Cafeteria-H1": "H1_10",
-                    "H1006": "H1_12",
-                    "H1005": "H1_14",
-                    "H1004": "H1_14",
-                    "H1003": "H1_15",
-                    "H1019": "H1_19",
-                    "H1022": "H1_19",
-                    "H1023": "H1_20",
-                    "H1024": "H1_21",
-                    "Cafeteria_H1": "H1_22",
-                    "H1032": "H1_25",
-                    "H1034": "H1_26",
-                    "H1033": "H1_27"
+                    "Hmisc": [
+                        "H1_1"
+                    ],
+                    "H1017": [
+                        "H1_2",
+                        "H1_11"
+                    ],
+                    "H1016": [
+                        "H1_5"
+                    ],
+                    "H1015": [
+                        "H1_6"
+                    ],
+                    "H1014": [
+                        "H1_7"
+                    ],
+                    "Bathroom-Men_H1": [
+                        "H1_8"
+                    ],
+                    "Bathroom-Accessible_H1": [
+                        "H1_9"
+                    ],
+                    "Bathroom-Women_H1": [
+                        "H1_10"
+                    ],
+                    "Cafeteria-H1": [
+                        "H1_10"
+                    ],
+                    "H1006": [
+                        "H1_12"
+                    ],
+                    "H1005": [
+                        "H1_13",
+                        "H1_14"
+                    ],
+                    "H1004": [
+                        "H1_14"
+                    ],
+                    "H1003": [
+                        "H1_15"
+                    ],
+                    "H1019": [
+                        "H1_19"
+                    ],
+                    "H1022": [
+                        "H1_19"
+                    ],
+                    "H1023": [
+                        "H1_20"
+                    ],
+                    "H1024": [
+                        "H1_21"
+                    ],
+                    "Cafeteria_H1": [
+                        "H1_22"
+                    ],
+                    "H1032": [
+                        "H1_25"
+                    ],
+                    "H1034": [
+                        "H1_26"
+                    ],
+                    "H1033": [
+                        "H1_27"
+                    ]
                 },
                 "exitToNode": {
-                    "M-Building_H1": "M1_entry",
-                    "Elevator_H1": "H1_3",
-                    "Stairs_1_H1": "H1_4",
-                    "Outside-Exit_1_H1": "H1_4",
-                    "Stairs_2_H1": "H1_16",
-                    "Outside-Exit_2_H1": "H1_17",
-                    "F-Building_H1": "H1_17",
-                    "Outside-Exit_3_H1": "H1_18",
-                    "Stairs_3_H1": "H1_28",
-                    "Outside-Exit_4_H1": "H1_28"
+                    "M-Building_H1": [
+                        "M1_entry"
+                    ],
+                    "Elevator_H1": [
+                        "H1_3"
+                    ],
+                    "Stairs_1_H1": [
+                        "H1_4"
+                    ],
+                    "Outside-Exit_1_H1": [
+                        "H1_4"
+                    ],
+                    "Stairs_2_H1": [
+                        "H1_16"
+                    ],
+                    "Outside-Exit_2_H1": [
+                        "H1_17"
+                    ],
+                    "F-Building_H1": [
+                        "H1_17"
+                    ],
+                    "Outside-Exit_3_H1": [
+                        "H1_18"
+                    ],
+                    "Stairs_3_H1": [
+                        "H1_28"
+                    ],
+                    "Outside-Exit_4_H1": [
+                        "H1_28"
+                    ]
                 },
                 "objects": {
                     "rooms": {
@@ -999,32 +1063,81 @@
                     }
                 },
                 "roomToNode": {
-                    "M1006": "M1_3",
-                    "M1004": "M1_4",
-                    "M1003": "M1_Int_2",
-                    "M1018": "M1_8",
-                    "Bathroom-Men_M1": "M1_9",
-                    "Bathroom-Accessible_M1": "M1_10",
-                    "Bathroom-Women_M1": "M1_11",
-                    "M1033": "M1_12",
-                    "M1035": "M1_14",
-                    "M1037": "M1_15",
-                    "M1030": "M1_16",
-                    "M1041": "M1_16",
-                    "M1045": "M1_Turn_3",
-                    "M1040": "M1_17",
-                    "M1049": "M1_18"
+                    "M1006": [
+                        "M1_3"
+                    ],
+                    "M1004": [
+                        "M1_4"
+                    ],
+                    "M1003": [
+                        "M1_6",
+                        "M1_Int_2"
+                    ],
+                    "M1018": [
+                        "M1_8"
+                    ],
+                    "Bathroom-Men_M1": [
+                        "M1_9"
+                    ],
+                    "Bathroom-Accessible_M1": [
+                        "M1_10"
+                    ],
+                    "Bathroom-Women_M1": [
+                        "M1_11"
+                    ],
+                    "M1033": [
+                        "M1_12"
+                    ],
+                    "M1035": [
+                        "M1_14"
+                    ],
+                    "M1037": [
+                        "M1_15"
+                    ],
+                    "M1030": [
+                        "M1_16"
+                    ],
+                    "M1041": [
+                        "M1_16"
+                    ],
+                    "M1045": [
+                        "M1_Turn_3"
+                    ],
+                    "M1040": [
+                        "M1_17"
+                    ],
+                    "M1049": [
+                        "M1_18"
+                    ]
                 },
                 "exitToNode": {
-                    "H1-Building_M1": "H_entry",
-                    "Stairs_1_M1": "M1_2",
-                    "Outside-Exit_2_M1": "M1_2",
-                    "Elevator_M1": "M1_5",
-                    "Outside-Exit_1_M1": "M1_7",
-                    "Stairs_2_M1": "M1_13",
-                    "Outside-Exit_3_M1": "M1_13",
-                    "Outside-Exit_4_M1": "M1_19",
-                    "Stairs_3_M1": "M1_19"
+                    "H1-Building_M1": [
+                        "H_entry"
+                    ],
+                    "Stairs_1_M1": [
+                        "M1_2"
+                    ],
+                    "Outside-Exit_2_M1": [
+                        "M1_2"
+                    ],
+                    "Elevator_M1": [
+                        "M1_5"
+                    ],
+                    "Outside-Exit_1_M1": [
+                        "M1_7"
+                    ],
+                    "Stairs_2_M1": [
+                        "M1_13"
+                    ],
+                    "Outside-Exit_3_M1": [
+                        "M1_13"
+                    ],
+                    "Outside-Exit_4_M1": [
+                        "M1_19"
+                    ],
+                    "Stairs_3_M1": [
+                        "M1_19"
+                    ]
                 },
                 "objects": {
                     "rooms": {
@@ -1492,29 +1605,76 @@
                     }
                 },
                 "roomToNode": {
-                    "M2004": "M2_Path1_2",
-                    "M2013": "M2_Turn_1",
-                    "M2010": "M2_Path2_1",
-                    "M2012": "M2_Path2_4",
-                    "M2017": "M2_Path2_6",
-                    "M2018": "M2_Path2_7",
-                    "Bathroom-Men_M2": "M2_Path3_1",
-                    "Bathroom-Accessible_M2": "M2_Path3_2",
-                    "Bathroom-Women_M2": "M2_Path3_3",
-                    "M2033": "M2_Path3_4",
-                    "M2035": "M2_Path2_8",
-                    "M2037": "M2_Path2_9",
-                    "M2022": "M2_Path2_10",
-                    "M2028": "M2_Path2_11",
-                    "M2041": "M2_Turn_2",
-                    "M2047": "M2_Path4_1"
+                    "M2004": [
+                        "M2_Path1_2"
+                    ],
+                    "M2013": [
+                        "M2_Turn_1"
+                    ],
+                    "M2010": [
+                        "M2_Path2_1"
+                    ],
+                    "M2012": [
+                        "M2_Path2_2",
+                        "M2_Path2_4"
+                    ],
+                    "M2017": [
+                        "M2_Path2_3",
+                        "M2_Path2_6"
+                    ],
+                    "M2018": [
+                        "M2_Path2_5",
+                        "M2_Path2_7"
+                    ],
+                    "Bathroom-Men_M2": [
+                        "M2_Path3_1"
+                    ],
+                    "Bathroom-Accessible_M2": [
+                        "M2_Path3_2"
+                    ],
+                    "Bathroom-Women_M2": [
+                        "M2_Path3_3"
+                    ],
+                    "M2033": [
+                        "M2_Path3_4"
+                    ],
+                    "M2035": [
+                        "M2_Path2_8"
+                    ],
+                    "M2037": [
+                        "M2_Path2_9"
+                    ],
+                    "M2022": [
+                        "M2_Path2_10"
+                    ],
+                    "M2028": [
+                        "M2_Path2_11"
+                    ],
+                    "M2041": [
+                        "M2_Path2_12",
+                        "M2_Turn_2"
+                    ],
+                    "M2047": [
+                        "M2_Turn_2",
+                        "M2_Path4_1"
+                    ]
                 },
                 "exitToNode": {
-                    "H2-Building_M2": "H2_entry",
-                    "Stairs_1_M2": "M2_Path1_1",
-                    "Elevator_M2": "M2_Path1_4",
-                    "Stairs_2_M2": "M2_Path3_6",
-                    "Stairs_3_M3": "M2_Path4_2"
+                    "H2-Building_M2": [
+                        "H2_entry"
+                    ],
+                    "Stairs_1_M2": [
+                        "M2_Path1_1"
+                    ],
+                    "Elevator_M2": [
+                        "M2_Path1_4"
+                    ],
+                    "Stairs_2_M2": [
+                        "M2_Path3_6"
+                    ],
+                    "Stairs_3_M3": [
+                        "M2_Path4_2"
+                    ]
                 },
                 "objects": {
                     "rooms": {
