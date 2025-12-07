@@ -20,19 +20,6 @@
             top: 0; bottom: 0;
             left: 0; right: 0;
         }
-		#rotation-display {
-		position: absolute;
-		top: 10px;
-		right: 10px;
-		background: rgba(255, 255, 255, 0.9);
-		padding: 10px 15px;
-		border-radius: 5px;
-		font-family: Arial, sans-serif;
-		font-size: 16px;
-		font-weight: bold;
-		box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-		z-index: 1000;
-	}
     </style>
 </head>
 <body>
@@ -69,12 +56,6 @@
         </div>
     </div>
     <div id="map"></div>
-	<div id="rotation-display">Rotation: 0°</div>
-	<div style="position: absolute; top: 50px; right: 10px; background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 5px; z-index: 1000;">
-		<label for="bearingInput">Map Bearing:</label>
-		<input type="number" id="bearingInput" value="0" step="0.1" style="width: 70px;" />
-		<button onclick="updateMapBearing()">Apply</button>
-	</div>
     <div style="position:absolute; top:10px; right:10px; z-index:1000; background:white; padding:6px; border-radius:8px; box-shadow:0 0 5px rgba(0,0,0,0.3);">
         <label for="floorSelect"><b>Choose Floor:</b></label>
         <select id="floorSelect">
@@ -93,12 +74,23 @@
             📍 Manual Mode
         </div>
     </div>
-    <div id="objectSearchPanel" 
-        style="position: absolute; top: 10px; right: 10px; 
-                background: white; padding: 8px; border-radius: 4px; 
-                box-shadow: 0 2px 6px rgba(0,0,0,0.3); z-index: 1000;">
-        <input id="objectIdSearch" type="text" placeholder="Enter Object ID" style="width: 150px;">
-        <button id="searchBtn">Navigate</button>
+    <div id="navigationPanel" 
+        style="position: absolute; top: 200px; right: 10px; 
+                background: white; padding: 12px; border-radius: 8px; 
+                box-shadow: 0 2px 6px rgba(0,0,0,0.3); z-index: 1000; min-width: 250px;">
+        <h4 style="margin: 0 0 10px 0; font-size: 14px;">🧭 Navigation</h4>
+        
+        <div style="margin-bottom: 10px;">
+            <label style="display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #28a745;">📍 Start Position (Room/Exit ID):</label>
+            <input id="startObjectId" type="text" placeholder="e.g., M2011 or Exit_M_1" style="width: 100%; padding: 6px; border: 1px solid #28a745; border-radius: 4px; font-size: 12px;">
+            <button id="setStartBtn" style="width: 100%; margin-top: 4px; padding: 6px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">Set as Start</button>
+        </div>
+        
+        <div>
+            <label style="display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #dc3545;">🎯 Destination (Room/Exit ID):</label>
+            <input id="destinationObjectId" type="text" placeholder="e.g., M3022 or Exit_A_2" style="width: 100%; padding: 6px; border: 1px solid #dc3545; border-radius: 4px; font-size: 12px;">
+            <button id="navigateBtn" style="width: 100%; margin-top: 4px; padding: 6px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">Navigate</button>
+        </div>
     </div>
     <script>
 		
@@ -1286,7 +1278,7 @@
                 // Getting Building path
                 let prePath = buildingInfo["path"];
                 let fileName = buildingInfo["floors"][floorKey]["plan"];
-                let svgPath = prePath + "/" + fileName + "?ts=" + new Date().getTime();
+                let svgPath = "/leaflet-assets/" + prePath + "/" + fileName + "?ts=" + new Date().getTime();
                 
                 let baseBounds = window.buildingInfoCache[buildingName]["bounds"];
                 let adjustedBounds = baseBounds;
@@ -1590,41 +1582,41 @@
         }
 
         function startupManualSelect() {
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('step3-manual').style.display = 'block';
+            // Hide the modal completely to avoid blocking
+            document.getElementById('startup-modal').style.display = 'none';
+            
+            // Show a floating instruction banner instead
+            const banner = document.createElement('div');
+            banner.id = 'instruction-banner';
+            banner.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(40, 167, 69, 0.95); color: white; padding: 20px 40px; border-radius: 10px; font-size: 18px; font-weight: bold; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.3); text-align: center;';
+            banner.innerHTML = '📍 Click on the map to set your starting position';
+            document.body.appendChild(banner);
             
             // Enable one-time click to set position
             window.waitingForPositionClick = true;
             
             const clickHandler = function(e) {
                 if (window.waitingForPositionClick) {
-                    // Prevent event from propagating to other elements
-                    L.DomEvent.stopPropagation(e);
-                    
                     createUserMarker(e.latlng);
                     updateUserLocation();
                     
-                    // Close modal
-                    document.getElementById('startup-modal').style.display = 'none';
                     window.waitingForPositionClick = false;
                     
                     // Remove the click handler
                     map.off('click', clickHandler);
                     
+                    // Remove instruction banner
+                    const instructionBanner = document.getElementById('instruction-banner');
+                    if (instructionBanner) {
+                        instructionBanner.remove();
+                    }
+                    
                     console.log("✅ Manual position set:", e.latlng);
                 }
             };
             
-            // Add click handler with high priority
+            // Add click handler
             map.on('click', clickHandler);
-            
-            // IMPORTANT: Make modal click-through for the map area
-            const modalContent = document.querySelector('#startup-modal > div');
-            const modal = document.getElementById('startup-modal');
-            
-            // Allow clicks to pass through the modal background to the map
-            modal.style.pointerEvents = 'none';
-            modalContent.style.pointerEvents = 'all';
         }
         // Keyboard controls
         document.addEventListener('keydown', function(e) {
@@ -1665,7 +1657,7 @@
         //Asynchrounous functions
         async function loadFloorPlans() {
             try {
-                const response = await fetch('JSON/all_node_data.json?=ts=' + new Date().getTime());
+                const response = await fetch('/leaflet-assets/JSON/all_node_data.json?ts=' + new Date().getTime());
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -1677,7 +1669,7 @@
 
         async function loadBuildingPositions() {
             try {   
-                const response = await fetch('JSON/Building Positions.json?ts=' + new Date().getTime());
+                const response = await fetch('/leaflet-assets/JSON/Building positions.JSON?ts=' + new Date().getTime());
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -1691,7 +1683,7 @@
 
         async function loadGeoJSON() {
             try {
-                const response = await fetch('campus.geojson?ts=' + new Date().getTime());
+                const response = await fetch('/leaflet-assets/campus.geojson?ts=' + new Date().getTime());
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -1705,7 +1697,7 @@
 
         async function loadBuildingConnections() {
             try {
-                const response = await fetch('JSON/building_connections.json?ts=' + new Date().getTime());
+                const response = await fetch('/leaflet-assets/JSON/building_connections.json?ts=' + new Date().getTime());
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -1758,13 +1750,6 @@
 
 
             setupOverlayDrag();
-
-            map.on('rotate', function() {
-                let bearing = map.getBearing();
-                document.getElementById('rotation-display').textContent = 
-                    'Rotation: ' + bearing.toFixed(1) + '°';
-            });
-
 
             //Mouse handling logic to distinguish drag vs click
             map.on('mousedown touchstart', function() {
@@ -1856,8 +1841,110 @@
                         alert("GeoJSON not loaded yet.");
                     }
                 });
-                document.getElementById("searchBtn").addEventListener("click", () => {
-                    const objectId = document.getElementById("objectIdSearch").value.trim();
+                
+                // Set Start Position Button
+                document.getElementById("setStartBtn").addEventListener("click", () => {
+                    const objectId = document.getElementById("startObjectId").value.trim();
+                    
+                    if (!objectId) {
+                        alert("Please enter a Start Position (Room or Exit ID)");
+                        return;
+                    }
+                    
+                    console.log(`🔍 Setting start position to: ${objectId}`);
+                    
+                    // Search through all buildings for the object
+                    let found = false;
+                    let targetBuilding = null;
+                    let targetFloor = null;
+                    let startNode = null;
+                    
+                    Object.entries(window.floorPlans).forEach(([buildingName, buildingInfo]) => {
+                        if (found) return;
+                        
+                        Object.entries(buildingInfo.floors).forEach(([floorKey, floorData]) => {
+                            if (found) return;
+                            
+                            // Check rooms
+                            if (floorData.objects && floorData.objects.rooms && floorData.objects.rooms[objectId]) {
+                                found = true;
+                                targetBuilding = buildingName;
+                                targetFloor = floorKey;
+                                
+                                // Find the node that represents this room (should be at door)
+                                const graphData = window.buildingGraphData[buildingName];
+                                if (graphData) {
+                                    Object.entries(graphData.nodeMetadata).forEach(([nodeId, data]) => {
+                                        if (!data.represents) return;
+                                        const represents = Array.isArray(data.represents) ? data.represents : [data.represents];
+                                        represents.forEach(rep => {
+                                            if (rep.id === objectId) {
+                                                startNode = nodeId;
+                                            }
+                                        });
+                                    });
+                                }
+                            }
+                            
+                            // Check exits
+                            if (floorData.objects && floorData.objects.exits && floorData.objects.exits[objectId]) {
+                                found = true;
+                                targetBuilding = buildingName;
+                                targetFloor = floorKey;
+                                
+                                // Find the node that represents this exit
+                                const graphData = window.buildingGraphData[buildingName];
+                                if (graphData) {
+                                    Object.entries(graphData.nodeMetadata).forEach(([nodeId, data]) => {
+                                        if (!data.represents) return;
+                                        const represents = Array.isArray(data.represents) ? data.represents : [data.represents];
+                                        represents.forEach(rep => {
+                                            if (rep.id === objectId) {
+                                                startNode = nodeId;
+                                            }
+                                        });
+                                    });
+                                }
+                            }
+                        });
+                    });
+                    
+                    if (!found) {
+                        alert(`Object "${objectId}" not found in any building.`);
+                        return;
+                    }
+                    
+                    if (!startNode) {
+                        alert(`Found ${objectId} in ${targetBuilding} Floor ${targetFloor}, but no navigation node exists for it.`);
+                        return;
+                    }
+                    
+                    // Get the position of the start node
+                    const graphData = window.buildingGraphData[targetBuilding];
+                    if (graphData && graphData.nodePositions[startNode]) {
+                        const position = graphData.nodePositions[startNode];
+                        
+                        // Set user position to this node
+                        createUserMarker(position);
+                        window.userCurrentBuilding = targetBuilding;
+                        window.userCurrentFloor = targetFloor;
+                        
+                        // Load the correct floor if not already loaded
+                        loadFloorLevel(parseInt(targetFloor));
+                        
+                        // Center map on this position
+                        map.setView(position, 20);
+                        
+                        alert(`✅ Start position set to ${objectId} in ${targetBuilding}, Floor ${targetFloor}`);
+                        console.log(`✅ User position set to node ${startNode}:`, position);
+                    } else {
+                        alert("Could not get position for this object");
+                    }
+                });
+                
+                // Navigate to Destination Button
+                document.getElementById("navigateBtn").addEventListener("click", () => {
+                    const objectId = document.getElementById("destinationObjectId").value.trim();
                     
                     if (!objectId) {
                         alert("Please enter an Object ID");

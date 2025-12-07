@@ -1,0 +1,29 @@
+﻿Node,Node_type,Node_connections,Object,Door,Object_category_type,Object_type,Exit_Connections
+H2_entry,object,M2_Path1_1,H2-Building_M2,,exit,building_connection,H2
+M2_Path1_1,object,"H2_entry, M2_Path1_2",Stairs_1_M2,,exit,stairs,[M1|M3]
+M2_Path1_2,object,"M2_Path1_1, M2_Path1_3",M2004,Door_M2004,room,room,
+M2_Path1_3,,"M2_Path1_2, M2_Path1_4",,,,,
+M2_Path1_4,object,"M2_Path1_3, M2_Turn_1",Elevator_M2,,exit,elevator,[M1|M3]
+M2_Turn_1,"object, turn","M2_Path1_4, M2_Path2_1",M2013,Door_M2013,room,room,
+M2_Path2_1,object,"M2_Turn_1, M2_Path2_2",M2010,Door_M2010,room,room,
+M2_Path2_2,object,"M2_Path2_1, M2_Path2_3",M2012,Door_M2012_1,room,room,
+M2_Path2_3,object,"M2_Path2_2, M2_Path2_4",M2017,Door_M2017_1,room,room,
+M2_Path2_4,object,"M2_Path2_3, M2_Path2_5",M2012,Door_M2012_2,room,room,
+M2_Path2_5,object,"M2_Path2_4, M2_Path2_6",M2018,Door_M2018_1,room,room,
+M2_Path2_6,object,"M2_Path2_5, M2_Int_1",M2017,Door_M2017_2,room,room,
+M2_Int_1,int,"M2_Path2_6, M2_Path3_1, M2_Path2_7",,,,,
+M2_Path3_1,object,"M2_Int_1, M2_Path3_2",Bathroom-Men_M2,Door_Bathroom-Men_M2,room,bathroom,
+M2_Path3_2,object,"M2_Path3_1, M2_Path3_3",Bathroom-Accessible_M2,Door_Bathroom-Accessible_M2,room,bathroom,
+M2_Path3_3,object,"M2_Path3_2, M2_Path3_4",Bathroom-Women_M2,Door_Bathroom-Women_M2,room,bathroom,
+M2_Path3_4,object,"M2_Path3_3, M2_Path3_5",M2033,Door_M2033,room,room,
+M2_Path3_5,turn,"M2_Path3_4, M2_Path3_6",,,,,
+M2_Path3_6,object,M2_Path3_5,Stairs_2_M2,,exit,stairs,[M1|M3]
+M2_Path2_7,object,"M2_Int_1, M2_Path2_8",M2018,Door_M2018_2,room,room,
+M2_Path2_8,object,"M2_Path2_7, M2_Path2_9",M2035,Door_M2035,room,room,
+M2_Path2_9,object,"M2_Path2_8, M2_Path2_10",M2037,Door_M2037,room,room,
+M2_Path2_10,object,"M2_Path2_9, M2_Path2_11",M2022,Door_M2022,room,room,
+M2_Path2_11,object,"M2_Path2_10, M2_Path2_12",M2028,Door_M2028,room,room,
+M2_Path2_12,object,"M2_Path2_11, M2_Turn_2",M2041,Door_M2041_1,room,room,
+M2_Turn_2,"object, object, turn","M2_Path2_12, M2_Path4_1","M2041, M2047","Door_M2041_2, Door_M2047_1","room, room","room, room",
+M2_Path4_1,object,"M2_Turn_2, M2_Path4_2",M2047,Door_M2047_2,room,room,
+M2_Path4_2,object,M2_Path4_1,Stairs_3_M3,,exit,stairs,[M1|M3]

@@ -50847,15 +50847,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="1.3106618"
-     inkscape:cx="224.69565"
-     inkscape:cy="695.0687"
-     inkscape:window-width="1116"
-     inkscape:window-height="1281"
-     inkscape:window-x="-9"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="layer1">
+     inkscape:zoom="7.4142228"
+     inkscape:cx="237.85366"
+     inkscape:cy="797.58866"
+     inkscape:window-width="2240"
+     inkscape:window-height="1294"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer2">
     <inkscape:page
        x="0"
        y="0"
@@ -71591,7 +71591,7 @@
      inkscape:label="Doors">
     <rect
        style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.50000188;stroke-dasharray:none"
-       id="Door_1049"
+       id="Door_M1049"
        width="0.95474803"
        height="18.315699"
        x="165.83691"
@@ -71600,7 +71600,7 @@
        transform="matrix(-0.00416943,0.99999131,-0.99999996,-2.8902449e-4,0,0)" />
     <rect
        style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.50000186;stroke-dasharray:none"
-       id="Door_1045"
+       id="Door_M1045"
        width="0.97460246"
        height="18.617178"
        x="165.81403"
@@ -71609,7 +71609,7 @@
        transform="matrix(-0.00415173,0.99999138,-0.99999996,-2.9025629e-4,0,0)" />
     <rect
        style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.50000002;stroke-dasharray:none"
-       id="Door_1037"
+       id="Door_M1037"
        width="1.058428"
        height="12.253946"
        x="-397.38766"
@@ -71618,7 +71618,7 @@
        transform="matrix(-0.99999986,-5.2888251e-4,1.0066033e-4,-0.99999999,0,0)" />
     <rect
        style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_1035"
+       id="Door_M1035"
        width="2.2573915"
        height="12.910168"
        x="-398.62338"
@@ -71627,7 +71627,7 @@
        transform="matrix(-0.99999997,-2.6125797e-4,2.0377368e-4,-0.99999998,0,0)" />
     <rect
        style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.50000002;stroke-dasharray:none"
-       id="Door_1041"
+       id="Door_M1041"
        width="0.9988271"
        height="12.111494"
        x="-397.32489"
@@ -71636,7 +71636,7 @@
        transform="matrix(-0.99999985,-5.5392624e-4,9.6109347e-5,-1,0,0)" />
     <rect
        style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.50016535;stroke-dasharray:none"
-       id="Door_1033"
+       id="Door_M1033"
        width="1.7276052"
        height="9.8820238"
        x="4.461297"
@@ -71645,7 +71645,7 @@
        transform="matrix(-0.7181631,0.69587482,-0.72152407,-0.69238936,0,0)" />
     <rect
        style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.5000001;stroke-dasharray:none"
-       id="Door_Bathroom-Women"
+       id="Door_Bathroom-Women_M1"
        width="0.99725759"
        height="12.910167"
        x="-495.93918"
@@ -71654,7 +71654,7 @@
        transform="matrix(0.00108294,-0.99999941,0.99999998,1.8595484e-4,0,0)" />
     <rect
        style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.50000005;stroke-dasharray:none"
-       id="Door_Bathroom-Accesible"
+       id="Door_Bathroom-Accesible_M1"
        width="0.99725741"
        height="10.2356"
        x="-495.90802"
@@ -71663,7 +71663,7 @@
        transform="matrix(8.5859022e-4,-0.99999963,0.99999997,2.3454493e-4,0,0)" />
     <rect
        style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.50000004;stroke-dasharray:none"
-       id="Door_Bathroom-Men"
+       id="Door_Bathroom-Men_M1"
        width="0.99725729"
        height="9.5666962"
        x="-495.91412"
@@ -71671,17 +71671,17 @@
        ry="1.3930805e-06"
        transform="matrix(8.024808e-4,-0.99999968,0.99999997,2.5094431e-4,0,0)" />
     <rect
-       style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.50000014;stroke-dasharray:none"
-       id="Door_1003_2"
-       width="1.195295"
-       height="17.527952"
-       x="-541.37378"
-       y="370.53912"
-       ry="2.5523805e-06"
-       transform="matrix(0.00122669,-0.99999925,0.99999999,1.6416321e-4,0,0)" />
+       style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
+       id="Door_M1003_2"
+       width="1.9902179"
+       height="18.392263"
+       x="-541.70068"
+       y="369.78876"
+       ry="2.6782395e-06"
+       transform="matrix(7.7306539e-4,-0.9999997,0.99999997,2.604939e-4,0,0)" />
     <rect
        style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.50000014;stroke-dasharray:none"
-       id="Door_1003_1"
+       id="Door_M1003_1"
        width="1.195295"
        height="17.527952"
        x="-755.41589"
@@ -71690,7 +71690,7 @@
        transform="matrix(0.00122669,-0.99999925,0.99999999,1.6416321e-4,0,0)" />
     <rect
        style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_1030"
+       id="Door_M1030"
        width="1.4416529"
        height="8.254653"
        x="-352.9368"
@@ -71699,7 +71699,7 @@
        transform="matrix(-0.99999997,-2.6156683e-4,2.0353306e-4,-0.99999998,0,0)" />
     <rect
        style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_1040"
+       id="Door_M1040"
        width="1.4416529"
        height="8.254653"
        x="-193.46049"
@@ -71708,13 +71708,31 @@
        transform="matrix(-0.00448821,-0.99998993,0.99998967,-0.00454624,0,0)" />
     <rect
        style="opacity:1;fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_1018"
+       id="Door_M1018"
        width="1.4416529"
        height="8.254653"
        x="-489.47202"
        y="300.79941"
        ry="1.2020238e-06"
        transform="matrix(-0.00448821,-0.99998993,0.99998967,-0.00454624,0,0)" />
+    <rect
+       style="fill:#ff0000;stroke:#000000;stroke-width:0.50000001;stroke-dasharray:none"
+       id="Door_M1004"
+       width="1.5638118"
+       height="12.11377"
+       x="-805.47803"
+       y="321.12805"
+       ry="1.7639795e-06"
+       transform="matrix(6.4800231e-4,-0.99999979,0.99999995,3.107687e-4,0,0)" />
+    <rect
+       style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
+       id="Door_M1006"
+       width="1.5638118"
+       height="12.11377"
+       x="-805.50037"
+       y="249.27144"
+       ry="1.7639795e-06"
+       transform="matrix(6.4800231e-4,-0.99999979,0.99999995,3.107687e-4,0,0)" />
   </g>
   <g
      inkscape:groupmode="layer"
