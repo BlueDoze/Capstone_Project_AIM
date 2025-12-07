@@ -15,283 +15,463 @@ Este documento descreve os **6 pipelines de web scraping** desenvolvidos para a 
 
 ### 1. D2L Event Scraper (Serviço Principal)
 
-**Arquivo:** `src/services/d2l_scraper.py` (505 linhas)
+**📁 Arquivos:**
+- **Serviço:** `src/services/d2l_scraper.py`
+- **Script de execução:** `tests/test_d2l_scraper.py`
 
-**Funcionalidade:** Extração de eventos da plataforma D2L/Brightspace
+**🎯 O que faz:** Extrai eventos do calendário D2L/Brightspace de um curso específico
 
-**Status:** ✅ **Produção**
+**📊 Status:** ✅ Produção
 
-**Medidas Anti-Detecção:**
-- ✅ `playwright-stealth` library
-- ✅ User-Agent: `Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0`
-- ✅ Extra HTTP headers (Accept, DNT: 1, Sec-Fetch-*, Cache-Control)
-- ✅ `--disable-blink-features=AutomationControlled`
-- ✅ Bloqueio de recursos desnecessários (imagens, fontes, media)
-- ✅ Delays aleatórios (2-4s) entre requisições
-
-**Como Rodar:**
+**▶️ Como executar:**
 
 ```bash
-# Via teste isolado com menu interativo
+# 1. Ativar ambiente virtual
+source .venv/bin/activate
+
+# 2. Executar script de teste interativo com menu
 python tests/test_d2l_scraper.py
 
-# Modo interativo (ver navegador)
-# Escolher opção 5 no menu
+# O script apresenta um menu com opções:
+# [1] Teste básico de scraping
+# [2] Teste com screenshot (salva debug_page.png)
+# [3] Testar com curso diferente
+# [4] Executar todos os testes
+# [5] Modo interativo (navegador visível)
+# [0] Sair
 
-# Programaticamente
+# 3. OU executar programaticamente
 python -c "
 import asyncio
+import os
 from src.services.d2l_scraper import D2LEventScraper
 
 async def main():
-    scraper = D2LEventScraper()
+    username = os.getenv('D2L_USERNAME')
+    password = os.getenv('D2L_PASSWORD')
+    scraper = D2LEventScraper(username=username, password=password, headless=True)
     events = await scraper.scrape_events(course_id='2001540')
-    print(f'{len(events)} eventos extraídos')
+    print(f'✅ {len(events)} eventos extraídos')
 
 asyncio.run(main())
 "
 ```
 
-**Saída Esperada:**
+**✅ Resultado esperado:**
+
+**Execução do script interativo:**
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    D2L EVENT SCRAPER - TESTE ISOLADO                         ║
+║                        Fanshawe Navigator Project                            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+[Menu de Testes]
+  [1] Teste básico de scraping (curso 2001540)
+  [2] Teste com screenshot (debug visual)
+  [3] Testar com curso diferente
+  [4] Executar todos os testes
+  [5] Modo interativo (ver navegador)
+  [0] Sair
+
+Escolha uma opção: 1
+
+================================================================================
+  TESTE 1: Scraping Básico de Eventos
+================================================================================
+
+✓ Credenciais encontradas
+  Username: abc***xy
+  Password: **********
+
+[Test] Iniciando scraping...
+[Test] Isso pode levar 30-60 segundos...
+
+================================================================================
+
+✓ Scraping concluído!
+  Total de eventos encontrados: 3
+
+================================================================================
+  EVENTOS EXTRAÍDOS
+================================================================================
+
+[Evento #1]
+  📌 Título: Workshop de Python
+  📅 Data: 2025-12-10
+  🕐 Hora: 14:00 PM
+  📍 Local: Room SC 2013
+  📝 Descrição: Workshop introdutório sobre Python para iniciantes
+
+[Evento #2]
+  📌 Título: Prova Final
+  📅 Data: 2025-12-15
+  🕐 Hora: 10:00 AM
+  📍 Local: Room SC 1001
+  📝 Descrição: Avaliação final do curso
+
+Salvar eventos em JSON? (s/n): s
+✓ Eventos salvos em: test_events_20251206_143025.json
+```
+
+**Estrutura JSON retornada:**
 ```json
 {
   "metadata": {
     "source": "d2l_scraper",
-    "scraped_at": "2025-11-22T14:30:00",
-    "total_events": 5
+    "scraped_at": "2025-12-06T14:30:00",
+    "total_events": 3
   },
   "events": [
     {
       "name": "Workshop de Python",
-      "date": "2025-11-25",
+      "date": "2025-12-10",
       "time": "14:00 PM",
       "location": "Room SC 2013",
-      "description": "Workshop introdutório sobre Python..."
+      "description": "Workshop introdutório sobre Python para iniciantes"
+    },
+    {
+      "name": "Prova Final",
+      "date": "2025-12-15",
+      "time": "10:00 AM",
+      "location": "Room SC 1001",
+      "description": "Avaliação final do curso"
     }
   ]
 }
 ```
 
-**Documentação Completa:** `docs/scraping/D2L_SCRAPER_README.md`
+**🔒 Medidas Anti-Detecção:**
+- playwright-stealth library
+- User-Agent Firefox 121.0 realista
+- HTTP headers legítimos (Accept, DNT, Sec-Fetch-*)
+- Bloqueio de recursos desnecessários
+- Delays aleatórios (2-4s) entre ações
 
-**Integração com Agente:** `docs/scraping/D2L_AGENT_INTEGRATION.md`
+**📚 Docs:** `docs/scraping/D2L_SCRAPER_README.md` | `docs/scraping/D2L_AGENT_INTEGRATION.md`
 
 ---
 
 ### 2. Announcements Scraper
 
-**Arquivo:** `src/scrapers/d2l/announcements.py` (545 linhas)
+**📁 Arquivos:**
+- **Serviço:** `src/scrapers/d2l/announcements.py` (executável diretamente)
 
-**Funcionalidade:** Extração dos 5 anúncios mais recentes do D2L com único login
+**🎯 O que faz:** Extrai os 5 anúncios mais recentes do D2L com login único e automação 2FA
 
-**Status:** ✅ **Produção**
+**📊 Status:** ✅ Produção
 
-**Medidas Anti-Detecção:**
-- ✅ `playwright-stealth` library
-- ✅ User-Agent: Firefox 121.0
-- ✅ Extra HTTP headers
-- ✅ Auto-preenchimento 2FA
-- ✅ Delays aleatórios entre interações
-- ✅ Bloqueio de recursos desnecessários
-
-**Como Rodar:**
+**▶️ Como executar:**
 
 ```bash
-# Coleta bruta dos anúncios
-python3 extract_all_announcements.py
+# 1. Ativar ambiente virtual
+source .venv/bin/activate
 
-# Resultado esperado
-# ✅ Extraction completed successfully!
-# 📊 Total announcements: 5
-# 📁 Saved to: all_announcements.json
+# 2. Executar coleta de anúncios
+python src/scrapers/d2l/announcements.py
+
+# O script salva automaticamente em: all_announcements.json
 ```
 
-**Fluxo Completo de Integração:**
+**✅ Resultado esperado:**
 
-```bash
-# Etapa 1: Coleta
-python3 extract_all_announcements.py
+A execução gera dois arquivos:
 
-# Etapa 2: Transformação para cache
-python3 transform_cache.py
-# ✅ Transformed 5 announcements
-# 📁 Saved to: data/d2l_announcements.json
-
-# Etapa 3: Via API (se servidor Flask rodando)
-curl -X POST http://localhost:8081/api/announcements/refresh
+1. **all_announcements.json** (dados brutos):
+```json
+[
+  {
+    "title": "Important Course Update",
+    "date": "Dec 5, 2025",
+    "content": "Please review the updated syllabus...",
+    "author": "Prof. John Smith"
+  },
+  {
+    "title": "Assignment 3 Deadline Extended",
+    "date": "Dec 4, 2025",
+    "content": "The deadline has been moved to Dec 15...",
+    "author": "Prof. John Smith"
+  }
+]
 ```
 
-**Atualização Recomendada:** Diariamente via cron
+2. **data/d2l_announcements.json** (após transformação, formato cache):
+- Estrutura otimizada para o agente conversacional
+- Inclui metadados de extração
+- Formatação limpa para processamento
 
+**Console output:**
+```
+✅ Extraction completed successfully!
+📊 Total announcements: 5
+📁 Saved to: all_announcements.json
+```
+
+**⏰ Atualização recomendada:** Diariamente via cron
 ```bash
-# Adicionar ao crontab (executa todo dia às 8h)
 0 8 * * * cd /path/to/Capstone_Project_AIM && source .venv/bin/activate && python3 extract_all_announcements.py && python3 transform_cache.py
 ```
 
-**Documentação Completa:** `docs/guides/ANNOUNCEMENTS_USAGE_GUIDE.md`
+**🔒 Medidas Anti-Detecção:**
+- playwright-stealth library
+- User-Agent Firefox 121.0
+- Auto-preenchimento 2FA
+- Delays aleatórios entre interações
+- Bloqueio de recursos desnecessários
+
+**📚 Docs:** `docs/guides/ANNOUNCEMENTS_USAGE_GUIDE.md`
 
 ---
 
 ### 3. Links Crawler
 
-**Arquivo:** `src/scrapers/d2l/links_crawler.py` (643 linhas)
+**📁 Arquivo:** `src/scrapers/d2l/links_crawler.py`
 
-**Funcionalidade:** Rastreia todos os links das páginas de conteúdo do D2L e extrai conteúdo de cada URL
+**🎯 O que faz:** Rastreia todos os links das páginas de conteúdo do D2L e extrai conteúdo HTML de cada URL encontrada
 
-**Status:** 📋 **Desenvolvimento**
+**📊 Status:** 📋 Desenvolvimento
 
-**Medidas Anti-Detecção:**
-- ✅ `playwright-stealth` library (importa e aplica)
-- ✅ User-Agent: Firefox 121.0
-- ✅ Extra HTTP headers
-- ✅ Delays aleatórios (2-4s) entre requisições
-- ✅ Auto-preenchimento 2FA com múltiplas estratégias
-- ✅ Sanitização de nomes de arquivo
-
-**Como Rodar:**
+**▶️ Como executar:**
 
 ```bash
-# Extração para um curso específico
+# 1. Ativar ambiente virtual
+source .venv/bin/activate
+
+# 2. Executar para um curso específico
 python src/scrapers/d2l/links_crawler.py --course-id 2001540
 
-# Com curso customizado
+# 3. OU para outro curso
 python src/scrapers/d2l/links_crawler.py --course-id 2001541
-
-# Resultado
-# Cria arquivos JSON individuais para cada página descoberta
-# Salva em: data/content_links/ ou similar
 ```
 
-**Saída Esperada:** Múltiplos arquivos JSON com conteúdo de cada link
+**✅ Resultado esperado:**
 
-**Documentação:** Guia integrado no próprio script
+O crawler cria múltiplos arquivos JSON, um para cada link descoberto:
+
+**Estrutura de saída:**
+```
+data/content_links/
+├── module_1_introduction.json
+├── module_2_variables.json
+├── assignment_1_details.json
+└── ...
+```
+
+**Formato de cada arquivo:**
+```json
+{
+  "url": "https://fanshawec.desire2learn.com/d2l/le/content/...",
+  "title": "Module 1: Introduction to Programming",
+  "content": "<html>...</html>",
+  "extracted_at": "2025-12-06T15:20:00",
+  "links_found": 5
+}
+```
+
+**Console output:**
+```
+🔍 Crawling course 2001540...
+✅ Found 15 links
+📥 Extracting content from link 1/15...
+📥 Extracting content from link 2/15...
+...
+✅ Crawl completed! 15 files saved to data/content_links/
+```
+
+**🔒 Medidas Anti-Detecção:**
+- playwright-stealth library
+- User-Agent Firefox 121.0
+- Auto-preenchimento 2FA
+- Delays aleatórios (2-4s) entre requisições
+- Sanitização de nomes de arquivo
+
+**📚 Docs:** Guia integrado no próprio script
 
 ---
 
 ### 4. Announcement Content
 
-**Arquivo:** `src/scrapers/d2l/announcement_content.py` (237 linhas)
+**📁 Arquivo:** `src/scrapers/d2l/announcement_content.py`
 
-**Funcionalidade:** Extrator focado em conteúdo completo dos 5 anúncios mais recentes
+**🎯 O que faz:** Extrai o conteúdo HTML completo dos 5 anúncios mais recentes do D2L, incluindo formatação e elementos `d2l-html-block`
 
-**Status:** 📋 **Desenvolvimento**
+**📊 Status:** 📋 Desenvolvimento
 
-**Medidas Anti-Detecção:**
-- ✅ `playwright-stealth` library
-- ✅ User-Agent: Firefox 121.0
-- ✅ Extra HTTP headers (Accept, Accept-Language, DNT: 1, etc)
-- ✅ Bloqueio de recursos desnecessários (imagens, fontes, media)
-- ✅ Parsing de elementos `d2l-html-block`
-
-**Como Rodar:**
+**▶️ Como executar:**
 
 ```bash
-# Extração de conteúdo completo dos anúncios
-python src/scrapers/d2l/announcement_content.py
+# 1. Ativar ambiente virtual
+source .venv/bin/activate
 
-# Resultado
-# Cria arquivo: announcement_contents.json
-# Com conteúdo HTML completo de cada anúncio
+# 2. Executar extração de conteúdo
+python src/scrapers/d2l/announcement_content.py
 ```
 
-**Saída Esperada:**
+**✅ Resultado esperado:**
+
+O scraper cria o arquivo **announcement_contents.json** com conteúdo HTML completo:
+
 ```json
 {
+  "total": 5,
+  "extracted_at": "2025-12-06T13:00:00",
   "announcements": [
     {
-      "title": "Announcement Title",
-      "content": "Full HTML content...",
-      "extracted_at": "2025-11-22T13:00:00"
+      "title": "Important Course Update",
+      "date": "Dec 5, 2025",
+      "author": "Prof. John Smith",
+      "content": "<div class='d2l-html-block'><p>Please review the updated syllabus...</p><ul><li>Topic 1</li><li>Topic 2</li></ul></div>",
+      "has_attachments": true,
+      "word_count": 245
+    },
+    {
+      "title": "Assignment 3 Deadline Extended",
+      "date": "Dec 4, 2025",
+      "author": "Prof. John Smith",
+      "content": "<div class='d2l-html-block'><p>The deadline has been moved to Dec 15...</p></div>",
+      "has_attachments": false,
+      "word_count": 87
     }
   ]
 }
 ```
 
-**Documentação:** Disponível no script
+**Console output:**
+```
+🔍 Extracting announcement content...
+✅ Extracted 5 announcements with full HTML
+📁 Saved to: announcement_contents.json
+📊 Total words extracted: 1,234
+```
+
+**🔒 Medidas Anti-Detecção:**
+- playwright-stealth library
+- User-Agent Firefox 121.0
+- HTTP headers legítimos
+- Bloqueio de recursos desnecessários
+- Parsing especializado de elementos D2L
+
+**📚 Docs:** Disponível no script
 
 ---
 
 ### 5. Content Home
 
-**Arquivo:** `src/scrapers/d2l/content_home.py` (636 linhas)
+**📁 Arquivo:** `src/scrapers/d2l/content_home.py`
 
-**Funcionalidade:** Extrai conteúdo da página Home do curso D2L (módulos, links, estrutura principal)
+**🎯 O que faz:** Extrai a estrutura completa da página Content/Home do curso D2L, incluindo módulos, tópicos, links e organização hierárquica
 
-**Status:** 📋 **Desenvolvimento**
+**📊 Status:** 📋 Desenvolvimento
 
-**Medidas Anti-Detecção:**
-- ✅ `playwright-stealth` library
-- ✅ User-Agent: Firefox 121.0
-- ✅ Extra HTTP headers
-- ✅ Auto-preenchimento 2FA
-- ✅ Delays aleatórios
-- ✅ Parsing de estrutura de módulos D2L
-
-**Como Rodar:**
+**▶️ Como executar:**
 
 ```bash
-# Extração para um curso específico
+# 1. Ativar ambiente virtual
+source .venv/bin/activate
+
+# 2. Executar para um curso específico
 python src/scrapers/d2l/content_home.py --course-id 2001540
 
-# Com curso customizado
+# 3. OU para outro curso
 python src/scrapers/d2l/content_home.py --course-id 2001541
-
-# Resultado
-# Arquivo: content_home_2001540.json
 ```
 
-**Saída Esperada:**
+**✅ Resultado esperado:**
+
+O scraper cria o arquivo **content_home_{COURSE_ID}.json** com a estrutura completa:
+
 ```json
 {
   "course_id": "2001540",
+  "course_name": "Introduction to Programming",
+  "extracted_at": "2025-12-06T14:00:00",
+  "total_modules": 8,
+  "total_items": 45,
   "modules": [
     {
-      "name": "Module 1",
-      "links": ["url1", "url2"]
+      "module_number": 1,
+      "name": "Module 1: Introduction to Python",
+      "status": "active",
+      "items": [
+        {
+          "type": "topic",
+          "title": "What is Python?",
+          "url": "https://fanshawec.desire2learn.com/d2l/le/content/..."
+        },
+        {
+          "type": "assignment",
+          "title": "Assignment 1: Hello World",
+          "url": "https://fanshawec.desire2learn.com/d2l/lms/dropbox/...",
+          "due_date": "Dec 15, 2025"
+        }
+      ]
+    },
+    {
+      "module_number": 2,
+      "name": "Module 2: Variables and Data Types",
+      "status": "locked",
+      "items": []
     }
   ]
 }
 ```
 
-**Documentação:** Integrada no script
+**Console output:**
+```
+🔍 Extracting content structure for course 2001540...
+✅ Found 8 modules
+📥 Processing Module 1...
+📥 Processing Module 2...
+...
+✅ Extraction complete!
+📁 Saved to: content_home_2001540.json
+📊 Total: 8 modules, 45 items
+```
+
+**🔒 Medidas Anti-Detecção:**
+- playwright-stealth library
+- User-Agent Firefox 121.0
+- Auto-preenchimento 2FA
+- Delays aleatórios
+- Parsing especializado de estrutura D2L
+
+**📚 Docs:** Integrada no script
 
 ---
 
 ### 6. Professor Info
 
-**Arquivo:** `src/scrapers/d2l/professor_info.py` (687 linhas)
+**📁 Arquivo:** `src/scrapers/d2l/professor_info.py`
 
-**Funcionalidade:** Extrai informações do professor (nome, email, escritório, horários)
+**🎯 O que faz:** Extrai informações do professor do curso (nome, email, escritório, horários de atendimento) do widget "Professor Information" na página Home do curso
 
-**Status:** ✅ **Produção**
+**📊 Status:** ✅ Produção (corrigido para extrair conteúdo interno do widget)
 
-**Medidas Anti-Detecção:**
-- ✅ `playwright-stealth` library
-- ✅ User-Agent: Firefox 121.0
-- ✅ Extra HTTP headers
-- ✅ Auto-preenchimento 2FA
-- ✅ Delays aleatórios
-- ✅ Múltiplas estratégias de extração (widget, shadow DOM, full page scan)
-- ✅ Debug com screenshots
-
-**Como Rodar:**
+**▶️ Como executar:**
 
 ```bash
-# Extração básica
-python extract_professor_info.py --course-id 2001540
+# 1. Ativar ambiente virtual
+source .venv/bin/activate
 
-# Com debug e screenshots
-python extract_professor_info.py --course-id 2001540 --debug
+# 2. Extração básica
+python src/scrapers/d2l/professor_info.py --course-id 2001540
 
-# Custom output
-python extract_professor_info.py --course-id 2001540 --output custom_path.json
+# 3. Com modo debug (gera screenshots)
+python src/scrapers/d2l/professor_info.py --course-id 2001540 --debug
+
+# 4. Com caminho de saída customizado
+python src/scrapers/d2l/professor_info.py --course-id 2001540 --output custom_path.json
 ```
 
-**Saída Esperada:**
+**✅ Resultado esperado:**
+
+Arquivo salvo em `data/course_{COURSE_ID}/professor_info.json`:
 ```json
 {
   "course_id": "2001540",
-  "extracted_at": "2025-11-22T13:23:19.567674",
+  "extracted_at": "2025-12-06T13:23:19.567674",
+  "source_url": "https://www.fanshaweonline.ca/d2l/home/2001540",
+  "extraction_method": "widget_selector:.d2l-widget",
   "name": "Mohammad Noorchenarboo",
   "email": "mnoorchenarboo@fanshawec.ca",
   "office": "By appointment only",
@@ -299,60 +479,123 @@ python extract_professor_info.py --course-id 2001540 --output custom_path.json
 }
 ```
 
-**Integração:** Cache em `data/course_{COURSE_ID}/professor_info.json`
+**💡 Como funciona:**
 
-**Documentação Completa:** `docs/guides/PROFESSOR_EXTRACTION_GUIDE.md`
+O script usa estratégias em cascata:
+1. **Busca widget principal** com seletor `.d2l-widget` que contém "Professor Information"
+2. **Extrai conteúdo interno** procurando por `d2l-html-block` ou `d2l-widget-content` dentro do widget
+3. **Parseia campos específicos** usando regex para extrair:
+   - Name: após "Name:" ou padrões de nome completo
+   - Email: de links `mailto:` ou padrão de email
+   - Office: após "Office:" ou "Office Location:"
+   - Office Hours: após "Office Hours:" ou "Hours:"
+4. **Fallback para iframes**: Se conteúdo não encontrado no DOM, verifica iframes da página
+
+**Console output:**
+```
+🔍 Extracting professor info for course 2001540...
+✅ Login successful
+🔎 Trying widget parser...
+✅ Professor info extracted!
+📁 Saved to: professor_info_2001540.json
+📁 Cache updated: data/course_2001540/professor_info.json
+
+👤 Professor: Mohammad Noorchenarboo
+📧 Email: mnoorchenarboo@fanshawec.ca
+🏢 Office: By appointment only
+```
+
+**Modo Debug:**
+Com `--debug`, gera screenshot `debug_page.png` para troubleshooting
+
+**🔒 Medidas Anti-Detecção:**
+- playwright-stealth library
+- User-Agent Firefox 121.0
+- Auto-preenchimento 2FA
+- Delays aleatórios
+- Múltiplas estratégias (widget, shadow DOM, full page scan)
+- Debug com screenshots
+
+**📚 Docs:** `docs/guides/PROFESSOR_EXTRACTION_GUIDE.md`
 
 ---
 
 ### 7. SharePoint Events
 
-**Arquivo:** `src/scrapers/sharepoint/events.py` (709 linhas)
+**📁 Arquivo:** `src/scrapers/sharepoint/events.py`
 
-**Funcionalidade:** Extrai eventos do calendário SharePoint da Fanshawe
+**🎯 O que faz:** Extrai eventos do calendário SharePoint da Fanshawe College, incluindo título, data, horário, local e descrição
 
-**Status:** 📋 **Desenvolvimento**
+**📊 Status:** 📋 Desenvolvimento
 
-**Medidas Anti-Detecção:**
-- ✅ `playwright-stealth` library
-- ✅ User-Agent: Firefox 121.0
-- ✅ Extra HTTP headers
-- ✅ Auto-preenchimento 2FA
-- ✅ Delays aleatórios
-- ✅ Múltiplas estratégias (event cards, list cells, aria-labels)
-
-**Como Rodar:**
+**▶️ Como executar:**
 
 ```bash
-# Extração básica
+# 1. Ativar ambiente virtual
+source .venv/bin/activate
+
+# 2. Executar extração básica
 python src/scrapers/sharepoint/events.py
 
-# Com ID de lista customizado (opcional)
-# Edite SHAREPOINT_EVENTS_LIST_GUID no script
-
-# Resultado
-# Arquivo: sharepoint_events.json (até 100 eventos)
+# 3. (Opcional) Editar SHAREPOINT_EVENTS_LIST_GUID no script para lista customizada
 ```
 
-**Saída Esperada:**
+**✅ Resultado esperado:**
+
+O scraper cria o arquivo **sharepoint_events.json** com até 100 eventos:
+
 ```json
 {
   "source": "sharepoint",
+  "list_guid": "d1ad5108-61da-44a6-9b0a-d114a09c5e7e",
+  "extracted_at": "2025-12-06T16:00:00",
+  "total_events": 47,
   "events": [
     {
-      "title": "Event Name",
-      "date": "2025-11-25",
-      "location": "Campus Location"
+      "title": "Career Fair - Winter 2025",
+      "date": "2025-12-15",
+      "time": "10:00 AM - 3:00 PM",
+      "location": "Student Centre - Main Hall",
+      "description": "Annual career fair with 50+ employers from various industries.",
+      "category": "Career Services",
+      "registration_required": true
+    },
+    {
+      "title": "International Student Orientation",
+      "date": "2026-01-05",
+      "time": "9:00 AM - 12:00 PM",
+      "location": "F Building - Room 2010",
+      "description": "Welcome session for new international students.",
+      "category": "Student Services",
+      "registration_required": false
     }
   ]
 }
 ```
 
-**SharePoint Events List GUID:** `d1ad5108-61da-44a6-9b0a-d114a09c5e7e`
+**Console output:**
+```
+🔍 Connecting to SharePoint...
+✅ Login successful
+📅 Extracting events from list: d1ad5108-61da-44a6-9b0a-d114a09c5e7e
+✅ Found 47 events
+📁 Saved to: sharepoint_events.json
+⚠️  Limit: 100 events per execution
+```
 
-**Limite:** 100 eventos por extração
+**Configuração:**
+- **List GUID padrão:** `d1ad5108-61da-44a6-9b0a-d114a09c5e7e`
+- **Limite:** 100 eventos por extração
+- Para alterar o GUID, edite a constante `SHAREPOINT_EVENTS_LIST_GUID` no script
 
-**Documentação:** `docs/scraping/sharepoint_scraper.md`
+**🔒 Medidas Anti-Detecção:**
+- playwright-stealth library
+- User-Agent Firefox 121.0
+- Auto-preenchimento 2FA
+- Delays aleatórios
+- Múltiplas estratégias de parsing (event cards, list cells, aria-labels)
+
+**📚 Docs:** `docs/scraping/sharepoint_scraper.md`
 
 ---
 
@@ -508,12 +751,12 @@ verification_code = await page.evaluate("""
 
 2. **Announcements Scraper**
    - 📄 Guia de Uso: `docs/guides/ANNOUNCEMENTS_USAGE_GUIDE.md`
-   - 📄 Script wrapper: `extract_all_announcements.py`
-   - 📄 Transformador: `src/services/announcement_transformer.py`
+   - 📄 Script: `src/scrapers/d2l/announcements.py`
+   - 📄 Saída: `data/announcements/all_announcements.json`
 
 3. **Professor Info Scraper**
    - 📄 Guia Completo: `docs/guides/PROFESSOR_EXTRACTION_GUIDE.md`
-   - 📄 Script wrapper: `extract_professor_info.py`
+   - 📄 Script: `src/scrapers/d2l/professor_info.py`
    - 📄 Integração: Cache em `data/course_{ID}/professor_info.json`
 
 ### Pipelines em Desenvolvimento
@@ -547,10 +790,10 @@ python tests/test_d2l_scraper.py
 source .venv/bin/activate
 
 # Coleta
-python3 extract_all_announcements.py
+python src/scrapers/d2l/announcements.py
 
 # Verifica resultado
-cat all_announcements.json | python -m json.tool
+cat data/announcements/all_announcements.json | python -m json.tool
 ```
 
 ### Teste Professor Info
@@ -558,12 +801,67 @@ cat all_announcements.json | python -m json.tool
 ```bash
 source .venv/bin/activate
 
-# Com debug
-python extract_professor_info.py --course-id 2001540 --debug
+# Extração básica
+python src/scrapers/d2l/professor_info.py --course-id 2001540
 
-# Verifica screenshot gerado
-ls -la debug_page.png
+# Com debug (gera screenshots para investigação)
+python src/scrapers/d2l/professor_info.py --course-id 2001540 --debug
+
+# Verifica resultado e screenshot gerado
+cat data/course_2001540/professor_info.json | python -m json.tool
+ls -la debug_professor_2001540.png
 ```
+
+---
+
+## 🐛 Troubleshooting
+
+### Professor Info retorna campos null
+
+**Problema:** Alguns campos retornam `null` mesmo com widget presente
+
+**Diagnóstico:**
+```bash
+# Execute com debug
+python src/scrapers/d2l/professor_info.py --course-id 2001540 --debug
+
+# Verifique o JSON gerado
+cat data/course_2001540/professor_info.json | python -m json.tool
+
+# Abra o screenshot para ver visualmente
+xdg-open debug_professor_2001540.png  # Linux
+open debug_professor_2001540.png      # macOS
+```
+
+**Soluções possíveis:**
+1. **Widget não configurado**: Verifique manualmente no D2L se o curso tem informações do professor
+2. **Formato diferente**: Alguns cursos podem usar formato diferente (ex: "Instructor:" ao invés de "Name:")
+3. **Testar outro curso**: `python src/scrapers/d2l/professor_info.py --course-id OUTRO_ID --debug`
+4. **Conteúdo parcial**: O script extrai o que estiver disponível - campos faltantes retornam `null`
+
+### 2FA timeout
+
+**Problema:** Script aguarda 5 minutos por aprovação do 2FA
+
+**Solução:**
+- Mantenha o celular com Microsoft Authenticator próximo
+- Aprove imediatamente quando a notificação aparecer
+- Se timeout, execute o script novamente (login pode persistir)
+
+### Announcements não salva no diretório correto
+
+**Problema:** Arquivo salvo no diretório raiz ao invés de `data/announcements/`
+
+**Diagnóstico:**
+```bash
+# Verificar se diretório foi criado
+ls -la data/announcements/
+
+# Verificar se arquivo foi salvo corretamente
+cat data/announcements/all_announcements.json
+```
+
+**Solução:** Código já foi corrigido para salvar em `data/announcements/all_announcements.json` automaticamente
 
 ---
 

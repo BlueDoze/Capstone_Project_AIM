@@ -30,28 +30,22 @@ async def wait_for_2fa_approval(page, timeout=300000):
         # Procurar por código numérico na página
         verification_code = await page.evaluate("""
             () => {
-                console.log('Procurando código de verificação...');
-                
                 // Procurar por diferentes padrões de código
                 const codeSelectors = [
                     '#idRichContext_DisplaySign',
                     '[data-value]',
                     '.text-title',
                     '.request-description-content',
-                    'div[role="heading"]',
-                    '.table-centered',
-                    '[data-bind*="displaySign"]'
+                    'div[role="heading"]'
                 ];
 
                 for (const selector of codeSelectors) {
                     const element = document.querySelector(selector);
                     if (element) {
-                        const text = element.innerText || element.textContent || '';
-                        console.log(`Selector ${selector}: "${text.substring(0, 100)}"`);
+                        const text = element.innerText || element.textContent;
                         // Procurar por número de 2 dígitos
                         const match = text.match(/\\b(\\d{2})\\b/);
                         if (match) {
-                            console.log(`Código encontrado: ${match[1]}`);
                             return match[1];
                         }
                     }
@@ -59,34 +53,20 @@ async def wait_for_2fa_approval(page, timeout=300000):
 
                 // Procurar em todo o body por padrão "número é XX"
                 const bodyText = document.body.innerText;
-                console.log(`Body text length: ${bodyText.length}`);
-                
                 const patterns = [
                     /number is (\\d{2})/i,
-                    /número.*?(\\d{2})/i,
                     /código.*?(\\d{2})/i,
                     /digite.*?(\\d{2})/i,
-                    /enter.*?(\\d{2})/i,
-                    /type\\s+(\\d{2})/i,
-                    /approval.*?(\\d{2})/i
+                    /enter.*?(\\d{2})/i
                 ];
 
                 for (const pattern of patterns) {
                     const match = bodyText.match(pattern);
                     if (match) {
-                        console.log(`Código encontrado com pattern: ${match[1]}`);
                         return match[1];
                     }
                 }
-                
-                // Última tentativa: procurar qualquer número de 2 dígitos isolado
-                const isolatedNumber = bodyText.match(/(?:^|\\s)(\\d{2})(?:\\s|$)/);
-                if (isolatedNumber) {
-                    console.log(`Número isolado encontrado: ${isolatedNumber[1]}`);
-                    return isolatedNumber[1];
-                }
 
-                console.log('Nenhum código encontrado');
                 return null;
             }
         """)
@@ -94,7 +74,6 @@ async def wait_for_2fa_approval(page, timeout=300000):
         if verification_code:
             print("╔" + "="*78 + "╗")
             print("║" + f"  🔢 CÓDIGO DE VERIFICAÇÃO DETECTADO: {verification_code}  ".center(78) + "║")
-            print("║" + "  👉 Digite este número no seu app Microsoft Authenticator  ".center(78) + "║")
             print("╚" + "="*78 + "╝")
             print()
 
@@ -156,14 +135,10 @@ async def wait_for_2fa_approval(page, timeout=300000):
 
             print()
         else:
-            print("⚠️  CÓDIGO NÃO DETECTADO AUTOMATICAMENTE")
-            print()
             print("📱 AÇÃO NECESSÁRIA:")
             print("   1. Abra o app Microsoft Authenticator no seu celular")
-            print("   2. Você verá um NÚMERO DE 2 DÍGITOS na tela do navegador")
-            print("   3. Digite esse número no app OU toque em 'Aprovar'")
-            print()
-            print(f"   🌐 URL da página 2FA: {page.url[:80]}...")
+            print("   2. Procure pela notificação de aprovação")
+            print("   3. Toque em 'Aprovar' ou digite o código se solicitado")
             print()
 
     except Exception as e:
@@ -428,137 +403,32 @@ async def _extract_professor_info_impl(page, course_id, output_file, username, p
     # Aguardar mais tempo para JavaScript renderizar completamente
     await asyncio.sleep(random.uniform(4.0, 6.0))
     
-    # Tentar múltiplas vezes com delays
-    max_attempts = 3
+    # Tentar múltiplas vezes com delays maiores
+    max_attempts = 5
     for attempt in range(max_attempts):
         try:
             # Aguardar por qualquer indicador do widget
             await page.wait_for_selector('[role="complementary"], .d2l-widget, d2l-widget', timeout=5000)
             print(f"  ✓ Widget encontrado (tentativa {attempt + 1}/{max_attempts})")
-            # Aguardar mais um pouco para conteúdo interno carregar
-            await asyncio.sleep(random.uniform(2.0, 3.0))
+            # Aguardar mais tempo para conteúdo interno carregar (aumentado para 5-8 segundos)
+            await asyncio.sleep(random.uniform(5.0, 8.0))
             break
         except:
             if attempt < max_attempts - 1:
                 print(f"  → Widget ainda não carregado, aguardando... (tentativa {attempt + 1}/{max_attempts})")
-                await asyncio.sleep(3)
+                await asyncio.sleep(4)
             else:
                 print(f"  ⚠️  Widget não detectado após {max_attempts} tentativas, tentando extração mesmo assim...")
     
-    # Aguardar conteúdo dinâmico adicional carregar
-    await asyncio.sleep(random.uniform(2.0, 3.0))
+    # Aguardar conteúdo dinâmico adicional carregar (aumentado)
+    await asyncio.sleep(random.uniform(4.0, 6.0))
 
     # ETAPA 3: Extrair informações do professor
     print("\n[3/3] Extraindo informações do professor...")
     
-    # Primeiro: encontrar o widget Professor Information
-    widget_info = await page.evaluate("""
+    # ESTRATÉGIA 1: Tentar extrair do DOM principal primeiro (mais específico)
+    professor_data = await page.evaluate("""
         () => {
-            const widgets = document.querySelectorAll('.d2l-widget, d2l-widget');
-            for (const widget of widgets) {
-                const text = widget.innerText || widget.textContent || '';
-                if (text.includes('Professor Information')) {
-                    // Verificar se tem iframe dentro
-                    const iframe = widget.querySelector('iframe');
-                    
-                    // Verificar shadow DOM
-                    let shadowText = '';
-                    if (widget.shadowRoot) {
-                        shadowText = widget.shadowRoot.textContent || '';
-                    }
-                    
-                    // Verificar todos os elementos filhos com shadow DOM
-                    const childrenWithShadow = [];
-                    const allChildren = widget.querySelectorAll('*');
-                    for (const child of allChildren) {
-                        if (child.shadowRoot) {
-                            const childText = child.shadowRoot.textContent || '';
-                            if (childText.length > 50) {
-                                childrenWithShadow.push({
-                                    tag: child.tagName,
-                                    textLength: childText.length,
-                                    preview: childText.substring(0, 200)
-                                });
-                            }
-                        }
-                    }
-                    
-                    return {
-                        found: true,
-                        hasIframe: !!iframe,
-                        iframeSrc: iframe ? iframe.src : null,
-                        hasShadowDOM: !!widget.shadowRoot,
-                        shadowText: shadowText.substring(0, 200),
-                        childrenWithShadow: childrenWithShadow,
-                        innerHTML: widget.innerHTML.substring(0, 500),
-                        text: text.substring(0, 200)
-                    };
-                }
-            }
-            return { found: false };
-        }
-    """)
-    
-    print(f"   Widget encontrado: {widget_info.get('found')}")
-    if widget_info.get('hasIframe'):
-        print(f"   ✓ Widget contém iframe: {widget_info.get('iframeSrc', 'N/A')[:80]}")
-    if widget_info.get('hasShadowDOM'):
-        print(f"   ✓ Widget tem Shadow DOM: {widget_info.get('shadowText', '')[:80]}")
-    if widget_info.get('childrenWithShadow'):
-        print(f"   ✓ Elementos filhos com Shadow DOM: {len(widget_info['childrenWithShadow'])}")
-        for child in widget_info['childrenWithShadow']:
-            print(f"      - {child['tag']}: {child['textLength']} chars")
-            print(f"        Preview: {child['preview'][:100]}")
-    
-    professor_data = None
-    
-    # Se encontrou shadow DOM em elementos filhos, extrair de lá
-    if widget_info.get('found') and widget_info.get('childrenWithShadow'):
-        print("   → Extraindo de Shadow DOM...")
-        for child in widget_info['childrenWithShadow']:
-            if len(child.get('preview', '')) > 50:
-                professor_data = {
-                    'raw_text': child['preview'],
-                    'extraction_method': f"shadow_dom_{child['tag']}",
-                    'debug_info': [f"Extracted from Shadow DOM in {child['tag']}", f"Text length: {child['textLength']}"]
-                }
-                print(f"   ✓ Conteúdo extraído do Shadow DOM ({child['textLength']} chars)")
-                break
-    
-    # Se o widget tem iframe, tentar extrair dele
-    elif widget_info.get('found') and widget_info.get('hasIframe'):
-        print("   → Tentando extrair do iframe dentro do widget...")
-        iframe_src = widget_info.get('iframeSrc')
-        
-        # Procurar o frame correspondente
-        for frame in page.frames:
-            if iframe_src and iframe_src in frame.url:
-                try:
-                    # Aguardar carregamento do iframe
-                    await asyncio.sleep(2)
-                    
-                    frame_text = await frame.evaluate("""
-                        () => {
-                            return document.body.innerText || document.body.textContent || '';
-                        }
-                    """)
-                    
-                    if len(frame_text.strip()) > 30:
-                        print(f"   ✓ Conteúdo do iframe extraído ({len(frame_text)} chars)")
-                        professor_data = {
-                            'raw_text': frame_text,
-                            'extraction_method': 'widget_iframe',
-                            'debug_info': [f'Extracted from iframe inside widget', f'Frame URL: {frame.url}']
-                        }
-                        break
-                except Exception as e:
-                    print(f"   ⚠️  Erro ao acessar iframe: {str(e)[:50]}")
-    
-    # Fallback: extração DOM padrão
-    if not professor_data:
-        print("   → Usando extração DOM padrão...")
-        professor_data = await page.evaluate("""
-            () => {
             const result = {
                 name: null,
                 email: null,
@@ -573,18 +443,215 @@ async def _extract_professor_info_impl(page, course_id, output_file, username, p
             const allWidgets = document.querySelectorAll('.d2l-widget, d2l-widget, [role="complementary"]');
             result.debug_info.push(`Total widgets found: ${allWidgets.length}`);
             
-            // Estratégia 1: Procurar por widget com "Professor Information"
+            // Procurar por widget com "Professor Information"
             const widgetSelectors = [
-                // Seletores específicos para widget de professor
-                'div[class*="professor"]',
-                'div[class*="instructor"]',
-                '[aria-label*="Professor"]',
-                '[aria-label*="Instructor"]',
-                // Seletores genéricos de widgets D2L
                 '.d2l-widget',
                 'd2l-widget',
                 '[role="complementary"]'
             ];
+            
+            let professorWidget = null;
+            let widgetTexts = [];
+            
+            for (const selector of widgetSelectors) {
+                try {
+                    const elements = document.querySelectorAll(selector);
+                    result.debug_info.push(`Selector '${selector}': found ${elements.length} elements`);
+                    
+                    for (const elem of elements) {
+                        const text = elem.innerText || elem.textContent || '';
+                        widgetTexts.push(`${selector}: ${text.substring(0, 100)}`);
+                        
+                        // Procurar especificamente por "Professor Information" no cabeçalho
+                        const heading = elem.querySelector('h2, h3, .d2l-heading, [role="heading"]');
+                        if (heading && (heading.innerText || '').includes('Professor')) {
+                            professorWidget = elem;
+                            result.extraction_method = `widget_selector:${selector}`;
+                            result.debug_info.push(`Found professor widget with heading`);
+                            break;
+                        }
+                        
+                        // Fallback: widget que contém texto "Professor Information"
+                        if (text.includes('Professor Information') && text.length < 500) {
+                            professorWidget = elem;
+                            result.extraction_method = `widget_selector:${selector}`;
+                            result.debug_info.push(`Found professor widget with text match`);
+                            break;
+                        }
+                    }
+                    if (professorWidget) break;
+                } catch (e) {
+                    result.debug_info.push(`Error with selector '${selector}': ${e.message}`);
+                    continue;
+                }
+            }
+            
+            result.debug_info.push(`Widget texts: ${JSON.stringify(widgetTexts).substring(0, 300)}`);
+            
+            if (professorWidget) {
+                let text = professorWidget.innerText || professorWidget.textContent || '';
+                const html = professorWidget.innerHTML || '';
+                
+                result.debug_info.push(`Widget text length: ${text.length}`);
+                result.debug_info.push(`Widget HTML length: ${html.length}`);
+                
+                // IMPORTANTE: Buscar conteúdo dentro do widget (não o widget todo)
+                const innerContent = professorWidget.querySelector('d2l-html-block, .d2l-htmlblock, d2l-widget-content, .d2l-widget-content, .d2l-widget-body');
+                if (innerContent) {
+                    const innerText = innerContent.innerText || innerContent.textContent || '';
+                    result.debug_info.push(`Found inner content block: ${innerText.length} chars`);
+                    result.debug_info.push(`Inner content preview: ${innerText.substring(0, 300)}`);
+                    text = innerText;
+                }
+                
+                result.raw_text = text.substring(0, 2000);
+                result.html_preview = html.substring(0, 1000);
+                result.debug_info.push(`Text for parsing: ${text.substring(0, 300)}`);
+                
+                // Extrair nome
+                const namePatterns = [
+                    /Name:\s*([^\n]+)/i,
+                    /Professor:\s*([^\n]+)/i,
+                    /Instructor:\s*([^\n]+)/i
+                ];
+                
+                for (const pattern of namePatterns) {
+                    const match = text.match(pattern);
+                    if (match && match[1]) {
+                        const extractedName = match[1].trim();
+                        if (extractedName !== 'Information' && extractedName.length > 3 && extractedName.length < 100) {
+                            result.name = extractedName;
+                            result.debug_info.push(`Name extracted: ${extractedName}`);
+                            break;
+                        }
+                    }
+                }
+                
+                // Extrair email
+                const emailLink = professorWidget.querySelector('a[href^="mailto:"]');
+                if (emailLink) {
+                    result.email = emailLink.href.replace('mailto:', '').trim();
+                    result.debug_info.push('Email found in mailto link');
+                } else {
+                    const emailMatch = text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+)/);
+                    if (emailMatch) {
+                        result.email = emailMatch[1];
+                        result.debug_info.push('Email extracted from text');
+                    }
+                }
+                
+                // Extrair office
+                const officePatterns = [
+                    /Office:\s*([^\n]+)/i,
+                    /Office Location:\s*([^\n]+)/i,
+                    /Room:\s*([^\n]+)/i
+                ];
+                
+                for (const pattern of officePatterns) {
+                    const match = text.match(pattern);
+                    if (match && match[1]) {
+                        result.office = match[1].trim();
+                        result.debug_info.push(`Office extracted: ${match[1].trim()}`);
+                        break;
+                    }
+                }
+                
+                // Extrair office hours
+                const hoursPatterns = [
+                    /Office Hours?:\s*([^\n]+(?:\n(?!Email|Office:)[^\n]+)*)/i,
+                    /Hours?:\s*([^\n]+)/i,
+                    /Availability:\s*([^\n]+)/i
+                ];
+                
+                for (const pattern of hoursPatterns) {
+                    const match = text.match(pattern);
+                    if (match && match[1]) {
+                        result.office_hours = match[1].trim();
+                        result.debug_info.push(`Office hours extracted: ${match[1].trim()}`);
+                        break;
+                    }
+                }
+            } else {
+                result.extraction_method = 'widget_not_found_in_dom';
+                result.debug_info.push('Professor widget not found in DOM');
+            }
+            
+            return result;
+        }
+    """)
+    
+    # ESTRATÉGIA 2: Se não encontrou no DOM, tentar iframes como fallback
+    if not professor_data or not professor_data.get('name'):
+        print("   → Widget não encontrado no DOM ou dados incompletos, verificando iframes...")
+        
+        frames = page.frames
+        print(f"   → {len(frames)} frames encontrados na página")
+    
+    for idx, frame in enumerate(frames):
+        try:
+            frame_url = frame.url
+            print(f"   → Frame {idx}: {frame_url[:80]}")
+            
+            # Verificar se o frame tem conteúdo relacionado a professor
+            frame_content = await frame.content()
+            if 'professor' in frame_content.lower() or 'instructor' in frame_content.lower():
+                print(f"   ✓ Frame {idx} contém informações de professor!")
+                
+                # Extrair do frame
+                frame_data = await frame.evaluate("""
+                    () => {
+                        const text = document.body.innerText || document.body.textContent || '';
+                        return {
+                            text: text,
+                            html: document.body.innerHTML.substring(0, 1000)
+                        };
+                    }
+                """)
+                
+                if frame_data and frame_data.get('text'):
+                    print(f"   → Texto do frame (primeiros 200 chars): {frame_data['text'][:200]}")
+                    # Se encontrou, processar este texto
+                    professor_data = {
+                        'raw_text': frame_data['text'],
+                        'extraction_method': f'iframe_{idx}',
+                        'debug_info': [f'Extracted from iframe {idx}', f'Frame URL: {frame_url}'],
+                        'html_preview': frame_data.get('html', '')[:500]
+                    }
+                    break
+        except Exception as e:
+            print(f"   ⚠️  Erro ao acessar frame {idx}: {str(e)[:50]}")
+            continue
+    
+    # Se não encontrou em iframes, usar extração do DOM principal
+    if not professor_data:
+        professor_data = await page.evaluate("""
+            () => {
+                const result = {
+                    name: null,
+                    email: null,
+                    office: null,
+                    office_hours: null,
+                    raw_text: null,
+                    extraction_method: null,
+                    debug_info: []
+                };
+                
+                // Debug: Listar todos os widgets na página
+                const allWidgets = document.querySelectorAll('.d2l-widget, d2l-widget, [role="complementary"]');
+                result.debug_info.push(`Total widgets found: ${allWidgets.length}`);
+                
+                // Estratégia 1: Procurar por widget com "Professor Information"
+                const widgetSelectors = [
+                    // Seletores específicos para widget de professor
+                    'div[class*="professor"]',
+                    'div[class*="instructor"]',
+                    '[aria-label*="Professor"]',
+                    '[aria-label*="Instructor"]',
+                    // Seletores genéricos de widgets D2L
+                    '.d2l-widget',
+                    'd2l-widget',
+                    '[role="complementary"]'
+                ];
             
             let professorWidget = null;
             let widgetTexts = [];
@@ -652,18 +719,35 @@ async def _extract_professor_info_impl(page, course_id, output_file, username, p
             
             if (professorWidget) {
                 const text = professorWidget.innerText || professorWidget.textContent || '';
+                const html = professorWidget.innerHTML || '';
                 result.raw_text = text.substring(0, 2000);  // Aumentar para 2000 caracteres
+                result.html_preview = html.substring(0, 1000);  // Capturar HTML também
                 
                 result.debug_info.push(`Widget text length: ${text.length}`);
-                result.debug_info.push(`Widget text preview: ${text.substring(0, 300)}`);
+                result.debug_info.push(`Widget HTML length: ${html.length}`);
+                result.debug_info.push(`Widget text preview: ${text.substring(0, 500)}`);
+                result.debug_info.push(`Widget HTML preview: ${html.substring(0, 500)}`);
+                
+                // NOVA ESTRATÉGIA: Buscar dentro do widget por elementos específicos do D2L
+                // O conteúdo pode estar em d2l-html-block ou elementos filhos
+                const innerContent = professorWidget.querySelector('d2l-html-block, .d2l-htmlblock, d2l-widget-content, .d2l-widget-content');
+                if (innerContent) {
+                    const innerText = innerContent.innerText || innerContent.textContent || '';
+                    result.debug_info.push(`Found inner content block: ${innerText.length} chars`);
+                    result.debug_info.push(`Inner content preview: ${innerText.substring(0, 300)}`);
+                    // Usar o texto interno ao invés do widget completo
+                    result.raw_text = innerText.substring(0, 2000);
+                    // IMPORTANTE: Atualizar 'text' para usar conteúdo interno nos patterns abaixo
+                    text = innerText;
+                }
                 
                 // Extrair nome (após "Name:" ou antes de newline após "Professor Information")
                 const namePatterns = [
-                    /Name:\\s*([^\\n]+)/i,
-                    /Professor:\\s*([^\\n]+)/i,
-                    /Instructor:\\s*([^\\n]+)/i,
-                    /Professor Information[^\\n]*\\n+\\s*([A-Z][a-z]+(?:\\s+[A-Z][a-z]+)+)/i,
-                    /(?:Professor|Instructor|Dr\\.|Prof\\.)\\s+([A-Z][a-z]+(?:\\s+[A-Z][a-z]+)+)/
+                    /Name:\s*([^\n]+)/i,
+                    /Professor:\s*([^\n]+)/i,
+                    /Instructor:\s*([^\n]+)/i,
+                    /Professor Information[^\n]*\n+\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/i,
+                    /(?:Professor|Instructor|Dr\.|Prof\.)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/
                 ];
                 
                 for (const pattern of namePatterns) {
@@ -686,7 +770,7 @@ async def _extract_professor_info_impl(page, course_id, output_file, username, p
                     result.email = emailLink.href.replace('mailto:', '').trim();
                     result.debug_info.push('Email found in mailto link');
                 } else {
-                    const emailMatch = text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z]+)/);
+                    const emailMatch = text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+)/);
                     if (emailMatch) {
                         result.email = emailMatch[1];
                         result.debug_info.push('Email extracted from text');
@@ -695,9 +779,9 @@ async def _extract_professor_info_impl(page, course_id, output_file, username, p
                 
                 // Extrair office
                 const officePatterns = [
-                    /Office:\\s*([^\\n]+)/i,
-                    /Office Location:\\s*([^\\n]+)/i,
-                    /Room:\\s*([^\\n]+)/i
+                    /Office:\s*([^\n]+)/i,
+                    /Office Location:\s*([^\n]+)/i,
+                    /Room:\s*([^\n]+)/i
                 ];
                 
                 for (const pattern of officePatterns) {
@@ -711,9 +795,9 @@ async def _extract_professor_info_impl(page, course_id, output_file, username, p
                 
                 // Extrair office hours
                 const hoursPatterns = [
-                    /Office Hours?:\\s*([^\\n]+(?:\\n(?!Email|Office:)[^\\n]+)*)/i,
-                    /Hours?:\\s*([^\\n]+)/i,
-                    /Availability:\\s*([^\\n]+)/i
+                    /Office Hours?:\s*([^\n]+(?:\n(?!Email|Office:)[^\n]+)*)/i,
+                    /Hours?:\s*([^\n]+)/i,
+                    /Availability:\s*([^\n]+)/i
                 ];
                 
                 for (const pattern of hoursPatterns) {
@@ -733,35 +817,57 @@ async def _extract_professor_info_impl(page, course_id, output_file, username, p
         }
     """)
     
-    # Se dados vieram de iframe ou shadow DOM, parsear o raw_text
-    if professor_data and (professor_data.get('extraction_method') == 'widget_iframe' or 
-                          professor_data.get('extraction_method', '').startswith('shadow_dom')):
-        print("   → Parseando texto extraído...")
+    # Se os dados vieram de iframe, precisamos parsear o raw_text
+    if professor_data and professor_data.get('extraction_method', '').startswith('iframe'):
+        print("   → Parseando texto extraído do iframe...")
         text = professor_data.get('raw_text', '')
         
-        # Extrair nome (após "Name:")
-        name_match = re.search(r'Name:\s*([^\n]+)', text, re.IGNORECASE)
-        if name_match:
-            professor_data['name'] = name_match.group(1).strip()
-            print(f"   ✓ Nome: {professor_data['name']}")
+        # Extrair nome
+        name_patterns = [
+            r'Name:\s*([^\n]+)',
+            r'Professor:\s*([^\n]+)',
+            r'Instructor:\s*([^\n]+)',
+            r'(?:Professor|Instructor|Dr\.|Prof\.)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)'
+        ]
+        
+        for pattern in name_patterns:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match and match.group(1):
+                name = match.group(1).strip()
+                if name != 'Information' and len(name) > 3:
+                    professor_data['name'] = name
+                    break
         
         # Extrair email
         email_match = re.search(r'([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+)', text)
         if email_match:
             professor_data['email'] = email_match.group(1)
-            print(f"   ✓ Email: {professor_data['email']}")
         
         # Extrair office
-        office_match = re.search(r'Office:\s*([^\n]+)', text, re.IGNORECASE)
-        if office_match:
-            professor_data['office'] = office_match.group(1).strip()
-            print(f"   ✓ Office: {professor_data['office']}")
+        office_patterns = [
+            r'Office:\s*([^\n]+)',
+            r'Office Location:\s*([^\n]+)',
+            r'Room:\s*([^\n]+)'
+        ]
+        
+        for pattern in office_patterns:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match and match.group(1):
+                professor_data['office'] = match.group(1).strip()
+                break
         
         # Extrair office hours
-        hours_match = re.search(r'Office Hours?:\s*([^\n]+)', text, re.IGNORECASE)
-        if hours_match:
-            professor_data['office_hours'] = hours_match.group(1).strip()
-            print(f"   ✓ Office Hours: {professor_data['office_hours']}")
+        hours_patterns = [
+            r'Office Hours?:\s*([^\n]+(?:\n(?!Email|Office:)[^\n]+)*)',
+            r'Hours?:\s*([^\n]+)',
+            r'Availability:\s*([^\n]+)'
+        ]
+        
+        for pattern in hours_patterns:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match and match.group(1):
+                professor_data['office_hours'] = match.group(1).strip()
+                break
     
     # Debug screenshot se solicitado
     if debug:
