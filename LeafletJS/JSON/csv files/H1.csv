@@ -1,33 +1,33 @@
 ﻿Node,Node_type,Node_connections,Object,Door,Object_category_type,Object_type,Exit_Connections
-M1_entry,object,H1_Turn_1,M1_entry,,exit,building_connection,M1
+M1_entry,object,H1_Turn_1,M-Building_H1,,exit,building_connection,M1
 H1_Turn_1,turn,"M1_entry, H1_1",,,,,
-H1_1,object,"H1_Turn_1, H1_2",Room_misc,Door_misc,room,room,
-H1_2,object,"H1_1, H1_Int_1",Room_1017,Door_1017,room,room,
+H1_1,object,"H1_Turn_1, H1_2",Hmisc,Door_Hmisc,room,room,
+H1_2,object,"H1_1, H1_Int_1",H1017,Door_H1017,room,room,
 H1_Int_1,int,"H1_2, H1_3, H1_5, H1_19",,,,,
-H1_3,object,"H1_Int_1,  H1_4",Elevator-H,,exit,elevator,[H2|H3]
-H1_4,"object, object",H1_3,"Stairs_1, Outside-Exit_1",,"exit, exit","stairs, outside_exit","[H2|H3],outside"
-H1_5,object,"H1_Int_1, H1_6",Room_1016,Door_1016,room,room,
-H1_6,object,"H1_5, H1_7",Room_1015,Door_1015,room,room,
-H1_7,object,"H1_6, H1_8",Room_1014,Door_1014,room,room,
-H1_8,object,"H1_7, H1_9",Bathroom-Men,Door_Bathroom-Men,room,bathroom,
-H1_9,object,"H1_8, H1_10",Bathroom-Accessible,Door_Bathroom-Accessible,room,bathroom,
-H1_10,"object, object","H1_9, H1_11","Bathroom-Women, Cafeteria-H","Door_Bathroom-Women, Door_Cafe_1","room, room","bathroom, eatery",
-H1_11,object,"H1_10, H1_12",Room_1017,Door_1017,room,room,
-H1_12,object,"H1_11, H1_13",Room_1006,Door_1006,room,room,
-H1_13,object,"H1_12, H1_14",Room_1005,Door_1005_2,room,room,
-H1_14,"object, object","H1_13, H1_15","Room_1005, Room_1004","Door_1005_1, Door_1004","room, room","room, room",
-H1_15,object,"H1_14, H1_16",Room_1003,Door_1003,room,room,
-H1_16,object,"H1_15, H1_17",Stairs_2,,exit,stairs,[H2|H3]
+H1_3,object,"H1_Int_1,  H1_4",Elevator_H1,,exit,elevator,[H2|H3]
+H1_4,"object, object",H1_3,"Stairs_1_H1, Outside-Exit_1_H1",,"exit, exit","stairs, outside_exit","[H2|H3],outside"
+H1_5,object,"H1_Int_1, H1_6",H1016,Door_H1016,room,room,
+H1_6,object,"H1_5, H1_7",H1015,Door_H1015,room,room,
+H1_7,object,"H1_6, H1_8",H1014,Door_H1014,room,room,
+H1_8,object,"H1_7, H1_9",Bathroom-Men_H1,Door_Bathroom-Men_H1,room,bathroom,
+H1_9,object,"H1_8, H1_10",Bathroom-Accessible_H1,Door_Bathroom-Accessible_H1,room,bathroom,
+H1_10,"object, object","H1_9, H1_11","Bathroom-Women_H1, Cafeteria-H1","Door_Bathroom-Women_H1, Door_Cafe_H1_1","room, room","bathroom, eatery",
+H1_11,object,"H1_10, H1_12",H1017,Door_H1017,room,room,
+H1_12,object,"H1_11, H1_13",H1006,Door_H1006,room,room,
+H1_13,object,"H1_12, H1_14",H1005,Door_H1005_2,room,room,
+H1_14,"object, object","H1_13, H1_15","H1005, H1004","Door_H1005_1, Door_H1004","room, room","room, room",
+H1_15,object,"H1_14, H1_16",H1003,Door_H1003,room,room,
+H1_16,object,"H1_15, H1_17",Stairs_2_H1,,exit,stairs,[H2|H3]
 H1_Int_2,int,"H1_16, H1_17, H1_18",,,,,
-H1_17,"object, object",H1_Int_2,"Outside-Exit_2, F-Building",,"exit, exit","outside_exit, building_connection","outside, F1"
-H1_18,object,H1_Int_2,Outside-Exit_3,,exit,outside_exit,outside
-H1_19,"object, object","H1_Int_1, H1_20","Room_1019, Room_1022","Door_1019, Door_1022","room, room","room, room",
-H1_20,object,"H1_19, H1_21",Room_1023,Door_1023,room,room,
-H1_21,object,"H1_20, H1_22",Room_1024,Door_1024,room,room,
-H1_22,object,"H1_21, H1_23",Cafeteria-H,Door_Cafe_2,room,eatery,
+H1_17,"object, object",H1_Int_2,"Outside-Exit_2_H1, F-Building_H1",,"exit, exit","outside_exit, building_connection","outside, F1"
+H1_18,object,H1_Int_2,Outside-Exit_3_H1,,exit,outside_exit,outside
+H1_19,"object, object","H1_Int_1, H1_20","H1019, H1022","Door_H1019, Door_H1022","room, room","room, room",
+H1_20,object,"H1_19, H1_21",H1023,Door_H1023,room,room,
+H1_21,object,"H1_20, H1_22",H1024,Door_H1024,room,room,
+H1_22,object,"H1_21, H1_23",Cafeteria_H1,Door_Cafe_H1_2,room,eatery,
 H1_23,,"H1_22, H1_24",,,,,
 H1_24,,"H1_23, H1_25",,,,,
-H1_25,object,"H1_24, H1_26",Room_1032,Door_1032,room,room,
-H1_26,object,"H1_25, H1_27",Room_1034,Door_1034,room,room,
-H1_27,object,"H1_26, H1_28",Room_1033,Door_1033,room,room,
-H1_28,"object, object",H1_27,"Stairs_3, Outside-Exit_4",,"exit, exit","stairs, outside_exit","[H2|H3], outside"
+H1_25,object,"H1_24, H1_26",H1032,Door_H1032,room,room,
+H1_26,object,"H1_25, H1_27",H1034,Door_H1034,room,room,
+H1_27,object,"H1_26, H1_28",H1033,Door_H1033,room,room,
+H1_28,"object, object",H1_27,"Stairs_3_H1, Outside-Exit_4_H1",,"exit, exit","stairs, outside_exit","[H2|H3], outside"

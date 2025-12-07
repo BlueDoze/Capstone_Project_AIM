@@ -26,13 +26,13 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="2.799372"
      inkscape:cx="308.46204"
-     inkscape:cy="642.64414"
-     inkscape:window-width="1116"
-     inkscape:window-height="1281"
-     inkscape:window-x="1102"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="layer1">
+     inkscape:cy="242.37579"
+     inkscape:window-width="2240"
+     inkscape:window-height="1294"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer3">
     <inkscape:page
        x="0"
        y="0"
@@ -13275,16 +13275,7 @@
      inkscape:label="Doors">
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2047_1"
-       width="1.2166027"
-       height="9.5666962"
-       x="-154.56168"
-       y="408.96875"
-       ry="1.3930805e-06"
-       transform="matrix(6.5779883e-4,-0.99999978,0.99999995,3.061392e-4,0,0)" />
-    <rect
-       style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2013"
+       id="Door_M2013"
        width="1.4416524"
        height="8.2546701"
        x="-431.13083"
@@ -13293,7 +13284,7 @@
        transform="matrix(-0.99999997,-2.6156747e-4,2.0353256e-4,-0.99999998,0,0)" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2010"
+       id="Door_M2010"
        width="1.4416529"
        height="8.254653"
        x="-386.15219"
@@ -13302,7 +13293,7 @@
        transform="matrix(-0.99999997,-2.6156683e-4,2.0353306e-4,-0.99999998,0,0)" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2012_1"
+       id="Door_M2012_1"
        width="1.4416529"
        height="8.254653"
        x="-377.66296"
@@ -13311,16 +13302,7 @@
        transform="matrix(-0.99999997,-2.6156683e-4,2.0353306e-4,-0.99999998,0,0)" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2017_1"
-       width="1.4416529"
-       height="8.254653"
-       x="-429.50162"
-       y="-695.84869"
-       ry="1.2020238e-06"
-       transform="matrix(-0.99999997,-2.6156683e-4,2.0353306e-4,-0.99999998,0,0)" />
-    <rect
-       style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2012_2"
+       id="Door_M2012_2"
        width="1.4416529"
        height="8.254653"
        x="-385.99707"
@@ -13329,7 +13311,16 @@
        transform="matrix(-0.99999997,-2.6156683e-4,2.0353306e-4,-0.99999998,0,0)" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2017_2"
+       id="Door_M2017_1"
+       width="1.4416529"
+       height="8.254653"
+       x="-429.50162"
+       y="-695.84869"
+       ry="1.2020238e-06"
+       transform="matrix(-0.99999997,-2.6156683e-4,2.0353306e-4,-0.99999998,0,0)" />
+    <rect
+       style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
+       id="Door_M2017_2"
        width="1.4416529"
        height="8.254653"
        x="-431.06802"
@@ -13338,7 +13329,7 @@
        transform="matrix(-0.99999997,-2.6156683e-4,2.0353306e-4,-0.99999998,0,0)" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2018_1"
+       id="Door_M2018_1"
        width="1.4416529"
        height="8.254653"
        x="-377.633"
@@ -13347,7 +13338,7 @@
        transform="matrix(-0.99999997,-2.6156683e-4,2.0353306e-4,-0.99999998,0,0)" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2018_2"
+       id="Door_M2018_2"
        width="1.4416529"
        height="8.254653"
        x="-377.60971"
@@ -13356,7 +13347,7 @@
        transform="matrix(-0.99999997,-2.6156683e-4,2.0353306e-4,-0.99999998,0,0)" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2035"
+       id="Door_M2035"
        width="1.4416529"
        height="8.254653"
        x="-422.32333"
@@ -13365,7 +13356,7 @@
        transform="matrix(-0.99999997,-2.6156683e-4,2.0353306e-4,-0.99999998,0,0)" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.566322;stroke-dasharray:none"
-       id="Door_2037"
+       id="Door_M2037"
        width="1.3753916"
        height="11.099939"
        x="-422.29739"
@@ -13374,7 +13365,7 @@
        transform="matrix(-0.99999993,-3.6867083e-4,1.4440387e-4,-0.99999999,0,0)" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2022"
+       id="Door_M2022"
        width="1.4416529"
        height="8.254653"
        x="-377.58859"
@@ -13383,7 +13374,7 @@
        transform="matrix(-0.99999997,-2.6156683e-4,2.0353306e-4,-0.99999998,0,0)" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.50718;stroke-dasharray:none"
-       id="Door_2041_1"
+       id="Door_M2041_1"
        width="1.4344791"
        height="8.5359154"
        x="-431.01633"
@@ -13392,16 +13383,7 @@
        transform="matrix(-0.99999996,-2.7183191e-4,1.9584712e-4,-0.99999998,0,0)" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2028"
-       width="1.4416529"
-       height="8.254653"
-       x="-377.57358"
-       y="-320.77118"
-       ry="1.2020238e-06"
-       transform="matrix(-0.99999997,-2.6156683e-4,2.0353306e-4,-0.99999998,0,0)" />
-    <rect
-       style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2041"
+       id="Door_M2041_2"
        width="1.4416529"
        height="8.254653"
        x="-430.99557"
@@ -13410,7 +13392,16 @@
        transform="matrix(-0.99999997,-2.6156683e-4,2.0353306e-4,-0.99999998,0,0)" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2004"
+       id="Door_M2028"
+       width="1.4416529"
+       height="8.254653"
+       x="-377.57358"
+       y="-320.77118"
+       ry="1.2020238e-06"
+       transform="matrix(-0.99999997,-2.6156683e-4,2.0353306e-4,-0.99999998,0,0)" />
+    <rect
+       style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
+       id="Door_M2004"
        width="1.2166027"
        height="9.5666962"
        x="-786.133"
@@ -13444,6 +13435,15 @@
        y="506.25079"
        ry="1.3930805e-06"
        transform="matrix(8.024808e-4,-0.99999968,0.99999997,2.5094431e-4,0,0)" />
+    <rect
+       style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
+       id="Door_M2047_1"
+       width="1.2166027"
+       height="9.5666962"
+       x="-154.56168"
+       y="408.96875"
+       ry="1.3930805e-06"
+       transform="matrix(6.5779883e-4,-0.99999978,0.99999995,3.061392e-4,0,0)" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
        id="Door_2047_2"

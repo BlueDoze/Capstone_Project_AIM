@@ -1360,9 +1360,9 @@ def serve_leaflet_assets(path):
 
 @app.route('/interactive-map')
 def serve_interactive_map():
-    """Serve the integrated Leaflet navigation map (set_start_end_integrated.html)"""
+    """Serve the integrated Leaflet navigation map (text_nav.html)"""
     leaflet_dir = project_root / 'LeafletJS'
-    return send_from_directory(str(leaflet_dir), 'set_start_end_integrated.html')
+    return send_from_directory(str(leaflet_dir), 'text_nav.html')
 
 @app.route('/<path:path>')
 def catch_all(path):

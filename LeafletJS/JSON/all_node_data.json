@@ -69,7 +69,7 @@
                             {
                                 "type": "room",
                                 "id": "Hmisc",
-                                "door": "Door_misc"
+                                "door": "Door_Hmisc"
                             }
                         ]
                     },
@@ -82,7 +82,7 @@
                             {
                                 "type": "room",
                                 "id": "H1017",
-                                "door": "Door_1017"
+                                "door": "Door_H1017"
                             }
                         ]
                     },
@@ -146,7 +146,7 @@
                             {
                                 "type": "room",
                                 "id": "H1016",
-                                "door": "Door_1016"
+                                "door": "Door_H1016"
                             }
                         ]
                     },
@@ -159,7 +159,7 @@
                             {
                                 "type": "room",
                                 "id": "H1015",
-                                "door": "Door_1015"
+                                "door": "Door_H1015"
                             }
                         ]
                     },
@@ -172,7 +172,7 @@
                             {
                                 "type": "room",
                                 "id": "H1014",
-                                "door": "Door_1014"
+                                "door": "Door_H1014"
                             }
                         ]
                     },
@@ -185,7 +185,7 @@
                             {
                                 "type": "bathroom",
                                 "id": "Bathroom-Men_H1",
-                                "door": "Door_Bathroom-Men"
+                                "door": "Door_Bathroom-Men_H1"
                             }
                         ]
                     },
@@ -198,7 +198,7 @@
                             {
                                 "type": "bathroom",
                                 "id": "Bathroom-Accessible_H1",
-                                "door": "Door_Bathroom-Accessible"
+                                "door": "Door_Bathroom-Accessible_H1"
                             }
                         ]
                     },
@@ -211,12 +211,12 @@
                             {
                                 "type": "bathroom",
                                 "id": "Bathroom-Women_H1",
-                                "door": "Door_Bathroom-Women"
+                                "door": "Door_Bathroom-Women_H1"
                             },
                             {
                                 "type": "eatery",
-                                "id": "Cafeteria-H",
-                                "door": "Door_Cafe_1"
+                                "id": "Cafeteria-H1",
+                                "door": "Door_Cafe_H1_1"
                             }
                         ]
                     },
@@ -229,7 +229,7 @@
                             {
                                 "type": "room",
                                 "id": "H1017",
-                                "door": "Door_1017"
+                                "door": "Door_H1017"
                             }
                         ]
                     },
@@ -242,7 +242,7 @@
                             {
                                 "type": "room",
                                 "id": "H1006",
-                                "door": "Door_1006"
+                                "door": "Door_H1006"
                             }
                         ]
                     },
@@ -255,7 +255,7 @@
                             {
                                 "type": "room",
                                 "id": "H1005",
-                                "door": "Door_1005_2"
+                                "door": "Door_H1005_2"
                             }
                         ]
                     },
@@ -268,12 +268,12 @@
                             {
                                 "type": "room",
                                 "id": "H1005",
-                                "door": "Door_1005_1"
+                                "door": "Door_H1005_1"
                             },
                             {
                                 "type": "room",
                                 "id": "H1004",
-                                "door": "Door_1004"
+                                "door": "Door_H1004"
                             }
                         ]
                     },
@@ -286,7 +286,7 @@
                             {
                                 "type": "room",
                                 "id": "H1003",
-                                "door": "Door_1003"
+                                "door": "Door_H1003"
                             }
                         ]
                     },
@@ -362,12 +362,12 @@
                             {
                                 "type": "room",
                                 "id": "H1019",
-                                "door": "Door_1019"
+                                "door": "Door_H1019"
                             },
                             {
                                 "type": "room",
                                 "id": "H1022",
-                                "door": "Door_1022"
+                                "door": "Door_H1022"
                             }
                         ]
                     },
@@ -380,7 +380,7 @@
                             {
                                 "type": "room",
                                 "id": "H1023",
-                                "door": "Door_1023"
+                                "door": "Door_H1023"
                             }
                         ]
                     },
@@ -393,7 +393,7 @@
                             {
                                 "type": "room",
                                 "id": "H1024",
-                                "door": "Door_1024"
+                                "door": "Door_H1024"
                             }
                         ]
                     },
@@ -406,7 +406,7 @@
                             {
                                 "type": "eatery",
                                 "id": "Cafeteria_H1",
-                                "door": "Door_Cafe_2"
+                                "door": "Door_Cafe_H1_2"
                             }
                         ]
                     },
@@ -433,7 +433,7 @@
                             {
                                 "type": "room",
                                 "id": "H1032",
-                                "door": "Door_1032"
+                                "door": "Door_H1032"
                             }
                         ]
                     },
@@ -446,7 +446,7 @@
                             {
                                 "type": "room",
                                 "id": "H1034",
-                                "door": "Door_1034"
+                                "door": "Door_H1034"
                             }
                         ]
                     },
@@ -459,7 +459,7 @@
                             {
                                 "type": "room",
                                 "id": "H1033",
-                                "door": "Door_1033"
+                                "door": "Door_H1033"
                             }
                         ]
                     },
@@ -495,7 +495,7 @@
                     "Bathroom-Men_H1": "H1_8",
                     "Bathroom-Accessible_H1": "H1_9",
                     "Bathroom-Women_H1": "H1_10",
-                    "Cafeteria-H": "H1_10",
+                    "Cafeteria-H1": "H1_10",
                     "H1006": "H1_12",
                     "H1005": "H1_14",
                     "H1004": "H1_14",
@@ -524,69 +524,69 @@
                 "objects": {
                     "rooms": {
                         "Hmisc": [
-                            "Door_misc"
+                            "Door_Hmisc"
                         ],
                         "H1017": [
-                            "Door_1017",
-                            "Door_1017"
+                            "Door_H1017",
+                            "Door_H1017"
                         ],
                         "H1016": [
-                            "Door_1016"
+                            "Door_H1016"
                         ],
                         "H1015": [
-                            "Door_1015"
+                            "Door_H1015"
                         ],
                         "H1014": [
-                            "Door_1014"
+                            "Door_H1014"
                         ],
                         "Bathroom-Men_H1": [
-                            "Door_Bathroom-Men"
+                            "Door_Bathroom-Men_H1"
                         ],
                         "Bathroom-Accessible_H1": [
-                            "Door_Bathroom-Accessible"
+                            "Door_Bathroom-Accessible_H1"
                         ],
                         "Bathroom-Women_H1": [
-                            "Door_Bathroom-Women"
+                            "Door_Bathroom-Women_H1"
                         ],
-                        "Cafeteria-H": [
-                            "Door_Cafe_1"
+                        "Cafeteria-H1": [
+                            "Door_Cafe_H1_1"
                         ],
                         "H1006": [
-                            "Door_1006"
+                            "Door_H1006"
                         ],
                         "H1005": [
-                            "Door_1005_2",
-                            "Door_1005_1"
+                            "Door_H1005_2",
+                            "Door_H1005_1"
                         ],
                         "H1004": [
-                            "Door_1004"
+                            "Door_H1004"
                         ],
                         "H1003": [
-                            "Door_1003"
+                            "Door_H1003"
                         ],
                         "H1019": [
-                            "Door_1019"
+                            "Door_H1019"
                         ],
                         "H1022": [
-                            "Door_1022"
+                            "Door_H1022"
                         ],
                         "H1023": [
-                            "Door_1023"
+                            "Door_H1023"
                         ],
                         "H1024": [
-                            "Door_1024"
+                            "Door_H1024"
                         ],
                         "Cafeteria_H1": [
-                            "Door_Cafe_2"
+                            "Door_Cafe_H1_2"
                         ],
                         "H1032": [
-                            "Door_1032"
+                            "Door_H1032"
                         ],
                         "H1034": [
-                            "Door_1034"
+                            "Door_H1034"
                         ],
                         "H1033": [
-                            "Door_1033"
+                            "Door_H1033"
                         ]
                     },
                     "exits": {
@@ -688,7 +688,7 @@
                             {
                                 "type": "room",
                                 "id": "M1006",
-                                "door": "Door_1006"
+                                "door": "Door_M1006"
                             }
                         ]
                     },
@@ -713,7 +713,7 @@
                             {
                                 "type": "room",
                                 "id": "M1004",
-                                "door": "Door_1004"
+                                "door": "Door_M1004"
                             }
                         ]
                     },
@@ -745,7 +745,7 @@
                             {
                                 "type": "room",
                                 "id": "M1003",
-                                "door": "Door_1003_1"
+                                "door": "Door_M1003_1"
                             }
                         ]
                     },
@@ -783,7 +783,7 @@
                             {
                                 "type": "room",
                                 "id": "M1018",
-                                "door": "Door_1018"
+                                "door": "Door_M1018"
                             }
                         ]
                     },
@@ -800,7 +800,7 @@
                             {
                                 "type": "room",
                                 "id": "M1003",
-                                "door": "Door_1003_2"
+                                "door": "Door_M1003_2"
                             }
                         ]
                     },
@@ -813,7 +813,7 @@
                             {
                                 "type": "bathroom",
                                 "id": "Bathroom-Men_M1",
-                                "door": "Door_Bathroom-Men"
+                                "door": "Door_Bathroom-Men_M1"
                             }
                         ]
                     },
@@ -826,7 +826,7 @@
                             {
                                 "type": "bathroom",
                                 "id": "Bathroom-Accessible_M1",
-                                "door": "Door_Bathroom-Accessible"
+                                "door": "Door_Bathroom-Accessible_M1"
                             }
                         ]
                     },
@@ -839,7 +839,7 @@
                             {
                                 "type": "bathroom",
                                 "id": "Bathroom-Women_M1",
-                                "door": "Door_Bathroom-Women"
+                                "door": "Door_Bathroom-Women_M1"
                             }
                         ]
                     },
@@ -852,7 +852,7 @@
                             {
                                 "type": "room",
                                 "id": "M1033",
-                                "door": "Door_1033"
+                                "door": "Door_M1033"
                             }
                         ]
                     },
@@ -898,7 +898,7 @@
                             {
                                 "type": "room",
                                 "id": "M1035",
-                                "door": "Door_1035"
+                                "door": "Door_M1035"
                             }
                         ]
                     },
@@ -911,7 +911,7 @@
                             {
                                 "type": "room",
                                 "id": "M1037",
-                                "door": "Door_1037"
+                                "door": "Door_M1037"
                             }
                         ]
                     },
@@ -924,12 +924,12 @@
                             {
                                 "type": "room",
                                 "id": "M1030",
-                                "door": "Door_1030"
+                                "door": "Door_M1030"
                             },
                             {
                                 "type": "room",
                                 "id": "M1041",
-                                "door": "Door_1041"
+                                "door": "Door_M1041"
                             }
                         ]
                     },
@@ -945,7 +945,7 @@
                             {
                                 "type": "room",
                                 "id": "M1045",
-                                "door": "Door_1045"
+                                "door": "Door_M1045"
                             }
                         ]
                     },
@@ -958,7 +958,7 @@
                             {
                                 "type": "room",
                                 "id": "M1040",
-                                "door": "Door_1040"
+                                "door": "Door_M1040"
                             }
                         ]
                     },
@@ -971,7 +971,7 @@
                             {
                                 "type": "room",
                                 "id": "M1049",
-                                "door": "Door_1049"
+                                "door": "Door_M1049"
                             }
                         ]
                     },
@@ -1029,50 +1029,50 @@
                 "objects": {
                     "rooms": {
                         "M1006": [
-                            "Door_1006"
+                            "Door_M1006"
                         ],
                         "M1004": [
-                            "Door_1004"
+                            "Door_M1004"
                         ],
                         "M1003": [
-                            "Door_1003_1",
-                            "Door_1003_2"
+                            "Door_M1003_1",
+                            "Door_M1003_2"
                         ],
                         "M1018": [
-                            "Door_1018"
+                            "Door_M1018"
                         ],
                         "Bathroom-Men_M1": [
-                            "Door_Bathroom-Men"
+                            "Door_Bathroom-Men_M1"
                         ],
                         "Bathroom-Accessible_M1": [
-                            "Door_Bathroom-Accessible"
+                            "Door_Bathroom-Accessible_M1"
                         ],
                         "Bathroom-Women_M1": [
-                            "Door_Bathroom-Women"
+                            "Door_Bathroom-Women_M1"
                         ],
                         "M1033": [
-                            "Door_1033"
+                            "Door_M1033"
                         ],
                         "M1035": [
-                            "Door_1035"
+                            "Door_M1035"
                         ],
                         "M1037": [
-                            "Door_1037"
+                            "Door_M1037"
                         ],
                         "M1030": [
-                            "Door_1030"
+                            "Door_M1030"
                         ],
                         "M1041": [
-                            "Door_1041"
+                            "Door_M1041"
                         ],
                         "M1045": [
-                            "Door_1045"
+                            "Door_M1045"
                         ],
                         "M1040": [
-                            "Door_1040"
+                            "Door_M1040"
                         ],
                         "M1049": [
-                            "Door_1049"
+                            "Door_M1049"
                         ]
                     },
                     "exits": {
@@ -1152,7 +1152,7 @@
                             {
                                 "type": "room",
                                 "id": "M2004",
-                                "door": "Door_2004"
+                                "door": "Door_M2004"
                             }
                         ]
                     },
@@ -1191,7 +1191,7 @@
                             {
                                 "type": "room",
                                 "id": "M2013",
-                                "door": "Door_2013"
+                                "door": "Door_M2013"
                             }
                         ]
                     },
@@ -1204,7 +1204,7 @@
                             {
                                 "type": "room",
                                 "id": "M2010",
-                                "door": "Door_2010"
+                                "door": "Door_M2010"
                             }
                         ]
                     },
@@ -1217,7 +1217,7 @@
                             {
                                 "type": "room",
                                 "id": "M2012",
-                                "door": "Door_2012_1"
+                                "door": "Door_M2012_1"
                             }
                         ]
                     },
@@ -1230,7 +1230,7 @@
                             {
                                 "type": "room",
                                 "id": "M2017",
-                                "door": "Door_2017_1"
+                                "door": "Door_M2017_1"
                             }
                         ]
                     },
@@ -1243,7 +1243,7 @@
                             {
                                 "type": "room",
                                 "id": "M2012",
-                                "door": "Door_2012_2"
+                                "door": "Door_M2012_2"
                             }
                         ]
                     },
@@ -1256,7 +1256,7 @@
                             {
                                 "type": "room",
                                 "id": "M2018",
-                                "door": "Door_2018_1"
+                                "door": "Door_M2018_1"
                             }
                         ]
                     },
@@ -1269,7 +1269,7 @@
                             {
                                 "type": "room",
                                 "id": "M2017",
-                                "door": "Door_2017_2"
+                                "door": "Door_M2017_2"
                             }
                         ]
                     },
@@ -1333,7 +1333,7 @@
                             {
                                 "type": "room",
                                 "id": "M2033",
-                                "door": "Door_2033"
+                                "door": "Door_M2033"
                             }
                         ]
                     },
@@ -1372,7 +1372,7 @@
                             {
                                 "type": "room",
                                 "id": "M2018",
-                                "door": "Door_2018_2"
+                                "door": "Door_M2018_2"
                             }
                         ]
                     },
@@ -1385,7 +1385,7 @@
                             {
                                 "type": "room",
                                 "id": "M2035",
-                                "door": "Door_2035"
+                                "door": "Door_M2035"
                             }
                         ]
                     },
@@ -1398,7 +1398,7 @@
                             {
                                 "type": "room",
                                 "id": "M2037",
-                                "door": "Door_2037"
+                                "door": "Door_M2037"
                             }
                         ]
                     },
@@ -1411,7 +1411,7 @@
                             {
                                 "type": "room",
                                 "id": "M2022",
-                                "door": "Door_2022"
+                                "door": "Door_M2022"
                             }
                         ]
                     },
@@ -1424,7 +1424,7 @@
                             {
                                 "type": "room",
                                 "id": "M2028",
-                                "door": "Door_2028"
+                                "door": "Door_M2028"
                             }
                         ]
                     },
@@ -1437,7 +1437,7 @@
                             {
                                 "type": "room",
                                 "id": "M2041",
-                                "door": "Door_2041_1"
+                                "door": "Door_M2041_1"
                             }
                         ]
                     },
@@ -1453,12 +1453,12 @@
                             {
                                 "type": "room",
                                 "id": "M2041",
-                                "door": "Door_2041_2"
+                                "door": "Door_M2041_2"
                             },
                             {
                                 "type": "room",
                                 "id": "M2047",
-                                "door": "Door_2047_1"
+                                "door": "Door_M2047_1"
                             }
                         ]
                     },
@@ -1471,7 +1471,7 @@
                             {
                                 "type": "room",
                                 "id": "M2047",
-                                "door": "Door_2047_2"
+                                "door": "Door_M2047_2"
                             }
                         ]
                     },
@@ -1519,25 +1519,25 @@
                 "objects": {
                     "rooms": {
                         "M2004": [
-                            "Door_2004"
+                            "Door_M2004"
                         ],
                         "M2013": [
-                            "Door_2013"
+                            "Door_M2013"
                         ],
                         "M2010": [
-                            "Door_2010"
+                            "Door_M2010"
                         ],
                         "M2012": [
-                            "Door_2012_1",
-                            "Door_2012_2"
+                            "Door_M2012_1",
+                            "Door_M2012_2"
                         ],
                         "M2017": [
-                            "Door_2017_1",
-                            "Door_2017_2"
+                            "Door_M2017_1",
+                            "Door_M2017_2"
                         ],
                         "M2018": [
-                            "Door_2018_1",
-                            "Door_2018_2"
+                            "Door_M2018_1",
+                            "Door_M2018_2"
                         ],
                         "Bathroom-Men_M2": [
                             "Door_Bathroom-Men_M2"
@@ -1549,27 +1549,27 @@
                             "Door_Bathroom-Women_M2"
                         ],
                         "M2033": [
-                            "Door_2033"
+                            "Door_M2033"
                         ],
                         "M2035": [
-                            "Door_2035"
+                            "Door_M2035"
                         ],
                         "M2037": [
-                            "Door_2037"
+                            "Door_M2037"
                         ],
                         "M2022": [
-                            "Door_2022"
+                            "Door_M2022"
                         ],
                         "M2028": [
-                            "Door_2028"
+                            "Door_M2028"
                         ],
                         "M2041": [
-                            "Door_2041_1",
-                            "Door_2041_2"
+                            "Door_M2041_1",
+                            "Door_M2041_2"
                         ],
                         "M2047": [
-                            "Door_2047_1",
-                            "Door_2047_2"
+                            "Door_M2047_1",
+                            "Door_M2047_2"
                         ]
                     },
                     "exits": {
