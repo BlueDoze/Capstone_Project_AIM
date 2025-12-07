@@ -1360,13 +1360,18 @@ def serve_leaflet_assets(path):
 
 @app.route('/interactive-map')
 def serve_interactive_map():
-    """Serve the integrated Leaflet navigation map (text_nav.html)"""
+    """Serve the integrated Leaflet navigation map (interactiveMap.html)"""
     leaflet_dir = project_root / 'LeafletJS'
-    return send_from_directory(str(leaflet_dir), 'text_nav.html')
+    print(f"🗺️ Serving interactive map from: {leaflet_dir / 'interactiveMap.html'}")
+    return send_from_directory(str(leaflet_dir), 'interactiveMap.html')
 
 @app.route('/<path:path>')
 def catch_all(path):
     """Serve React app for client-side routing"""
+    # Don't intercept the interactive-map route
+    if path == 'interactive-map':
+        return serve_interactive_map()
+    
     file_path = os.path.join(react_build_dir, path)
 
     if os.path.exists(file_path) and os.path.isfile(file_path):

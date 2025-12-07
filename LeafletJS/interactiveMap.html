@@ -20,59 +20,173 @@
             top: 0; bottom: 0;
             left: 0; right: 0;
         }
+		#rotation-display {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background: rgba(255, 255, 255, 0.9);
+		padding: 10px 15px;
+		border-radius: 5px;
+		font-family: Arial, sans-serif;
+		font-size: 16px;
+		font-weight: bold;
+		box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+		z-index: 1000;
+	}
+
+        /* Standardized Button Styles - Fanshawe Red Theme */
+        .btn {
+            padding: 15px 30px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Primary Button - Fanshawe Red */
+        .btn-primary {
+            background: #A6192E;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #8A1426;
+        }
+
+        .btn-primary:active {
+            background: #6E0F1E;
+        }
+
+        /* Secondary Button - Darker Red */
+        .btn-secondary {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #c82333;
+        }
+
+        .btn-secondary:active {
+            background: #bd2130;
+        }
+
+        /* Outline Button - Red Border */
+        .btn-outline {
+            background: white;
+            color: #A6192E;
+            border: 2px solid #A6192E;
+            padding: 13px 28px; /* Adjust for border */
+        }
+
+        .btn-outline:hover {
+            background: #A6192E;
+            color: white;
+        }
+
+        .btn-outline:active {
+            background: #8A1426;
+            color: white;
+        }
+
+        /* Small Button Variant */
+        .btn-sm {
+            padding: 10px 20px;
+            font-size: 13px;
+        }
+
+        /* Full Width Button */
+        .btn-block {
+            width: 100%;
+            display: block;
+        }
+
+        /* Button Margins */
+        .btn-mt {
+            margin-top: 20px;
+        }
+
+        .btn-m {
+            margin: 10px;
+        }
+
+        .btn-mb {
+            margin-bottom: 8px;
+        }
     </style>
 </head>
 <body>
-    <div id="startup-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; justify-content:center; align-items:center;">
-        <div style="background:white; padding:30px; border-radius:10px; max-width:500px; text-align:center;">
-            <h2>Welcome to Campus Navigation</h2>
+    <div id="startup-modal" style="display:none; position:fixed; top:20px; left:50%; transform:translateX(-50%); z-index:10000;">
+        <div style="background:white; padding:20px; border-radius:10px; max-width:400px; text-align:center; box-shadow:0 4px 12px #999;">
+            <h3 style="margin:0 0 15px 0; font-size:18px;">Campus Navigation</h3>
             
             <div id="step1" style="display:block;">
-                <h3>Step 1: Select Your Current Floor</h3>
+                <h4 style="margin:0 0 10px 0; font-size:14px;">Step 1: Select Your Current Floor</h4>
                 <select id="startFloorSelect" style="font-size:18px; padding:10px; margin:10px;">
                     <option value="1">Floor 1</option>
                     <option value="2">Floor 2</option>
                     <option value="3">Floor 3</option>
                 </select>
                 <br>
-                <button onclick="startupStep2()" style="padding:15px 30px; font-size:16px; margin-top:20px;">Next</button>
+                <button onclick="startupStep2()" class="btn btn-primary btn-mt">Next</button>
             </div>
             
             <div id="step2" style="display:none;">
-                <h3>Step 2: Set Your Starting Position</h3>
-                <button onclick="startupUseGPS()" style="padding:15px 30px; font-size:16px; margin:10px; background:#0066cc; color:white; border:none; border-radius:5px; cursor:pointer;">
-                    🛰️ Use GPS
+                <h4 style="margin:0 0 10px 0; font-size:14px;">Step 2: Set Your Starting Position</h4>
+                <button onclick="startupUseGPS()" class="btn btn-primary btn-m">
+                    Use GPS
                 </button>
-                <button onclick="startupManualSelect()" style="padding:15px 30px; font-size:16px; margin:10px; background:#28a745; color:white; border:none; border-radius:5px; cursor:pointer;">
-                    📍 Select Manually on Map
+                <button onclick="startupManualSelect()" class="btn btn-outline btn-m">
+                    Select Manually on Map
                 </button>
             </div>
             
             <div id="step3-manual" style="display:none;">
-                <h3>Click on the map to set your position</h3>
-                <p style="color:#666;">The floor plan for your selected floor is now visible. Click where you are currently located.</p>
-                <p style="color:#999; font-size:14px;">Your marker will appear after you click.</p>
+                <h4 style="margin:0 0 10px 0; font-size:14px;">Click on the map to set your position</h4>
+                <p style="color:#666; font-size:12px; margin:5px 0;">Click where you are currently located.</p>
+                <p style="color:#999; font-size:11px; margin:5px 0;">Your marker will appear after you click.</p>
             </div>
         </div>
     </div>
     <div id="map"></div>
-    <div style="position:absolute; top:10px; right:10px; z-index:1000; background:white; padding:6px; border-radius:8px; box-shadow:0 0 5px rgba(0,0,0,0.3);">
-        <label for="floorSelect"><b>Choose Floor:</b></label>
-        <select id="floorSelect">
-            <option value=1>Floor 1</option>
-            <option value=2>Floor 2</option>
-            <option value=3>Floor 3</option>
+    
+    <!-- Floor selector with dropdown -->
+    <div style="position:absolute; top:40px; right:10px; z-index:1000; background:#A6192E; padding:8px 12px; border-radius:5px; box-shadow:0 2px 4px rgba(0,0,0,0.2);">
+        <select id="floor-selector" onchange="changeFloor()" style="font-size:14px; padding:6px 10px; border:2px solid #A6192E; border-radius:4px; background:white; color:#A6192E; font-weight:600; cursor:pointer; width:100%;">
+            <option value="1">Floor 1</option>
+            <option value="2">Floor 2</option>
+            <option value="3">Floor 3</option>
         </select>
-        <button id="loadFloorBtn">Load Floor</button>
     </div>
-    <div style="position:absolute; top:80px; right:10px; z-index:1000; background:white; padding:10px; border-radius:8px; box-shadow:0 0 5px rgba(0,0,0,0.3); min-width:200px;">
-        <h4 style="margin:0 0 10px 0; font-size:14px;">📍 Location Mode</h4>
-        <button id="location-mode-btn" onclick="toggleLocationMode()" style="width:100%; padding:10px; background:#0066cc; color:white; border:none; border-radius:4px; cursor:pointer; font-size:13px; margin-bottom:8px;">
-            🛰️ Switch to GPS
-        </button>
-        <div id="location-status" style="font-size:12px; color:#666; line-height:1.5;">
-            📍 Manual Mode
-        </div>
+    
+    <!-- Clear Path Button -->
+    <button id="clear-path-btn" onclick="clearPath()" class="btn btn-outline btn-sm" style="position:absolute; top:100px; right:10px; z-index:1000; width:140px;">
+        Clear Path
+    </button>
+    <!-- Location Mode Toggle Button -->
+    <button id="location-mode-btn" onclick="toggleLocationMode()" class="btn btn-primary btn-sm" style="position:absolute; top:150px; right:10px; z-index:1000; width:140px;">
+        Switch to GPS
+    </button>
+    
+    <!-- Location Status Display -->
+    <div id="location-status" style="position:absolute; top:200px; right:10px; z-index:1000; background:rgba(255,255,255,0.9); padding:8px 12px; border-radius:5px; font-size:11px; color:#666; box-shadow:0 2px 4px rgba(0,0,0,0.2); display:none; width:140px;">
+        Manual Mode
     </div>
     <div id="navigationPanel" 
         style="position: absolute; top: 200px; right: 10px; 
@@ -114,6 +228,60 @@
 
 
         //Functions
+
+        function clearPath() {
+            console.log("🗑️ Clearing path...");
+            
+            // Clear the red polylines (path lines) from map
+            if (window.pathPolylines) {
+                window.pathPolylines.forEach(line => map.removeLayer(line));
+                window.pathPolylines = [];
+            }
+            
+            // Clear highlighted nodes (green start, yellow middle, red end)
+            if (window.highlightedNodes && window.buildingSVGElements) {
+                Object.values(window.buildingSVGElements).forEach(svgElement => {
+                    window.highlightedNodes.forEach(nodeId => {
+                        const node = svgElement.getElementById(nodeId);
+                        if (node) {
+                            node.style.fill = '';
+                            node.style.stroke = '';
+                            node.style.strokeWidth = '';
+                        }
+                    });
+                });
+                window.highlightedNodes = [];
+            }
+            
+            console.log("✅ Path cleared!");
+            
+            // Save state after clearing path
+            saveUserState();
+        }
+
+        function changeFloor() {
+            const newFloor = document.getElementById('floor-selector').value;
+            
+            // Clear any existing paths when switching floors
+            clearPath();
+            
+            // Only change if user has a position
+            if (window.userMarker) {
+                console.log(`🔄 Changing to floor ${newFloor}`);
+                window.userCurrentFloor = newFloor;
+                
+                // Load the new floor
+                loadFloorLevel(parseInt(newFloor));
+                
+                // Save state with new floor
+                saveUserState();
+                
+                console.log(`✅ Floor changed to ${newFloor}`);
+            } else {
+                // If no position set yet, just update the value and it will be used when position is set
+                window.userCurrentFloor = newFloor;
+            }
+        }
 
         function toggleLocationMode() {
             if (window.locationMode === 'manual') {
@@ -1832,15 +2000,6 @@
                 showStartupModal();
 
 
-                document.getElementById("loadFloorBtn").addEventListener("click", () => {
-                    const floorKey = document.getElementById("floorSelect").value;
-                    alert(floorKey + "Clicked")
-                    if (window.geojsonData) {
-                        loadFloorLevel(floorKey);
-                    } else {
-                        alert("GeoJSON not loaded yet.");
-                    }
-                });
                 
                 // Set Start Position Button
                 document.getElementById("setStartBtn").addEventListener("click", () => {
