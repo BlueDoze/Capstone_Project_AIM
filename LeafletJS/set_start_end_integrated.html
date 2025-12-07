@@ -133,7 +133,7 @@
 </head>
 <body>
     <div id="startup-modal" style="display:none; position:fixed; top:20px; left:50%; transform:translateX(-50%); z-index:10000;">
-        <div style="background:white; padding:20px; border-radius:10px; max-width:400px; text-align:center; box-shadow:0 4px 12px rgba(0,0,0,0.3);">
+        <div style="background:white; padding:20px; border-radius:10px; max-width:400px; text-align:center; box-shadow:0 4px 12px #999;">
             <h3 style="margin:0 0 15px 0; font-size:18px;">Campus Navigation</h3>
             
             <div id="step1" style="display:block;">
@@ -1842,13 +1842,48 @@
             window.userCurrentFloor = selectedFloor;
             
             document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').style.display = 'block';
+            // Skip step2 and go directly to step3-manual
+            document.getElementById('step3-manual').style.display = 'block';
             
             // Load the selected floor in the background
             loadFloorLevel(parseInt(selectedFloor));
             
             // Save state after floor selection
             saveUserState();
+            
+            // Enable one-time click to set position (moved from startupManualSelect)
+            window.waitingForPositionClick = true;
+            
+            const clickHandler = function(e) {
+                if (window.waitingForPositionClick) {
+                    window.waitingForPositionClick = false;
+                    map.off('click', clickHandler);
+                    
+                    const clickedPos = e.latlng;
+                    createUserMarker(clickedPos);
+                    updateUserLocation();
+                    
+                    document.getElementById('startup-modal').style.display = 'none';
+                    
+                    // Restore normal modal pointer events
+                    const modal = document.getElementById('startup-modal');
+                    modal.style.pointerEvents = 'auto';
+                    
+                    saveUserState();
+                    console.log("✅ User position set manually at:", clickedPos);
+                }
+            };
+            
+            // Add click handler with high priority
+            map.on('click', clickHandler);
+            
+            // Make modal click-through for the map area
+            const modalContent = document.querySelector('#startup-modal > div');
+            const modal = document.getElementById('startup-modal');
+            
+            // Allow clicks to pass through the modal background to the map
+            modal.style.pointerEvents = 'none';
+            modalContent.style.pointerEvents = 'all';
         }
 
         function startupUseGPS() {
