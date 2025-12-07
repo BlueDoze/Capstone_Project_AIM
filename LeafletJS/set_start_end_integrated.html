@@ -167,7 +167,7 @@
     <div id="map"></div>
     
     <!-- Floor selector with dropdown -->
-    <div style="position:absolute; top:40px; right:10px; z-index:1000; background:#A6192E; padding:8px 12px; border-radius:5px; box-shadow:0 2px 4px rgba(0,0,0,0.2);">
+    <div style="position:absolute; top:30px; right:10px; z-index:1000; background:#A6192E; padding:8px 12px; border-radius:5px; box-shadow:0 2px 4px rgba(0,0,0,0.2); width:140px;">
         <select id="floor-selector" onchange="changeFloor()" style="font-size:14px; padding:6px 10px; border:2px solid #A6192E; border-radius:4px; background:white; color:#A6192E; font-weight:600; cursor:pointer; width:100%;">
             <option value="1">Floor 1</option>
             <option value="2">Floor 2</option>
@@ -176,12 +176,12 @@
     </div>
     
     <!-- Clear Path Button -->
-    <button id="clear-path-btn" onclick="clearPath()" class="btn btn-outline btn-sm" style="position:absolute; top:100px; right:10px; z-index:1000; width:140px;">
+    <button id="clear-path-btn" onclick="clearPath()" class="btn btn-outline btn-sm" style="position:absolute; top:90px; right:10px; z-index:1000; width:164px;">
         Clear Path
     </button>
     
     <!-- Location Mode Toggle Button -->
-    <button id="location-mode-btn" onclick="toggleLocationMode()" class="btn btn-primary btn-sm" style="position:absolute; top:150px; right:10px; z-index:1000; width:140px;">
+    <button id="location-mode-btn" onclick="toggleLocationMode()" class="btn btn-primary btn-sm" style="position:absolute; top:140px; right:10px; z-index:1000; width:164px;">
         Switch to GPS
     </button>
     
@@ -1250,13 +1250,6 @@
                         
                         console.log(`🏢 ${roomId} clicked!`);
                         
-                        const userConfirmed = confirm(`You clicked ${roomId}. Would you like directions?`);
-                        if (!userConfirmed) {
-                            console.log("User declined directions");
-                            return;
-                        }
-
-
                         // Clear previous highlights
                         clearAllHighlights(svgMap);
 
@@ -1312,7 +1305,7 @@
 
                         if (!destinationNode) {
                             console.error(`No Node for ${roomId}`);
-                            alert(`No navigation node for ${roomId}`);
+                            console.error(`No navigation node for ${roomId}`);
                             return;
                         }
 
@@ -1333,16 +1326,16 @@
                                     drawPathOnMap(pathResult.path, graphData.nodePositions, map, svgMap);
                                 } else {
                                     console.error("❌ Path is empty!");
-                                    alert("Could not generate path");
+                                    console.error("Could not generate path");
                                 }
                             } else if (pathResult.type == 'multi-building'){
                                 console.log("📍 Multi-building path:", pathResult);
-                                alert(`Route: ${pathResult.segments.map(s => s.description).join(' → ')}`);
+                                console.log(`Route: ${pathResult.segments.map(s => s.description).join(' → ')}`);
                                 
                                 // ✅ Draw multi-building path (both segments)
                                 drawMultiBuildingPath(pathResult);
                             } else {
-                                alert(`Could not find path to ${roomId}`)
+                                console.error(`Could not find path to ${roomId}`);
                             }
                         } else {
                             console.warn(`⚠️ Room ${roomId} not found in SVG`);
@@ -1368,12 +1361,7 @@
                         }
                         
                         console.log(`🚪 ${exitId} clicked!`);
-                        const userConfirmed = confirm(`You clicked ${exitId}. Would you like directions?`);
-                        if (!userConfirmed) {
-                            console.log("User declined directions");
-                            return;
-                        }
-
+                        
                         // Clear previous highlights
                         clearAllHighlights(svgMap);
 
@@ -1399,7 +1387,7 @@
 
                         if (!destinationNode) {
                             console.error(`No Node for ${exitId}`);
-                            alert(`No navigation node for ${exitId}`);
+                            console.error(`No navigation node for ${exitId}`);
                             return;
                         }
 
@@ -1421,17 +1409,17 @@
                                     drawPathOnMap(pathResult.path, graphData.nodePositions, map, svgMap);
                                 } else {
                                     console.error("❌ Path is empty!");
-                                    alert("Could not generate path");
+                                    console.error("Could not generate path");
                                 }
                             } else if (pathResult.type === 'multi-building') {
                                 console.log("📍 Multi-building path:", pathResult);
-                                alert(`Route: ${pathResult.segments.map(s => s.description).join(' → ')}`);
+                                console.log(`Route: ${pathResult.segments.map(s => s.description).join(' → ')}`);
                                 
                                 // Draw multi-building path (both segments)
                                 drawMultiBuildingPath(pathResult);
                             }
                         } else {
-                            alert(`Could not find path to ${exitId}`);
+                            console.error(`Could not find path to ${exitId}`);
                         }
                     });
                 } else {
@@ -1823,6 +1811,9 @@
             if (window.userMarker) {
                 console.log(`🔄 Changing to floor ${newFloor}`);
                 window.userCurrentFloor = newFloor;
+                
+                // Clear any existing path when changing floors
+                clearPath();
                 
                 // Load the new floor
                 loadFloorLevel(parseInt(newFloor));
