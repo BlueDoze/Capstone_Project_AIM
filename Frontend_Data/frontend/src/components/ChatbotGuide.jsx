@@ -17,12 +17,22 @@ export default function ChatbotGuide({ onClose }) {
     },
     {
       icon: <Map size={48} className="text-green-500" />,
-      title: "Interactive Navigation",
-      description: "Click 'Interactive Map' to explore the campus and find routes between buildings.",
+      title: "Interactive Map - Indoor Navigation",
+      description: "Click 'Interactive Map' to navigate inside buildings with step-by-step directions between rooms.",
       tips: [
-        "View floor plans for all buildings",
-        "Get turn-by-turn directions",
-        "Visualize your route in real-time"
+        "View detailed floor plans for all buildings",
+        "Select start and end points for room-to-room navigation",
+        "Get turn-by-turn indoor directions"
+      ]
+    },
+    {
+      icon: <Map size={48} className="text-blue-500" />,
+      title: "Show Campus Map - Overview",
+      description: "Click 'Show Campus Map' to see the entire campus layout and building locations.",
+      tips: [
+        "View all campus buildings on an interactive map",
+        "Click on buildings to see information",
+        "Get a general overview of the campus geography"
       ]
     },
     {
