@@ -1,0 +1,27 @@
+{
+  "session_id": "464ea86b-950d-4b69-99b3-8f739143eee9",
+  "archived_at": "2025-12-06T16:11:11.838743",
+  "message_count": 4,
+  "messages": [
+    {
+      "role": "user",
+      "content": "User message 1",
+      "timestamp": "2025-12-06T16:11:11.838186"
+    },
+    {
+      "role": "assistant",
+      "content": "Assistant response 1",
+      "timestamp": "2025-12-06T16:11:11.838202"
+    },
+    {
+      "role": "user",
+      "content": "User message 2",
+      "timestamp": "2025-12-06T16:11:11.838210"
+    },
+    {
+      "role": "assistant",
+      "content": "Assistant response 2",
+      "timestamp": "2025-12-06T16:11:11.838214"
+    }
+  ]
+}

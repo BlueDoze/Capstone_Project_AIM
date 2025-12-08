@@ -492,10 +492,15 @@ async def extract_all_announcements():
                 "announcements": all_announcements
             }
 
-            with open('all_announcements.json', 'w', encoding='utf-8') as f:
+            # Criar diretório se não existir
+            output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'announcements')
+            os.makedirs(output_dir, exist_ok=True)
+            
+            output_path = os.path.join(output_dir, 'all_announcements.json')
+            with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(output, f, indent=2, ensure_ascii=False)
 
-            print(f"\n✓ Arquivo salvo: all_announcements.json")
+            print(f"\n✓ Arquivo salvo: {output_path}")
             print(f"✓ Home page: {len(home_content)} caracteres")
             print(f"✓ Total: {output['total_announcements']} anúncios")
             print(f"✓ Sucesso: {output['successful']}")
@@ -515,9 +520,12 @@ async def extract_all_announcements():
                     "error": str(e),
                     "announcements": all_announcements
                 }
-                with open('all_announcements_partial.json', 'w', encoding='utf-8') as f:
+                output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'announcements')
+                os.makedirs(output_dir, exist_ok=True)
+                partial_path = os.path.join(output_dir, 'all_announcements_partial.json')
+                with open(partial_path, 'w', encoding='utf-8') as f:
                     json.dump(partial_output, f, indent=2, ensure_ascii=False)
-                print(f"✓ Resultados parciais salvos em: all_announcements_partial.json")
+                print(f"✓ Resultados parciais salvos em: {partial_path}")
 
             raise
 
@@ -538,7 +546,7 @@ if __name__ == "__main__":
     print("\n" + "="*80)
     print("CONCLUÍDO COM SUCESSO!")
     print("="*80)
-    print(f"Arquivo gerado: all_announcements.json")
+    print(f"Arquivo gerado: data/announcements/all_announcements.json")
     print(f"Home page extraída: {result['home_page']['content_length']} caracteres")
     print(f"Total de anúncios extraídos: {result['total_announcements']}")
     print("="*80 + "\n")

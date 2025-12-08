@@ -1,0 +1,51 @@
+{
+  "academic_schedule": {
+    "semester": "Fall 2025",
+    "deadlines": [
+      {
+        "date": "2025-12-06",
+        "day": "Saturday",
+        "time": "11:59 PM",
+        "course_code": "INFO-6154-(01)-25F",
+        "task_name": "Final Project - Report",
+        "type": "Report",
+        "description": "Report on optimization techniques for deep learning, hyperparameter optimization, and explainability."
+      },
+      {
+        "date": "2025-12-06",
+        "day": "Saturday",
+        "time": "11:59 PM",
+        "course_code": "INFO-6154-(01)-25F",
+        "task_name": "Final Project - Code",
+        "type": "Code Submission",
+        "description": "Submission of deep learning models code (TensorFlow 2/Keras) comparing two different architectures."
+      },
+      {
+        "date": "2025-12-07",
+        "day": "Sunday",
+        "time": "11:59 PM",
+        "course_code": "Unknown (Context: Notebook Submission)",
+        "task_name": "Project - Final Submission",
+        "type": "Project",
+        "description": "Submit PDF and runnable code (Jupyter/Colab). Availability ends at this time."
+      },
+      {
+        "date": "2025-12-09",
+        "day": "Tuesday",
+        "time": "1:00 PM",
+        "task_name": "Presentation and Final Code",
+        "type": "Presentation",
+        "description": "Submit all presentation artifacts and final code as a single zip file."
+      },
+      {
+        "date": "2025-12-10",
+        "day": "Wednesday",
+        "time": "11:59 PM",
+        "course_code": "INFO-6155-(01)-25F",
+        "task_name": "Brandwatch Social Listening & Sentiment Analysis Walkthrough",
+        "type": "Walkthrough",
+        "description": "Completion of the social listening and sentiment analysis assignment."
+      }
+    ]
+  }
+}

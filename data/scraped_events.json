@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "source": "d2l_scraper",
+    "scraped_at": "2025-12-06T18:14:40.335153",
+    "total_events": 3,
+    "scraper_version": "1.0.0"
+  },
+  "events": [
+    {
+      "name": "📝Final Project - Report - Due",
+      "date": "Dec 7, 2025",
+      "time": "11:59 PM, 11:59 PM, 11:59 PM",
+      "location": "Fanshawe College",
+      "description": "📝Final Project - Report - Due\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t11:59 PM\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t...",
+      "category": "academic",
+      "source": "d2l_scraper",
+      "scraped_at": "2025-12-06T18:14:15.884972"
+    },
+    {
+      "name": "👨‍💻Final Project - Code - Due",
+      "date": "Dec 7, 2025",
+      "time": "11:59 PM, 11:59 PM, 11:59 PM",
+      "location": "Fanshawe College",
+      "description": "👨‍💻Final Project - Code - Due\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t11:59 PM\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t...",
+      "category": "academic",
+      "source": "d2l_scraper",
+      "scraped_at": "2025-12-06T18:14:15.902567"
+    },
+    {
+      "name": "📊Final Project - Presentation File - Due",
+      "date": "Dec 7, 2025",
+      "time": "11:59 PM, 11:59 PM, 11:59 PM",
+      "location": "Fanshawe College",
+      "description": "📊Final Project - Presentation File - Due\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t11:59 PM\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t...",
+      "category": "academic",
+      "source": "d2l_scraper",
+      "scraped_at": "2025-12-06T18:14:15.928707"
+    }
+  ]
+}

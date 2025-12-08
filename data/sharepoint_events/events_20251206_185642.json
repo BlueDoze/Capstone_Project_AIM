@@ -1,0 +1,38 @@
+{
+  "metadata": {
+    "source": "sharepoint_scraper",
+    "scraped_at": "2025-12-06T18:57:12.465275",
+    "total_events": 2,
+    "endpoint": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-12-06&EndDate=2026-01-05&AudienceTarget=false",
+    "date_range": {
+      "start_date": "2025-12-06",
+      "end_date": "2026-01-05"
+    },
+    "max_events_limit": 100,
+    "extraction_method": "modern_event_cards"
+  },
+  "events": [
+    {
+      "id": "sp_evt_001",
+      "name": "National Day of Remembrance and Action on Violence Against Women",
+      "date": "Sat, Dec 6, 10:00 AM",
+      "time": "",
+      "location": "Fanshawe College, London, Ontario, Canada",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-12-06&EndDate=2026-01-05&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_002",
+      "name": "Holiday closure 2025-26",
+      "date": "Wed, Dec 24, 12:00 PM",
+      "time": "",
+      "location": "All Fanshawe campuses, sites and centres",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-12-06&EndDate=2026-01-05&AudienceTarget=false"
+    }
+  ]
+}
