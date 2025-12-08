@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Map as MapIcon, X, Navigation, Building2, Calendar, Moon, Sun, MessageSquare, MapPin } from 'lucide-react';
+import { Send, Map as MapIcon, X, Navigation, Building2, Calendar, Moon, Sun, MessageSquare, MapPin, HelpCircle } from 'lucide-react';
 import { MapContainer, TileLayer, GeoJSON, Polyline, useMap } from 'react-leaflet';
 import MapNavigator from './components/MapNavigator';
+import ChatbotGuide from './components/ChatbotGuide';
 import 'leaflet/dist/leaflet.css';
 
 // Component to fit map bounds when data loads
@@ -33,6 +34,7 @@ export default function FanshaweNavigator() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [showIndoorMap, setShowIndoorMap] = useState(false);
   const [mapAction, setMapAction] = useState(null);
+  const [showInstructions, setShowInstructions] = useState(false);
   const messagesEndRef = useRef(null);
 
   // Use relative URL since Flask serves the React app (same origin)
@@ -258,6 +260,14 @@ export default function FanshaweNavigator() {
                 aria-label="Toggle Dark Mode"
               >
                 {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+              <button
+                onClick={() => setShowInstructions(true)}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
+                aria-label="View Instructions"
+                title="How to use the chatbot"
+              >
+                <HelpCircle size={20} className="text-gray-600 dark:text-gray-300" />
               </button>
               <button
                 onClick={() => {
@@ -570,6 +580,11 @@ export default function FanshaweNavigator() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Instructions Guide Modal */}
+        {showInstructions && (
+          <ChatbotGuide onClose={() => setShowInstructions(false)} />
         )}
       </div>
     </div>
