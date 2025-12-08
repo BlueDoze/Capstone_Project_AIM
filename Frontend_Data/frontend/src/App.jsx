@@ -439,10 +439,10 @@ export default function FanshaweNavigator() {
                     
                     {/* Building Info Popup */}
                     {buildingInfo && (
-                      <div className="absolute top-4 right-4 bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-6 max-w-md z-10 border-2 border-fanshawe-red transition-colors duration-200">
-                        <div className="flex justify-between items-start mb-4">
+                      <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-[calc(100vw-1rem)] sm:w-96 md:max-w-md z-10 border-2 border-fanshawe-red transition-colors duration-200 max-h-[calc(100vh-1rem)] md:max-h-[calc(100vh-2rem)] flex flex-col">
+                        <div className="flex justify-between items-start p-6 pb-4">
                           <h4 className="text-xl font-bold text-fanshawe-red">
-                            {buildingInfo.info.nome}
+                            {buildingInfo.info.name || buildingInfo.info.nome}
                           </h4>
                           <button
                             onClick={() => setBuildingInfo(null)}
@@ -452,46 +452,37 @@ export default function FanshaweNavigator() {
                           </button>
                         </div>
                         
-                        <div className="space-y-3 text-gray-700 dark:text-gray-300">
-                          {buildingInfo.info.descricao && (
-                            <p className="text-sm">{buildingInfo.info.descricao}</p>
+                        <div className="space-y-3 text-gray-700 dark:text-gray-300 overflow-y-auto px-6 pb-6 custom-scrollbar">
+                          {(buildingInfo.info.description || buildingInfo.info.descricao) && (
+                            <p className="text-sm">{buildingInfo.info.description || buildingInfo.info.descricao}</p>
                           )}
                           
-                          {buildingInfo.info.andares && buildingInfo.info.andares.length > 0 && (
+                          {((buildingInfo.info.floors && buildingInfo.info.floors.length > 0) || 
+                            (buildingInfo.info.andares && buildingInfo.info.andares.length > 0)) && (
                             <div>
                               <p className="font-semibold text-sm">🏢 Floors:</p>
-                              <p className="text-sm">{buildingInfo.info.andares.join(', ')}</p>
+                              <p className="text-sm">
+                                {(buildingInfo.info.floors || buildingInfo.info.andares).join(', ')}
+                              </p>
                             </div>
                           )}
                           
-                          {buildingInfo.info.facilidades && buildingInfo.info.facilidades.length > 0 && (
+                          {((buildingInfo.info.facilities && buildingInfo.info.facilities.length > 0) || 
+                            (buildingInfo.info.facilidades && buildingInfo.info.facilidades.length > 0)) && (
                             <div>
                               <p className="font-semibold text-sm">✨ Facilities:</p>
                               <ul className="text-sm list-disc list-inside">
-                                {buildingInfo.info.facilidades.map((fac, idx) => (
+                                {(buildingInfo.info.facilities || buildingInfo.info.facilidades).map((fac, idx) => (
                                   <li key={idx}>{fac}</li>
                                 ))}
                               </ul>
                             </div>
                           )}
                           
-                          {buildingInfo.info.salas_principais && buildingInfo.info.salas_principais.length > 0 && (
-                            <div>
-                              <p className="font-semibold text-sm">📚 Main Rooms:</p>
-                              <ul className="text-sm list-disc list-inside">
-                                {buildingInfo.info.salas_principais.slice(0, 5).map((sala, idx) => (
-                                  <li key={idx}>
-                                    {sala.numero} - {sala.tipo} (Floor {sala.andar})
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                          
-                          {buildingInfo.info.horario_funcionamento && (
+                          {(buildingInfo.info.operating_hours || buildingInfo.info.horario_funcionamento) && (
                             <div>
                               <p className="font-semibold text-sm">🕐 Hours:</p>
-                              <p className="text-sm">{buildingInfo.info.horario_funcionamento}</p>
+                              <p className="text-sm">{buildingInfo.info.operating_hours || buildingInfo.info.horario_funcionamento}</p>
                             </div>
                           )}
                         </div>

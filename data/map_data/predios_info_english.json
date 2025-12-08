@@ -1,182 +1,2512 @@
 {
-  "A": {
-    "nome": "Building A",
-    "ref": "A",
-    "andares": [1, 2, 3],
-    "descricao": "Main administration and classroom building",
-    "facilidades": [
-      "Classrooms",
-      "Administrative Offices",
-      "Restrooms",
-      "Elevators"
-    ],
-    "salas_principais": [
-      {"numero": "A101", "tipo": "Classroom", "andar": 1},
-      {"numero": "A102", "tipo": "Classroom", "andar": 1},
-      {"numero": "A201", "tipo": "Laboratory", "andar": 2},
-      {"numero": "A301", "tipo": "Office", "andar": 3}
-    ],
-    "horario_funcionamento": "Monday to Friday: 7am - 10pm"
-  },
+
+"A": {
+  "name": "Building A",
+  "ref": "A",
+  "floors": [1, 2, 3],
+  "description": "Main academic and administration building.",
+  "facilities": [
+    "Classrooms",
+    "Lecture Rooms",
+    "Lounge",
+    "Cultural Services",
+    "Academic Services",
+    "Washrooms",
+    "Staircases",
+    "Elevators",
+    "Mezzanine"
+  ],
+  "main_rooms": [
+
+    { "number": "FIRST NATIONS", "type": "Cultural Services", "floor": 1 },
+    { "number": "CONTINUING EDUCATION", "type": "Academic Services", "floor": 1 },
+    { "number": "LOUNGE", "type": "Lounge", "floor": 1 },
+    { "number": "MEN", "type": "Washroom", "floor": 1 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 1 },
+    { "number": "MECH ROOM", "type": "Mechanical Room", "floor": 1 },
+    { "number": "STAIR A1", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR A2", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR A3", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR A4", "type": "Staircase", "floor": 1 },
+    { "number": "ELEVATOR", "type": "Elevator", "floor": 1 },
+
+
+    { "number": "1001", "floor": 1 },
+    { "number": "1004", "floor": 1 },
+    { "number": "1005", "floor": 1 },
+    { "number": "1006", "floor": 1 },
+    { "number": "1007", "floor": 1 },
+    { "number": "1008", "floor": 1 },
+    { "number": "1010", "floor": 1 },
+    { "number": "1012", "floor": 1 },
+    { "number": "1014", "floor": 1 },
+    { "number": "1016", "floor": 1 },
+    { "number": "1017", "floor": 1 },
+    { "number": "1018", "floor": 1 },
+    { "number": "1020", "floor": 1 },
+    { "number": "1023", "floor": 1 },
+    { "number": "1031", "floor": 1 },
+    { "number": "1033", "floor": 1 },
+    { "number": "1034", "floor": 1 },
+    { "number": "1035", "floor": 1 },
+    { "number": "1043", "floor": 1 },
+    { "number": "1046", "floor": 1 },
+    { "number": "1049", "floor": 1 },
+
+    
+    { "number": "1051", "type": "Lecture Hall", "floor": 1 },
+
+    
+    { "number": "1053", "floor": 1 },
+    { "number": "1054", "floor": 1 },
+    { "number": "1055", "floor": 1 },
+    { "number": "1056", "floor": 1 },
+    { "number": "1057", "floor": 1 },
+    { "number": "1058", "floor": 1 },
+    { "number": "1059", "floor": 1 },
+    { "number": "1061", "floor": 1 },
+    { "number": "1062", "floor": 1 },
+    { "number": "1063", "floor": 1 },
+    { "number": "1064", "floor": 1 },
+
+  
+    { "number": "MEZZANINE", "type": "Mezzanine Area", "floor": 2 },
+    { "number": "MEN", "type": "Washroom", "floor": 2 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 2 },
+    { "number": "STAIR A1", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR A2", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR A3", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR A4", "type": "Staircase", "floor": 2 },
+    { "number": "ELEVATOR", "type": "Elevator", "floor": 2 },
+
+
+    { "number": "2001", "floor": 2 },
+    { "number": "2002", "floor": 2 },
+    { "number": "2003", "floor": 2 },
+    { "number": "2004", "floor": 2 },
+    { "number": "2005", "floor": 2 },
+    { "number": "2007", "floor": 2 },
+    { "number": "2008", "floor": 2 },
+    { "number": "2010", "floor": 2 },
+    { "number": "2011", "floor": 2 },
+    { "number": "2014", "floor": 2 },
+    { "number": "2015", "floor": 2 },
+    { "number": "2016", "floor": 2 },
+    { "number": "2018", "floor": 2 },
+    { "number": "2019", "floor": 2 },
+    { "number": "2020", "floor": 2 },
+    { "number": "2021", "floor": 2 },
+    { "number": "2022", "floor": 2 },
+    { "number": "2023", "floor": 2 },
+    { "number": "2024", "floor": 2 },
+    { "number": "2025", "floor": 2 },
+    { "number": "2026", "floor": 2 },
+    { "number": "2027", "floor": 2 },
+    { "number": "2028", "floor": 2 },
+    { "number": "2029", "floor": 2 },
+    { "number": "2031", "floor": 2 },
+    { "number": "2032", "floor": 2 },
+    { "number": "2033", "floor": 2 },
+    { "number": "2034", "floor": 2 },
+    { "number": "2035", "floor": 2 },
+    { "number": "2036", "floor": 2 },
+    { "number": "2037", "floor": 2 },
+    { "number": "2038", "floor": 2 },
+    { "number": "2042", "floor": 2 },
+    { "number": "2044", "floor": 2 },
+    { "number": "2045", "floor": 2 },
+    { "number": "2046", "floor": 2 },
+    { "number": "2049", "floor": 2 },
+    { "number": "2050", "floor": 2 },
+    { "number": "2052", "floor": 2 },
+    { "number": "2054", "floor": 2 },
+    { "number": "2056", "floor": 2 },
+    { "number": "2057", "floor": 2 },
+    { "number": "2058", "floor": 2 },
+    { "number": "2061", "floor": 2 },
+
+
+    { "number": "STAIR A1", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR A2", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR A3", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR A4", "type": "Staircase", "floor": 3 },
+
+  
+    { "number": "3001", "floor": 3 },
+    { "number": "3002", "floor": 3 },
+    { "number": "3003", "floor": 3 },
+    { "number": "3004", "floor": 3 }
+
+  ],
+  "operating_hours": "Monday to Friday: 7am - 10pm"
+
+}   
+,
+
   "B": {
-    "nome": "Building B",
-    "ref": "B",
-    "andares": [1, 2],
-    "descricao": "Technology and laboratory building",
-    "facilidades": [
-      "Computer Labs",
-      "Classrooms",
-      "Restrooms"
-    ],
-    "salas_principais": [
-      {"numero": "B101", "tipo": "Computer Lab", "andar": 1},
-      {"numero": "B102", "tipo": "Computer Lab", "andar": 1},
-      {"numero": "B201", "tipo": "Classroom", "andar": 2}
-    ],
-    "horario_funcionamento": "Monday to Friday: 8am - 8pm"
+  "name": "Building B",
+  "ref": "B",
+  "floors": [1, 2, 3],
+  "description": "Technology, engineering, manufacturing, and computer labs.",
+  "main_rooms": [
+
+   
+    { "number": "MEN", "type": "Washroom", "floor": 1 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 1 },
+    { "number": "STAIR", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR", "type": "Staircase", "floor": 1 },
+    { "number": "ELEVATOR", "type": "Elevator", "floor": 1 },
+
+
+    { "number": "B1024", "type": "Automation Lab", "floor": 1 },
+    { "number": "B1028", "type": "Mechatronics Lab", "floor": 1 },
+    { "number": "B1016", "type": "Machine Shop", "floor": 1 },
+    { "number": "B1015", "type": "Manufacturing", "floor": 1 },
+    { "number": "B1012", "type": "Welding", "floor": 1 },
+    { "number": "B1030", "type": "Lecture", "floor": 1 },
+    { "number": "B1027", "type": "Lecture", "floor": 1 },
+    { "number": "B1049", "type": "Computer Lab", "floor": 1 },
+    { "number": "B1073", "type": "Lecture", "floor": 1 },
+    { "number": "B1046", "type": "James A. Colvin Atrium", "floor": 1 },
+    { "number": "B1037", "type": "Receiving", "floor": 1 },
+    { "number": "B1002", "type": "Reprographics", "floor": 1 },
+
+
+    { "number": "B1001", "floor": 1 },
+    { "number": "B1005", "floor": 1 },
+    { "number": "B1006", "floor": 1 },
+    { "number": "B1007", "floor": 1 },
+    { "number": "B1008", "floor": 1 },
+    { "number": "B1009", "floor": 1 },
+    { "number": "B1010", "floor": 1 },
+    { "number": "B1014", "floor": 1 },
+    { "number": "B1017", "floor": 1 },
+    { "number": "B1019", "floor": 1 },
+    { "number": "B1020", "floor": 1 },
+    { "number": "B1022", "floor": 1 },
+    { "number": "B1023", "floor": 1 },
+    { "number": "B1025", "floor": 1 },
+    { "number": "B1026", "floor": 1 },
+    { "number": "B1032", "floor": 1 },
+    { "number": "B1033", "floor": 1 },
+    { "number": "B1038", "floor": 1 },
+    { "number": "B1039", "floor": 1 },
+    { "number": "B1041", "floor": 1 },
+    { "number": "B1048", "floor": 1 },
+    { "number": "B1051", "floor": 1 },
+    { "number": "B1052", "floor": 1 },
+    { "number": "B1054", "floor": 1 },
+    { "number": "B1055", "floor": 1 },
+    { "number": "B1056", "floor": 1 },
+    { "number": "B1057", "floor": 1 },
+    { "number": "B1058", "floor": 1 },
+    { "number": "B1059", "floor": 1 },
+    { "number": "B1060", "floor": 1 },
+    { "number": "B1061", "floor": 1 },
+    { "number": "B1062", "floor": 1 },
+    { "number": "B1063", "floor": 1 },
+    { "number": "B1064", "floor": 1 },
+    { "number": "B1066", "floor": 1 },
+    { "number": "B1067", "floor": 1 },
+    { "number": "B1070", "floor": 1 },
+    { "number": "B1071", "floor": 1 },
+    { "number": "B1076", "floor": 1 },
+    { "number": "B1077", "floor": 1 },
+    { "number": "B1078", "floor": 1 },
+    { "number": "B1079", "floor": 1 },
+    { "number": "B1080", "floor": 1 },
+    { "number": "B1081", "floor": 1 },
+    { "number": "B1082", "floor": 1 },
+
+    
+    { "number": "MEZZANINE", "type": "Mezzanine Area", "floor": 2 },
+    { "number": "MEN", "type": "Washroom", "floor": 2 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 2 },
+    { "number": "STAIR", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR", "type": "Staircase", "floor": 2 },
+    { "number": "ELEVATOR", "type": "Elevator", "floor": 2 },
+    { "number": "LINK to D building", "type": "Connector", "floor": 2 },
+
+   
+    { "number": "B2001", "floor": 2 },
+    { "number": "B2002", "floor": 2 },
+    { "number": "B2003", "floor": 2 },
+    { "number": "B2004", "floor": 2 },
+    { "number": "B2005", "floor": 2 },
+    { "number": "B2007", "floor": 2 },
+    { "number": "B2010", "floor": 2 },
+    { "number": "B2011", "floor": 2 },
+    { "number": "B2025", "floor": 2 },
+    { "number": "B2029", "floor": 2 },
+    { "number": "B2032", "floor": 2 },
+    { "number": "B2033", "floor": 2 },
+    { "number": "B2034", "floor": 2 },
+    { "number": "B2035", "floor": 2 },
+    { "number": "B2036", "floor": 2 },
+    { "number": "B2037", "floor": 2 },
+    { "number": "B2040", "floor": 2 },
+    { "number": "B2041", "floor": 2 },
+    { "number": "B2042", "floor": 2 },
+
+    
+    { "number": "STAIR", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR", "type": "Staircase", "floor": 3 },
+
+   
+    { "number": "B3001", "floor": 3 },
+    { "number": "B3002", "floor": 3 },
+    { "number": "B3003", "floor": 3 }
+
+  ],
+
+  "operating_hours": "Monday to Friday: 7am - 10pm"
+},
+
+   "C": {
+  "name": "Building C",
+  "ref": "C",
+  "floors": [1, 2],
+  "description": "Academic building containing classrooms, labs, offices, and student spaces.",
+  "main_rooms": [
+
+   
+    { "number": "MEN", "type": "Washroom", "floor": 1 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 1 },
+    { "number": "STAIR C2", "type": "Staircase", "floor": 1 },
+    { "number": "SERVICE TUNNEL", "type": "Service Tunnel", "floor": 1 },
+
+
+    { "number": "C1004", "type": "Covered Parking", "floor": 1 },
+
+ 
+    { "number": "C1003", "floor": 1 },
+    { "number": "C1007", "floor": 1 },
+    { "number": "C1009", "floor": 1 },
+    { "number": "C1011", "floor": 1 },
+    { "number": "C1013", "floor": 1 },
+    { "number": "C1015", "floor": 1 },
+    { "number": "C1017", "floor": 1 },
+    { "number": "C1019", "floor": 1 },
+    { "number": "C1023", "floor": 1 },
+    { "number": "C1025", "floor": 1 },
+    { "number": "C1030", "floor": 1 },
+    { "number": "C1031", "floor": 1 },
+    { "number": "C1034", "floor": 1 },
+    { "number": "C1035", "floor": 1 },
+    { "number": "C1038", "floor": 1 },
+    { "number": "C1039", "floor": 1 },
+    { "number": "C1042", "floor": 1 },
+    { "number": "C1043", "floor": 1 },
+    { "number": "C1044", "floor": 1 },
+    { "number": "C1046", "floor": 1 },
+    { "number": "C1047", "floor": 1 },
+    { "number": "C1050", "floor": 1 },
+    { "number": "C1051", "floor": 1 },
+    { "number": "C1053", "floor": 1 },
+    { "number": "C1056", "floor": 1 },
+    { "number": "C1052", "floor": 1 },
+
+
+   
+    { "number": "MEN", "type": "Washroom", "floor": 2 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 2 },
+    { "number": "STAIR", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR", "type": "Staircase", "floor": 2 },
+
+
+    { "number": "C2001", "floor": 2 },
+    { "number": "C2002", "floor": 2 },
+    { "number": "C2003", "floor": 2 },
+    { "number": "C2005", "floor": 2 },
+    { "number": "C2006", "floor": 2 },
+    { "number": "C2008", "floor": 2 },
+    { "number": "C2014", "floor": 2 },
+    { "number": "C2015", "floor": 2 },
+    { "number": "C2016", "floor": 2 },
+    { "number": "C2017", "floor": 2 }
+  ]
+   , "operating_hours": "Monday to Friday: 7am - 10pm"
+},
+
+
+ "D": {
+  "name": "Building D",
+  "ref": "D",
+  "floors": [1, 2, 3, 4],
+  "description": "Arts, design, cafeteria, lecture rooms, studios, and student spaces.",
+  "main_rooms": [
+
+    { "number": "MEN", "type": "Washroom", "floor": 1 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 1 },
+    { "number": "STAIR D1", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR D2", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR D3", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR D4", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR D5", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR D6", "type": "Staircase", "floor": 1 },
+    { "number": "ELEVATOR", "type": "Elevator", "floor": 1 },
+    { "number": "AFTER HOURS ENTRANCE", "type": "Entrance", "floor": 1 },
+    { "number": "CONTROL CENTER", "type": "Control Center", "floor": 1 },
+    { "number": "TRANSFORMER YARD", "type": "Utility Area", "floor": 1 },
+    { "number": "SERVICE TUNNEL", "type": "Service Tunnel", "floor": 1 },
+
+    { "number": "D1001", "type": "Cafeteria", "floor": 1 },
+    { "number": "D1030", "type": "Lounge", "floor": 1 },
+    { "number": "D1032", "type": "Lecture", "floor": 1 },
+    { "number": "D1041", "type": "Lecture", "floor": 1 },
+    { "number": "D1042", "type": "Clothing Store", "floor": 1 },
+    { "number": "D1043", "type": "Variety Store", "floor": 1 },
+    { "number": "D1045", "type": "Courtyard Café", "floor": 1 },
+    { "number": "D1048", "type": "Studio", "floor": 1 },
+
+    { "number": "D1000", "floor": 1 },
+    { "number": "D1004", "floor": 1 },
+    { "number": "D1007", "floor": 1 },
+    { "number": "D1010", "floor": 1 },
+    { "number": "D1011", "floor": 1 },
+    { "number": "D1012", "floor": 1 },
+    { "number": "D1013", "floor": 1 },
+    { "number": "D1014", "floor": 1 },
+    { "number": "D1015", "floor": 1 },
+    { "number": "D1016", "floor": 1 },
+    { "number": "D1018", "floor": 1 },
+    { "number": "D1019", "floor": 1 },
+    { "number": "D1021", "floor": 1 },
+    { "number": "D1022", "floor": 1 },
+    { "number": "D1024", "floor": 1 },
+    { "number": "D1026", "floor": 1 },
+    { "number": "D1029", "floor": 1 },
+    { "number": "D1031", "floor": 1 },
+    { "number": "D1033", "floor": 1 },
+    { "number": "D1034", "floor": 1 },
+    { "number": "D1035", "floor": 1 },
+    { "number": "D1036", "floor": 1 },
+    { "number": "D1037", "floor": 1 },
+    { "number": "D1038", "floor": 1 },
+    { "number": "D1039", "floor": 1 },
+    { "number": "D1044", "floor": 1 },
+    { "number": "D1046", "floor": 1 },
+    { "number": "D1050", "floor": 1 },
+    { "number": "D1051", "floor": 1 },
+    { "number": "D1052", "floor": 1 },
+    { "number": "D1053", "floor": 1 },
+    { "number": "D1054", "floor": 1 },
+    { "number": "D1055", "floor": 1 },
+    { "number": "D1056", "floor": 1 },
+    { "number": "D1057", "floor": 1 },
+    { "number": "D1058", "floor": 1 },
+    { "number": "D1059", "floor": 1 },
+    { "number": "D1060", "floor": 1 },
+    { "number": "D1061", "floor": 1 },
+    { "number": "D1062", "floor": 1 },
+    { "number": "D1063", "floor": 1 },
+    { "number": "D1070", "floor": 1 },
+    { "number": "D1072", "floor": 1 },
+
+
+    { "number": "MEN", "type": "Washroom", "floor": 2 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 2 },
+    { "number": "STAIR D1", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR D2", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR D3", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR D4", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR D5", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR D6", "type": "Staircase", "floor": 2 },
+
+    { "number": "D1032", "type": "Lounge", "floor": 2 },
+    { "number": "D1041", "type": "Lecture", "floor": 2 },
+
+    { "number": "D2001", "floor": 2 },
+    { "number": "D2003", "floor": 2 },
+    { "number": "D2004", "floor": 2 },
+    { "number": "D2005", "floor": 2 },
+    { "number": "D2008", "floor": 2 },
+    { "number": "D2009", "floor": 2 },
+    { "number": "D2012", "floor": 2 },
+    { "number": "D2013", "floor": 2 },
+    { "number": "D2016", "floor": 2 },
+    { "number": "D2017", "floor": 2 },
+    { "number": "D2018", "floor": 2 },
+    { "number": "D2020", "floor": 2 },
+    { "number": "D2021", "floor": 2 },
+    { "number": "D2024", "floor": 2 },
+    { "number": "D2029", "floor": 2 },
+    { "number": "D2030", "floor": 2 },
+    { "number": "D2032", "floor": 2 },
+    { "number": "D2033", "floor": 2 },
+    { "number": "D2034", "floor": 2 },
+    { "number": "D2037", "floor": 2 },
+    { "number": "D2040", "floor": 2 },
+
+
+    { "number": "STAIR D1", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR D2", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR D4", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR D5", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR D6", "type": "Staircase", "floor": 3 },
+    { "number": "MEN", "type": "Washroom", "floor": 3 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 3 },
+
+    { "number": "D3000", "floor": 3 },
+    { "number": "D3001", "floor": 3 },
+    { "number": "D3003", "floor": 3 },
+    { "number": "D3004", "floor": 3 },
+    { "number": "D3005", "floor": 3 },
+    { "number": "D3007", "floor": 3 },
+    { "number": "D3008", "floor": 3 },
+    { "number": "D3009", "floor": 3 },
+    { "number": "D3011", "floor": 3 },
+    { "number": "D3013", "floor": 3 },
+    { "number": "D3015", "floor": 3 },
+    { "number": "D3016", "floor": 3 },
+    { "number": "D3017", "floor": 3 },
+    { "number": "D3018", "floor": 3 },
+    { "number": "D3019", "floor": 3 },
+    { "number": "D3024", "floor": 3 },
+
+
+    { "number": "STAIR D4", "type": "Staircase", "floor": 4 },
+    { "number": "STAIR D5", "type": "Staircase", "floor": 4 },
+    { "number": "STAIR D6", "type": "Staircase", "floor": 4 },
+
+  
+    { "number": "D4001", "floor": 4 },
+    { "number": "D4002", "floor": 4 },
+    { "number": "D4003", "floor": 4 },
+    { "number": "D4004", "floor": 4 },
+    { "number": "D4005", "floor": 4 },
+    { "number": "D4006", "floor": 4 },
+    { "number": "D4007", "floor": 4 },
+    { "number": "D4008", "floor": 4 },
+    { "number": "D4009", "floor": 4 },
+    { "number": "D4010", "floor": 4 },
+    { "number": "D4011", "floor": 4 },
+    { "number": "D4012", "floor": 4 },
+    { "number": "D4013", "floor": 4 },
+    { "number": "D4014", "floor": 4 },
+    { "number": "D4015", "floor": 4 },
+    { "number": "D4016", "floor": 4 },
+    { "number": "D4017", "floor": 4 },
+    { "number": "D4018", "floor": 4 }
+
+  ], "operating_hours": "Monday to Friday: 7am - 10pm"
+},
+
+  
+ "E": {
+  "name": "Building E",
+  "ref": "E",
+  "floors": [1, 2, 3],
+  "description": "Student services building including Registrar, Financial Aid, International Students, Technical Support, and lounges.",
+  "main_rooms": [
+
+
+    { "number": "MEN", "type": "Washroom", "floor": 1 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 1 },
+    { "number": "STAIR E1", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR E2", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR E3", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR E4", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR E5", "type": "Staircase", "floor": 1 },
+
+    { "number": "E1012", "type": "Registrar", "floor": 1 },
+
+    { "number": "E1003", "floor": 1 },
+    { "number": "E1004", "floor": 1 },
+    { "number": "E1005", "floor": 1 },
+    { "number": "E1008", "floor": 1 },
+    { "number": "E1010", "floor": 1 },
+    { "number": "E1011", "floor": 1 },
+    { "number": "E1013", "floor": 1 },
+    { "number": "E1022", "floor": 1 },
+
+
+
+    { "number": "MEN", "type": "Washroom", "floor": 2 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 2 },
+    { "number": "STAIR E1", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR E2", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR E3", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR E4", "type": "Staircase", "floor": 2 },
+
+    { "number": "E2015", "type": "Lounge", "floor": 2 },
+    { "number": "E2020", "type": "Financial Aid", "floor": 2 },
+    { "number": "E2025", "type": "International Students", "floor": 2 },
+    { "number": "E2030", "type": "Technical Support", "floor": 2 },
+
+    { "number": "E2002", "floor": 2 },
+    { "number": "E2003", "floor": 2 },
+    { "number": "E2006", "floor": 2 },
+    { "number": "E2008", "floor": 2 },
+    { "number": "E2012", "floor": 2 },
+    { "number": "E2014", "floor": 2 },
+    { "number": "E2027", "floor": 2 },
+    { "number": "E2036", "floor": 2 },
+    { "number": "E2037", "floor": 2 },
+
+
+    { "number": "E3001", "floor": 3 }
+
+  ], "operating_hours": "Monday to Friday: 7am - 10pm"
+
   },
-  "C": {
-    "nome": "Building C",
-    "ref": "C",
-    "andares": [1, 2],
-    "descricao": "Academic building with classrooms",
-    "facilidades": [
-      "Classrooms",
-      "Restrooms",
-      "Study Room"
-    ],
-    "salas_principais": [],
-    "horario_funcionamento": "Monday to Friday: 7am - 10pm"
-  },
-  "D": {
-    "nome": "Building D",
-    "ref": "D",
-    "andares": [1],
-    "descricao": "Arts and design building",
-    "facilidades": [
-      "Art Studios",
-      "Design Rooms",
-      "Gallery"
-    ],
-    "salas_principais": [],
-    "horario_funcionamento": "Monday to Friday: 8am - 8pm"
-  },
-  "E": {
-    "nome": "Building E",
-    "ref": "E",
-    "andares": [1, 2],
-    "descricao": "Engineering building",
-    "facilidades": [
-      "Engineering Labs",
-      "Workshops",
-      "Project Rooms"
-    ],
-    "salas_principais": [],
-    "horario_funcionamento": "Monday to Friday: 7am - 10pm"
-  },
+
+
   "F": {
-    "nome": "F Building",
-    "ref": "F",
-    "andares": [1, 2],
-    "descricao": "Health sciences building",
-    "facilidades": [
-      "Health Labs",
-      "Training Clinic",
-      "Simulation Rooms"
-    ],
-    "salas_principais": [],
-    "horario_funcionamento": "Monday to Friday: 7am - 9pm"
+  "name": "Building F",
+  "ref": "F",
+  "floors": [1, 2, 3, 4],
+  "description": "Health sciences building including labs, classrooms, and support areas.",
+  "main_rooms": [
+
+
+    { "number": "MEN", "type": "Washroom", "floor": 1 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 1 },
+    { "number": "STAIR F1", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR F2", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR F3", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR F5", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR F6", "type": "Staircase", "floor": 1 },
+    { "number": "EXIT ONLY", "type": "Exit", "floor": 1 },
+
+    { "number": "F1019", "floor": 1 },
+    { "number": "F1023", "floor": 1 },
+    { "number": "F1027", "floor": 1 },
+    { "number": "F1028", "floor": 1 },
+    { "number": "F1029", "floor": 1 },
+    { "number": "F1030", "floor": 1 },
+    { "number": "F1031", "floor": 1 },
+    { "number": "F1032", "floor": 1 },
+    { "number": "F1033", "floor": 1 },
+    { "number": "F1034", "floor": 1 },
+    { "number": "F1036", "floor": 1 },
+    { "number": "F1042", "floor": 1 },
+    { "number": "F1043", "floor": 1 },
+    { "number": "F1045", "floor": 1 },
+    { "number": "F1046", "floor": 1 },
+    { "number": "F1048", "floor": 1 },
+    { "number": "F1050", "floor": 1 },
+    { "number": "F1055", "floor": 1 },
+    { "number": "F1057", "floor": 1 },
+    { "number": "F1058", "floor": 1 },
+    { "number": "F1061", "floor": 1 },
+    { "number": "F1064", "floor": 1 },
+    { "number": "F1066", "floor": 1 },
+
+
+    { "number": "MEN", "type": "Washroom", "floor": 2 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 2 },
+    { "number": "STAIR F2", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR F3", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR F4", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR F5", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR F6", "type": "Staircase", "floor": 2 },
+
+    { "number": "F2030", "type": "Technical Support", "floor": 2 },
+
+    { "number": "F2001", "floor": 2 },
+    { "number": "F2002", "floor": 2 },
+    { "number": "F2003", "floor": 2 },
+    { "number": "F2005", "floor": 2 },
+    { "number": "F2006", "floor": 2 },
+    { "number": "F2008", "floor": 2 },
+    { "number": "F2010", "floor": 2 },
+    { "number": "F2012", "floor": 2 },
+    { "number": "F2014", "floor": 2 },
+    { "number": "F2016", "floor": 2 },
+    { "number": "F2018", "floor": 2 },
+    { "number": "F2019", "floor": 2 },
+    { "number": "F2023", "floor": 2 },
+    { "number": "F2024", "floor": 2 },
+    { "number": "F2025", "floor": 2 },
+    { "number": "F2034", "floor": 2 },
+    { "number": "F2036", "floor": 2 },
+    { "number": "F2037", "floor": 2 },
+    { "number": "F2053", "floor": 2 },
+    { "number": "F2055", "floor": 2 },
+    { "number": "F2057", "floor": 2 },
+    { "number": "F2059", "floor": 2 },
+    { "number": "F2061", "floor": 2 },
+    { "number": "F2063", "floor": 2 },
+    { "number": "F2067", "floor": 2 },
+    { "number": "F2069", "floor": 2 },
+
+
+    { "number": "MEN", "type": "Washroom", "floor": 3 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 3 },
+    { "number": "STAIR F3", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR F4", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR F5", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR H3", "type": "Staircase", "floor": 3 },
+
+    { "number": "F3000", "floor": 3 },
+    { "number": "F3001", "floor": 3 },
+    { "number": "F3003", "floor": 3 },
+    { "number": "F3005", "floor": 3 },
+    { "number": "F3006", "floor": 3 },
+    { "number": "F3009", "floor": 3 },
+    { "number": "F3020", "floor": 3 },
+    { "number": "F3021", "floor": 3 },
+    { "number": "F3040", "floor": 3 },
+    { "number": "F3042", "floor": 3 },
+
+
+    { "number": "STAIR F4", "type": "Staircase", "floor": 4 },
+
+    { "number": "F4001", "floor": 4 },
+    { "number": "F4003", "floor": 4 }
+
+], "operating_hours": "Monday to Friday: 7am - 10pm"
+
   },
-  "G": {
-    "nome": "Building G",
-    "ref": "G",
-    "andares": [1, 2],
-    "descricao": "Business building",
-    "facilidades": [
-      "Classrooms",
-      "Auditorium",
-      "Conference Room"
-    ],
-    "salas_principais": [],
-    "horario_funcionamento": "Monday to Friday: 7am - 10pm"
+
+"G": {
+  "name": "Building G",
+  "ref": "G",
+  "floors": [1, 2, 3],
+  "description": "Business building with classrooms, lounge areas, and faculty offices.",
+  "main_rooms": [
+
+    { "number": "MEN", "type": "Washroom", "floor": 1 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 1 },
+    { "number": "STAIR G1", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR G2", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR G3", "type": "Staircase", "floor": 1 },
+
+    { "number": "G1010", "type": "Lounge", "floor": 1 },
+
+    { "number": "G1001", "floor": 1 },
+    { "number": "G1003", "floor": 1 },
+    { "number": "G1004", "floor": 1 },
+    { "number": "G1008", "floor": 1 },
+    { "number": "G1012", "floor": 1 },
+    { "number": "G1013", "floor": 1 },
+    { "number": "G1014", "floor": 1 },
+
+
+    { "number": "MEN", "type": "Washroom", "floor": 2 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 2 },
+    { "number": "STAIR G1", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR G2", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR G3", "type": "Staircase", "floor": 2 },
+
+    { "number": "G2001", "floor": 2 },
+    { "number": "G2003", "floor": 2 },
+    { "number": "G2005", "floor": 2 },
+    { "number": "G2006", "floor": 2 },
+    { "number": "G2010", "floor": 2 },
+    { "number": "G2011", "floor": 2 },
+    { "number": "G2013", "floor": 2 },
+    { "number": "G2014", "floor": 2 },
+    { "number": "G2019", "floor": 2 },
+
+
+    { "number": "MEN", "type": "Washroom", "floor": 3 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 3 },
+    { "number": "STAIR G1", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR G2", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR G3", "type": "Staircase", "floor": 3 },
+
+    { "number": "G3001", "floor": 3 },
+    { "number": "G3006", "floor": 3 },
+    { "number": "G3008", "floor": 3 },
+    { "number": "G3009", "floor": 3 }
+
+  ], "operating_hours": "Monday to Friday: 7am - 10pm"
+
   },
-  "H": {
-    "nome": "Building H",
-    "ref": "H",
-    "andares": [1, 2, 3],
-    "descricao": "Hospitality and tourism building",
-    "facilidades": [
-      "Culinary Labs",
-      "Teaching Restaurant",
-      "Reception Classrooms"
-    ],
-    "salas_principais": [],
-    "horario_funcionamento": "Monday to Friday: 8am - 9pm"
-  },
+
+"H": {
+  "name": "Building H",
+  "ref": "H",
+  "floors": [1, 2, 3, 4],
+  "description": "Hospitality and tourism building containing executive offices, cafeteria, board room, gallery, and classrooms.",
+  "main_rooms": [
+
+    { "number": "MEN", "type": "Washroom", "floor": 1 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 1 },
+    { "number": "STAIR H1", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR H2", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR H3", "type": "Staircase", "floor": 1 },
+
+    { "number": "H1004", "type": "Executive Office", "floor": 1 },
+    { "number": "H1005", "type": "Board Room", "floor": 1 },
+    { "number": "H1013", "type": "Cafeteria", "floor": 1 },
+    { "number": "H1014", "type": "President", "floor": 1 },
+    { "number": "H1015", "type": "Gallery", "floor": 1 },
+    { "number": "H1019", "type": "Gallery", "floor": 1 },
+    { "number": "H1025", "type": "Servery", "floor": 1 },
+
+    { "number": "H1003", "floor": 1 },
+    { "number": "H1006", "floor": 1 },
+    { "number": "H1007", "floor": 1 },
+    { "number": "H1022", "floor": 1 },
+    { "number": "H1023", "floor": 1 },
+    { "number": "H1024", "floor": 1 },
+    { "number": "H1027", "floor": 1 },
+    { "number": "H1028", "floor": 1 },
+    { "number": "H1029", "floor": 1 },
+    { "number": "H1030", "floor": 1 },
+    { "number": "H1031", "floor": 1 },
+    { "number": "H1032", "floor": 1 },
+    { "number": "H1033", "floor": 1 },
+    { "number": "H1034", "floor": 1 },
+
+
+    { "number": "MEN", "type": "Washroom", "floor": 2 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 2 },
+    { "number": "STAIR H1", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR H2", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR H3", "type": "Staircase", "floor": 2 },
+
+    { "number": "H2003", "floor": 2 },
+    { "number": "H2004", "floor": 2 },
+    { "number": "H2005", "floor": 2 },
+    { "number": "H2006", "floor": 2 },
+    { "number": "H2008", "floor": 2 },
+    { "number": "H2009", "floor": 2 },
+    { "number": "H2011", "floor": 2 },
+    { "number": "H2014", "floor": 2 },
+    { "number": "H2015", "floor": 2 },
+    { "number": "H2020", "floor": 2 },
+    { "number": "H2023", "floor": 2 },
+    { "number": "H2024", "floor": 2 },
+    { "number": "H2025", "floor": 2 },
+    { "number": "H2026", "floor": 2 },
+    { "number": "H2027", "floor": 2 },
+    { "number": "H2030", "floor": 2 },
+    { "number": "H2031", "floor": 2 },
+    { "number": "H2032", "floor": 2 },
+
+
+    { "number": "MEN", "type": "Washroom", "floor": 3 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 3 },
+    { "number": "STAIR H1", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR H2", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR H3", "type": "Staircase", "floor": 3 },
+
+    { "number": "H3003", "floor": 3 },
+    { "number": "H3004", "floor": 3 },
+    { "number": "H3006", "floor": 3 },
+    { "number": "H3008", "floor": 3 },
+    { "number": "H3009", "floor": 3 },
+    { "number": "H3011", "floor": 3 },
+    { "number": "H3013", "floor": 3 },
+    { "number": "H3014", "floor": 3 },
+    { "number": "H3017", "floor": 3 },
+    { "number": "H3021", "floor": 3 },
+    { "number": "H3022", "floor": 3 },
+    { "number": "H3024", "floor": 3 },
+    { "number": "H3026", "floor": 3 },
+    { "number": "H3027", "floor": 3 },
+    { "number": "H3028", "floor": 3 },
+    { "number": "H3030", "floor": 3 },
+    { "number": "H3032", "floor": 3 },
+
+
+    { "number": "STAIR H1", "type": "Staircase", "floor": 4 },
+
+    { "number": "H4001", "floor": 4 },
+    { "number": "H4002", "floor": 4 }
+
+  ], "operating_hours": "Monday to Friday: 7am - 10pm"
+},
+
+"I": {
+  "name": "Building I",
+  "ref": "I",
+  "floors": [1],
+  "description": "Small building with two rooms on the first floor.",
+  "main_rooms": [
+    { "number": "I1001", "floor": 1 },
+    { "number": "I1002", "floor": 1 }
+  ], "operating_hours": "Monday to Friday: 7am - 10pm"
+},
+
   "J": {
-    "nome": "Building J",
-    "ref": "J",
-    "andares": [1, 2],
-    "descricao": "Sciences building",
-    "facilidades": [
-      "Science Labs",
-      "Classrooms",
-      "Study Areas"
-    ],
-    "salas_principais": [],
-    "horario_funcionamento": "Monday to Friday: 7am - 10pm"
-  },
-  "K": {
-    "nome": "Building K",
-    "ref": "K",
-    "andares": [1],
-    "descricao": "Student services building",
-    "facilidades": [
-      "Student Services",
-      "Counseling",
-      "Financial Aid"
-    ],
-    "salas_principais": [],
-    "horario_funcionamento": "Monday to Friday: 8:30am - 4:30pm"
-  },
-  "M": {
-    "nome": "Building M",
-    "ref": "M",
-    "andares": [1, 2],
-    "descricao": "Media and entertainment building",
-    "facilidades": [
-      "Recording Studios",
-      "Editing Labs",
-      "Production Rooms"
-    ],
-    "salas_principais": [],
-    "horario_funcionamento": "Monday to Friday: 8am - 8pm"
-  },
-  "SC": {
-    "nome": "Student Centre (SC)",
-    "ref": "SC",
-    "andares": [1, 2, 3],
-    "descricao": "Main student center with multiple services",
-    "facilidades": [
-      "Cafeteria",
-      "Student Lounge",
-      "Bookstore",
-      "Recreation Area"
-    ],
-    "salas_principais": [],
-    "horario_funcionamento": "Monday to Friday: 7am - 11pm"
-  },
-  "T": {
-    "nome": "Building T",
-    "ref": "T",
-    "andares": [1, 2],
-    "descricao": "Technology and trades building",
-    "facilidades": [
-      "Trade Workshops",
-      "Tech Labs",
-      "Equipment Storage"
-    ],
-    "salas_principais": [],
-    "horario_funcionamento": "Monday to Friday: 7am - 9pm"
-  }
+  "name": "Building J",
+  "ref": "J",
+  "floors": [1, 2, 3],
+  "description": "Athletics and gymnasium building with multiple gyms, studios, and support rooms.",
+  "main_rooms": [
+    
+    { "number": "J1032", "type": "Gym 3", "floor": 1 },
+    { "number": "J1034", "type": "Athletics", "floor": 1 },
+    { "number": "J1015", "type": "Gym 2", "floor": 1 },
+    { "number": "J1015A", "type": "Gym 1 Community Fitness Centre & Gymnasium", "floor": 1 },
+    { "number": "J1014", "floor": 1 },
+    { "number": "J1013", "floor": 1 },
+    { "number": "J1012", "floor": 1 },
+    { "number": "J1019", "floor": 1 },
+    { "number": "J1018", "floor": 1 },
+    { "number": "J1008", "floor": 1 },
+    { "number": "J1005", "floor": 1 },
+    { "number": "J1004", "floor": 1 },
+    { "number": "J1003", "floor": 1 },
+    { "number": "J1002", "floor": 1 },
+    { "number": "J1001", "floor": 1 },
+    { "number": "J1000", "floor": 1 },
+
+    { "number": "J2015", "floor": 2 },
+    { "number": "J1032", "type": "Open to Below", "floor": 2 },
+    { "number": "J1015", "type": "Gym 1/2 (Open to Below)", "floor": 2 },
+    { "number": "J2013", "floor": 2 },
+    { "number": "J2012", "floor": 2 },
+    { "number": "J2000", "floor": 2 },
+
+  
+    { "number": "J1014", "type": "Squash", "floor": 2 },
+    { "number": "J1013", "type": "Squash", "floor": 2 },
+    { "number": "J1012", "type": "Squash", "floor": 2 },
+
+    { "number": "J2021", "floor": 2 },
+    { "number": "J2019", "floor": 2 },
+    { "number": "J2017", "floor": 2 },
+    { "number": "J2016", "floor": 2 },
+    { "number": "J2005", "floor": 2 },
+    { "number": "J2006", "floor": 2 },
+    { "number": "J2003", "floor": 2 },
+    { "number": "J2002", "floor": 2 },
+    { "number": "J2001", "floor": 2 },
+
+   
+    { "number": "J3001", "floor": 3 },
+    { "number": "J3000", "floor": 3 }
+  ], "operating_hours": "Monday to Friday: 7am - 10pm"
+},
+
+
+ "K": {
+  "name": "Building K",
+  "ref": "K",
+  "floors": [1],
+  "description": "Innovation and development offices, scholarships, and support spaces.",
+
+  "main_rooms": [
+    { "number": "K1001", "floor": 1 },
+    { "number": "K1002", "floor": 1 },
+    { "number": "K1003", "type": "Development Scholarships", "floor": 1 },
+    { "number": "K1008", "floor": 1 },
+    { "number": "K1011", "floor": 1 },
+    { "number": "K1013", "floor": 1 },
+    { "number": "K1014", "floor": 1 },
+    { "number": "K1019", "floor": 1 },
+    { "number": "K1020", "floor": 1 },
+    { "number": "K1021", "floor": 1 },
+    { "number": "K1024", "type": "Centre for Innovation", "floor": 1 },
+    { "number": "K1025", "floor": 1 },
+    { "number": "K1027", "floor": 1 }
+    ], "operating_hours": "Monday to Friday: 7am - 10pm"
+
+},
+
+
+"L": {
+  "name": "Building L",
+  "ref": "L",
+  "floors": [1, 2, 3, 4],
+  "description": "L Building connected to F Building. Contains offices and open multi-purpose spaces.",
+
+  "main_rooms": [
+    { "number": "L1001", "floor": 1 },
+    { "number": "L1002", "floor": 1 },
+    { "number": "L1011", "floor": 1 },
+    { "number": "L1012", "floor": 1 },
+    { "number": "L1013", "floor": 1 },
+    { "number": "L1018", "floor": 1 },
+    { "number": "L1020", "floor": 1 },
+    { "number": "L1024", "floor": 1 },
+
+    { "number": "L2005", "floor": 2 },
+    { "number": "L2010", "floor": 2 },
+    { "number": "L2012", "floor": 2 },
+    { "number": "L2013", "floor": 2 },
+
+    { "number": "L3013", "floor": 3 },
+
+    { "number": "L4013", "floor": 4 }
+ ], "operating_hours": "Monday to Friday: 7am - 10pm"
+
+},
+
+
+"M": {
+  "name": "Building M",
+  "ref": "M",
+  "floors": [1, 2, 3, 4],
+  "description": "Media and entertainment building with classrooms, labs, offices, and production spaces.",
+
+  "main_rooms": [
+    { "number": "M1001", "floor": 1 },
+    { "number": "M1002", "floor": 1 },
+    { "number": "M1003", "floor": 1 },
+    { "number": "M1004", "floor": 1 },
+    { "number": "M1006", "floor": 1 },
+    { "number": "M1007", "floor": 1 },
+    { "number": "M1008", "floor": 1 },
+    { "number": "M1009", "floor": 1 },
+    { "number": "M1010", "floor": 1 },
+    { "number": "M1015", "floor": 1 },
+
+    { "number": "M1018", "floor": 1 },
+    { "number": "M1019", "floor": 1 },
+    { "number": "M1020", "floor": 1 },
+    { "number": "M1021", "floor": 1 },
+    { "number": "M1022", "floor": 1 },
+    { "number": "M1027", "floor": 1 },
+    { "number": "M1029", "floor": 1 },
+
+    { "number": "M1030", "floor": 1 },
+    { "number": "M1033", "floor": 1 },
+    { "number": "M1035", "floor": 1 },
+    { "number": "M1037", "floor": 1 },
+    { "number": "M1040", "floor": 1 },
+    { "number": "M1041", "floor": 1 },
+    { "number": "M1045", "floor": 1 },
+    { "number": "M1049", "floor": 1 },
+
+    { "number": "GENERATOR", "floor": 1 },
+
+    { "number": "M2001", "floor": 2 },
+    { "number": "M2004", "floor": 2 },
+    { "number": "M2010", "floor": 2 },
+    { "number": "M2012", "floor": 2 },
+    { "number": "M2013", "floor": 2 },
+    { "number": "M2017", "floor": 2 },
+    { "number": "M2018", "floor": 2 },
+    { "number": "M2022", "floor": 2 },
+    { "number": "M2028", "floor": 2 },
+    { "number": "M2033", "floor": 2 },
+    { "number": "M2035", "floor": 2 },
+    { "number": "M2041", "floor": 2 },
+    { "number": "M2047", "floor": 2 },
+
+    { "number": "M3001", "floor": 3 },
+    { "number": "M3004", "floor": 3 },
+    { "number": "M3006", "floor": 3 },
+    { "number": "M3009", "floor": 3 },
+    { "number": "M3010", "floor": 3 },
+    { "number": "M3013", "floor": 3 },
+    { "number": "M3017", "floor": 3 },
+    { "number": "M3021", "floor": 3 },
+    { "number": "M3033", "floor": 3 },
+    { "number": "M3035", "floor": 3 },
+    { "number": "M3039", "floor": 3 },
+    { "number": "M3041", "floor": 3 },
+    { "number": "M3043", "floor": 3 },
+    { "number": "M3045", "floor": 3 },
+    { "number": "M3047", "floor": 3 },
+    { "number": "M3048", "floor": 3 },
+
+    { "number": "M4002", "floor": 4 }
+ ], "operating_hours": "Monday to Friday: 7am - 10pm"
+
+
+},
+
+"N": {
+  "name": "Building N",
+  "ref": "N",
+  "floors": [1],
+  "description": "Small building with a few numbered rooms connected to surrounding structures.",
+
+  "main_rooms": [
+    { "number": "N1000", "floor": 1 },
+    { "number": "N1001", "floor": 1 },
+    { "number": "N1003", "floor": 1 },
+    { "number": "N1004", "floor": 1 },
+    { "number": "N1005", "floor": 1 },
+    { "number": "N1006", "floor": 1 },
+    { "number": "N1007", "floor": 1 },
+    { "number": "N1008", "floor": 1 },
+    { "number": "N1009", "floor": 1 }
+   ], "operating_hours": "Monday to Friday: 7am - 10pm"
+
+},
+
+  "R1": {  
+  "name": "Building R1",
+  "ref": "R1",
+  "floor": 1,
+  "rooms": [
+
+    { "number": "R1-101", "floor": 1 },
+    { "number": "R1-102", "floor": 1 },
+    { "number": "R1-103", "floor": 1 },
+    { "number": "R1-104", "floor": 1 },
+    { "number": "R1-105", "floor": 1 },
+    { "number": "R1-106", "floor": 1 },
+    { "number": "R1-107", "floor": 1 },
+    { "number": "R1-108", "floor": 1 },
+    { "number": "R1-109", "floor": 1 },
+
+    { "number": "R1-110", "floor": 1 },
+    { "number": "R1-111", "floor": 1 },
+    { "number": "R1-112", "floor": 1 },
+    { "number": "R1-113", "floor": 1 },
+    { "number": "R1-114", "floor": 1 },
+    { "number": "R1-115", "floor": 1 },
+    { "number": "R1-116", "floor": 1 },
+    { "number": "R1-117", "floor": 1 },
+    { "number": "R1-118", "floor": 1 },
+    { "number": "R1-119", "floor": 1 },
+    { "number": "R1-120", "floor": 1 },
+    { "number": "R1-121", "floor": 1 },
+
+    { "number": "R1-123", "floor": 1 },
+    { "number": "R1-125", "floor": 1 },
+    { "number": "R1-127", "floor": 1 },
+    { "number": "R1-128", "floor": 1 },
+    { "number": "R1-130", "floor": 1 },
+
+    { "number": "R1-1001", "floor": 1 },
+    { "number": "R1-1003", "floor": 1 },
+    { "number": "R1-1005", "floor": 1 },
+
+    { "number": "R1-1019", "floor": 1 },
+    { "number": "R1-1020", "type": "Laundry", "floor": 1 },
+    { "number": "R1-1021", "type": "Kitchen", "floor": 1 },
+
+    { "number": "R1-1042", "type": "Lounge", "floor": 1 },
+    { "number": "R1-1053", "floor": 1 },
+    { "number": "R1-1057", "floor": 1 },
+    { "number": "R1-1060", "floor": 1 },
+    { "number": "R1-1062", "type": "Staff Room", "floor": 1 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 1 },
+    { "number": "STAIR 1", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR 2", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR 3", "type": "Staircase", "floor": 1 },
+
+    { "number": "R1-201", "floor": 2 },
+    { "number": "R1-202", "floor": 2 },
+    { "number": "R1-203", "floor": 2 },
+    { "number": "R1-204", "floor": 2 },
+    { "number": "R1-205", "floor": 2 },
+    { "number": "R1-206", "floor": 2 },
+    { "number": "R1-207", "floor": 2 },
+    { "number": "R1-208", "floor": 2 },
+    { "number": "R1-209", "floor": 2 },
+
+    { "number": "R1-210", "floor": 2 },
+    { "number": "R1-211", "floor": 2 },
+    { "number": "R1-212", "floor": 2 },
+    { "number": "R1-213", "floor": 2 },
+    { "number": "R1-214", "floor": 2 },
+    { "number": "R1-215", "floor": 2 },
+    { "number": "R1-216", "floor": 2 },
+    { "number": "R1-217", "floor": 2 },
+    { "number": "R1-218", "floor": 2 },
+    { "number": "R1-219", "floor": 2 },
+    { "number": "R1-220", "floor": 2 },
+    { "number": "R1-221", "floor": 2 },
+
+    { "number": "R1-223", "floor": 2 },
+    { "number": "R1-225", "floor": 2 },
+    { "number": "R1-227", "floor": 2 },
+    { "number": "R1-228", "floor": 2 },
+    { "number": "R1-230", "floor": 2 },
+
+    { "number": "R1-2001", "floor": 2 },
+    { "number": "R1-2003", "floor": 2 },
+    { "number": "R1-2005", "floor": 2 },
+    { "number": "R1-2007", "floor": 2 },
+
+    { "number": "R1-2019", "floor": 2 },
+
+    { "number": "R1-2020", "type": "Laundry", "floor": 2 },
+    { "number": "R1-2021", "type": "Kitchen", "floor": 2 },
+
+    { "number": "R1-2038", "type": "Lounge", "floor": 2 },
+
+    { "number": "R1-2053", "floor": 2 },
+    { "number": "R1-2055", "floor": 2 },
+    { "number": "R1-2056", "floor": 2 },
+    { "number": "R1-2058", "floor": 2 },
+    { "number": "R1-2059", "floor": 2 },
+
+    { "number": "R1-MEETING ROOM", "type": "Meeting Room", "floor": 2 },
+    { "number": "R1-STAFF ROOM", "type": "Staff Room", "floor": 2 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 2 },
+    { "number": "STAIR 1", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR 2", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR 3", "type": "Staircase", "floor": 2 },
+  
+    { "number": "R1-301", "floor": 3 },
+    { "number": "R1-302", "floor": 3 },
+    { "number": "R1-303", "floor": 3 },
+    { "number": "R1-304", "floor": 3 },
+    { "number": "R1-305", "floor": 3 },
+    { "number": "R1-306", "floor": 3 },
+    { "number": "R1-307", "floor": 3 },
+
+    { "number": "R1-308", "floor": 3 },
+    { "number": "R1-309", "floor": 3 },
+    { "number": "R1-310", "floor": 3 },
+    { "number": "R1-311", "floor": 3 },
+    { "number": "R1-312", "floor": 3 },
+    { "number": "R1-313", "floor": 3 },
+
+    { "number": "R1-314", "floor": 3 },
+    { "number": "R1-315", "floor": 3 },
+    { "number": "R1-316", "floor": 3 },
+    { "number": "R1-317", "floor": 3 },
+    { "number": "R1-318", "floor": 3 },
+
+    { "number": "R1-319", "floor": 3 },
+    { "number": "R1-320", "floor": 3 },
+    { "number": "R1-321", "floor": 3 },
+
+    { "number": "R1-323", "floor": 3 },
+    { "number": "R1-325", "floor": 3 },
+    { "number": "R1-327", "floor": 3 },
+    { "number": "R1-328", "floor": 3 },
+    { "number": "R1-330", "floor": 3 },
+
+    { "number": "R1-3001", "floor": 3 },
+    { "number": "R1-3003", "floor": 3 },
+    { "number": "R1-3004", "floor": 3 },
+    { "number": "R1-3005", "floor": 3 },
+    { "number": "R1-3006", "floor": 3 },
+    { "number": "R1-3007", "floor": 3 },
+
+    { "number": "R1-3011", "floor": 3 },
+    { "number": "R1-3012", "floor": 3 },
+    { "number": "R1-3013", "floor": 3 },
+    { "number": "R1-3014", "floor": 3 },
+
+    { "number": "R1-3017", "floor": 3 },
+    { "number": "R1-3019", "floor": 3 },
+    { "number": "R1-3020", "floor": 3 },
+    { "number": "R1-3021", "floor": 3 },
+    { "number": "R1-3022", "floor": 3 },
+
+    { "number": "R1-3027", "floor": 3 },
+    { "number": "R1-3032", "floor": 3 },
+    { "number": "R1-3037", "floor": 3 },
+
+    { "number": "R1-LAUNDRY", "type": "Laundry", "floor": 3 },
+    { "number": "R1-KITCHEN", "type": "Kitchen", "floor": 3 },
+    { "number": "R1-LOUNGE", "type": "Lounge", "floor": 3 },
+    { "number": "R1-STAFF ROOM", "type": "Staff Room", "floor": 3 },
+    { "number": "R1-STUDY ROOM 1", "type": "Study Room", "floor": 3 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 3 },
+    { "number": "STAIR 1", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR 2", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR 3", "type": "Staircase", "floor": 3 },
+
+    { "number": "R1-401", "floor": 4 },
+    { "number": "R1-402", "floor": 4 },
+    { "number": "R1-403", "floor": 4 },
+    { "number": "R1-404", "floor": 4 },
+    { "number": "R1-405", "floor": 4 },
+    { "number": "R1-406", "floor": 4 },
+    { "number": "R1-407", "floor": 4 },
+
+    { "number": "R1-408", "floor": 4 },
+    { "number": "R1-409", "floor": 4 },
+    { "number": "R1-410", "floor": 4 },
+    { "number": "R1-411", "floor": 4 },
+    { "number": "R1-412", "floor": 4 },
+    { "number": "R1-413", "floor": 4 },
+
+    { "number": "R1-414", "floor": 4 },
+    { "number": "R1-415", "floor": 4 },
+    { "number": "R1-416", "floor": 4 },
+    { "number": "R1-417", "floor": 4 },
+    { "number": "R1-418", "floor": 4 },
+
+    { "number": "R1-419", "floor": 4 },
+    { "number": "R1-420", "floor": 4 },
+    { "number": "R1-421", "floor": 4 },
+
+    { "number": "R1-423", "floor": 4 },
+    { "number": "R1-425", "floor": 4 },
+    { "number": "R1-427", "floor": 4 },
+    { "number": "R1-428", "floor": 4 },
+    { "number": "R1-430", "floor": 4 },
+
+    { "number": "R1-4001", "floor": 4 },
+    { "number": "R1-4003", "floor": 4 },
+    { "number": "R1-4004", "floor": 4 },
+    { "number": "R1-4005", "floor": 4 },
+    { "number": "R1-4006", "floor": 4 },
+    { "number": "R1-4007", "floor": 4 },
+
+    { "number": "R1-4011", "floor": 4 },
+    { "number": "R1-4012", "floor": 4 },
+    { "number": "R1-4013", "floor": 4 },
+    { "number": "R1-4014", "floor": 4 },
+
+    { "number": "R1-4017", "floor": 4 },
+    { "number": "R1-4019", "floor": 4 },
+    { "number": "R1-4020", "floor": 4 },
+    { "number": "R1-4021", "floor": 4 },
+    { "number": "R1-4022", "floor": 4 },
+
+    { "number": "R1-4027", "floor": 4 },
+    { "number": "R1-4032", "floor": 4 },
+    { "number": "R1-4037", "floor": 4 },
+
+    { "number": "R1-LAUNDRY", "type": "Laundry", "floor": 4 },
+    { "number": "R1-KITCHEN", "type": "Kitchen", "floor": 4 },
+    { "number": "R1-LOUNGE", "type": "Lounge", "floor": 4 },
+    { "number": "R1-STAFF ROOM", "type": "Staff Room", "floor": 4 },
+    { "number": "R1-STUDY ROOM 1", "type": "Study Room", "floor": 4 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 4 },
+    { "number": "STAIR 1", "type": "Staircase", "floor": 4 },
+    { "number": "STAIR 2", "type": "Staircase", "floor": 4 },
+    { "number": "STAIR 3", "type": "Staircase", "floor": 4 },
+
+    { "number": "R1-501", "floor": 5 },
+    { "number": "R1-502", "floor": 5 },
+    { "number": "R1-503", "floor": 5 },
+    { "number": "R1-504", "floor": 5 },
+    { "number": "R1-505", "floor": 5 },
+    { "number": "R1-506", "floor": 5 },
+    { "number": "R1-507", "floor": 5 },
+
+    { "number": "R1-508", "floor": 5 },
+    { "number": "R1-509", "floor": 5 },
+    { "number": "R1-510", "floor": 5 },
+    { "number": "R1-511", "floor": 5 },
+    { "number": "R1-512", "floor": 5 },
+    { "number": "R1-513", "floor": 5 },
+
+    { "number": "R1-514", "floor": 5 },
+    { "number": "R1-515", "floor": 5 },
+    { "number": "R1-516", "floor": 5 },
+    { "number": "R1-517", "floor": 5 },
+    { "number": "R1-518", "floor": 5 },
+
+    { "number": "R1-519", "floor": 5 },
+    { "number": "R1-520", "floor": 5 },
+    { "number": "R1-521", "floor": 5 },
+
+    { "number": "R1-523", "floor": 5 },
+    { "number": "R1-525", "floor": 5 },
+    { "number": "R1-527", "floor": 5 },
+    { "number": "R1-528", "floor": 5 },
+    { "number": "R1-530", "floor": 5 },
+
+    { "number": "R1-5001", "floor": 5 },
+    { "number": "R1-5003", "floor": 5 },
+    { "number": "R1-5004", "floor": 5 },
+    { "number": "R1-5005", "floor": 5 },
+    { "number": "R1-5006", "floor": 5 },
+    { "number": "R1-5007", "floor": 5 },
+
+    { "number": "R1-5011", "floor": 5 },
+    { "number": "R1-5012", "floor": 5 },
+    { "number": "R1-5013", "floor": 5 },
+    { "number": "R1-5014", "floor": 5 },
+
+    { "number": "R1-5017", "floor": 5 },
+    { "number": "R1-5019", "floor": 5 },
+    { "number": "R1-5020", "floor": 5 },
+    { "number": "R1-5021", "floor": 5 },
+    { "number": "R1-5022", "floor": 5 },
+
+    { "number": "R1-5027", "floor": 5 },
+    { "number": "R1-5032", "floor": 5 },
+    { "number": "R1-5037", "floor": 5 },
+
+    { "number": "R1-LAUNDRY", "type": "Laundry", "floor": 5 },
+    { "number": "R1-KITCHEN", "type": "Kitchen", "floor": 5 },
+    { "number": "R1-LOUNGE", "type": "Lounge", "floor": 5 },
+    { "number": "R1-STAFF ROOM", "type": "Staff Room", "floor": 5 },
+    { "number": "R1-STUDY ROOM 1", "type": "Study Room", "floor": 5 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 5 },
+    { "number": "STAIR 1", "type": "Staircase", "floor": 5 },
+    { "number": "STAIR 2", "type": "Staircase", "floor": 5 },
+    { "number": "STAIR 3", "type": "Staircase", "floor": 5 },
+
+
+    { "number": "R1-601", "floor": 6 },
+    { "number": "R1-602", "floor": 6 },
+    { "number": "R1-603", "floor": 6 },
+    { "number": "R1-604", "floor": 6 },
+    { "number": "R1-605", "floor": 6 },
+    { "number": "R1-606", "floor": 6 },
+    { "number": "R1-607", "floor": 6 },
+
+    { "number": "R1-608", "floor": 6 },
+    { "number": "R1-609", "floor": 6 },
+    { "number": "R1-610", "floor": 6 },
+    { "number": "R1-611", "floor": 6 },
+    { "number": "R1-612", "floor": 6 },
+    { "number": "R1-613", "floor": 6 },
+
+    { "number": "R1-614", "floor": 6 },
+    { "number": "R1-615", "floor": 6 },
+    { "number": "R1-616", "floor": 6 },
+    { "number": "R1-617", "floor": 6 },
+    { "number": "R1-618", "floor": 6 },
+
+    { "number": "R1-619", "floor": 6 },
+    { "number": "R1-620", "floor": 6 },
+    { "number": "R1-621", "floor": 6 },
+
+    { "number": "R1-623", "floor": 6 },
+    { "number": "R1-625", "floor": 6 },
+    { "number": "R1-627", "floor": 6 },
+    { "number": "R1-628", "floor": 6 },
+    { "number": "R1-630", "floor": 6 },
+
+    { "number": "R1-6001", "floor": 6 },
+    { "number": "R1-6003", "floor": 6 },
+    { "number": "R1-6004", "floor": 6 },
+    { "number": "R1-6005", "floor": 6 },
+    { "number": "R1-6006", "floor": 6 },
+    { "number": "R1-6007", "floor": 6 },
+
+    { "number": "R1-6011", "floor": 6 },
+    { "number": "R1-6012", "floor": 6 },
+    { "number": "R1-6013", "floor": 6 },
+    { "number": "R1-6014", "floor": 6 },
+
+    { "number": "R1-6017", "floor": 6 },
+    { "number": "R1-6019", "floor": 6 },
+    { "number": "R1-6020", "floor": 6 },
+    { "number": "R1-6021", "floor": 6 },
+    { "number": "R1-6022", "floor": 6 },
+
+    { "number": "R1-6027", "floor": 6 },
+    { "number": "R1-6032", "floor": 6 },
+    { "number": "R1-6037", "floor": 6 },
+
+    { "number": "R1-LAUNDRY", "type": "Laundry", "floor": 6 },
+    { "number": "R1-KITCHEN", "type": "Kitchen", "floor": 6 },
+    { "number": "R1-LOUNGE", "type": "Lounge", "floor": 6 },
+    { "number": "R1-STAFF ROOM", "type": "Staff Room", "floor": 6 },
+    { "number": "R1-STUDY ROOM 1", "type": "Study Room", "floor": 6 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 6 },
+    { "number": "STAIR 1", "type": "Staircase", "floor": 6 },
+    { "number": "STAIR 2", "type": "Staircase", "floor": 6 },
+    { "number": "STAIR 3", "type": "Staircase", "floor": 6 },
+    
+ 
+    {"number": "7001", "floor": 7},
+    {"number": "STAIR R2","type": "Staircase","floor": 7 }
+  ]
+},
+
+  "R2": {  
+  "name": "Building R2",
+  "ref": "R2",
+  "floor": 1,
+  "rooms": 
+  
+   [
+    { "number": "R2-101", "floor": 1 },
+    { "number": "R2-102", "floor": 1 },
+    { "number": "R2-103", "floor": 1 },
+    { "number": "R2-104", "floor": 1 },
+    { "number": "R2-105", "floor": 1 },
+    { "number": "R2-106", "floor": 1 },
+    { "number": "R2-107", "floor": 1 },
+    { "number": "R2-108", "floor": 1 },
+    { "number": "R2-109", "floor": 1 },
+    { "number": "R2-110", "floor": 1 },
+    { "number": "R2-111", "floor": 1 },
+    { "number": "R2-112", "floor": 1 },
+    { "number": "R2-113", "floor": 1 },
+    { "number": "R2-114", "floor": 1 },
+
+    { "number": "R2-1005", "floor": 1 },
+    { "number": "R2-1007", "floor": 1 },
+    { "number": "R2-1009", "floor": 1 },
+    { "number": "R2-1011", "floor": 1 },
+    { "number": "R2-1012", "floor": 1 },
+    { "number": "R2-1014", "floor": 1 },
+    { "number": "R2-1015", "floor": 1 },
+    { "number": "R2-1017", "floor": 1 },
+    { "number": "R2-1019", "floor": 1 },
+
+    { "number": "R2-1020", "floor": 1 },
+
+    { "number": "R2-1021", "floor": 1 },
+    { "number": "R2-1023", "floor": 1 },
+    { "number": "R2-1025", "floor": 1 },
+    { "number": "R2-1027", "floor": 1 },
+    { "number": "R2-1029", "floor": 1 },
+
+    { "number": "STAIR R2-1", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR R2-2", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR R2-3", "type": "Staircase", "floor": 1 },
+
+    { "number": "R2-201", "floor": 2 },
+    { "number": "R2-202", "floor": 2 },
+    { "number": "R2-203", "floor": 2 },
+    { "number": "R2-204", "floor": 2 },
+    { "number": "R2-205", "floor": 2 },
+    { "number": "R2-206", "floor": 2 },
+    { "number": "R2-207", "floor": 2 },
+    { "number": "R2-208", "floor": 2 },
+    { "number": "R2-209", "floor": 2 },
+    { "number": "R2-210", "floor": 2 },
+
+    { "number": "R2-211", "floor": 2 },
+    { "number": "R2-212", "floor": 2 },
+    { "number": "R2-213", "floor": 2 },
+    { "number": "R2-214", "floor": 2 },
+    { "number": "R2-215", "floor": 2 },
+
+    { "number": "R2-2012", "floor": 2 },
+    { "number": "R2-2005", "floor": 2 },
+
+    { "number": "R2-216", "floor": 2 },
+    { "number": "R2-217", "floor": 2 },
+    { "number": "R2-218", "floor": 2 },
+    { "number": "R2-219", "floor": 2 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 2 },
+
+    { "number": "STAIR S1", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR S2", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR S3", "type": "Staircase", "floor": 2 },
+
+
+    { "number": "R2-301", "floor": 3 },
+    { "number": "R2-302", "floor": 3 },
+    { "number": "R2-303", "floor": 3 },
+    { "number": "R2-304", "floor": 3 },
+    { "number": "R2-305", "floor": 3 },
+    { "number": "R2-306", "floor": 3 },
+    { "number": "R2-307", "floor": 3 },
+    { "number": "R2-308", "floor": 3 },
+    { "number": "R2-309", "floor": 3 },
+    { "number": "R2-310", "floor": 3 },
+
+    { "number": "R2-311", "floor": 3 },
+    { "number": "R2-312", "floor": 3 },
+    { "number": "R2-313", "floor": 3 },
+    { "number": "R2-314", "floor": 3 },
+    { "number": "R2-315", "floor": 3 },
+
+    { "number": "R2-316", "floor": 3 },
+    { "number": "R2-317", "floor": 3 },
+    { "number": "R2-318", "floor": 3 },
+    { "number": "R2-319", "floor": 3 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 3 },
+
+    { "number": "STAIR S1", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR S2", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR S3", "type": "Staircase", "floor": 3 },
+
+    { "number": "R2-401", "floor": 4 },
+    { "number": "R2-402", "floor": 4 },
+    { "number": "R2-403", "floor": 4 },
+    { "number": "R2-404", "floor": 4 },
+    { "number": "R2-405", "floor": 4 },
+    { "number": "R2-406", "floor": 4 },
+    { "number": "R2-407", "floor": 4 },
+    { "number": "R2-408", "floor": 4 },
+    { "number": "R2-409", "floor": 4 },
+    { "number": "R2-410", "floor": 4 },
+
+    { "number": "R2-411", "floor": 4 },
+    { "number": "R2-412", "floor": 4 },
+    { "number": "R2-413", "floor": 4 },
+    { "number": "R2-414", "floor": 4 },
+    { "number": "R2-415", "floor": 4 },
+
+    { "number": "R2-416", "floor": 4 },
+    { "number": "R2-417", "floor": 4 },
+    { "number": "R2-418", "floor": 4 },
+    { "number": "R2-419", "floor": 4 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 4 },
+
+    { "number": "STAIR S1", "type": "Staircase", "floor": 4 },
+    { "number": "STAIR S2", "type": "Staircase", "floor": 4 },
+    { "number": "STAIR S3", "type": "Staircase", "floor": 4 },
+
+    { "number": "R2-501", "floor": 5 },
+    { "number": "R2-502", "floor": 5 },
+    { "number": "R2-503", "floor": 5 },
+    { "number": "R2-504", "floor": 5 },
+    { "number": "R2-505", "floor": 5 },
+    { "number": "R2-506", "floor": 5 },
+    { "number": "R2-507", "floor": 5 },
+    { "number": "R2-508", "floor": 5 },
+    { "number": "R2-509", "floor": 5 },
+    { "number": "R2-510", "floor": 5 },
+
+    { "number": "R2-511", "floor": 5 },
+    { "number": "R2-512", "floor": 5 },
+    { "number": "R2-513", "floor": 5 },
+    { "number": "R2-514", "floor": 5 },
+    { "number": "R2-515", "floor": 5 },
+
+    { "number": "R2-516", "floor": 5 },
+    { "number": "R2-517", "floor": 5 },
+    { "number": "R2-518", "floor": 5 },
+    { "number": "R2-519", "floor": 5 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 5 },
+
+    { "number": "STAIR S1", "type": "Staircase", "floor": 5 },
+    { "number": "STAIR S2", "type": "Staircase", "floor": 5 },
+    { "number": "STAIR S3", "type": "Staircase", "floor": 5 },
+
+    { "number": "R2-601", "floor": 6 },
+    { "number": "R2-602", "floor": 6 },
+    { "number": "R2-603", "floor": 6 },
+    { "number": "R2-604", "floor": 6 },
+    { "number": "R2-605", "floor": 6 },
+    { "number": "R2-606", "floor": 6 },
+    { "number": "R2-607", "floor": 6 },
+    { "number": "R2-608", "floor": 6 },
+    { "number": "R2-609", "floor": 6 },
+    { "number": "R2-610", "floor": 6 },
+
+    { "number": "R2-611", "floor": 6 },
+    { "number": "R2-612", "floor": 6 },
+    { "number": "R2-613", "floor": 6 },
+    { "number": "R2-614", "floor": 6 },
+    { "number": "R2-615", "floor": 6 },
+
+    { "number": "R2-616", "floor": 6 },
+    { "number": "R2-617", "floor": 6 },
+    { "number": "R2-618", "floor": 6 },
+    { "number": "R2-619", "floor": 6 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 6 },
+
+    { "number": "STAIR S1", "type": "Staircase", "floor": 6 },
+    { "number": "STAIR S2", "type": "Staircase", "floor": 6 },
+    { "number": "STAIR S3", "type": "Staircase", "floor": 6 },
+
+    { "number": "R2-7001", "floor": 7 },
+
+    { "number": "STAIR S2", "type": "Staircase", "floor": 7 }
+
+  ]
+},
+
+  "R3": {  
+  "name": "Building R3",
+  "ref": "R3",
+  "floor": 1,
+  "rooms": 
+  [
+
+    { "number": "R3-101", "floor": 1 },
+    { "number": "R3-102", "floor": 1 },
+    { "number": "R3-103", "floor": 1 },
+    { "number": "R3-104", "floor": 1 },
+    { "number": "R3-105", "floor": 1 },
+    { "number": "R3-106", "floor": 1 },
+    { "number": "R3-107", "floor": 1 },
+    { "number": "R3-108", "floor": 1 },
+    { "number": "R3-109", "floor": 1 },
+
+    { "number": "R3-110", "floor": 1 },
+    { "number": "R3-111", "floor": 1 },
+    { "number": "R3-112", "floor": 1 },
+    { "number": "R3-113", "floor": 1 },
+
+    { "number": "R3-1007", "floor": 1 },
+    { "number": "R3-1009", "floor": 1 },
+
+    { "number": "R3-1010", "floor": 1 },
+    { "number": "R3-1011", "floor": 1 },
+    { "number": "R3-1012", "floor": 1 },
+    { "number": "R3-1013", "floor": 1 },
+    { "number": "R3-1014", "floor": 1 },
+    { "number": "R3-1015", "floor": 1 },
+    { "number": "R3-1016", "floor": 1 },
+    { "number": "R3-1017", "floor": 1 },
+    { "number": "R3-1018", "floor": 1 },
+    { "number": "R3-1019", "floor": 1 },
+    { "number": "R3-1020", "floor": 1 },
+    { "number": "R3-1021", "floor": 1 },
+    { "number": "R3-1022", "floor": 1 },
+    { "number": "R3-1023", "floor": 1 },
+
+    { "number": "STAIR R3-1", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR R3-2", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR R3-3", "type": "Staircase", "floor": 1 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 1 },
+
+    { "number": "R3-201", "floor": 2 },
+    { "number": "R3-202", "floor": 2 },
+    { "number": "R3-203", "floor": 2 },
+    { "number": "R3-204", "floor": 2 },
+    { "number": "R3-205", "floor": 2 },
+    { "number": "R3-206", "floor": 2 },
+    { "number": "R3-207", "floor": 2 },
+    { "number": "R3-208", "floor": 2 },
+    { "number": "R3-209", "floor": 2 },
+    { "number": "R3-210", "floor": 2 },
+    { "number": "R3-211", "floor": 2 },
+    { "number": "R3-212", "floor": 2 },
+    { "number": "R3-213", "floor": 2 },
+    { "number": "R3-214", "floor": 2 },
+    { "number": "R3-215", "floor": 2 },
+    { "number": "R3-216", "floor": 2 },
+    { "number": "R3-217", "floor": 2 },
+    { "number": "R3-218", "floor": 2 },
+    { "number": "R3-219", "floor": 2 },
+    { "number": "R3-221", "floor": 2 },
+
+    { "number": "R3-2005", "floor": 2 },
+    { "number": "R3-2010", "floor": 2 },
+
+    { "number": "STAIR R3-1", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR R3-2", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR R3-3", "type": "Staircase", "floor": 2 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 2 },
+
+
+    { "number": "R3-301", "floor": 3 },
+    { "number": "R3-302", "floor": 3 },
+    { "number": "R3-303", "floor": 3 },
+    { "number": "R3-304", "floor": 3 },
+    { "number": "R3-305", "floor": 3 },
+    { "number": "R3-306", "floor": 3 },
+    { "number": "R3-307", "floor": 3 },
+    { "number": "R3-308", "floor": 3 },
+    { "number": "R3-309", "floor": 3 },
+    { "number": "R3-310", "floor": 3 },
+    { "number": "R3-311", "floor": 3 },
+    { "number": "R3-312", "floor": 3 },
+    { "number": "R3-313", "floor": 3 },
+    { "number": "R3-314", "floor": 3 },
+    { "number": "R3-315", "floor": 3 },
+    { "number": "R3-316", "floor": 3 },
+    { "number": "R3-317", "floor": 3 },
+    { "number": "R3-318", "floor": 3 },
+    { "number": "R3-319", "floor": 3 },
+    { "number": "R3-321", "floor": 3 },
+
+    { "number": "R3-3005", "floor": 3 },
+    { "number": "R3-3012", "floor": 3 },
+
+    { "number": "STAIR R3-1", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR R3-2", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR R3-3", "type": "Staircase", "floor": 3 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 3 },
+
+    { "number": "R3-401", "floor": 4 },
+    { "number": "R3-402", "floor": 4 },
+    { "number": "R3-403", "floor": 4 },
+    { "number": "R3-404", "floor": 4 },
+    { "number": "R3-405", "floor": 4 },
+    { "number": "R3-406", "floor": 4 },
+    { "number": "R3-407", "floor": 4 },
+    { "number": "R3-408", "floor": 4 },
+    { "number": "R3-409", "floor": 4 },
+    { "number": "R3-410", "floor": 4 },
+    { "number": "R3-411", "floor": 4 },
+    { "number": "R3-412", "floor": 4 },
+    { "number": "R3-413", "floor": 4 },
+    { "number": "R3-414", "floor": 4 },
+    { "number": "R3-415", "floor": 4 },
+    { "number": "R3-416", "floor": 4 },
+    { "number": "R3-417", "floor": 4 },
+    { "number": "R3-418", "floor": 4 },
+    { "number": "R3-419", "floor": 4 },
+    { "number": "R3-421", "floor": 4 },
+
+    { "number": "R3-4005", "floor": 4 },
+    { "number": "R3-4012", "floor": 4 },
+
+    { "number": "STAIR R3-1", "type": "Staircase", "floor": 4 },
+    { "number": "STAIR R3-2", "type": "Staircase", "floor": 4 },
+    { "number": "STAIR R3-3", "type": "Staircase", "floor": 4 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 4 },
+
+
+    { "number": "R3-501", "floor": 5 },
+    { "number": "R3-502", "floor": 5 },
+    { "number": "R3-503", "floor": 5 },
+    { "number": "R3-504", "floor": 5 },
+    { "number": "R3-505", "floor": 5 },
+    { "number": "R3-506", "floor": 5 },
+    { "number": "R3-507", "floor": 5 },
+    { "number": "R3-508", "floor": 5 },
+    { "number": "R3-509", "floor": 5 },
+    { "number": "R3-510", "floor": 5 },
+    { "number": "R3-511", "floor": 5 },
+    { "number": "R3-512", "floor": 5 },
+    { "number": "R3-513", "floor": 5 },
+    { "number": "R3-514", "floor": 5 },
+    { "number": "R3-515", "floor": 5 },
+    { "number": "R3-516", "floor": 5 },
+    { "number": "R3-517", "floor": 5 },
+    { "number": "R3-518", "floor": 5 },
+    { "number": "R3-519", "floor": 5 },
+    { "number": "R3-521", "floor": 5 },
+
+    { "number": "R3-5005", "floor": 5 },
+    { "number": "R3-5010", "floor": 5 },
+    { "number": "R3-5012", "floor": 5 },
+
+    { "number": "STAIR R3-1", "type": "Staircase", "floor": 5 },
+    { "number": "STAIR R3-2", "type": "Staircase", "floor": 5 },
+    { "number": "STAIR R3-3", "type": "Staircase", "floor": 5 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 5 },
+
+    { "number": "R3-601", "floor": 6 },
+    { "number": "R3-602", "floor": 6 },
+    { "number": "R3-603", "floor": 6 },
+    { "number": "R3-604", "floor": 6 },
+    { "number": "R3-605", "floor": 6 },
+    { "number": "R3-606", "floor": 6 },
+    { "number": "R3-607", "floor": 6 },
+    { "number": "R3-608", "floor": 6 },
+    { "number": "R3-609", "floor": 6 },
+    { "number": "R3-610", "floor": 6 },
+    { "number": "R3-611", "floor": 6 },
+    { "number": "R3-612", "floor": 6 },
+    { "number": "R3-613", "floor": 6 },
+    { "number": "R3-614", "floor": 6 },
+    { "number": "R3-615", "floor": 6 },
+    { "number": "R3-616", "floor": 6 },
+    { "number": "R3-618", "floor": 6 },
+    { "number": "R3-619", "floor": 6 },
+    { "number": "R3-621", "floor": 6 },
+
+    { "number": "R3-6005", "floor": 6 },
+    { "number": "R3-6005A", "floor": 6 },
+    { "number": "R3-6010", "floor": 6 },
+    { "number": "R3-6012", "floor": 6 },
+
+    { "number": "ELEV", "type": "Elevator", "floor": 6 },
+
+    { "number": "STAIR R3-1", "type": "Staircase", "floor": 6 },
+    { "number": "STAIR R3-2", "type": "Staircase", "floor": 6 },
+    { "number": "STAIR R3-3", "type": "Staircase", "floor": 6 },
+
+
+    { "number": "R3-7001", "floor": 7 },
+
+    { "number": "STAIR R3-2", "type": "Staircase", "floor": 7 }
+
+
+  ]
+},
+
+"R4": {
+  "name": "Building R4",
+  "ref": "R4",
+  "floors": ["Lower", "Main", "Upper"],
+  "rooms": [
+    { "number": "R4-UNIT 01", "floor": "Lower" },
+    { "number": "R4-UNIT 02", "floor": "Lower" },
+    { "number": "R4-UNIT 03", "floor": "Lower" },
+    { "number": "R4-UNIT 04", "floor": "Lower" },
+    { "number": "R4-UNIT 05", "floor": "Lower" },
+    { "number": "R4-UNIT 06", "floor": "Lower" },
+
+    { "number": "R4-UNIT 01", "floor": "Main" },
+    { "number": "R4-UNIT 02", "floor": "Main" },
+    { "number": "R4-UNIT 03", "floor": "Main" },
+    { "number": "R4-UNIT 04", "floor": "Main" },
+    { "number": "R4-UNIT 05", "floor": "Main" },
+    { "number": "R4-UNIT 06", "floor": "Main" },
+
+    { "number": "R4-UNIT 01", "floor": "Upper" },
+    { "number": "R4-UNIT 02", "floor": "Upper" },
+    { "number": "R4-UNIT 03", "floor": "Upper" },
+    { "number": "R4-UNIT 04", "floor": "Upper" },
+    { "number": "R4-UNIT 05", "floor": "Upper" },
+    { "number": "R4-UNIT 06", "floor": "Upper" }
+  ]
+},
+
+  "R4-2": {
+  "name": "Building R4-2",
+  "ref": "R4",
+  "floors": ["Lower", "Main", "Upper"],
+  "rooms": [
+    { "number": "R4-UNIT 07", "floor": "Lower" },
+    { "number": "R4-UNIT 08", "floor": "Lower" },
+    { "number": "R4-UNIT 09", "floor": "Lower" },
+    { "number": "R4-UNIT 10", "floor": "Lower" },
+    { "number": "R4-UNIT 11", "floor": "Lower" },
+    { "number": "R4-UNIT 12", "floor": "Lower" },
+    { "number": "R4-UNIT 14", "floor": "Lower" },
+
+    { "number": "R4-UNIT 07", "floor": "Main" },
+    { "number": "R4-UNIT 08", "floor": "Main" },
+    { "number": "R4-UNIT 09", "floor": "Main" },
+    { "number": "R4-UNIT 10", "floor": "Main" },
+    { "number": "R4-UNIT 11", "floor": "Main" },
+    { "number": "R4-UNIT 12", "floor": "Main" },
+    { "number": "R4-UNIT 14", "floor": "Main" },
+
+    { "number": "R4-UNIT 07", "floor": "Upper" },
+    { "number": "R4-UNIT 08", "floor": "Upper" },
+    { "number": "R4-UNIT 09", "floor": "Upper" },
+    { "number": "R4-UNIT 10", "floor": "Upper" },
+    { "number": "R4-UNIT 11", "floor": "Upper" },
+    { "number": "R4-UNIT 12", "floor": "Upper" },
+    { "number": "R4-UNIT 14", "floor": "Upper" }
+  ]
+},
+
+"R4-3": {
+  "name": "Building R4-3",
+  "ref": "R4",
+  "floors": ["Lower", "Main", "Upper"],
+  "rooms": [
+    { "number": "R4-UNIT 15", "floor": "Lower" },
+    { "number": "R4-UNIT 16", "floor": "Lower" },
+    { "number": "R4-UNIT 17", "floor": "Lower" },
+    { "number": "R4-UNIT 18", "floor": "Lower" },
+    { "number": "R4-UNIT 19", "floor": "Lower" },
+    { "number": "R4-UNIT 20", "floor": "Lower" },
+    { "number": "R4-UNIT 21", "floor": "Lower" },
+
+    { "number": "R4-UNIT 15", "floor": "Main" },
+    { "number": "R4-UNIT 16", "floor": "Main" },
+    { "number": "R4-UNIT 17", "floor": "Main" },
+    { "number": "R4-UNIT 18", "floor": "Main" },
+    { "number": "R4-UNIT 19", "floor": "Main" },
+    { "number": "R4-UNIT 20", "floor": "Main" },
+    { "number": "R4-UNIT 21", "floor": "Main" },
+
+    { "number": "R4-UNIT 15", "floor": "Upper" },
+    { "number": "R4-UNIT 16", "floor": "Upper" },
+    { "number": "R4-UNIT 17", "floor": "Upper" },
+    { "number": "R4-UNIT 18", "floor": "Upper" },
+    { "number": "R4-UNIT 19", "floor": "Upper" },
+    { "number": "R4-UNIT 20", "floor": "Upper" },
+    { "number": "R4-UNIT 21", "floor": "Upper" }
+  ]
+},
+
+"R4-4": {
+  "name": "Building R4-4",
+  "ref": "R4",
+  "floors": ["Lower", "Main", "Upper"],
+  "rooms": [
+    { "number": "R4-UNIT 22", "floor": "Lower" },
+    { "number": "R4-UNIT 23", "floor": "Lower" },
+    { "number": "R4-UNIT 24", "floor": "Lower" },
+    { "number": "R4-UNIT 25", "floor": "Lower" },
+    { "number": "R4-UNIT 26", "floor": "Lower" },
+    { "number": "R4-UNIT 27", "floor": "Lower" },
+    { "number": "R4-UNIT 28", "floor": "Lower" },
+
+    { "number": "R4-UNIT 22", "floor": "Main" },
+    { "number": "R4-UNIT 23", "floor": "Main" },
+    { "number": "R4-UNIT 24", "floor": "Main" },
+    { "number": "R4-UNIT 25", "floor": "Main" },
+    { "number": "R4-UNIT 26", "floor": "Main" },
+    { "number": "R4-UNIT 27", "floor": "Main" },
+    { "number": "R4-UNIT 28", "floor": "Main" },
+
+    { "number": "R4-UNIT 22", "floor": "Upper" },
+    { "number": "R4-UNIT 23", "floor": "Upper" },
+    { "number": "R4-UNIT 24", "floor": "Upper" },
+    { "number": "R4-UNIT 25", "floor": "Upper" },
+    { "number": "R4-UNIT 26", "floor": "Upper" },
+    { "number": "R4-UNIT 27", "floor": "Upper" },
+    { "number": "R4-UNIT 28", "floor": "Upper" }
+  ]
+},
+
+"R4-5": {
+  "name": "Building R4-5",
+  "ref": "R4",
+  "floors": ["Lower", "Main", "Upper"],
+  "rooms": [
+    { "number": "R4-UNIT 29", "floor": "Lower" },
+    { "number": "R4-UNIT 30", "floor": "Lower" },
+    { "number": "R4-UNIT 31", "floor": "Lower" },
+    { "number": "R4-UNIT 32", "floor": "Lower" },
+    { "number": "R4-UNIT 33", "floor": "Lower" },
+    { "number": "R4-UNIT 34", "floor": "Lower" },
+    { "number": "R4-UNIT 35", "floor": "Lower" },
+
+    { "number": "R4-UNIT 29", "floor": "Main" },
+    { "number": "R4-UNIT 30", "floor": "Main" },
+    { "number": "R4-UNIT 31", "floor": "Main" },
+    { "number": "R4-UNIT 32", "floor": "Main" },
+    { "number": "R4-UNIT 33", "floor": "Main" },
+    { "number": "R4-UNIT 34", "floor": "Main" },
+    { "number": "R4-UNIT 35", "floor": "Main" },
+
+    { "number": "R4-UNIT 29", "floor": "Upper" },
+    { "number": "R4-UNIT 30", "floor": "Upper" },
+    { "number": "R4-UNIT 31", "floor": "Upper" },
+    { "number": "R4-UNIT 32", "floor": "Upper" },
+    { "number": "R4-UNIT 33", "floor": "Upper" },
+    { "number": "R4-UNIT 34", "floor": "Upper" },
+    { "number": "R4-UNIT 35", "floor": "Upper" }
+  ]
+},
+
+
+"R4-6": {
+  "name": "Building R4-6",
+  "ref": "R4",
+  "floors": ["Lower", "Main", "Upper"],
+  "rooms": [
+    { "number": "R4-UNIT 36", "floor": "Lower" },
+    { "number": "R4-UNIT 37", "floor": "Lower" },
+    { "number": "R4-UNIT 38", "floor": "Lower" },
+    { "number": "R4-UNIT 39", "floor": "Lower" },
+
+    { "number": "R4-UNIT 36", "floor": "Main" },
+    { "number": "R4-UNIT 37", "floor": "Main" },
+    { "number": "R4-UNIT 38", "floor": "Main" },
+    { "number": "R4-UNIT 39", "floor": "Main" },
+
+    { "number": "R4-UNIT 36", "floor": "Upper" },
+    { "number": "R4-UNIT 37", "floor": "Upper" },
+    { "number": "R4-UNIT 38", "floor": "Upper" },
+    { "number": "R4-UNIT 39", "floor": "Upper" }
+  ]
+},
+
+"R4-7": {
+  "name": "Building R4-7",
+  "ref": "R4",
+  "floors": ["Lower", "Main", "Upper"],
+  "rooms": [
+    { "number": "R4-UNIT 40", "floor": "Lower" },
+    { "number": "R4-UNIT 41", "floor": "Lower" },
+    { "number": "R4-UNIT 42", "floor": "Lower" },
+    { "number": "R4-UNIT 43", "floor": "Lower" },
+    { "number": "R4-UNIT 44", "floor": "Lower" },
+    { "number": "R4-UNIT 45", "floor": "Lower" },
+
+    { "number": "R4-UNIT 40", "floor": "Main" },
+    { "number": "R4-UNIT 41", "floor": "Main" },
+    { "number": "R4-UNIT 42", "floor": "Main" },
+    { "number": "R4-UNIT 43", "floor": "Main" },
+    { "number": "R4-UNIT 44", "floor": "Main" },
+    { "number": "R4-UNIT 45", "floor": "Main" },
+
+    { "number": "R4-UNIT 40", "floor": "Upper" },
+    { "number": "R4-UNIT 41", "floor": "Upper" },
+    { "number": "R4-UNIT 42", "floor": "Upper" },
+    { "number": "R4-UNIT 43", "floor": "Upper" },
+    { "number": "R4-UNIT 44", "floor": "Upper" },
+    { "number": "R4-UNIT 45", "floor": "Upper" }
+  ]
+},
+
+"R4-8": {
+  "name": "Building R4-8",
+  "ref": "R4",
+  "floors": ["Lower", "Main", "Upper"],
+  "rooms": [
+    { "number": "R4-UNIT 46", "floor": "Lower" },
+    { "number": "R4-UNIT 47", "floor": "Lower" },
+    { "number": "R4-UNIT 48", "floor": "Lower" },
+    { "number": "R4-UNIT 49", "floor": "Lower" },
+    { "number": "R4-UNIT 50", "floor": "Lower" },
+    { "number": "R4-UNIT 51", "floor": "Lower" },
+
+    { "number": "R4-UNIT 46", "floor": "Main" },
+    { "number": "R4-UNIT 47", "floor": "Main" },
+    { "number": "R4-UNIT 48", "floor": "Main" },
+    { "number": "R4-UNIT 49", "floor": "Main" },
+    { "number": "R4-UNIT 50", "floor": "Main" },
+    { "number": "R4-UNIT 51", "floor": "Main" },
+
+    { "number": "R4-UNIT 46", "floor": "Upper" },
+    { "number": "R4-UNIT 47", "floor": "Upper" },
+    { "number": "R4-UNIT 48", "floor": "Upper" },
+    { "number": "R4-UNIT 49", "floor": "Upper" },
+    { "number": "R4-UNIT 50", "floor": "Upper" },
+    { "number": "R4-UNIT 51", "floor": "Upper" }
+  ]
+},
+
+"R4-9": {
+  "name": "Building R4-9",
+  "ref": "R4",
+  "floors": ["Lower", "Main", "Upper"],
+  "rooms": [
+    { "number": "R4-UNIT 52", "floor": "Lower" },
+    { "number": "R4-UNIT 53", "floor": "Lower" },
+    { "number": "R4-UNIT 54", "floor": "Lower" },
+    { "number": "R4-UNIT 55", "floor": "Lower" },
+
+    { "number": "R4-UNIT 52", "floor": "Main" },
+    { "number": "R4-UNIT 53", "floor": "Main" },
+    { "number": "R4-UNIT 54", "floor": "Main" },
+    { "number": "R4-UNIT 55", "floor": "Main" },
+
+    { "number": "R4-UNIT 52", "floor": "Upper" },
+    { "number": "R4-UNIT 53", "floor": "Upper" },
+    { "number": "R4-UNIT 54", "floor": "Upper" },
+    { "number": "R4-UNIT 55", "floor": "Upper" }
+  ]
+},
+
+"R4-10": {
+  "name": "Building R4-10",
+  "ref": "R4",
+  "floors": ["Lower", "Main", "Upper"],
+  "rooms": [
+    { "number": "R4-UNIT 56", "floor": "Lower" },
+    { "number": "R4-UNIT 57", "floor": "Lower" },
+    { "number": "R4-UNIT 58", "floor": "Lower" },
+    { "number": "R4-UNIT 59", "floor": "Lower" },
+    { "number": "R4-UNIT 60", "floor": "Lower" },
+    { "number": "R4-UNIT 61", "floor": "Lower" },
+
+    { "number": "R4-UNIT 56", "floor": "Main" },
+    { "number": "R4-UNIT 57", "floor": "Main" },
+    { "number": "R4-UNIT 58", "floor": "Main" },
+    { "number": "R4-UNIT 59", "floor": "Main" },
+    { "number": "R4-UNIT 60", "floor": "Main" },
+    { "number": "R4-UNIT 61", "floor": "Main" },
+
+    { "number": "R4-UNIT 56", "floor": "Upper" },
+    { "number": "R4-UNIT 57", "floor": "Upper" },
+    { "number": "R4-UNIT 58", "floor": "Upper" },
+    { "number": "R4-UNIT 59", "floor": "Upper" },
+    { "number": "R4-UNIT 60", "floor": "Upper" },
+    { "number": "R4-UNIT 61", "floor": "Upper" }
+  ]
+},
+
+"R4-11": {
+  "name": "Building R4-11",
+  "ref": "R4",
+  "floors": ["Lower", "Main", "Upper"],
+  "rooms": [
+    { "number": "R4-UNIT 62", "floor": "Lower" },
+    { "number": "R4-UNIT 63", "floor": "Lower" },
+    { "number": "R4-UNIT 64", "floor": "Lower" },
+    { "number": "R4-UNIT 65", "floor": "Lower" },
+    { "number": "R4-UNIT 66", "floor": "Lower" },
+
+    { "number": "R4-UNIT 62", "floor": "Main" },
+    { "number": "R4-UNIT 63", "floor": "Main" },
+    { "number": "R4-UNIT 64", "floor": "Main" },
+    { "number": "R4-UNIT 65", "floor": "Main" },
+    { "number": "R4-UNIT 66", "floor": "Main" },
+
+    { "number": "R4-UNIT 62", "floor": "Upper" },
+    { "number": "R4-UNIT 63", "floor": "Upper" },
+    { "number": "R4-UNIT 64", "floor": "Upper" },
+    { "number": "R4-UNIT 65", "floor": "Upper" },
+    { "number": "R4-UNIT 66", "floor": "Upper" }
+  ]
+},
+
+"R4-12": {
+  "name": "Building R4-12",
+  "ref": "R4",
+  "floors": ["Lower", "Main", "Upper"],
+  "rooms": [
+    { "number": "R4-UNIT 67", "floor": "Lower" },
+    { "number": "R4-UNIT 68", "floor": "Lower" },
+    { "number": "R4-UNIT 69", "floor": "Lower" },
+
+    { "number": "R4-UNIT 67", "floor": "Main" },
+    { "number": "R4-UNIT 68", "floor": "Main" },
+    { "number": "R4-UNIT 69", "floor": "Main" },
+
+    { "number": "R4-UNIT 67", "floor": "Upper" },
+    { "number": "R4-UNIT 68", "floor": "Upper" },
+    { "number": "R4-UNIT 69", "floor": "Upper" }
+  ]
+},
+
+"SC": {
+  "name": "Student Centre (SC)",
+  "ref": "SC",
+  "floors": [1, 2, 3],
+  "description": "Main student centre building that includes cafeteria, servery, kitchen, open seating, offices, washrooms, and event space.",
+
+  "main_rooms": [
+    { "number": "SC1013", "type": "Cafeteria", "floor": 1 },
+    { "number": "SC1015", "type": "Servery", "floor": 1 },
+    { "number": "SC1017", "type": "Kitchen", "floor": 1 },
+
+    { "number": "SC2013", "type": "Event / Large Open Area", "floor": 2 },
+    { "number": "SC3001", "type": "Multi-Purpose Hall", "floor": 3 },
+
+    { "number": "SC1001", "floor": 1 },
+    { "number": "SC1002", "floor": 1 },
+    { "number": "SC1010", "floor": 1 },
+    { "number": "SC1011", "floor": 1 },
+    { "number": "SC1012", "floor": 1 },
+
+    { "number": "SC1013", "floor": 1, "type": "Cafeteria" },
+    { "number": "SC1014", "floor": 1 },
+    { "number": "SC1015", "floor": 1, "type": "Servery" },
+    { "number": "SC1016", "floor": 1 },
+    { "number": "SC1017", "floor": 1, "type": "Kitchen" },
+
+    { "number": "SC-1001", "type": "Men’s Washroom", "floor": 1 },
+    { "number": "SC-1001", "type": "Women’s Washroom", "floor": 1 },
+
+    { "number": "SC-ELEV-1", "type": "Elevator", "floor": 1 },
+    { "number": "STAIR SC1", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR SC2", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR SC3", "type": "Staircase", "floor": 1 },
+
+    { "number": "SC2000", "floor": 2 },
+    { "number": "SC2001", "floor": 2 },
+    { "number": "SC2002", "floor": 2 },
+    { "number": "SC2003", "floor": 2 },
+    { "number": "SC2012", "floor": 2, "type": "Washrooms" },
+    { "number": "SC2013", "floor": 2 },
+    { "number": "SC2014", "floor": 2 },
+    { "number": "SC2015", "floor": 2 },
+
+    { "number": "SC-2001", "type": "Men’s Washroom", "floor": 2 },
+    { "number": "SC-2001", "type": "Women’s Washroom", "floor": 2 },
+
+    { "number": "SC-ELEV-1", "type": "Elevator", "floor": 2 },
+    { "number": "STAIR SC1", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR SC2", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR SC3", "type": "Staircase", "floor": 2 },
+
+    { "number": "SC3001", "floor": 3 },
+
+    { "number": "SC-ELEV-1", "type": "Elevator", "floor": 3 },
+    { "number": "STAIR SC1", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR SC2", "type": "Staircase", "floor": 3 }
+
+  ],
+
+  "operating_hours": "Monday to Friday: 7am - 11pm"
+},
+
+"SUB": {
+  "name": "Student Union Building (SUB)",
+  "ref": "SUB",
+  "floors": [1, 2],
+  "description": "Student Union facility containing Outback Shack dining, student spaces, and multipurpose areas.",
+
+  "main_rooms": [
+    { "number": "MEN", "type": "Washroom", "floor": 1 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 1 },
+
+    { "number": "STAIR", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR", "type": "Staircase", "floor": 2 },
+
+    { "number": "1027", "type": "Outback Shack", "floor": 1 },
+    { "number": "2002", "type": "Multipurpose Hall", "floor": 2 },
+
+
+    { "number": "1026", "floor": 1 },
+    { "number": "1027", "type": "Outback Shack", "floor": 1 },
+
+    { "number": "1036", "floor": 1 },
+    { "number": "1034", "floor": 1 },
+    { "number": "1035", "floor": 1 },
+
+    { "number": "1029", "floor": 1 },
+    { "number": "1025", "floor": 1 },
+    { "number": "1023", "floor": 1 },
+
+    { "number": "1014", "floor": 1 },
+    { "number": "1018", "floor": 1 },
+    { "number": "1017", "floor": 1 },
+    { "number": "1016", "floor": 1 },
+    { "number": "1015", "floor": 1 },
+
+    { "number": "1031", "floor": 1 },
+
+    { "number": "1010", "type": "Men’s Washroom", "floor": 1 },
+    { "number": "1011", "type": "Women’s Washroom", "floor": 1 },
+
+    { "number": "1033-C", "type": "Corridor", "floor": 1 },
+    { "number": "1022-C", "type": "Corridor", "floor": 1 },
+    { "number": "1018-C", "type": "Corridor", "floor": 1 },
+
+    { "number": "STAIR 1013", "type": "Staircase", "floor": 1 },
+
+
+    { "number": "2002", "type": "Multipurpose Hall", "floor": 2 },
+
+    { "number": "STAIR 2013", "type": "Staircase", "floor": 2 }
+  ],
+
+  "operating_hours": "Monday to Friday: 7am - 10pm"
+},
+
+
+ "T": {
+  "name": "Building T",
+  "ref": "T",
+  "floors": [1, 2, 3, 4],
+  "description": "Skilled trades and technology building including woodworking, plumbing/electrical, lecture rooms, and labs.",
+
+  "main_rooms": [
+
+    { "number": "T1023", "type": "Plumbing/Electrical Shop", "floor": 1 },
+    { "number": "T1028", "type": "Woodworking Shop", "floor": 1 },
+    { "number": "T1003", "type": "Lecture Room", "floor": 1 },
+
+    { "number": "T1017", "type": "Women’s Washroom", "floor": 1 },
+    { "number": "T1018", "type": "Men’s Washroom", "floor": 1 },
+
+    { "number": "STAIR T1", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR T2", "type": "Staircase", "floor": 1 },
+
+    { "number": "T1002", "floor": 1 },
+    { "number": "T1004", "floor": 1 },
+    { "number": "T1005", "floor": 1 },
+    { "number": "T1006", "floor": 1 },
+    { "number": "T1009", "floor": 1 },
+    { "number": "T1019", "floor": 1 },
+    { "number": "T1022", "floor": 1 },
+    { "number": "T1027", "floor": 1 },
+    { "number": "T1033", "floor": 1 },
+    { "number": "T1034", "floor": 1 },
+    { "number": "T1035", "floor": 1 },
+    { "number": "T1036", "floor": 1 },
+
+    { "number": "T2001", "floor": 2 },
+    { "number": "T2002", "floor": 2 },
+    { "number": "T2006", "floor": 2 },
+    { "number": "T2009", "floor": 2 },
+    { "number": "T2003", "floor": 2 },
+    { "number": "T2007", "floor": 2 },
+
+    { "number": "T2012", "type": "Women’s Washroom", "floor": 2 },
+    { "number": "T2013", "type": "Men’s Washroom", "floor": 2 },
+
+    { "number": "STAIR T2", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR T3", "type": "Staircase", "floor": 2 },
+
+
+    { "number": "T3001-1", "floor": 3 },
+    { "number": "T3001-2", "floor": 3 },
+    { "number": "T3001-3", "floor": 3 },
+    { "number": "T3001-4", "floor": 3 },
+
+    { "number": "T3010", "floor": 3 },
+    { "number": "T3010-4", "floor": 3 },
+
+    { "number": "T3014", "floor": 3 },
+    { "number": "T3016", "floor": 3 },
+
+    { "number": "T3012", "type": "Women’s Washroom", "floor": 3 },
+    { "number": "T3013", "type": "Men’s Washroom", "floor": 3 },
+
+    { "number": "STAIR T2", "type": "Staircase", "floor": 3 },
+    { "number": "STAIR T3", "type": "Staircase", "floor": 3 },
+
+    { "number": "T4001", "type": "Penthouse Mechanical Room", "floor": 4 },
+
+    { "number": "STAIR T2", "type": "Staircase", "floor": 4 },
+    { "number": "STAIR T3", "type": "Staircase", "floor": 4 }
+
+  ],
+
+  "operating_hours": "Monday to Friday: 7am - 10pm"
+},
+
+"Y": {
+  "name": "Building Y",
+  "ref": "Y",
+  "floors": [1, 2],
+  "description": "Multi-purpose academic and aviation training building featuring classrooms, labs, offices, student service areas, and support spaces.",
+
+  "main_rooms": [
+    { "number": "Y1013", "type": "Main Entrance / Lobby", "floor": 1 },
+    { "number": "Y1023", "type": "Classroom", "floor": 1 },
+    { "number": "Y1026", "type": "Office / Service Area", "floor": 1 },
+    { "number": "Y1040", "type": "Large Training Area", "floor": 1 },
+    { "number": "Y1042", "type": "Training Area", "floor": 1 },
+    { "number": "Y2002", "type": "Large Training Area", "floor": 2 },
+    { "number": "Y2015", "type": "Classroom", "floor": 2 },
+
+    { "number": "MEN", "type": "Washroom", "floor": 1 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 1 },
+    { "number": "MEN", "type": "Washroom", "floor": 2 },
+    { "number": "WOMEN", "type": "Washroom", "floor": 2 },
+
+    { "number": "STAIR", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR", "type": "Staircase", "floor": 2 },
+    { "number": "ELEVATOR", "type": "Elevator", "floor": 1 },
+    { "number": "ELEVATOR", "type": "Elevator", "floor": 2 },
+
+
+    { "number": "Y1003", "floor": 1 },
+    { "number": "Y1004", "floor": 1 },
+    { "number": "Y1005", "floor": 1 },
+    { "number": "Y1008", "floor": 1 },
+    { "number": "Y1009", "floor": 1 },
+    { "number": "Y1010", "floor": 1 },
+    { "number": "Y1013", "floor": 1 },
+    { "number": "Y1014", "floor": 1 },
+    { "number": "Y1015", "floor": 1 },
+    { "number": "Y1018", "floor": 1 },
+    { "number": "Y1021", "floor": 1 },
+    { "number": "Y1022", "floor": 1 },
+    { "number": "Y1023", "floor": 1 },
+    { "number": "Y1025", "floor": 1 },
+    { "number": "Y1026", "floor": 1 },
+    { "number": "Y1027", "floor": 1 },
+
+    { "number": "Y1040", "floor": 1 },
+    { "number": "Y1041", "floor": 1 },
+    { "number": "Y1042", "floor": 1 },
+    { "number": "Y1044", "floor": 1 },
+    { "number": "Y1046", "floor": 1 },
+    { "number": "Y1047", "floor": 1 },
+    { "number": "Y1048", "floor": 1 },
+    { "number": "Y1049", "floor": 1 },
+    { "number": "Y1050", "floor": 1 },
+    { "number": "Y1053", "floor": 1 },
+    { "number": "Y1054", "floor": 1 },
+    { "number": "Y1055", "floor": 1 },
+    { "number": "Y1056", "floor": 1 },
+
+    { "number": "Y1001-M", "type": "Men’s Washroom", "floor": 1 },
+    { "number": "Y1001-W", "type": "Women’s Washroom", "floor": 1 },
+    { "number": "Y-ELV-1", "type": "Elevator", "floor": 1 },
+
+    { "number": "STAIR Y1", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR Y2", "type": "Staircase", "floor": 1 },
+
+    { "number": "Y2001", "floor": 2 },
+    { "number": "Y2002", "floor": 2 },
+    { "number": "Y2003", "floor": 2 },
+    { "number": "Y2007", "floor": 2 },
+    { "number": "Y2011", "floor": 2 },
+    { "number": "Y2015", "floor": 2 },
+    { "number": "Y2016", "floor": 2 },
+    { "number": "Y2017", "floor": 2 },
+    { "number": "Y2023", "floor": 2 },
+    { "number": "Y2028", "floor": 2 },
+
+    { "number": "Y2040", "floor": 2 },
+    { "number": "Y2041", "floor": 2 },
+    { "number": "Y2042", "floor": 2 },
+
+    { "number": "Y2002-M", "type": "Men’s Washroom", "floor": 2 },
+    { "number": "Y2002-W", "type": "Women’s Washroom", "floor": 2 },
+
+    { "number": "Y-ELV-2", "type": "Elevator", "floor": 2 },
+
+    { "number": "STAIR Y1", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR Y2", "type": "Staircase", "floor": 2 }
+  ],
+
+  "operating_hours": "Monday to Friday: 7am - 10pm"
+},
+
+"Z": {
+  "name": "Z Building",
+  "ref": "Z",
+  "floors": [1, 2, 3],
+  "description": "Automotive, diesel, powertrain, and mechanical training facilities including labs, shops, classrooms, and simulation rooms.",
+
+  "main_rooms": [
+    { "number": "Z1012", "type": "Cafeteria", "floor": 1 },
+
+    { "number": "Z1089", "type": "Power Train Shop", "floor": 1 },
+    { "number": "Z1095", "type": "Truck Shop", "floor": 1 },
+    { "number": "Z1069", "type": "Auto Body Repair Shop", "floor": 1 },
+    { "number": "Z1014", "type": "Motor Vehicle Repair", "floor": 1 },
+    { "number": "Z1072", "type": "Machine Shop", "floor": 1 },
+    { "number": "Z1070", "type": "Transmission Lab", "floor": 1 },
+    { "number": "Z1076", "type": "Men’s Washroom", "floor": 1 },
+    { "number": "Z1078", "type": "Women’s Washroom", "floor": 1 },
+    { "number": "Z1040", "type": "Electronics / GM Lab Area", "floor": 1 },
+    { "number": "Z1058", "type": "Simulator", "floor": 1 },
+
+    { "number": "Z2039", "type": "Classroom", "floor": 2 },
+    { "number": "Z2035", "type": "Classroom", "floor": 2 },
+    { "number": "Z2033", "type": "Classroom", "floor": 2 },
+    { "number": "Z2031", "type": "Classroom", "floor": 2 },
+    { "number": "Z2027", "type": "Classroom", "floor": 2 },
+    { "number": "Z2025", "type": "Classroom", "floor": 2 },
+    { "number": "Z2023", "type": "Classroom", "floor": 2 },
+    { "number": "Z2019", "type": "Classroom", "floor": 2 },
+    { "number": "Z2017", "type": "Classroom", "floor": 2 },
+
+    { "number": "Z2005", "type": "Classroom", "floor": 2 },
+    { "number": "Z2003", "type": "Classroom", "floor": 2 },
+
+    { "number": "Z2007", "type": "Women's Washroom", "floor": 2 },
+    { "number": "Z2009", "type": "Men’s Washroom", "floor": 2 },
+
+    { "number": "STAIR Z1", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR Z2", "type": "Staircase", "floor": 1 },
+    { "number": "STAIR Z3", "type": "Staircase", "floor": 2 },
+    { "number": "STAIR Z4", "type": "Staircase", "floor": 1 },
+
+
+    { "number": "Z1095", "floor": 1 },
+    { "number": "Z1089", "floor": 1 },
+    { "number": "Z1092", "floor": 1 },
+    { "number": "Z1090", "floor": 1 },
+    { "number": "Z1086", "floor": 1 },
+    { "number": "Z1082", "floor": 1 },
+    { "number": "Z1080", "floor": 1 },
+    { "number": "Z1078", "floor": 1, "type": "Women’s Washroom" },
+    { "number": "Z1076", "floor": 1, "type": "Men’s Washroom" },
+    { "number": "Z1072", "floor": 1 },
+    { "number": "Z1070", "floor": 1 },
+    { "number": "Z1069", "floor": 1 },
+    { "number": "Z1066", "floor": 1 },
+    { "number": "Z1062", "floor": 1 },
+    { "number": "Z1060", "floor": 1 },
+    { "number": "Z1059", "floor": 1 },
+    { "number": "Z1058", "floor": 1 },
+    { "number": "Z1054", "floor": 1 },
+    { "number": "Z1050", "floor": 1 },
+    { "number": "Z1044", "floor": 1 },
+    { "number": "Z1040", "floor": 1 },
+    { "number": "Z1038", "floor": 1 },
+    { "number": "Z1035", "floor": 1 },
+    { "number": "Z1033", "floor": 1 },
+    { "number": "Z1024", "floor": 1 },
+    { "number": "Z1027", "floor": 1 },
+    { "number": "Z1025", "floor": 1 },
+    { "number": "Z1023", "floor": 1 },
+    { "number": "Z1017", "floor": 1 },
+    { "number": "Z1016", "floor": 1 },
+    { "number": "Z1014", "floor": 1 },
+    { "number": "Z1012", "floor": 1, "type": "Cafeteria" },
+    { "number": "Z1011", "floor": 1 },
+    { "number": "Z1010", "floor": 1 },
+    { "number": "Z1009", "floor": 1 },
+    { "number": "Z1007", "floor": 1 },
+    { "number": "Z1003", "floor": 1 },
+
+    { "number": "Z2039", "floor": 2 },
+    { "number": "Z2035", "floor": 2 },
+    { "number": "Z2033", "floor": 2 },
+    { "number": "Z2031", "floor": 2 },
+    { "number": "Z2030", "floor": 2 },
+    { "number": "Z2027", "floor": 2 },
+    { "number": "Z2025", "floor": 2 },
+    { "number": "Z2023", "floor": 2 },
+    { "number": "Z2019", "floor": 2 },
+    { "number": "Z2017", "floor": 2 },
+    { "number": "Z2015", "floor": 2 },
+    { "number": "Z2011", "floor": 2 },
+    { "number": "Z2009", "floor": 2, "type": "Men’s Washroom" },
+    { "number": "Z2007", "floor": 2, "type": "Women’s Washroom" },
+    { "number": "Z2005", "floor": 2 },
+    { "number": "Z2003", "floor": 2 },
+
+    { "number": "Z3001", "floor": 3 },
+    { "number": "STAIR Z4", "floor": 3, "type": "Staircase" }
+  ],
+
+  "operating_hours": "Monday to Friday: 7am - 10pm"
+}
 }
