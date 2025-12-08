@@ -185,9 +185,83 @@
         Switch to GPS
     </button>
     
+    <!-- Room Entry Button -->
+    <button id="room-entry-btn" onclick="showRoomEntryModal()" class="btn btn-sm" style="position:absolute; top:190px; right:10px; z-index:1000; width:164px; background:#A6192E; color:white; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <span style="font-size:18px;"></span>
+        <span>Enter Rooms</span>
+    </button>
+    
     <!-- Location Status Display -->
-    <div id="location-status" style="position:absolute; top:200px; right:10px; z-index:1000; background:rgba(255,255,255,0.9); padding:8px 12px; border-radius:5px; font-size:11px; color:#666; box-shadow:0 2px 4px rgba(0,0,0,0.2); display:none; width:140px;">
+    <div id="location-status" style="position:absolute; top:250px; right:10px; z-index:1000; background:rgba(255,255,255,0.9); padding:8px 12px; border-radius:5px; font-size:11px; color:#666; box-shadow:0 2px 4px rgba(0,0,0,0.2); display:none; width:140px;">
         Manual Mode
+    </div>
+    
+    <!-- Room Entry Modal -->
+    <div id="room-entry-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:10000; justify-content:center; align-items:center;">
+        <div style="background:white; padding:15px; border-radius:8px; max-width:95%; width:340px; margin:10px; box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+            <h3 style="margin:0 0 12px 0; font-size:16px; color:#333; text-align:center;">Navigate Between Rooms</h3>
+            
+            <!-- Start Location Section -->
+            <div style="background:#f8f9fa; padding:10px; border-radius:6px; margin-bottom:12px;">
+                <h4 style="margin:0 0 8px 0; font-size:14px; color:#A6192E;">📍 Starting Location</h4>
+                
+                <div style="margin-bottom:8px;">
+                    <label style="display:block; margin-bottom:4px; font-weight:600; color:#555; font-size:11px;">Building:</label>
+                    <select id="start-building-select" onchange="updateStartRooms()" style="width:100%; padding:6px; font-size:13px; border-radius:5px; border:2px solid #ddd; background:white;">
+                        <option value="">Select building...</option>
+                    </select>
+                </div>
+                
+                <div style="margin-bottom:8px;">
+                    <label style="display:block; margin-bottom:4px; font-weight:600; color:#555; font-size:11px;">Floor:</label>
+                    <select id="start-floor-select" onchange="updateStartRooms()" style="width:100%; padding:6px; font-size:13px; border-radius:5px; border:2px solid #ddd; background:white;">
+                        <option value="">Select floor...</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label style="display:block; margin-bottom:4px; font-weight:600; color:#555; font-size:11px;">Room:</label>
+                    <select id="start-room-select" style="width:100%; padding:6px; font-size:13px; border-radius:5px; border:2px solid #ddd; background:white;">
+                        <option value="">Select starting room...</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- End Location Section -->
+            <div style="background:#f8f9fa; padding:10px; border-radius:6px; margin-bottom:12px;">
+                <h4 style="margin:0 0 8px 0; font-size:14px; color:#A6192E;">🎯 Destination</h4>
+                
+                <div style="margin-bottom:8px;">
+                    <label style="display:block; margin-bottom:4px; font-weight:600; color:#555; font-size:11px;">Building:</label>
+                    <select id="end-building-select" onchange="updateEndRooms()" style="width:100%; padding:6px; font-size:13px; border-radius:5px; border:2px solid #ddd; background:white;">
+                        <option value="">Select building...</option>
+                    </select>
+                </div>
+                
+                <div style="margin-bottom:8px;">
+                    <label style="display:block; margin-bottom:4px; font-weight:600; color:#555; font-size:11px;">Floor:</label>
+                    <select id="end-floor-select" onchange="updateEndRooms()" style="width:100%; padding:6px; font-size:13px; border-radius:5px; border:2px solid #ddd; background:white;">
+                        <option value="">Select floor...</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label style="display:block; margin-bottom:4px; font-weight:600; color:#555; font-size:11px;">Room:</label>
+                    <select id="end-room-select" style="width:100%; padding:6px; font-size:13px; border-radius:5px; border:2px solid #ddd; background:white;">
+                        <option value="">Select destination room...</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="display:flex; gap:6px;">
+                <button onclick="closeRoomEntryModal()" class="btn" style="flex:1; padding:8px; font-size:13px; border:2px solid #A6192E; background:white; color:#A6192E;">
+                    Cancel
+                </button>
+                <button onclick="navigateToRooms()" id="navigate-rooms-btn" class="btn" style="flex:1; padding:8px; font-size:13px; background:#95a5a6; color:white; border:none;">
+                    Navigate
+                </button>
+            </div>
+        </div>
     </div>
     <script>
 		
@@ -476,6 +550,303 @@
             
             // Save state after clearing path
             saveUserState();
+        }
+
+        // Room Entry Modal Functions
+        
+        // Helper function to populate room dropdown for a given building and floor
+        function populateRoomDropdown(selectElement, building, floor) {
+            // Clear previous options
+            selectElement.innerHTML = '<option value="">Select room...</option>';
+            
+            if (!building || !floor) {
+                return;
+            }
+            
+            // Get graph data for the building
+            const graphData = window.buildingGraphData[building];
+            
+            if (!graphData || !graphData.nodeMetadata) {
+                console.warn(`No graph data loaded for ${building}. Please load Floor ${floor} first.`);
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = `Load Floor ${floor} first`;
+                option.disabled = true;
+                selectElement.appendChild(option);
+                return;
+            }
+            
+            // Extract rooms from node metadata
+            const rooms = new Set();
+            Object.entries(graphData.nodeMetadata).forEach(([nodeId, metadata]) => {
+                if (metadata.represents) {
+                    metadata.represents.forEach(item => {
+                        if (item.type === 'room' && item.id) {
+                            rooms.add(item.id);
+                        }
+                    });
+                }
+            });
+            
+            // Sort and populate dropdown
+            const sortedRooms = Array.from(rooms).sort();
+            
+            if (sortedRooms.length === 0) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'No rooms found';
+                option.disabled = true;
+                selectElement.appendChild(option);
+                return;
+            }
+            
+            sortedRooms.forEach(room => {
+                const option = document.createElement('option');
+                option.value = room;
+                option.textContent = room;
+                selectElement.appendChild(option);
+            });
+            
+            console.log(`Populated ${sortedRooms.length} rooms for ${building} Floor ${floor}`);
+        }
+        
+        // Update start room dropdown when building/floor changes
+        function updateStartRooms() {
+            const building = document.getElementById('start-building-select').value;
+            const floor = document.getElementById('start-floor-select').value;
+            const roomSelect = document.getElementById('start-room-select');
+            
+            populateRoomDropdown(roomSelect, building, floor);
+            updateNavigateButton();
+        }
+        
+        // Update end room dropdown when building/floor changes
+        function updateEndRooms() {
+            const building = document.getElementById('end-building-select').value;
+            const floor = document.getElementById('end-floor-select').value;
+            const roomSelect = document.getElementById('end-room-select');
+            
+            populateRoomDropdown(roomSelect, building, floor);
+            updateNavigateButton();
+        }
+        
+        // Update navigate button state based on selections
+        function updateNavigateButton() {
+            const navigateBtn = document.getElementById('navigate-rooms-btn');
+            const startBuilding = document.getElementById('start-building-select').value;
+            const startFloor = document.getElementById('start-floor-select').value;
+            const startRoom = document.getElementById('start-room-select').value;
+            const endBuilding = document.getElementById('end-building-select').value;
+            const endFloor = document.getElementById('end-floor-select').value;
+            const endRoom = document.getElementById('end-room-select').value;
+            
+            if (startBuilding && startFloor && startRoom && endBuilding && endFloor && endRoom) {
+                navigateBtn.style.background = '#A6192E';
+                navigateBtn.style.cursor = 'pointer';
+                navigateBtn.disabled = false;
+            } else {
+                navigateBtn.style.background = '#95a5a6';
+                navigateBtn.style.cursor = 'not-allowed';
+                navigateBtn.disabled = true;
+            }
+        }
+        
+        function showRoomEntryModal() {
+            const modal = document.getElementById('room-entry-modal');
+            const startBuildingSelect = document.getElementById('start-building-select');
+            const startFloorSelect = document.getElementById('start-floor-select');
+            const startRoomSelect = document.getElementById('start-room-select');
+            const endBuildingSelect = document.getElementById('end-building-select');
+            const endFloorSelect = document.getElementById('end-floor-select');
+            const endRoomSelect = document.getElementById('end-room-select');
+            
+            // Clear all selections
+            startBuildingSelect.innerHTML = '<option value="">Select building...</option>';
+            startFloorSelect.innerHTML = '<option value="">Select floor...</option>';
+            startRoomSelect.innerHTML = '<option value="">Select starting room...</option>';
+            endBuildingSelect.innerHTML = '<option value="">Select building...</option>';
+            endFloorSelect.innerHTML = '<option value="">Select floor...</option>';
+            endRoomSelect.innerHTML = '<option value="">Select destination room...</option>';
+            
+            // Check if we have floor plans data
+            if (!window.floorPlans || Object.keys(window.floorPlans).length === 0) {
+                alert('Floor plans not loaded. Please wait a moment and try again.');
+                return;
+            }
+            
+            // Get list of all available buildings from floor plans
+            const availableBuildings = Object.keys(window.floorPlans).sort();
+            
+            console.log(`Available buildings: ${availableBuildings.join(', ')}`);
+            
+            // Populate building dropdowns
+            availableBuildings.forEach(building => {
+                const startOption = document.createElement('option');
+                startOption.value = building;
+                startOption.textContent = building;
+                startBuildingSelect.appendChild(startOption);
+                
+                const endOption = document.createElement('option');
+                endOption.value = building;
+                endOption.textContent = building;
+                endBuildingSelect.appendChild(endOption);
+            });
+            
+            // Populate floor dropdowns (floors 1-3 available)
+            ['1', '2', '3'].forEach(floor => {
+                const startFloorOption = document.createElement('option');
+                startFloorOption.value = floor;
+                startFloorOption.textContent = `Floor ${floor}`;
+                startFloorSelect.appendChild(startFloorOption);
+                
+                const endFloorOption = document.createElement('option');
+                endFloorOption.value = floor;
+                endFloorOption.textContent = `Floor ${floor}`;
+                endFloorSelect.appendChild(endFloorOption);
+            });
+            
+            // Set default values to user's current location
+            const currentBuilding = window.userCurrentBuilding || availableBuildings[0];
+            const currentFloor = window.userCurrentFloor || '1';
+            
+            if (availableBuildings.includes(currentBuilding)) {
+                startBuildingSelect.value = currentBuilding;
+                startFloorSelect.value = currentFloor;
+                updateStartRooms();
+            }
+            
+            // Show modal
+            modal.style.display = 'flex';
+            
+            // Add event listeners for room selection changes
+            startRoomSelect.addEventListener('change', updateNavigateButton);
+            endRoomSelect.addEventListener('change', updateNavigateButton);
+            
+            // Initialize button state
+            updateNavigateButton();
+        }
+        
+        function closeRoomEntryModal() {
+            const modal = document.getElementById('room-entry-modal');
+            modal.style.display = 'none';
+            
+            // Clear all selections
+            document.getElementById('start-building-select').value = '';
+            document.getElementById('start-floor-select').value = '';
+            document.getElementById('start-room-select').value = '';
+            document.getElementById('end-building-select').value = '';
+            document.getElementById('end-floor-select').value = '';
+            document.getElementById('end-room-select').value = '';
+        }
+        
+        function navigateToRooms() {
+            const startBuilding = document.getElementById('start-building-select').value;
+            const startFloor = document.getElementById('start-floor-select').value;
+            const startRoom = document.getElementById('start-room-select').value;
+            const endBuilding = document.getElementById('end-building-select').value;
+            const endFloor = document.getElementById('end-floor-select').value;
+            const endRoom = document.getElementById('end-room-select').value;
+            
+            if (!startBuilding || !startFloor || !startRoom || !endBuilding || !endFloor || !endRoom) {
+                alert('Please select all fields (building, floor, and room) for both start and end locations');
+                return;
+            }
+            
+            console.log(`🗺️ Finding path from ${startRoom} (${startBuilding}, Floor ${startFloor}) to ${endRoom} (${endBuilding}, Floor ${endFloor})`);
+            
+            // Get graph data for both buildings
+            const startGraphData = window.buildingGraphData[startBuilding];
+            const endGraphData = window.buildingGraphData[endBuilding];
+            
+            if (!startGraphData || !endGraphData) {
+                alert('Navigation data not available for selected buildings');
+                console.error('Start building data:', !!startGraphData, 'End building data:', !!endGraphData);
+                return;
+            }
+            
+            // Find nodes that represent the start and end rooms
+            let startNode = null;
+            let endNode = null;
+            
+            // Find start node
+            Object.entries(startGraphData.nodeMetadata).forEach(([nodeId, metadata]) => {
+                if (metadata.represents) {
+                    metadata.represents.forEach(item => {
+                        if (item.type === 'room' && item.id === startRoom) {
+                            startNode = nodeId;
+                        }
+                    });
+                }
+            });
+            
+            // Find end node
+            Object.entries(endGraphData.nodeMetadata).forEach(([nodeId, metadata]) => {
+                if (metadata.represents) {
+                    metadata.represents.forEach(item => {
+                        if (item.type === 'room' && item.id === endRoom) {
+                            endNode = nodeId;
+                        }
+                    });
+                }
+            });
+            
+            if (!startNode || !endNode) {
+                alert('Could not find navigation nodes for selected rooms');
+                console.error('Start node:', startNode, 'End node:', endNode);
+                return;
+            }
+            
+            console.log(`📍 Start node: ${startNode}, End node: ${endNode}`);
+            
+            // Check if same building and floor - use simple pathfinding
+            if (startBuilding === endBuilding && startFloor === endFloor) {
+                console.log('✅ Same building/floor - using simple pathfinding');
+                
+                const path = findShortestPath(startGraphData.graph, startNode, endNode);
+                
+                if (!path) {
+                    alert('No path found between selected rooms');
+                    return;
+                }
+                
+                const svgElement = window.buildingSVGElements[startBuilding];
+                if (!svgElement) {
+                    alert('SVG overlay not available');
+                    return;
+                }
+                
+                drawPathOnMap(path, startGraphData.nodePositions, map, svgElement);
+            } else {
+                // Different buildings or floors - use multi-building pathfinding
+                console.log('🌉 Cross-building/floor navigation - using advanced pathfinding');
+                
+                // Temporarily set user position to start node for pathfinding
+                const originalUserPosition = window.userPosition;
+                window.userPosition = startGraphData.nodePositions[startNode];
+                
+                const pathResult = findPathAcrossBuildings(startBuilding, startFloor, endBuilding, endFloor, endNode);
+                
+                // Restore user position
+                window.userPosition = originalUserPosition;
+                
+                if (!pathResult) {
+                    alert('No path found between selected locations. Buildings may not be connected.');
+                    return;
+                }
+                
+                // Draw the multi-building path
+                if (pathResult.segments && pathResult.segments.length > 0) {
+                    drawMultiBuildingPath(pathResult);
+                } else {
+                    alert('Invalid path result');
+                    return;
+                }
+            }
+            
+            // Close modal
+            closeRoomEntryModal();
+            
+            console.log(`✅ Route displayed from ${startRoom} to ${endRoom}`);
         }
 
         function debugShowNodePositions(buildingName) {
