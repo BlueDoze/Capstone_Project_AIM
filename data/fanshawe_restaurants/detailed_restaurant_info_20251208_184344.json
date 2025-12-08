@@ -1,0 +1,223 @@
+{
+  "metadata": {
+    "source": "restaurant_link_enrichment",
+    "generated_at": "2025-12-08T18:43:56.954922",
+    "source_file": "data/fanshawe_restaurants/restaurants_20251208_183628.json",
+    "total_restaurants_processed": 5,
+    "successful_enrichments": 5,
+    "original_metadata": {
+      "source": "fanshawe_food_page_scraper",
+      "scraped_at": "2025-12-08T18:36:36.754991",
+      "total_restaurants": 21,
+      "source_url": "https://www.fanshawec.ca/students/life/campus-services/food",
+      "extraction_method": "heading_parsing"
+    }
+  },
+  "restaurants": [
+    {
+      "id": "fanshawe_rest_003",
+      "name": "Booster Juice",
+      "original_link": "https://www.fsu.ca/booster-juice",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper",
+      "original_data": {
+        "location": null,
+        "description": "",
+        "building": null,
+        "floor": null,
+        "hours": null,
+        "cuisine_type": null,
+        "menu_highlights": []
+      },
+      "detailed_info": {
+        "url": "https://www.fsu.ca/booster-juice",
+        "accessible": true,
+        "hours": [
+          "Monday to Friday:\n10:00 a.m. to 4:00 p.m.\nSaturday to Sunday:\nClosed\nHours are subject to change.\nLocated in J1002\nStudent Wellness Centre, London Campus",
+          "",
+          ""
+        ],
+        "menu_items": [
+          "refreshing beverage after your workout.\n\nView our menu online or download a PDF version .\n\nBooster Juice Menu Allergy Alert:\n\nTell us before placing your order if you have any food allergies. Booster Juice smoothies, juices and food items may contain",
+          "lergies. Booster Juice smoothies, juices and food items may contain traces of food allergens. For information on our products and ingredients please view the Booster Juice Allergen Guide .\n\nHours of operation\nMonday to Friday:\n10:00 a.m. to 4:00 p.m.",
+          "vigator Magazine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Cre",
+          "all needs. Come by and have yourself a refreshing beverage after your workout.\n\nView our menu online or download a PDF version .\n\nBooster Juice Menu Allergy Alert:\n\nTell us before placing your order if you have any food allergies. Booster Juice smoot",
+          "ine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Creative Cloud\nM"
+        ],
+        "location": null,
+        "description": null,
+        "phone": "519.452.4109",
+        "email": "d_paterson@nullfanshawec.ca",
+        "payment_methods": [],
+        "dietary_options": [
+          "Allergen",
+          "Nut"
+        ],
+        "special_features": [],
+        "raw_content_preview": "Light Dark\nStudent Centre,Room SC1000, 1001 Fanshawe College Blvd., London ON N5Y 5R6 Health Plan opt-in/opt-out/choose plan\nChat With Us\nAbout\nOur Team\nAll Team Members\nExecutive Team\nDirectors\nStaff\nHistory of the FSU\nFees and Financials\nAncillary Fees\nFinancials\nStudent Spaces\nFSU Student Centre\nForwell Hall\nThe Biz Booth\nThe Fuel Station\nHair Salon\nPharmacy\nFSU Gamesrooms\nUpdates and Announcements\nContact Us\nFeedback\nAdvocacy\nServices\nStudent Life\nDomestic Student Health Plan\nFinancial Liter"
+      }
+    },
+    {
+      "id": "fanshawe_rest_004",
+      "name": "Oasis",
+      "original_link": "https://www.fsu.ca/oasis",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper",
+      "original_data": {
+        "location": null,
+        "description": "",
+        "building": null,
+        "floor": null,
+        "hours": null,
+        "cuisine_type": null,
+        "menu_highlights": []
+      },
+      "detailed_info": {
+        "url": "https://www.fsu.ca/oasis",
+        "accessible": true,
+        "hours": [
+          "Monday to Friday:\n8:00 a.m. to 8:00 p.m.\nThe pasta/stir fry and build-a-bowl stations are open 11:00 a.m. to 6:00 p.m.\n\nSaturday to Sunday:\n10:00 a.m. to 6:00 p.m.\n\nLocated in the Student Centre\nLondon Campus",
+          "",
+          ""
+        ],
+        "menu_items": [
+          "ee, fresh bagel or pastry, baked daily.\n\nView our menu online or download a PDF version .\n\nSeven Seas International Fare: Check out our made-to-order pasta and stir fry stations.\n\nView our menu online or download a PDF version .\n\nSunny’s: Grab all-da",
+          "Grab all-day breakfast or check out our pub grub items off the grill.\n\nView our menu online or download a PDF version .\n\nGrab & Go: Fresh pre-made food on the run, featuring fruit cups, parfaits, fresh sushi and lots of other treats! Available in Th",
+          "vigator Magazine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Cre",
+          "UB before heading to the patio.\n\nGrinders: Grab a coffee, fresh bagel or pastry, baked daily.\n\nView our menu online or download a PDF version .\n\nSeven Seas International Fare: Check out our made-to-order pasta and stir fry stations.\n\nView our menu on",
+          "ine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Creative Cloud\nM"
+        ],
+        "location": null,
+        "description": null,
+        "phone": "519.452.4109",
+        "email": "d_paterson@nullfanshawec.ca",
+        "payment_methods": [],
+        "dietary_options": [],
+        "special_features": [],
+        "raw_content_preview": "Light Dark\nStudent Centre,Room SC1000, 1001 Fanshawe College Blvd., London ON N5Y 5R6 Health Plan opt-in/opt-out/choose plan\nChat With Us\nAbout\nOur Team\nAll Team Members\nExecutive Team\nDirectors\nStaff\nHistory of the FSU\nFees and Financials\nAncillary Fees\nFinancials\nStudent Spaces\nFSU Student Centre\nForwell Hall\nThe Biz Booth\nThe Fuel Station\nHair Salon\nPharmacy\nFSU Gamesrooms\nUpdates and Announcements\nContact Us\nFeedback\nAdvocacy\nServices\nStudent Life\nDomestic Student Health Plan\nFinancial Liter"
+      }
+    },
+    {
+      "id": "fanshawe_rest_008",
+      "name": "CD's Coffee Bar",
+      "original_link": "https://www.fsu.ca/hospitality",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper",
+      "original_data": {
+        "location": null,
+        "description": "",
+        "building": null,
+        "floor": null,
+        "hours": null,
+        "cuisine_type": null,
+        "menu_highlights": []
+      },
+      "detailed_info": {
+        "url": "https://www.fsu.ca/hospitality",
+        "accessible": true,
+        "hours": [
+          "Monday to Friday:\n9:00 a.m. to 4:30 p.m.\n\nSaturday and Sunday:\nClosed",
+          "",
+          ""
+        ],
+        "menu_items": [
+          "re\n\nCatering by FSU\n\nOrder from a wide variety of menus, venues and support services for all your catering needs. Cater your event with Catering by FSU.\n\nGo to Website\n\nGrab and Go\n\nWhere you can find fresh pre-made food on the run. Grab and Go is lo",
+          "Grab all-day breakfast or check out our pub grub items off the grill. Sunny’s is located in the Oasis in the Student Centre.\n\nRead More\nFSU Staff\nHospitality Team\n\nThe Fanshawe Student Union’s Hospitality team provides food services to Fanshawe’s st",
+          "vigator Magazine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Cre",
+          "the Student Centre.\n\nRead More\n\nGrinders\n\nGrab a coffee, fresh bagel or pastry, baked daily. Grinders is located in the Oasis in the Student Centre.\n\nRead More\n\nOasis\n\nCome to the Oasis to experience our “Marché“ style, multi-station food court. The",
+          "ine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Creative Cloud\nM"
+        ],
+        "location": null,
+        "description": null,
+        "phone": "519.452.4109",
+        "email": null,
+        "payment_methods": [],
+        "dietary_options": [],
+        "special_features": [],
+        "raw_content_preview": "Light Dark\nStudent Centre,Room SC1000, 1001 Fanshawe College Blvd., London ON N5Y 5R6 Health Plan opt-in/opt-out/choose plan\nChat With Us\nAbout\nOur Team\nAll Team Members\nExecutive Team\nDirectors\nStaff\nHistory of the FSU\nFees and Financials\nAncillary Fees\nFinancials\nStudent Spaces\nFSU Student Centre\nForwell Hall\nThe Biz Booth\nThe Fuel Station\nHair Salon\nPharmacy\nFSU Gamesrooms\nUpdates and Announcements\nContact Us\nFeedback\nAdvocacy\nServices\nStudent Life\nDomestic Student Health Plan\nFinancial Liter"
+      }
+    },
+    {
+      "id": "fanshawe_rest_009",
+      "name": "The Out Back Shack",
+      "original_link": "https://www.fsu.ca/out-back-shack",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper",
+      "original_data": {
+        "location": null,
+        "description": "",
+        "building": null,
+        "floor": null,
+        "hours": null,
+        "cuisine_type": null,
+        "menu_highlights": []
+      },
+      "detailed_info": {
+        "url": "https://www.fsu.ca/out-back-shack",
+        "accessible": true,
+        "hours": [
+          "Monday to Friday:\n11:00 a.m. to 7:00 p.m.\nSaturday to Sunday:\nClosed\nHours are subject to change.",
+          "",
+          ""
+        ],
+        "menu_items": [
+          "eat bar and grill or order for pick-up.\n\nView our menu online or download a PDF version .\n\nEvents\n\nYou can subscribe to the FSU events calendar through various calendar applications such as Google Calendar and Outlook. The address to use when asked f",
+          "vigator Magazine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Cre",
+          "rve double shots or allow patrons to purchase two drinks at a time for their own consumption. All pitchers of draught will be served to a minimum of two patrons.\n\nEnd of Bar Service\n\nAGCO legislation states that all signs of alcoholic beverage consum",
+          "handling, holding or consumption of any alcoholic beverage.\n\nTheft or Damage\n\nTheft or damage to the FSU or College property will be reported to Campus Security Services . This will result in charges, possible further discipline and payment for the c",
+          "ine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Creative Cloud\nM"
+        ],
+        "location": null,
+        "description": null,
+        "phone": "519.452.4109",
+        "email": "d_paterson@nullfanshawec.ca",
+        "payment_methods": [],
+        "dietary_options": [
+          "Nut"
+        ],
+        "special_features": [],
+        "raw_content_preview": "Light Dark\nStudent Centre,Room SC1000, 1001 Fanshawe College Blvd., London ON N5Y 5R6 Health Plan opt-in/opt-out/choose plan\nChat With Us\nAbout\nOur Team\nAll Team Members\nExecutive Team\nDirectors\nStaff\nHistory of the FSU\nFees and Financials\nAncillary Fees\nFinancials\nStudent Spaces\nFSU Student Centre\nForwell Hall\nThe Biz Booth\nThe Fuel Station\nHair Salon\nPharmacy\nFSU Gamesrooms\nUpdates and Announcements\nContact Us\nFeedback\nAdvocacy\nServices\nStudent Life\nDomestic Student Health Plan\nFinancial Liter"
+      }
+    },
+    {
+      "id": "fanshawe_rest_013",
+      "name": "The Nest Convenience Store",
+      "original_link": "https://www.fsu.ca/nest",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper",
+      "original_data": {
+        "location": null,
+        "description": "",
+        "building": null,
+        "floor": null,
+        "hours": null,
+        "cuisine_type": null,
+        "menu_highlights": []
+      },
+      "detailed_info": {
+        "url": "https://www.fsu.ca/nest",
+        "accessible": true,
+        "hours": [
+          "Monday to Friday:\n9:00 a.m. to 10:00 p.m.\nSaturday to Sunday:\nClosed\nHours are subject to change.\nLocated in L1001\nStudent Union Building, London Campus",
+          "",
+          ""
+        ],
+        "menu_items": [
+          ", subscribe to our newsletter\nSubscribe Now\nQuick Menu\nHome\nAbout\nOur Team\nContact Us\nAdvertising\nStudent Services\nUpcoming Events\nContests\nFuel Esports\nFSU Class Reps\nFSU Clubs\nFSU Jobs\nVolunteer Opportunities\nFSU Leadership Opportunities\nGet in Tou",
+          "vigator Magazine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Cre",
+          "s, including sushi and ICEE slushies, the coldest drink on campus!\n\nHours of operation\nMonday to Friday:\n9:00 a.m. to 10:00 p.m.\nSaturday to Sunday:\nClosed\nHours are subject to change.\nLocated in L1001\nStudent Union Building, London Campus\nContact In",
+          "ommunity a place to purchase a variety of snacks, beverages and pre-made meals, including sushi and ICEE slushies, the coldest drink on campus!\n\nHours of operation\nMonday to Friday:\n9:00 a.m. to 10:00 p.m.\nSaturday to Sunday:\nClosed\nHours are subject",
+          "ine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Creative Cloud\nM"
+        ],
+        "location": null,
+        "description": null,
+        "phone": "519.452.4109",
+        "email": "d_paterson@nullfanshawec.ca",
+        "payment_methods": [],
+        "dietary_options": [],
+        "special_features": [],
+        "raw_content_preview": "Light Dark\nStudent Centre,Room SC1000, 1001 Fanshawe College Blvd., London ON N5Y 5R6 Health Plan opt-in/opt-out/choose plan\nChat With Us\nAbout\nOur Team\nAll Team Members\nExecutive Team\nDirectors\nStaff\nHistory of the FSU\nFees and Financials\nAncillary Fees\nFinancials\nStudent Spaces\nFSU Student Centre\nForwell Hall\nThe Biz Booth\nThe Fuel Station\nHair Salon\nPharmacy\nFSU Gamesrooms\nUpdates and Announcements\nContact Us\nFeedback\nAdvocacy\nServices\nStudent Life\nDomestic Student Health Plan\nFinancial Liter"
+      }
+    }
+  ]
+}
