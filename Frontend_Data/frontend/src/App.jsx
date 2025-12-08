@@ -21,6 +21,7 @@ export default function FanshaweNavigator() {
   ]);
   const [input, setInput] = useState('');
   const [showMap, setShowMap] = useState(false);
+  const [showInteractiveMap, setShowInteractiveMap] = useState(false);
   const [geoJsonData, setGeoJsonData] = useState(null);
   const [mapBounds, setMapBounds] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -360,9 +361,9 @@ export default function FanshaweNavigator() {
               {/* Quick Action Chips - Single Row */}
               <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
                 <button
-                  onClick={() => window.open('/interactive-map', '_blank')}
+                  onClick={() => setShowInteractiveMap(true)}
                   className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-fanshawe-red dark:border-fanshawe-red bg-fanshawe-red text-white hover:bg-fanshawe-red-dark hover:border-fanshawe-red-dark text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0 shadow-md"
-                  title="Open full-screen interactive navigation map in new window"
+                  title="Open interactive navigation map"
                 >
                   <MapPin size={16} />
                   <span>Interactive Map</span>
@@ -373,23 +374,6 @@ export default function FanshaweNavigator() {
                 >
                   <MapIcon size={16} />
                   <span>Show Campus Map</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setShowIndoorMap(true);
-                    setMapAction({ type: 'INTERACTIVE_MODE', mode: 'selection' });
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-fanshawe-red dark:border-fanshawe-red bg-transparent hover:bg-fanshawe-red hover:text-white dark:hover:bg-fanshawe-red-dark text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
-                >
-                  <Navigation size={16} />
-                  <span>Indoor Navigation</span>
-                </button>
-                <button
-                  onClick={() => setInput("How do I get from building A to building B?")}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-all duration-200 whitespace-nowrap flex-shrink-0"
-                >
-                  <Navigation size={16} />
-                  <span>Campus Navigation</span>
                 </button>
                 <button
                   onClick={() => setInput("What's in building A?")}
@@ -509,6 +493,36 @@ export default function FanshaweNavigator() {
                     <p className="text-gray-800 dark:text-gray-100">Loading map...</p>
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Interactive Map Modal */}
+        {showInteractiveMap && (
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            onClick={() => setShowInteractiveMap(false)}
+          >
+            <div 
+              className="bg-white dark:bg-gray-800 rounded-lg w-[90%] h-[90%] flex flex-col border-2 border-gray-400 dark:border-gray-600 transition-colors duration-200"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center p-4 border-b border-gray-300 dark:border-gray-700">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Interactive Navigation Map</h3>
+                <button
+                  onClick={() => setShowInteractiveMap(false)}
+                  className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              <div className="flex-1 overflow-hidden relative">
+                <iframe 
+                  src="/interactive-map" 
+                  className="w-full h-full border-0"
+                  title="Interactive Navigation Map"
+                />
               </div>
             </div>
           </div>

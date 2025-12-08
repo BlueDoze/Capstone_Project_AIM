@@ -1,19 +1,30 @@
 {
-  "Building M": {
-  	"positionAdjustments": {
-  	"latOffset": -0.00003,
-  	"lngOffset": 0.000084,
-  	"scale": 1.48,
-  	"rotation": -21.5
-  	}
-  },
-  
   "Building H": {
-  	"positionAdjustments": {
-  	"latOffset": -0.000023,
-  	"lngOffset": -0.000038,
-  	"scale": 1.2,
-  	"rotation": -20.5
-  	}
+    "1": {
+      "positionAdjustments": {
+        "latOffset": -0.000024,
+        "lngOffset": -0.000059,
+        "scale": 1.28,
+        "rotation": -20.5
+      }
+    }
+  },
+  "Building M": {
+    "1": {
+      "positionAdjustments": {
+        "latOffset": -0.000032,
+        "lngOffset": 0.000078,
+        "scale": 1.48,
+        "rotation": -21.5
+      }
+    },
+    "2": {
+      "positionAdjustments": {
+        "latOffset": -0.000055,
+        "lngOffset": 0.000045,
+        "scale": 1.52,
+        "rotation": -21.3
+      }
+    }
   }
 }
