@@ -1460,7 +1460,7 @@ def api_chat():
         # Route to appropriate handler
         if intent_type == "NAVIGATION":
             # Simplified: Just direct user to interactive map
-            reply_message = "To find routes and navigate the campus, please use the Fanshawe Map. Click the 'Show Map' button below chatbar to access the complete map navigation.\\n\\nOn the map you'll be able to:\\n• View all buildings and rooms\\n• Select starting point and destination\\n• Get detailed step-by-step routes\\n• Visualize routes between different buildings"
+            reply_message = "To navigate inside buildings and find routes between rooms:\n• Click the 'Interactive Map' button below the chatbar\n• Select your starting point and destination\n• Get detailed step-by-step indoor directions\n\nFor general campus overview and building locations:\n• Click the 'Show Campus Map' button to view all buildings and campus layout"
             response_data = {
                 "reply": reply_message,
                 "session_id": session_id,
