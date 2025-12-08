@@ -287,7 +287,7 @@ export async function loadNavigationNodes(building) {
  */
 export async function loadBuildingConnections() {
   try {
-    const response = await fetch('/leaflet-assets/JSON/building_connections.JSON');
+    const response = await fetch('/leaflet-assets/JSON/building_connections.json');
     if (!response.ok) {
       throw new Error('Failed to load building connections');
     }

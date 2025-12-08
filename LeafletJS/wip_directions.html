@@ -89,7 +89,7 @@
 
         async function loadBuildingPositions() {
             try {   
-                const response = await fetch('JSON/Building Positions.json');
+                const response = await fetch('JSON/building_positions.json');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }

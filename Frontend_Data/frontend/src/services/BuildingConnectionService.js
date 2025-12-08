@@ -21,7 +21,7 @@ export async function fetchBuildingConnections() {
   }
 
   try {
-    const response = await fetch('/leaflet-assets/building_connections.JSON');
+    const response = await fetch('/leaflet-assets/building_connections.json');
     
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);

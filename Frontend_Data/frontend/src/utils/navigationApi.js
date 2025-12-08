@@ -168,7 +168,7 @@ export function getFloorPlanUrl(building, floor) {
  */
 export async function getBuildingPositions() {
   try {
-    const response = await fetch('/leaflet-assets/Building positions.JSON');
+    const response = await fetch('/leaflet-assets/building_positions.json');
     if (!response.ok) throw new Error('Failed to fetch building positions');
     const data = await response.json();
     return data;
