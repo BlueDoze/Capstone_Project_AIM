@@ -1980,7 +1980,7 @@
 
         async function loadBuildingPositions() {
             try {   
-                const response = await fetch('/leaflet-assets/JSON/Building positions.JSON?ts=' + new Date().getTime());
+                const response = await fetch('/leaflet-assets/JSON/building_positions.json?ts=' + new Date().getTime());
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
