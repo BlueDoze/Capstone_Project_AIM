@@ -148,6 +148,21 @@
   "ref": "B",
   "floors": [1, 2, 3],
   "description": "Technology, engineering, manufacturing, and computer labs.",
+  "facilities": [
+    "Classrooms",
+    "Lecture Rooms",
+    "Computer Labs",
+    "Automation Labs",
+    "Mechatronics Labs",
+    "Machine Shop",
+    "Manufacturing Labs",
+    "Welding Shop",
+    "Atrium",
+    "Washrooms",
+    "Staircases",
+    "Elevators",
+    "Mezzanine"
+  ],
   "main_rooms": [
 
    
@@ -268,6 +283,16 @@
   "ref": "C",
   "floors": [1, 2],
   "description": "Academic building containing classrooms, labs, offices, and student spaces.",
+  "facilities": [
+    "Classrooms",
+    "Labs",
+    "Offices",
+    "Student Spaces",
+    "Covered Parking",
+    "Washrooms",
+    "Staircases",
+    "Service Tunnel"
+  ],
   "main_rooms": [
 
    
@@ -335,6 +360,21 @@
   "ref": "D",
   "floors": [1, 2, 3, 4],
   "description": "Arts, design, cafeteria, lecture rooms, studios, and student spaces.",
+  "facilities": [
+    "Classrooms",
+    "Lecture Rooms",
+    "Art Studios",
+    "Design Studios",
+    "Cafeteria",
+    "Clothing Store",
+    "Variety Store",
+    "Courtyard Café",
+    "Lounge",
+    "Washrooms",
+    "Staircases",
+    "Elevators",
+    "Service Tunnel"
+  ],
   "main_rooms": [
 
     { "number": "MEN", "type": "Washroom", "floor": 1 },
@@ -499,6 +539,16 @@
   "ref": "E",
   "floors": [1, 2, 3],
   "description": "Student services building including Registrar, Financial Aid, International Students, Technical Support, and lounges.",
+  "facilities": [
+    "Registrar Office",
+    "Financial Aid",
+    "International Students Office",
+    "Technical Support",
+    "Student Lounges",
+    "Offices",
+    "Washrooms",
+    "Staircases"
+  ],
   "main_rooms": [
 
 
@@ -558,6 +608,17 @@
   "ref": "F",
   "floors": [1, 2, 3, 4],
   "description": "Health sciences building including labs, classrooms, and support areas.",
+  "facilities": [
+    "Classrooms",
+    "Health Sciences Labs",
+    "Medical Labs",
+    "Nursing Labs",
+    "Clinical Simulation Labs",
+    "Offices",
+    "Washrooms",
+    "Staircases",
+    "Elevators"
+  ],
   "main_rooms": [
 
 
@@ -666,6 +727,14 @@
   "ref": "G",
   "floors": [1, 2, 3],
   "description": "Business building with classrooms, lounge areas, and faculty offices.",
+  "facilities": [
+    "Classrooms",
+    "Business Labs",
+    "Faculty Offices",
+    "Student Lounge",
+    "Washrooms",
+    "Staircases"
+  ],
   "main_rooms": [
 
     { "number": "MEN", "type": "Washroom", "floor": 1 },
@@ -722,6 +791,17 @@
   "ref": "H",
   "floors": [1, 2, 3, 4],
   "description": "Hospitality and tourism building containing executive offices, cafeteria, board room, gallery, and classrooms.",
+  "facilities": [
+    "Classrooms",
+    "Executive Offices",
+    "President's Office",
+    "Board Room",
+    "Cafeteria",
+    "Servery",
+    "Art Gallery",
+    "Washrooms",
+    "Staircases"
+  ],
   "main_rooms": [
 
     { "number": "MEN", "type": "Washroom", "floor": 1 },
@@ -818,6 +898,9 @@
   "ref": "I",
   "floors": [1],
   "description": "Small building with two rooms on the first floor.",
+  "facilities": [
+    "Offices"
+  ],
   "main_rooms": [
     { "number": "I1001", "floor": 1 },
     { "number": "I1002", "floor": 1 }
@@ -829,6 +912,17 @@
   "ref": "J",
   "floors": [1, 2, 3],
   "description": "Athletics and gymnasium building with multiple gyms, studios, and support rooms.",
+  "facilities": [
+    "Gymnasium 1",
+    "Gymnasium 2",
+    "Gymnasium 3",
+    "Community Fitness Centre",
+    "Squash Courts",
+    "Athletics Offices",
+    "Fitness Studios",
+    "Washrooms",
+    "Locker Rooms"
+  ],
   "main_rooms": [
     
     { "number": "J1032", "type": "Gym 3", "floor": 1 },
@@ -882,7 +976,13 @@
   "ref": "K",
   "floors": [1],
   "description": "Innovation and development offices, scholarships, and support spaces.",
-
+  "facilities": [
+    "Centre for Innovation",
+    "Development Offices",
+    "Scholarship Services",
+    "Administrative Offices",
+    "Meeting Rooms"
+  ],
   "main_rooms": [
     { "number": "K1001", "floor": 1 },
     { "number": "K1002", "floor": 1 },
@@ -907,7 +1007,11 @@
   "ref": "L",
   "floors": [1, 2, 3, 4],
   "description": "L Building connected to F Building. Contains offices and open multi-purpose spaces.",
-
+  "facilities": [
+    "Offices",
+    "Multi-Purpose Spaces",
+    "Meeting Rooms"
+  ],
   "main_rooms": [
     { "number": "L1001", "floor": 1 },
     { "number": "L1002", "floor": 1 },
@@ -936,7 +1040,17 @@
   "ref": "M",
   "floors": [1, 2, 3, 4],
   "description": "Media and entertainment building with classrooms, labs, offices, and production spaces.",
-
+  "facilities": [
+    "Classrooms",
+    "Media Production Studios",
+    "Broadcasting Labs",
+    "Film Production Labs",
+    "Audio Studios",
+    "Editing Suites",
+    "Photography Labs",
+    "Offices",
+    "Equipment Storage"
+  ],
   "main_rooms": [
     { "number": "M1001", "floor": 1 },
     { "number": "M1002", "floor": 1 },
@@ -1010,7 +1124,10 @@
   "ref": "N",
   "floors": [1],
   "description": "Small building with a few numbered rooms connected to surrounding structures.",
-
+  "facilities": [
+    "Offices",
+    "Storage"
+  ],
   "main_rooms": [
     { "number": "N1000", "floor": 1 },
     { "number": "N1001", "floor": 1 },
@@ -2131,7 +2248,19 @@
   "ref": "SC",
   "floors": [1, 2, 3],
   "description": "Main student centre building that includes cafeteria, servery, kitchen, open seating, offices, washrooms, and event space.",
-
+  "facilities": [
+    "Cafeteria",
+    "Food Servery",
+    "Commercial Kitchen",
+    "Multi-Purpose Hall",
+    "Event Space",
+    "Open Seating Areas",
+    "Student Lounge",
+    "Offices",
+    "Washrooms",
+    "Elevators",
+    "Staircases"
+  ],
   "main_rooms": [
     { "number": "SC1013", "type": "Cafeteria", "floor": 1 },
     { "number": "SC1015", "type": "Servery", "floor": 1 },
@@ -2193,7 +2322,14 @@
   "ref": "SUB",
   "floors": [1, 2],
   "description": "Student Union facility containing Outback Shack dining, student spaces, and multipurpose areas.",
-
+  "facilities": [
+    "Outback Shack Restaurant",
+    "Student Union Offices",
+    "Student Lounge",
+    "Multipurpose Rooms",
+    "Meeting Spaces",
+    "Washrooms"
+  ],
   "main_rooms": [
     { "number": "MEN", "type": "Washroom", "floor": 1 },
     { "number": "WOMEN", "type": "Washroom", "floor": 1 },
@@ -2248,7 +2384,18 @@
   "ref": "T",
   "floors": [1, 2, 3, 4],
   "description": "Skilled trades and technology building including woodworking, plumbing/electrical, lecture rooms, and labs.",
-
+  "facilities": [
+    "Classrooms",
+    "Lecture Rooms",
+    "Woodworking Shop",
+    "Plumbing Lab",
+    "Electrical Lab",
+    "Skilled Trades Labs",
+    "Workshops",
+    "Washrooms",
+    "Staircases",
+    "Mechanical Room"
+  ],
   "main_rooms": [
 
     { "number": "T1023", "type": "Plumbing/Electrical Shop", "floor": 1 },
@@ -2320,7 +2467,18 @@
   "ref": "Y",
   "floors": [1, 2],
   "description": "Multi-purpose academic and aviation training building featuring classrooms, labs, offices, student service areas, and support spaces.",
-
+  "facilities": [
+    "Classrooms",
+    "Aviation Training Areas",
+    "Flight Simulators",
+    "Labs",
+    "Offices",
+    "Student Services",
+    "Main Lobby",
+    "Washrooms",
+    "Elevators",
+    "Staircases"
+  ],
   "main_rooms": [
     { "number": "Y1013", "type": "Main Entrance / Lobby", "floor": 1 },
     { "number": "Y1023", "type": "Classroom", "floor": 1 },
@@ -2411,7 +2569,20 @@
   "ref": "Z",
   "floors": [1, 2, 3],
   "description": "Automotive, diesel, powertrain, and mechanical training facilities including labs, shops, classrooms, and simulation rooms.",
-
+  "facilities": [
+    "Classrooms",
+    "Cafeteria",
+    "Automotive Repair Shop",
+    "Auto Body Repair Shop",
+    "Diesel Truck Shop",
+    "Powertrain Shop",
+    "Transmission Lab",
+    "Machine Shop",
+    "Electronics Lab",
+    "Driving Simulators",
+    "Washrooms",
+    "Staircases"
+  ],
   "main_rooms": [
     { "number": "Z1012", "type": "Cafeteria", "floor": 1 },
 
