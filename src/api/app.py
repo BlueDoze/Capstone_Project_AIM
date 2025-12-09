@@ -1533,8 +1533,7 @@ def load_building_info():
         return building_info_data
 
     possible_paths = [
-        project_root / 'data' / 'map_data' / 'predios_info_english.json',
-        project_root / 'src' / 'config' / 'predios_info_english.json',
+        project_root / 'src' / 'data' / 'floorplan' / 'floorplan_buildins.json',
     ]
 
     for json_path in possible_paths:
@@ -1602,7 +1601,7 @@ def api_chat():
         # Route to appropriate handler
         if intent_type == "NAVIGATION":
             # Simplified: Just direct user to interactive map
-            reply_message = "To navigate inside buildings and find routes between rooms:\n• Click the 'Interactive Map' button below the chatbar\n• Select your starting point and destination\n• Get detailed step-by-step indoor directions\n\nFor general campus overview and building locations:\n• Click the 'Show Campus Map' button to view all buildings and campus layout"
+            reply_message = "To navigate inside buildings and find routes between rooms:\n• Click the 'Interactive Map' button below the chatbot\n• Select your starting point and destination\n• Get detailed step-by-step indoor directions\n\nFor general campus overview and building locations:\n• Click the 'Show Campus Map' button to view all buildings and campus layout"
             response_data = {
                 "reply": reply_message,
                 "session_id": session_id,
