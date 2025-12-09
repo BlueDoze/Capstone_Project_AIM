@@ -20,6 +20,7 @@ sys.path.insert(0, str(project_root))
 from src.api.utils.text_cleaner import clean_html_to_text
 from src.services.navigation_service import get_navigation_service
 from src.services.direction_service import get_direction_service
+from src.config.paths import ANNOUNCEMENTS_FILE
 
 load_dotenv()
 
@@ -1046,7 +1047,7 @@ def handle_announcement_query(user_message: str, entities: Dict[str, Any]) -> Di
         return {'reply': 'The AI model is not configured.'}
 
     try:
-        announcements_path = Path('all_announcements.json')
+        announcements_path = ANNOUNCEMENTS_FILE
         if not announcements_path.exists():
             return {'reply': 'Announcement information is currently unavailable. Please run extract_all_announcements.py to collect D2L announcements.'}
 
@@ -1672,7 +1673,7 @@ def system_status():
 def announcements_status():
     """Returns announcements data status"""
     try:
-        announcements_path = Path('all_announcements.json')
+        announcements_path = ANNOUNCEMENTS_FILE
         if not announcements_path.exists():
             return jsonify({
                 "status": "no_data",

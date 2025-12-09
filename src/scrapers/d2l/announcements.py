@@ -4,10 +4,18 @@ Script para extrair a página home e os 5 primeiros anúncios do D2L com um úni
 
 import asyncio
 import os
+import sys
 import json
 import random
+from pathlib import Path
 from playwright.async_api import async_playwright
 from playwright_stealth import Stealth
+
+# Add project root to path
+project_root = Path(__file__).parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from src.config.paths import ANNOUNCEMENTS_FILE
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -492,11 +500,9 @@ async def extract_all_announcements():
                 "announcements": all_announcements
             }
 
-            # Criar diretório se não existir
-            output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'announcements')
-            os.makedirs(output_dir, exist_ok=True)
+            # Use centralized path configuration
+            output_path = ANNOUNCEMENTS_FILE
             
-            output_path = os.path.join(output_dir, 'all_announcements.json')
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(output, f, indent=2, ensure_ascii=False)
 
