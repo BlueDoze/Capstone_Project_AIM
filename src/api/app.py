@@ -394,16 +394,21 @@ restaurants_prompt = '''You are the Fanshawe Dining Guide. You help students fin
 You have access to information about campus dining including:
 - Restaurant and cafe names and locations
 - Operating hours for each day
-- Cuisine types and menu highlights
+- Menu information and available food items
 - Payment methods accepted
-- Building and floor locations
+- Contact information (phone and email)
+- Dietary information and allergen alerts
+- Website links for more details
 
 When answering about dining:
-- Use emojis for visual appeal: 🍽️ for dining sections, ☕ for cafes, 📋 for menus, 🕐 for hours, 📍 for locations
+- Use emojis for visual appeal: 🍽️ for dining sections, ☕ for cafes, 📋 for menus, 🕐 for hours, 📍 for locations, 📞 for contact info
 - Provide clear information about location and hours
 - Mention what type of food is available
 - Include operating hours, especially for today
 - Suggest options based on the user's needs (quick snack, full meal, coffee, etc.)
+- Include dietary information when relevant (allergens, special options)
+- Mention contact information if the user needs to inquire further
+- Provide website links when available for detailed menus
 - Mention payment methods if relevant
 - Be aware of current day/time when suggesting options
 - Format with clear section headers using emojis
@@ -994,39 +999,171 @@ def handle_event_query(user_message: str, entities: Dict[str, Any]) -> Dict[str,
         print(f"⚠️ Error handling event query: {e}")
         return {'reply': 'Sorry, I encountered an error while searching for events.'}
 
+def parse_restaurant_hours(hours_array: List[str]) -> Dict[str, str]:
+    """
+    Parses hours array from restaurant data into a day-based dictionary.
+
+    Handles patterns like:
+    - "Monday to Friday:\n8:00 a.m. to 8:00 p.m.\nSaturday to Sunday:\nClosed"
+
+    Returns: {"monday": "8:00 a.m. to 8:00 p.m.", "tuesday": "8:00 a.m. to 8:00 p.m.", ...}
+    """
+    if not hours_array or not hours_array[0]:
+        return {}
+
+    hours_dict = {}
+    hours_text = hours_array[0].strip()
+
+    # Pattern 1: "Monday to Friday:\n8:00 a.m. to 8:00 p.m."
+    weekday_pattern = r'Monday to Friday:\s*\n?\s*([^\n]+)'
+    weekday_match = re.search(weekday_pattern, hours_text, re.IGNORECASE)
+    if weekday_match:
+        weekday_hours = weekday_match.group(1).strip()
+        for day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']:
+            hours_dict[day] = weekday_hours
+
+    # Pattern 2: "Saturday to Sunday:\nClosed" or "Saturday and Sunday:\nClosed"
+    weekend_pattern = r'Saturday (?:to|and) Sunday:\s*\n?\s*([^\n]+)'
+    weekend_match = re.search(weekend_pattern, hours_text, re.IGNORECASE)
+    if weekend_match:
+        weekend_hours = weekend_match.group(1).strip()
+        hours_dict['saturday'] = weekend_hours
+        hours_dict['sunday'] = weekend_hours
+
+    # Pattern 3: Individual day patterns like "Monday:\n9:00 a.m. to 4:30 p.m."
+    individual_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+    for day in individual_days:
+        if day not in hours_dict:
+            day_pattern = rf'{day.capitalize()}:\s*\n?\s*([^\n]+)'
+            day_match = re.search(day_pattern, hours_text, re.IGNORECASE)
+            if day_match:
+                hours_dict[day] = day_match.group(1).strip()
+
+    return hours_dict
+
+def extract_menu_summary(menu_items: List[str], max_length: int = 150) -> str:
+    """
+    Extracts meaningful menu information from text fragments.
+
+    Searches for menu-related keywords and extracts surrounding context.
+    Returns cleaned summary or "Menu available on-site" if no content.
+    """
+    if not menu_items:
+        return ""
+
+    combined_text = " ".join(menu_items)
+
+    menu_keywords = ['menu', 'food', 'beverage', 'smoothie', 'juice', 'pasta',
+                     'stir fry', 'breakfast', 'grill', 'coffee', 'bagel',
+                     'pastry', 'sandwich', 'salad', 'pizza', 'burger', 'sushi',
+                     'wrap', 'drinks', 'hot', 'cold', 'fresh']
+
+    relevant_parts = []
+    for keyword in menu_keywords:
+        pattern = rf'([^.]*\b{keyword}\b[^.]*)'
+        matches = re.findall(pattern, combined_text, re.IGNORECASE)
+        if matches:
+            for match in matches[:2]:
+                cleaned = match.strip()
+                if len(cleaned) > 20 and cleaned not in relevant_parts:
+                    relevant_parts.append(cleaned)
+
+    summary = ". ".join(relevant_parts[:3])
+    if len(summary) > max_length:
+        summary = summary[:max_length].rsplit(' ', 1)[0] + "..."
+
+    return summary if summary else ""
+
 def handle_restaurant_query(user_message: str, entities: Dict[str, Any]) -> Dict[str, Any]:
-    """Handles restaurant/dining queries"""
+    """Handles restaurant/dining queries using detailed restaurant data"""
     if not model:
         return {'reply': 'The AI model is not configured.'}
 
     try:
-        restaurants_path = Path('data/campus_restaurants.json')
+        restaurants_path = Path('data/fanshawe_restaurants/detailed_restaurant_info_20251208_184344.json')
         if not restaurants_path.exists():
             return {'reply': 'Restaurant information is currently unavailable.'}
 
-        with open(restaurants_path, 'r') as f:
+        with open(restaurants_path, 'r', encoding='utf-8') as f:
             restaurants_data = json.load(f)
 
         restaurants = restaurants_data.get('restaurants', [])
-        
+
         from datetime import datetime
         today = datetime.now().strftime('%A').lower()
 
         restaurants_context = "\n\n** Campus Dining Options: **\n"
         for restaurant in restaurants:
-            restaurants_context += f"\n- **{restaurant['name']}**\n"
-            restaurants_context += f"  Location: {restaurant['location']}\n"
-            restaurants_context += f"  Type: {restaurant['cuisine_type']}\n"
+            name = restaurant.get('name', 'Unknown')
+            detailed_info = restaurant.get('detailed_info', {})
+            original_data = restaurant.get('original_data', {})
 
-            hours = restaurant.get('hours', {})
-            if today in hours:
-                restaurants_context += f"  Hours Today ({today.capitalize()}): {hours[today]}\n"
+            restaurants_context += f"\n- **{name}**\n"
 
-            menu = restaurant.get('menu_highlights', [])
-            if menu:
-                restaurants_context += f"  Menu: {', '.join(menu)}\n"
+            # Extract location - prefer detailed_info, fallback to original_data or parse from hours
+            location = detailed_info.get('location')
+            if not location:
+                location = original_data.get('location')
+            if not location:
+                hours_array = detailed_info.get('hours', [])
+                if hours_array and len(hours_array) > 0:
+                    location_match = re.search(r'Located in ([^\n]+)', hours_array[0])
+                    if location_match:
+                        location = location_match.group(1).strip()
 
-            restaurants_context += f"  Payment: {', '.join(restaurant.get('payment_methods', []))}\n"
+            if location:
+                restaurants_context += f"  📍 Location: {location}\n"
+
+            # Parse and display hours
+            hours_array = detailed_info.get('hours', [])
+            hours_dict = parse_restaurant_hours(hours_array)
+            if today in hours_dict:
+                restaurants_context += f"  🕐 Hours Today ({today.capitalize()}): {hours_dict[today]}\n"
+            elif hours_array and hours_array[0]:
+                raw_hours = hours_array[0].replace('\n', ' ').strip()
+                if len(raw_hours) > 100:
+                    raw_hours = raw_hours[:100] + "..."
+                restaurants_context += f"  🕐 Hours: {raw_hours}\n"
+
+            # Extract and display menu information
+            menu_items = detailed_info.get('menu_items', [])
+            if not menu_items:
+                menu_items = original_data.get('menu_highlights', [])
+            menu_summary = extract_menu_summary(menu_items)
+            if menu_summary:
+                restaurants_context += f"  📋 Menu: {menu_summary}\n"
+
+            # Add contact information
+            phone = detailed_info.get('phone')
+            if not phone:
+                phone = original_data.get('phone')
+            if phone:
+                restaurants_context += f"  📞 Phone: {phone}\n"
+
+            email = detailed_info.get('email')
+            if not email:
+                email = original_data.get('email')
+            if email and 'null' not in email.lower():
+                restaurants_context += f"  ✉️ Email: {email}\n"
+
+            # Add dietary options
+            dietary_options = detailed_info.get('dietary_options', [])
+            if not dietary_options:
+                dietary_options = original_data.get('dietary_options', [])
+            if dietary_options:
+                restaurants_context += f"  🥗 Dietary Info: {', '.join(dietary_options)}\n"
+
+            # Add payment methods if available
+            payment_methods = detailed_info.get('payment_methods', [])
+            if not payment_methods:
+                payment_methods = original_data.get('payment_methods', [])
+            if payment_methods:
+                restaurants_context += f"  💳 Payment: {', '.join(payment_methods)}\n"
+
+            # Add website link
+            url = detailed_info.get('url')
+            if url:
+                restaurants_context += f"  🌐 Website: {url}\n"
 
         current_time = datetime.now().strftime('%A, %B %d, %Y at %I:%M %p')
         prompt = f"{restaurants_prompt}\n\nCurrent time: {current_time}\n{restaurants_context}\n\nUser: {user_message}\nAI:"
@@ -1039,6 +1176,8 @@ def handle_restaurant_query(user_message: str, entities: Dict[str, Any]) -> Dict
 
     except Exception as e:
         print(f"⚠️ Error handling restaurant query: {e}")
+        import traceback
+        traceback.print_exc()
         return {'reply': 'Sorry, I encountered an error while searching for restaurants.'}
 
 def parse_announcement_date(date_string: str) -> Optional[datetime]:

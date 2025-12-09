@@ -1,10 +1,10 @@
 {
   "metadata": {
     "source": "restaurant_link_enrichment",
-    "generated_at": "2025-12-08T18:43:56.954922",
+    "generated_at": "2025-12-08T18:48:12.954922",
     "source_file": "data/fanshawe_restaurants/restaurants_20251208_183628.json",
-    "total_restaurants_processed": 5,
-    "successful_enrichments": 5,
+    "total_restaurants_processed": 14,
+    "successful_enrichments": 14,
     "original_metadata": {
       "source": "fanshawe_food_page_scraper",
       "scraped_at": "2025-12-08T18:36:36.754991",
@@ -38,11 +38,7 @@
           ""
         ],
         "menu_items": [
-          "refreshing beverage after your workout.\n\nView our menu online or download a PDF version .\n\nBooster Juice Menu Allergy Alert:\n\nTell us before placing your order if you have any food allergies. Booster Juice smoothies, juices and food items may contain",
-          "lergies. Booster Juice smoothies, juices and food items may contain traces of food allergens. For information on our products and ingredients please view the Booster Juice Allergen Guide .\n\nHours of operation\nMonday to Friday:\n10:00 a.m. to 4:00 p.m.",
-          "vigator Magazine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Cre",
-          "all needs. Come by and have yourself a refreshing beverage after your workout.\n\nView our menu online or download a PDF version .\n\nBooster Juice Menu Allergy Alert:\n\nTell us before placing your order if you have any food allergies. Booster Juice smoot",
-          "ine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Creative Cloud\nM"
+          "refreshing beverage after your workout.\n\nView our menu online or download a PDF version .\n\nBooster Juice Menu Allergy Alert:\n\nTell us before placing your order if you have any food allergies. Booster Juice smoothies, juices and food items may contain"
         ],
         "location": null,
         "description": null,
@@ -54,7 +50,7 @@
           "Nut"
         ],
         "special_features": [],
-        "raw_content_preview": "Light Dark\nStudent Centre,Room SC1000, 1001 Fanshawe College Blvd., London ON N5Y 5R6 Health Plan opt-in/opt-out/choose plan\nChat With Us\nAbout\nOur Team\nAll Team Members\nExecutive Team\nDirectors\nStaff\nHistory of the FSU\nFees and Financials\nAncillary Fees\nFinancials\nStudent Spaces\nFSU Student Centre\nForwell Hall\nThe Biz Booth\nThe Fuel Station\nHair Salon\nPharmacy\nFSU Gamesrooms\nUpdates and Announcements\nContact Us\nFeedback\nAdvocacy\nServices\nStudent Life\nDomestic Student Health Plan\nFinancial Liter"
+        "raw_content_preview": "Light Dark\nStudent Centre..."
       }
     },
     {
@@ -81,11 +77,7 @@
           ""
         ],
         "menu_items": [
-          "ee, fresh bagel or pastry, baked daily.\n\nView our menu online or download a PDF version .\n\nSeven Seas International Fare: Check out our made-to-order pasta and stir fry stations.\n\nView our menu online or download a PDF version .\n\nSunny’s: Grab all-da",
-          "Grab all-day breakfast or check out our pub grub items off the grill.\n\nView our menu online or download a PDF version .\n\nGrab & Go: Fresh pre-made food on the run, featuring fruit cups, parfaits, fresh sushi and lots of other treats! Available in Th",
-          "vigator Magazine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Cre",
-          "UB before heading to the patio.\n\nGrinders: Grab a coffee, fresh bagel or pastry, baked daily.\n\nView our menu online or download a PDF version .\n\nSeven Seas International Fare: Check out our made-to-order pasta and stir fry stations.\n\nView our menu on",
-          "ine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Creative Cloud\nM"
+          "ee, fresh bagel or pastry, baked daily.\n\nView our menu online or download a PDF version ."
         ],
         "location": null,
         "description": null,
@@ -94,7 +86,7 @@
         "payment_methods": [],
         "dietary_options": [],
         "special_features": [],
-        "raw_content_preview": "Light Dark\nStudent Centre,Room SC1000, 1001 Fanshawe College Blvd., London ON N5Y 5R6 Health Plan opt-in/opt-out/choose plan\nChat With Us\nAbout\nOur Team\nAll Team Members\nExecutive Team\nDirectors\nStaff\nHistory of the FSU\nFees and Financials\nAncillary Fees\nFinancials\nStudent Spaces\nFSU Student Centre\nForwell Hall\nThe Biz Booth\nThe Fuel Station\nHair Salon\nPharmacy\nFSU Gamesrooms\nUpdates and Announcements\nContact Us\nFeedback\nAdvocacy\nServices\nStudent Life\nDomestic Student Health Plan\nFinancial Liter"
+        "raw_content_preview": "Light Dark\nStudent Centre..."
       }
     },
     {
@@ -121,11 +113,7 @@
           ""
         ],
         "menu_items": [
-          "re\n\nCatering by FSU\n\nOrder from a wide variety of menus, venues and support services for all your catering needs. Cater your event with Catering by FSU.\n\nGo to Website\n\nGrab and Go\n\nWhere you can find fresh pre-made food on the run. Grab and Go is lo",
-          "Grab all-day breakfast or check out our pub grub items off the grill. Sunny’s is located in the Oasis in the Student Centre.\n\nRead More\nFSU Staff\nHospitality Team\n\nThe Fanshawe Student Union’s Hospitality team provides food services to Fanshawe’s st",
-          "vigator Magazine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Cre",
-          "the Student Centre.\n\nRead More\n\nGrinders\n\nGrab a coffee, fresh bagel or pastry, baked daily. Grinders is located in the Oasis in the Student Centre.\n\nRead More\n\nOasis\n\nCome to the Oasis to experience our “Marché“ style, multi-station food court. The",
-          "ine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Creative Cloud\nM"
+          "re\n\nCatering by FSU\n\nOrder from a wide variety of menus, venues and support services for all your catering needs."
         ],
         "location": null,
         "description": null,
@@ -134,7 +122,7 @@
         "payment_methods": [],
         "dietary_options": [],
         "special_features": [],
-        "raw_content_preview": "Light Dark\nStudent Centre,Room SC1000, 1001 Fanshawe College Blvd., London ON N5Y 5R6 Health Plan opt-in/opt-out/choose plan\nChat With Us\nAbout\nOur Team\nAll Team Members\nExecutive Team\nDirectors\nStaff\nHistory of the FSU\nFees and Financials\nAncillary Fees\nFinancials\nStudent Spaces\nFSU Student Centre\nForwell Hall\nThe Biz Booth\nThe Fuel Station\nHair Salon\nPharmacy\nFSU Gamesrooms\nUpdates and Announcements\nContact Us\nFeedback\nAdvocacy\nServices\nStudent Life\nDomestic Student Health Plan\nFinancial Liter"
+        "raw_content_preview": "Light Dark\nStudent Centre..."
       }
     },
     {
@@ -161,11 +149,7 @@
           ""
         ],
         "menu_items": [
-          "eat bar and grill or order for pick-up.\n\nView our menu online or download a PDF version .\n\nEvents\n\nYou can subscribe to the FSU events calendar through various calendar applications such as Google Calendar and Outlook. The address to use when asked f",
-          "vigator Magazine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Cre",
-          "rve double shots or allow patrons to purchase two drinks at a time for their own consumption. All pitchers of draught will be served to a minimum of two patrons.\n\nEnd of Bar Service\n\nAGCO legislation states that all signs of alcoholic beverage consum",
-          "handling, holding or consumption of any alcoholic beverage.\n\nTheft or Damage\n\nTheft or damage to the FSU or College property will be reported to Campus Security Services . This will result in charges, possible further discipline and payment for the c",
-          "ine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Creative Cloud\nM"
+          "eat bar and grill or order for pick-up.\n\nView our menu online or download a PDF version ."
         ],
         "location": null,
         "description": null,
@@ -176,7 +160,7 @@
           "Nut"
         ],
         "special_features": [],
-        "raw_content_preview": "Light Dark\nStudent Centre,Room SC1000, 1001 Fanshawe College Blvd., London ON N5Y 5R6 Health Plan opt-in/opt-out/choose plan\nChat With Us\nAbout\nOur Team\nAll Team Members\nExecutive Team\nDirectors\nStaff\nHistory of the FSU\nFees and Financials\nAncillary Fees\nFinancials\nStudent Spaces\nFSU Student Centre\nForwell Hall\nThe Biz Booth\nThe Fuel Station\nHair Salon\nPharmacy\nFSU Gamesrooms\nUpdates and Announcements\nContact Us\nFeedback\nAdvocacy\nServices\nStudent Life\nDomestic Student Health Plan\nFinancial Liter"
+        "raw_content_preview": "Light Dark\nStudent Centre..."
       }
     },
     {
@@ -203,11 +187,7 @@
           ""
         ],
         "menu_items": [
-          ", subscribe to our newsletter\nSubscribe Now\nQuick Menu\nHome\nAbout\nOur Team\nContact Us\nAdvertising\nStudent Services\nUpcoming Events\nContests\nFuel Esports\nFSU Class Reps\nFSU Clubs\nFSU Jobs\nVolunteer Opportunities\nFSU Leadership Opportunities\nGet in Tou",
-          "vigator Magazine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Cre",
-          "s, including sushi and ICEE slushies, the coldest drink on campus!\n\nHours of operation\nMonday to Friday:\n9:00 a.m. to 10:00 p.m.\nSaturday to Sunday:\nClosed\nHours are subject to change.\nLocated in L1001\nStudent Union Building, London Campus\nContact In",
-          "ommunity a place to purchase a variety of snacks, beverages and pre-made meals, including sushi and ICEE slushies, the coldest drink on campus!\n\nHours of operation\nMonday to Friday:\n9:00 a.m. to 10:00 p.m.\nSaturday to Sunday:\nClosed\nHours are subject",
-          "ine\nStudent Appeals\nThe Sharing Shop\nFood\nBooster Juice\nCatering by FSU\nThe Nest Convenience Store\nOasis\nThe Out Back Shack\nFANCard Meal Plan\nCollege Partnerships\nAcademic Integrity\nAthletics and Recreation\nCo-curricular Record\nAdobe Creative Cloud\nM"
+          "s, including sushi and ICEE slushies, the coldest drink on campus!"
         ],
         "location": null,
         "description": null,
@@ -216,7 +196,334 @@
         "payment_methods": [],
         "dietary_options": [],
         "special_features": [],
-        "raw_content_preview": "Light Dark\nStudent Centre,Room SC1000, 1001 Fanshawe College Blvd., London ON N5Y 5R6 Health Plan opt-in/opt-out/choose plan\nChat With Us\nAbout\nOur Team\nAll Team Members\nExecutive Team\nDirectors\nStaff\nHistory of the FSU\nFees and Financials\nAncillary Fees\nFinancials\nStudent Spaces\nFSU Student Centre\nForwell Hall\nThe Biz Booth\nThe Fuel Station\nHair Salon\nPharmacy\nFSU Gamesrooms\nUpdates and Announcements\nContact Us\nFeedback\nAdvocacy\nServices\nStudent Life\nDomestic Student Health Plan\nFinancial Liter"
+        "raw_content_preview": "Light Dark\nStudent Centre..."
+      }
+    },
+    {
+      "id": "fanshawe_rest_014",
+      "name": "Tim Hortons",
+      "original_link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "manual_entry",
+      "original_data": {
+        "location": "D-E-F Junction, James A. Colvin Atrium, B Building",
+        "description": "Tim Hortons is Canada's coffee and bake shop. This full-service location offers all of your favourite hot and cold beverages, as well as breakfast foods and your favourite doughnuts and pastries.",
+        "building": "B Building",
+        "floor": null,
+        "hours": null,
+        "cuisine_type": "Coffee and Bake Shop",
+        "menu_highlights": [
+          "Hot and cold beverages",
+          "Breakfast foods",
+          "Doughnuts",
+          "Pastries"
+        ]
+      },
+      "detailed_info": {
+        "url": null,
+        "accessible": null,
+        "hours": [],
+        "menu_items": [
+          "Tim Hortons is Canada's coffee and bake shop.",
+          "This full-service location offers all of your favourite hot and cold beverages, as well as breakfast foods and your favourite doughnuts and pastries."
+        ],
+        "location": "D-E-F Junction, James A. Colvin Atrium, B Building",
+        "description": "Tim Hortons is Canada's coffee and bake shop. This full-service location offers all of your favourite hot and cold beverages, as well as breakfast foods and your favourite doughnuts and pastries.",
+        "phone": null,
+        "email": null,
+        "payment_methods": [],
+        "dietary_options": [],
+        "special_features": [],
+        "raw_content_preview": null
+      }
+    },
+    {
+      "id": "fanshawe_rest_015",
+      "name": "Subway",
+      "original_link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "manual_entry",
+      "original_data": {
+        "location": "D-E-F Junction",
+        "description": "Subway is simply the better choice when it comes to freshly made, convenient and affordable food. Whether it’s our bread baked fresh daily, new flavorful signature subs or our classic fan favourites made fresh to order, Subway® delivers a quality, flavourful meal that you can feel good about.",
+        "building": "D-E-F Junction",
+        "floor": null,
+        "hours": null,
+        "cuisine_type": "Sandwiches",
+        "menu_highlights": [
+          "Freshly baked bread",
+          "Signature subs",
+          "Classic fan favourites"
+        ]
+      },
+      "detailed_info": {
+        "url": null,
+        "accessible": null,
+        "hours": [],
+        "menu_items": [
+          "Subway is simply the better choice when it comes to freshly made, convenient and affordable food.",
+          "Whether it’s our bread baked fresh daily, new flavorful signature subs or our classic fan favourites made fresh to order, Subway® delivers a quality, flavourful meal that you can feel good about."
+        ],
+        "location": "D-E-F Junction",
+        "description": "Subway is simply the better choice when it comes to freshly made, convenient and affordable food. Whether it’s our bread baked fresh daily, new flavorful signature subs or our classic fan favourites made fresh to order, Subway® delivers a quality, flavourful meal that you can feel good about.",
+        "phone": null,
+        "email": null,
+        "payment_methods": [],
+        "dietary_options": [],
+        "special_features": [],
+        "raw_content_preview": null
+      }
+    },
+    {
+      "id": "fanshawe_rest_016",
+      "name": "The Variety Store",
+      "original_link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "manual_entry",
+      "original_data": {
+        "location": "D-E-F Junction",
+        "description": "Fanshawe College Retail Services has a variety store offering large varieties of cool refreshing drinks, ice cream offerings including deluxe favourites, and many of the wonderful varieties of sweet, sour and salty munchies that can satisfy your hunger.",
+        "building": "D-E-F Junction",
+        "floor": null,
+        "hours": null,
+        "cuisine_type": "Convenience Store",
+        "menu_highlights": [
+          "Refreshing drinks",
+          "Ice cream",
+          "Deluxe favourites",
+          "Sweet, sour and salty munchies"
+        ]
+      },
+      "detailed_info": {
+        "url": null,
+        "accessible": null,
+        "hours": [],
+        "menu_items": [
+          "Fanshawe College Retail Services has a variety store offering large varieties of cool refreshing drinks, ice cream offerings including deluxe favourites, and many of the wonderful varieties of sweet, sour and salty munchies that can satisfy your hunger."
+        ],
+        "location": "D-E-F Junction",
+        "description": "Fanshawe College Retail Services has a variety store offering large varieties of cool refreshing drinks, ice cream offerings including deluxe favourites, and many of the wonderful varieties of sweet, sour and salty munchies that can satisfy your hunger.",
+        "phone": null,
+        "email": null,
+        "payment_methods": [],
+        "dietary_options": [],
+        "special_features": [],
+        "raw_content_preview": null
+      }
+    },
+    {
+      "id": "fanshawe_rest_017",
+      "name": "Starbucks",
+      "original_link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "manual_entry",
+      "original_data": {
+        "location": "H Cafeteria",
+        "description": "Starbucks is the premier roaster, marketer and retailer of specialty coffee in the world. This full-service location provides you with all your favourite hot and cold beverages and delicious snacks.",
+        "building": "H Building",
+        "floor": null,
+        "hours": null,
+        "cuisine_type": "Coffee Shop",
+        "menu_highlights": [
+          "Specialty coffee",
+          "Hot and cold beverages",
+          "Delicious snacks"
+        ]
+      },
+      "detailed_info": {
+        "url": null,
+        "accessible": null,
+        "hours": [],
+        "menu_items": [
+          "Starbucks is the premier roaster, marketer and retailer of specialty coffee in the world.",
+          "This full-service location provides you with all your favourite hot and cold beverages and delicious snacks."
+        ],
+        "location": "H Cafeteria",
+        "description": "Starbucks is the premier roaster, marketer and retailer of specialty coffee in the world. This full-service location provides you with all your favourite hot and cold beverages and delicious snacks.",
+        "phone": null,
+        "email": null,
+        "payment_methods": [],
+        "dietary_options": [],
+        "special_features": [],
+        "raw_content_preview": null
+      }
+    },
+    {
+      "id": "fanshawe_rest_018",
+      "name": "Pizza Pizza",
+      "original_link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "manual_entry",
+      "original_data": {
+        "location": "D-E-F Junction",
+        "description": "The secret to our food? It’s pretty simple. Source fresh, quality ingredients. Prepare dishes with care and passion. Serve them with a warm smile. In other words, we take pride in what we make and how we share it. Even though we’ve grown a lot over the years, our mission is still the same: Always the best food, made especially for you.",
+        "building": "D-E-F Junction",
+        "floor": null,
+        "hours": null,
+        "cuisine_type": "Pizza",
+        "menu_highlights": [
+          "Fresh quality ingredients",
+          "Prepared dishes"
+        ]
+      },
+      "detailed_info": {
+        "url": null,
+        "accessible": null,
+        "hours": [],
+        "menu_items": [
+          "The secret to our food? It’s pretty simple. Source fresh, quality ingredients. Prepare dishes with care and passion. Serve them with a warm smile.",
+          "In other words, we take pride in what we make and how we share it.",
+          "Even though we’ve grown a lot over the years, our mission is still the same: Always the best food, made especially for you."
+        ],
+        "location": "D-E-F Junction",
+        "description": "The secret to our food? It’s pretty simple. Source fresh, quality ingredients. Prepare dishes with care and passion. Serve them with a warm smile. In other words, we take pride in what we make and how we share it. Even though we’ve grown a lot over the years, our mission is still the same: Always the best food, made especially for you.",
+        "phone": null,
+        "email": null,
+        "payment_methods": [],
+        "dietary_options": [],
+        "special_features": [],
+        "raw_content_preview": null
+      }
+    },
+    {
+      "id": "fanshawe_rest_019",
+      "name": "Tim Hortons Express",
+      "original_link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "manual_entry",
+      "original_data": {
+        "location": "Southwest Café (B-D corner)",
+        "description": "A quick self-service Tim Hortons to get your coffee fix on the go!",
+        "building": "Southwest Café",
+        "floor": null,
+        "hours": null,
+        "cuisine_type": "Coffee",
+        "menu_highlights": [
+          "Coffee"
+        ]
+      },
+      "detailed_info": {
+        "url": null,
+        "accessible": null,
+        "hours": [],
+        "menu_items": [
+          "A quick self-service Tim Hortons to get your coffee fix on the go!"
+        ],
+        "location": "Southwest Café (B-D corner)",
+        "description": "A quick self-service Tim Hortons to get your coffee fix on the go!",
+        "phone": null,
+        "email": null,
+        "payment_methods": [],
+        "dietary_options": [],
+        "special_features": [],
+        "raw_content_preview": null
+      }
+    },
+    {
+      "id": "fanshawe_rest_020",
+      "name": "Harveys",
+      "original_link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "manual_entry",
+      "original_data": {
+        "location": "Southwest Café (B-D corner)",
+        "description": "At Harvey's®, we have a long history of proudly serving Canadians great tasting burgers. Our Harvey's® grill-masters charbroil each burger to perfection at 600℉ on an open-flame grill. Once the burger is set in front of you, we let you choose from a selection of fresh toppings and together we build your perfect burger right before your eyes. Your burger is made just the way you want it.",
+        "building": "Southwest Café",
+        "floor": null,
+        "hours": null,
+        "cuisine_type": "Burgers",
+        "menu_highlights": [
+          "Great tasting burgers",
+          "Charbroiled burgers",
+          "Fresh toppings",
+          "Custom built burgers"
+        ]
+      },
+      "detailed_info": {
+        "url": null,
+        "accessible": null,
+        "hours": [],
+        "menu_items": [
+          "At Harvey's®, we have a long history of proudly serving Canadians great tasting burgers.",
+          "Our Harvey's® grill-masters charbroil each burger to perfection at 600℉ on an open-flame grill.",
+          "Once the burger is set in front of you, we let you choose from a selection of fresh toppings and together we build your perfect burger right before your eyes.",
+          "Your burger is made just the way you want it."
+        ],
+        "location": "Southwest Café (B-D corner)",
+        "description": "At Harvey's®, we have a long history of proudly serving Canadians great tasting burgers. Our Harvey's® grill-masters charbroil each burger to perfection at 600℉ on an open-flame grill. Once the burger is set in front of you, we let you choose from a selection of fresh toppings and together we build your perfect burger right before your eyes. Your burger is made just the way you want it.",
+        "phone": null,
+        "email": null,
+        "payment_methods": [],
+        "dietary_options": [],
+        "special_features": [],
+        "raw_content_preview": null
+      }
+    },
+    {
+      "id": "fanshawe_rest_021",
+      "name": "Atrium Cafe",
+      "original_link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "manual_entry",
+      "original_data": {
+        "location": "James A. Colvin Atrium, B Building",
+        "description": "The Atrium Cafe includes: Tim Hortons, Chicken Chicken, Chef Inspired and Bento Sushi.",
+        "building": "B Building",
+        "floor": null,
+        "hours": null,
+        "cuisine_type": "Food Court",
+        "menu_highlights": [
+          "Tim Hortons",
+          "Chicken Chicken",
+          "Chef Inspired",
+          "Bento Sushi"
+        ]
+      },
+      "detailed_info": {
+        "url": null,
+        "accessible": null,
+        "hours": [],
+        "menu_items": [
+          "The Atrium Cafe includes: Tim Hortons, Chicken Chicken, Chef Inspired and Bento Sushi."
+        ],
+        "location": "James A. Colvin Atrium, B Building",
+        "description": "The Atrium Cafe includes: Tim Hortons, Chicken Chicken, Chef Inspired and Bento Sushi.",
+        "phone": null,
+        "email": null,
+        "payment_methods": [],
+        "dietary_options": [],
+        "special_features": [],
+        "raw_content_preview": null
+      }
+    },
+    {
+      "id": "fanshawe_rest_022",
+      "name": "Brake Time Cafe",
+      "original_link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "manual_entry",
+      "original_data": {
+        "location": "Z Building (CAAT, 1764 Oxford St. E.)",
+        "description": "",
+        "building": "Z Building",
+        "floor": null,
+        "hours": null,
+        "cuisine_type": null,
+        "menu_highlights": []
+      },
+      "detailed_info": {
+        "url": null,
+        "accessible": null,
+        "hours": [],
+        "menu_items": [],
+        "location": "Z Building (CAAT, 1764 Oxford St. E.)",
+        "description": "",
+        "phone": null,
+        "email": null,
+        "payment_methods": [],
+        "dietary_options": [],
+        "special_features": [],
+        "raw_content_preview": null
       }
     }
   ]

@@ -490,13 +490,13 @@
     }
   ],
   "metadata": {
-    "last_updated": "2025-12-08T17:18:11.660871",
+    "last_updated": "2025-12-08T18:47:04.597205",
     "sources": [
       "manual",
       "web_scraper"
     ],
     "total_restaurants": 24,
-    "enhanced_count": 3,
-    "new_count": 18
+    "enhanced_count": 21,
+    "new_count": 0
   }
 }
