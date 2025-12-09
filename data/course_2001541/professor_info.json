@@ -1,0 +1,26 @@
+{
+  "course_id": "2001541",
+  "extracted_at": "2025-12-09T11:06:23.106055",
+  "source_url": "https://www.fanshaweonline.ca/d2l/home/2001541",
+  "extraction_method": "widget_heuristic:.d2l-widget",
+  "name": null,
+  "email": null,
+  "office": null,
+  "office_hours": null,
+  "raw_text_preview": "Christie Ramos",
+  "debug_info": [
+    "Total widgets found: 4",
+    "Selector 'div[class*=\"professor\"]': found 0 elements",
+    "Selector 'div[class*=\"instructor\"]': found 0 elements",
+    "Selector '[aria-label*=\"Professor\"]': found 0 elements",
+    "Selector '[aria-label*=\"Instructor\"]': found 0 elements",
+    "Selector '.d2l-widget': found 4 elements",
+    "Selector 'd2l-widget': found 0 elements",
+    "Selector '[role=\"complementary\"]': found 0 elements",
+    "Widget texts: [\".d2l-widget: Announcements\\nClass Recording and LAST Assignment Reminder\\nChristie Ramos Castro posted on Dec 5, 20\",\".d2l-widget: Christie Ramos\",\".d2l-widget: Calendar\\nView Event - Brandwatch Soc",
+    "Applying heuristic detection for professor names...",
+    "Found professor via heuristic: \"Christie Ramos\"",
+    "Widget text length: 14",
+    "Widget text preview: Christie Ramos"
+  ]
+}

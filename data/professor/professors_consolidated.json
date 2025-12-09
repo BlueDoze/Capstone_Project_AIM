@@ -1,0 +1,67 @@
+{
+  "aggregated_at": "2025-12-09T11:35:40.205879",
+  "total_courses": 5,
+  "total_professors_found": 2,
+  "courses": [
+    {
+      "course_id": "2001538",
+      "professor": {
+        "name": "Mohammad Noorchenarboo",
+        "email": "mnoorchenarboo@fanshawec.ca",
+        "office": null,
+        "office_hours": "Please email to arrange a meetingEmail: mnoorchenarboo@fanshawec.ca"
+      },
+      "extraction_method": "widget_not_found",
+      "extracted_at": "2025-12-09T10:18:49.133207",
+      "source_url": "https://www.fanshaweonline.ca/d2l/home/2001538"
+    },
+    {
+      "course_id": "2001539",
+      "professor": {
+        "name": "Sulaiman Aburakhia",
+        "email": "s_aburakhia@Fanshawec.ca",
+        "office": null,
+        "office_hours": "Please email to arrange a meeting" 
+      },
+      "extraction_method": "widget_not_found",
+      "extracted_at": "2025-12-09T09:51:08.969508",
+      "source_url": "https://www.fanshaweonline.ca/d2l/home/2001539"
+    },
+    {
+      "course_id": "2001540",
+      "professor": {
+        "name": "Mohammad Noorchenarboo",
+        "email": "mnoorchenarboo@fanshawec.ca",
+        "office": null,
+        "office_hours": "Please email to arrange a meeting"
+      },
+      "extraction_method": "shadow_dom_D2L-HTML-BLOCK",
+      "extracted_at": "2025-12-09T09:46:11.199054",
+      "source_url": "https://www.fanshaweonline.ca/d2l/home/2001540"
+    },
+    {
+      "course_id": "2001541",
+      "professor": {
+        "name": "Christie Ramos",
+        "email": "cramoscastro@fanshaweonline.ca",
+        "office": null,
+        "office_hours": null
+      },
+      "extraction_method": "widget_heuristic:.d2l-widget",
+      "extracted_at": "2025-12-09T11:06:23.106055",
+      "source_url": "https://www.fanshaweonline.ca/d2l/home/2001541"
+    },
+    {
+      "course_id": "2001542",
+      "professor": {
+        "name": "Dr. Magdalene Ravichandran",
+        "email": "mravichandran@fanshaweonline.ca",
+        "office": null,
+        "office_hours": "Thursdays, 12 PM - 3 PM"
+      },
+      "extraction_method": "shadow_dom_D2L-HTML-BLOCK",
+      "extracted_at": "2025-12-09T09:51:53.673880",
+      "source_url": "https://www.fanshaweonline.ca/d2l/home/2001542"
+    }
+  ]
+}
