@@ -111,6 +111,10 @@
                                 "goesTo": [
                                     "H2",
                                     "H3"
+                                ],
+                                "verticalConnections": [
+                                    "Elevator_H2",
+                                    "Elevator_H3"
                                 ]
                             }
                         ]
@@ -126,6 +130,10 @@
                                 "goesTo": [
                                     "H2",
                                     "H3"
+                                ],
+                                "verticalConnections": [
+                                    "Stairs_1_H2",
+                                    "Stairs_1_H3"
                                 ]
                             },
                             {
@@ -215,7 +223,7 @@
                             },
                             {
                                 "type": "eatery",
-                                "id": "Cafeteria-H1",
+                                "id": "Cafeteria_H1",
                                 "door": "Door_Cafe_H1_1"
                             }
                         ]
@@ -302,6 +310,10 @@
                                 "goesTo": [
                                     "H2",
                                     "H3"
+                                ],
+                                "verticalConnections": [
+                                    "Stairs_2_H2",
+                                    "Stairs_2_H3"
                                 ]
                             }
                         ]
@@ -474,6 +486,10 @@
                                 "goesTo": [
                                     "H2",
                                     "H3"
+                                ],
+                                "verticalConnections": [
+                                    "Stairs_3_H2",
+                                    "Stairs_3_H3"
                                 ]
                             },
                             {
@@ -512,8 +528,9 @@
                     "Bathroom-Women_H1": [
                         "H1_10"
                     ],
-                    "Cafeteria-H1": [
-                        "H1_10"
+                    "Cafeteria_H1": [
+                        "H1_10",
+                        "H1_22"
                     ],
                     "H1006": [
                         "H1_12"
@@ -539,9 +556,6 @@
                     ],
                     "H1024": [
                         "H1_21"
-                    ],
-                    "Cafeteria_H1": [
-                        "H1_22"
                     ],
                     "H1032": [
                         "H1_25"
@@ -612,8 +626,9 @@
                         "Bathroom-Women_H1": [
                             "Door_Bathroom-Women_H1"
                         ],
-                        "Cafeteria-H1": [
-                            "Door_Cafe_H1_1"
+                        "Cafeteria_H1": [
+                            "Door_Cafe_H1_1",
+                            "Door_Cafe_H1_2"
                         ],
                         "H1006": [
                             "Door_H1006"
@@ -639,9 +654,6 @@
                         ],
                         "H1024": [
                             "Door_H1024"
-                        ],
-                        "Cafeteria_H1": [
-                            "Door_Cafe_H1_2"
                         ],
                         "H1032": [
                             "Door_H1032"
@@ -689,6 +701,60 @@
                             "outside"
                         ]
                     }
+                },
+                "verticalConnectors": {
+                    "Elevator_H1": {
+                        "id": "Elevator_H1",
+                        "type": "elevator",
+                        "nodeId": "H1_3",
+                        "goesTo": [
+                            "H2",
+                            "H3"
+                        ],
+                        "verticalConnections": {
+                            "2": "Elevator_H2",
+                            "3": "Elevator_H3"
+                        }
+                    },
+                    "Stairs_1_H1": {
+                        "id": "Stairs_1_H1",
+                        "type": "stairs",
+                        "nodeId": "H1_4",
+                        "goesTo": [
+                            "H2",
+                            "H3"
+                        ],
+                        "verticalConnections": {
+                            "2": "Stairs_1_H2",
+                            "3": "Stairs_1_H3"
+                        }
+                    },
+                    "Stairs_2_H1": {
+                        "id": "Stairs_2_H1",
+                        "type": "stairs",
+                        "nodeId": "H1_16",
+                        "goesTo": [
+                            "H2",
+                            "H3"
+                        ],
+                        "verticalConnections": {
+                            "2": "Stairs_2_H2",
+                            "3": "Stairs_2_H3"
+                        }
+                    },
+                    "Stairs_3_H1": {
+                        "id": "Stairs_3_H1",
+                        "type": "stairs",
+                        "nodeId": "H1_28",
+                        "goesTo": [
+                            "H2",
+                            "H3"
+                        ],
+                        "verticalConnections": {
+                            "2": "Stairs_3_H2",
+                            "3": "Stairs_3_H3"
+                        }
+                    }
                 }
             }
         }
@@ -699,9 +765,9 @@
             "1": {
                 "plan": "M1.svg",
                 "navigationGraph": {
-                    "H_entry": {
+                    "H1_entry": {
                         "connections": [
-                            "M1_1"
+                            "M1_Path1_1"
                         ],
                         "represents": [
                             {
@@ -713,17 +779,17 @@
                             }
                         ]
                     },
-                    "M1_1": {
+                    "M1_Path1_1": {
                         "connections": [
-                            "H_entry",
-                            "M1_2"
+                            "H1_entry",
+                            "M1_Path1_2"
                         ],
                         "represents": []
                     },
-                    "M1_2": {
+                    "M1_Path1_2": {
                         "connections": [
-                            "M1_1",
-                            "M1_3"
+                            "M1_Path1_1",
+                            "M1_Path1_3"
                         ],
                         "represents": [
                             {
@@ -732,6 +798,10 @@
                                 "goesTo": [
                                     "M2",
                                     "M3"
+                                ],
+                                "verticalConnections": [
+                                    "Stairs_1_M2",
+                                    "Stairs_1_M3"
                                 ]
                             },
                             {
@@ -743,10 +813,10 @@
                             }
                         ]
                     },
-                    "M1_3": {
+                    "M1_Path1_3": {
                         "connections": [
-                            "M1_2",
-                            "M1_4"
+                            "M1_Path1_2",
+                            "M1_Int_1"
                         ],
                         "represents": [
                             {
@@ -758,8 +828,8 @@
                     },
                     "M1_Int_1": {
                         "connections": [
-                            "M1_3",
-                            "M1_4",
+                            "M1_Path1_3",
+                            "M1_Path1_4",
                             "M1_Turn_1"
                         ],
                         "represents": [
@@ -768,10 +838,10 @@
                             }
                         ]
                     },
-                    "M1_4": {
+                    "M1_Path1_4": {
                         "connections": [
                             "M1_Int_1",
-                            "M1_5"
+                            "M1_Path1_5"
                         ],
                         "represents": [
                             {
@@ -781,10 +851,10 @@
                             }
                         ]
                     },
-                    "M1_5": {
+                    "M1_Path1_5": {
                         "connections": [
-                            "M1_4",
-                            "M1_6"
+                            "M1_Path1_4",
+                            "M1_Path1_6"
                         ],
                         "represents": [
                             {
@@ -793,14 +863,18 @@
                                 "goesTo": [
                                     "M2",
                                     "M3"
+                                ],
+                                "verticalConnections": [
+                                    "Elevator_M2",
+                                    "Elevator_M3"
                                 ]
                             }
                         ]
                     },
-                    "M1_6": {
+                    "M1_Path1_6": {
                         "connections": [
-                            "M1_5",
-                            "M1_7"
+                            "M1_Path1_5",
+                            "M1_Path1_7"
                         ],
                         "represents": [
                             {
@@ -813,9 +887,9 @@
                             }
                         ]
                     },
-                    "M1_7": {
+                    "M1_Path1_7": {
                         "connections": [
-                            "M1_6"
+                            "M1_Path1_6"
                         ],
                         "represents": [
                             {
@@ -830,7 +904,7 @@
                     "M1_Turn_1": {
                         "connections": [
                             "M1_Int_1",
-                            "M1_8"
+                            "M1_Path2_1"
                         ],
                         "represents": [
                             {
@@ -838,7 +912,7 @@
                             }
                         ]
                     },
-                    "M1_8": {
+                    "M1_Path2_1": {
                         "connections": [
                             "M1_Turn_1",
                             "M1_Int_2"
@@ -853,9 +927,9 @@
                     },
                     "M1_Int_2": {
                         "connections": [
-                            "M1_8",
-                            "M1_9",
-                            "M1_14"
+                            "M1_Path2_1",
+                            "M1_Path2_2",
+                            "M1_Path3_1"
                         ],
                         "represents": [
                             {
@@ -868,10 +942,10 @@
                             }
                         ]
                     },
-                    "M1_9": {
+                    "M1_Path2_2": {
                         "connections": [
                             "M1_Int_2",
-                            "M1_10"
+                            "M1_Path2_3"
                         ],
                         "represents": [
                             {
@@ -881,10 +955,10 @@
                             }
                         ]
                     },
-                    "M1_10": {
+                    "M1_Path2_3": {
                         "connections": [
-                            "M1_9",
-                            "M1_11"
+                            "M1_Path2_2",
+                            "M1_Path2_4"
                         ],
                         "represents": [
                             {
@@ -894,10 +968,10 @@
                             }
                         ]
                     },
-                    "M1_11": {
+                    "M1_Path2_4": {
                         "connections": [
-                            "M1_10",
-                            "M1_12"
+                            "M1_Path2_3",
+                            "M1_Path2_5"
                         ],
                         "represents": [
                             {
@@ -907,10 +981,10 @@
                             }
                         ]
                     },
-                    "M1_12": {
+                    "M1_Path2_5": {
                         "connections": [
-                            "M1_11",
-                            "M1_Turn_2"
+                            "M1_Path2_4",
+                            "M1_Path2_6"
                         ],
                         "represents": [
                             {
@@ -920,10 +994,10 @@
                             }
                         ]
                     },
-                    "M1_Turn_2": {
+                    "M1_Path2_6": {
                         "connections": [
-                            "M1_12",
-                            "M1_13"
+                            "M1_Path2_5",
+                            "M1_Path2_7"
                         ],
                         "represents": [
                             {
@@ -931,9 +1005,9 @@
                             }
                         ]
                     },
-                    "M1_13": {
+                    "M1_Path2_7": {
                         "connections": [
-                            "M1_Turn_2"
+                            "M1_Path2_6"
                         ],
                         "represents": [
                             {
@@ -942,6 +1016,10 @@
                                 "goesTo": [
                                     "M2",
                                     "M3"
+                                ],
+                                "verticalConnections": [
+                                    "Stairs_2_M2",
+                                    "Stairs_2_M3"
                                 ]
                             },
                             {
@@ -953,10 +1031,10 @@
                             }
                         ]
                     },
-                    "M1_14": {
+                    "M1_Path3_1": {
                         "connections": [
                             "M1_Int_2",
-                            "M1_15"
+                            "M1_Path3_2"
                         ],
                         "represents": [
                             {
@@ -966,10 +1044,10 @@
                             }
                         ]
                     },
-                    "M1_15": {
+                    "M1_Path3_2": {
                         "connections": [
-                            "M1_14",
-                            "M1_16"
+                            "M1_Path3_1",
+                            "M1_Path3_3"
                         ],
                         "represents": [
                             {
@@ -979,9 +1057,9 @@
                             }
                         ]
                     },
-                    "M1_16": {
+                    "M1_Path3_3": {
                         "connections": [
-                            "M1_15",
+                            "M1_Path3_2",
                             "M1_Turn_3"
                         ],
                         "represents": [
@@ -999,8 +1077,8 @@
                     },
                     "M1_Turn_3": {
                         "connections": [
-                            "M1_16",
-                            "M1_17"
+                            "M1_Path3_3",
+                            "M1_Path4_1"
                         ],
                         "represents": [
                             {
@@ -1013,10 +1091,10 @@
                             }
                         ]
                     },
-                    "M1_17": {
+                    "M1_Path4_1": {
                         "connections": [
                             "M1_Turn_3",
-                            "M1_18"
+                            "M1_Path4_2"
                         ],
                         "represents": [
                             {
@@ -1026,10 +1104,10 @@
                             }
                         ]
                     },
-                    "M1_18": {
+                    "M1_Path4_2": {
                         "connections": [
-                            "M1_17",
-                            "M1_19"
+                            "M1_Path4_1",
+                            "M1_Path4_3"
                         ],
                         "represents": [
                             {
@@ -1039,9 +1117,16 @@
                             }
                         ]
                     },
-                    "M1_19": {
+                    "M1_Path4_3": {
                         "connections": [
-                            "M1_18"
+                            "M1_Path4_2",
+                            "M1_Path4_4"
+                        ],
+                        "represents": []
+                    },
+                    "M1_Path4_4": {
+                        "connections": [
+                            "M1_Path4_3"
                         ],
                         "represents": [
                             {
@@ -1057,6 +1142,10 @@
                                 "goesTo": [
                                     "M2",
                                     "M3"
+                                ],
+                                "verticalConnections": [
+                                    "Stairs_3_M2",
+                                    "Stairs_3_M3"
                                 ]
                             }
                         ]
@@ -1064,79 +1153,79 @@
                 },
                 "roomToNode": {
                     "M1006": [
-                        "M1_3"
+                        "M1_Path1_3"
                     ],
                     "M1004": [
-                        "M1_4"
+                        "M1_Path1_4"
                     ],
                     "M1003": [
-                        "M1_6",
+                        "M1_Path1_6",
                         "M1_Int_2"
                     ],
                     "M1018": [
-                        "M1_8"
+                        "M1_Path2_1"
                     ],
                     "Bathroom-Men_M1": [
-                        "M1_9"
+                        "M1_Path2_2"
                     ],
                     "Bathroom-Accessible_M1": [
-                        "M1_10"
+                        "M1_Path2_3"
                     ],
                     "Bathroom-Women_M1": [
-                        "M1_11"
+                        "M1_Path2_4"
                     ],
                     "M1033": [
-                        "M1_12"
+                        "M1_Path2_5"
                     ],
                     "M1035": [
-                        "M1_14"
+                        "M1_Path3_1"
                     ],
                     "M1037": [
-                        "M1_15"
+                        "M1_Path3_2"
                     ],
                     "M1030": [
-                        "M1_16"
+                        "M1_Path3_3"
                     ],
                     "M1041": [
-                        "M1_16"
+                        "M1_Path3_3"
                     ],
                     "M1045": [
                         "M1_Turn_3"
                     ],
                     "M1040": [
-                        "M1_17"
+                        "M1_Path4_1"
                     ],
                     "M1049": [
-                        "M1_18"
+                        "M1_Path4_2"
                     ]
                 },
                 "exitToNode": {
                     "H1-Building_M1": [
-                        "H_entry"
+                        "H1_entry"
                     ],
                     "Stairs_1_M1": [
-                        "M1_2"
+                        "M1_Path1_2"
                     ],
                     "Outside-Exit_2_M1": [
-                        "M1_2"
+                        "M1_Path1_2"
                     ],
                     "Elevator_M1": [
-                        "M1_5"
+                        "M1_Path1_5"
                     ],
                     "Outside-Exit_1_M1": [
-                        "M1_7"
+                        "M1_Path1_7"
                     ],
                     "Stairs_2_M1": [
-                        "M1_13"
+                        "M1_Path2_7"
                     ],
                     "Outside-Exit_3_M1": [
-                        "M1_13"
+                        "M1_Path2_7"
                     ],
                     "Outside-Exit_4_M1": [
-                        "M1_19"
+                        "M1_Path4_4"
                     ],
                     "Stairs_3_M1": [
-                        "M1_19"
+                        "M1_Path4_4"
                     ]
                 },
                 "objects": {
@@ -1221,6 +1310,60 @@
                             "M3"
                         ]
                     }
+                },
+                "verticalConnectors": {
+                    "Stairs_1_M1": {
+                        "id": "Stairs_1_M1",
+                        "type": "stairs",
+                        "nodeId": "M1_Path1_2",
+                        "goesTo": [
+                            "M2",
+                            "M3"
+                        ],
+                        "verticalConnections": {
+                            "2": "Stairs_1_M2",
+                            "3": "Stairs_1_M3"
+                        }
+                    },
+                    "Elevator_M1": {
+                        "id": "Elevator_M1",
+                        "type": "elevator",
+                        "nodeId": "M1_Path1_5",
+                        "goesTo": [
+                            "M2",
+                            "M3"
+                        ],
+                        "verticalConnections": {
+                            "2": "Elevator_M2",
+                            "3": "Elevator_M3"
+                        }
+                    },
+                    "Stairs_2_M1": {
+                        "id": "Stairs_2_M1",
+                        "type": "stairs",
+                        "nodeId": "M1_Path2_7",
+                        "goesTo": [
+                            "M2",
+                            "M3"
+                        ],
+                        "verticalConnections": {
+                            "2": "Stairs_2_M2",
+                            "3": "Stairs_2_M3"
+                        }
+                    },
+                    "Stairs_3_M1": {
+                        "id": "Stairs_3_M1",
+                        "type": "stairs",
+                        "nodeId": "M1_Path4_4",
+                        "goesTo": [
+                            "M2",
+                            "M3"
+                        ],
+                        "verticalConnections": {
+                            "2": "Stairs_3_M2",
+                            "3": "Stairs_3_M3"
+                        }
+                    }
                 }
             },
             "2": {
@@ -1252,6 +1395,10 @@
                                 "goesTo": [
                                     "M1",
                                     "M3"
+                                ],
+                                "verticalConnections": [
+                                    "Stairs_1_M1",
+                                    "Stairs_1_M3"
                                 ]
                             }
                         ]
@@ -1288,6 +1435,10 @@
                                 "goesTo": [
                                     "M1",
                                     "M3"
+                                ],
+                                "verticalConnections": [
+                                    "Elevator_M1",
+                                    "Elevator_M3"
                                 ]
                             }
                         ]
@@ -1472,6 +1623,10 @@
                                 "goesTo": [
                                     "M1",
                                     "M3"
+                                ],
+                                "verticalConnections": [
+                                    "Stairs_2_M1",
+                                    "Stairs_2_M3"
                                 ]
                             }
                         ]
@@ -1595,10 +1750,14 @@
                         "represents": [
                             {
                                 "type": "stairs",
-                                "id": "Stairs_3_M3",
+                                "id": "Stairs_3_M2",
                                 "goesTo": [
                                     "M1",
                                     "M3"
+                                ],
+                                "verticalConnections": [
+                                    "Stairs_3_M1",
+                                    "Stairs_3_M3"
                                 ]
                             }
                         ]
@@ -1672,7 +1831,7 @@
                     "Stairs_2_M2": [
                         "M2_Path3_6"
                     ],
-                    "Stairs_3_M3": [
+                    "Stairs_3_M2": [
                         "M2_Path4_2"
                     ]
                 },
@@ -1748,10 +1907,64 @@
                             "M1",
                             "M3"
                         ],
-                        "Stairs_3_M3": [
+                        "Stairs_3_M2": [
                             "M1",
                             "M3"
                         ]
+                    }
+                },
+                "verticalConnectors": {
+                    "Stairs_1_M2": {
+                        "id": "Stairs_1_M2",
+                        "type": "stairs",
+                        "nodeId": "M2_Path1_1",
+                        "goesTo": [
+                            "M1",
+                            "M3"
+                        ],
+                        "verticalConnections": {
+                            "1": "Stairs_1_M1",
+                            "3": "Stairs_1_M3"
+                        }
+                    },
+                    "Elevator_M2": {
+                        "id": "Elevator_M2",
+                        "type": "elevator",
+                        "nodeId": "M2_Path1_4",
+                        "goesTo": [
+                            "M1",
+                            "M3"
+                        ],
+                        "verticalConnections": {
+                            "1": "Elevator_M1",
+                            "3": "Elevator_M3"
+                        }
+                    },
+                    "Stairs_2_M2": {
+                        "id": "Stairs_2_M2",
+                        "type": "stairs",
+                        "nodeId": "M2_Path3_6",
+                        "goesTo": [
+                            "M1",
+                            "M3"
+                        ],
+                        "verticalConnections": {
+                            "1": "Stairs_2_M1",
+                            "3": "Stairs_2_M3"
+                        }
+                    },
+                    "Stairs_3_M2": {
+                        "id": "Stairs_3_M2",
+                        "type": "stairs",
+                        "nodeId": "M2_Path4_2",
+                        "goesTo": [
+                            "M1",
+                            "M3"
+                        ],
+                        "verticalConnections": {
+                            "1": "Stairs_3_M1",
+                            "3": "Stairs_3_M3"
+                        }
                     }
                 }
             }

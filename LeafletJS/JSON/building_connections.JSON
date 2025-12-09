@@ -1,7 +1,7 @@
 {
   "Building M": {
     "Building H": {
-      "exitNode": "H_entry",
+      "exitNode": "H1_entry",
       "entryNode": "M1_entry",
       "description": "M-H Connector"
     }
@@ -9,7 +9,7 @@
   "Building H": {
     "Building M": {
       "exitNode": "M1_entry",
-      "entryNode": "H_entry",
+      "entryNode": "H1_entry",
       "description": "H-M Connector"
     },
     "Building F": {

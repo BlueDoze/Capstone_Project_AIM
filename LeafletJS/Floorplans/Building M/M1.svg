@@ -50847,15 +50847,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="7.4142228"
-     inkscape:cx="237.85366"
-     inkscape:cy="797.58866"
+     inkscape:zoom="5.2426472"
+     inkscape:cx="311.76998"
+     inkscape:cy="375.28751"
      inkscape:window-width="2240"
      inkscape:window-height="1294"
-     inkscape:window-x="-11"
+     inkscape:window-x="2869"
      inkscape:window-y="-11"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer2">
+     inkscape:current-layer="layer5">
     <inkscape:page
        x="0"
        y="0"
@@ -71742,8 +71742,8 @@
     <path
        id="path12728"
        style="opacity:0.25;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-dasharray:none"
-       d="m 378.25485,512.65939 v -194.9055 -32.79208 -15.57784 l 0.19273,-90.59458 -39.09944,-0.0928 -38.8883,-0.0924 -73.35002,-0.0711 m 37.86529,607.00132 v -273.25 h 42.01501 l 71.26473,0.375 h 37.86027 55.75 16.625 l 21.1335,0.25 20.49575,20.49575 -0.004,10.28727 M 146.81512,785.78439 h 93.55 c 4.47332,0.0526 8.94564,0.0175 13.4177,-0.0492 3.73081,-0.0557 7.46143,-0.13347 11.19229,-0.20076 h 60.64001 14.25 l 38.39001,0.5 -0.24949,97.5625"
-       sodipodi:nodetypes="ccccccccccccccccccccsccccc"
+       d="m 378.25485,512.65939 v -194.9055 -32.79208 -15.57784 l 0.19273,-90.59458 -39.09944,-0.0928 -38.8883,-0.0924 -39.47443,-0.0383 -33.87559,-0.0328 m 37.86529,607.00132 v -273.25 h 42.01501 l 71.26473,0.375 h 37.86027 55.75 16.625 l 21.1335,0.25 20.49575,20.49575 -0.004,10.28727 M 146.81512,785.78439 h 93.55 c 4.47332,0.0526 8.94564,0.0175 13.4177,-0.0492 3.73081,-0.0557 7.46143,-0.13347 11.19229,-0.20076 h 60.64001 14.25 l 38.39001,0.5 -0.24949,97.5625"
+       sodipodi:nodetypes="cccccccccccccccccccccsccccc"
        sodipodi:insensitive="true" />
   </g>
   <g
@@ -71753,36 +71753,36 @@
      style="display:none">
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="H_entry"
+       id="H1_entry"
        cx="147.2"
        cy="785.88086"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="H_entry" />
+       inkscape:label="H1_entry" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_1"
+       id="M1_Path1_1"
        cx="189.04181"
        cy="785.875"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_1" />
+       inkscape:label="M1_Path1_1" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_2"
+       id="M1_Path1_2"
        cx="240.36513"
        cy="785.78436"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_2" />
+       inkscape:label="M1_Path1_2" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_3"
+       id="M1_Path1_3"
        cx="253.78282"
        cy="785.73517"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_3" />
+       inkscape:label="M1_Path1_3" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
        id="M1_Int_1"
@@ -71793,36 +71793,36 @@
        inkscape:label="M1_Int_1" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_4"
+       id="M1_Path1_4"
        cx="325.61511"
        cy="785.53436"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_4" />
+       inkscape:label="M1_Path1_4" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_5"
+       id="M1_Path1_5"
        cx="339.86511"
        cy="785.53436"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_5" />
+       inkscape:label="M1_Path1_5" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_6"
+       id="M1_Path1_6"
        cx="378.25513"
        cy="786.03436"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_6" />
+       inkscape:label="M1_Path1_6" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_7"
+       id="M1_Path1_7"
        cx="378.00565"
        cy="883.59686"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_7" />
+       inkscape:label="M1_Path1_7" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
        id="M1_Turn_1"
@@ -71833,12 +71833,12 @@
        inkscape:label="M1_Turn_1" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_8"
+       id="M1_Path2_1"
        cx="306.99011"
        cy="512.28442"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_8" />
+       inkscape:label="M1_Path2_1" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
        id="M1_Int_2"
@@ -71849,76 +71849,76 @@
        inkscape:label="M1_Int_2" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_9"
+       id="M1_Path2_2"
        cx="416.11511"
        cy="512.65942"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_9" />
+       inkscape:label="M1_Path2_2" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_10"
+       id="M1_Path2_3"
        cx="471.86511"
        cy="512.65942"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_10" />
+       inkscape:label="M1_Path2_3" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_11"
+       id="M1_Path2_4"
        cx="488.49011"
        cy="512.65942"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_11" />
+       inkscape:label="M1_Path2_4" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_12"
+       id="M1_Path2_5"
        cx="509.62363"
        cy="512.90942"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_12" />
+       inkscape:label="M1_Path2_5" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_Turn_2"
+       id="M1_Path2_6"
        cx="530.11536"
        cy="533.37146"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_Turn_2" />
+       inkscape:label="M1_Path2_6" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_13"
+       id="M1_Path2_7"
        cx="530.11536"
        cy="543.69238"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_13" />
+       inkscape:label="M1_Path2_7" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_14"
+       id="M1_Path3_1"
        cx="378.25485"
        cy="317.86847"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_14" />
+       inkscape:label="M1_Path3_1" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_15"
+       id="M1_Path3_2"
        cx="378.25485"
        cy="284.96182"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_15" />
+       inkscape:label="M1_Path3_2" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_16"
+       id="M1_Path3_3"
        cx="378.25485"
        cy="269.38397"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_16" />
+       inkscape:label="M1_Path3_3" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
        id="M1_Turn_3"
@@ -71929,33 +71929,42 @@
        inkscape:label="M1_Turn_3" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_17"
+       id="M1_Path4_1"
        cx="339.34814"
        cy="178.69659"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_17" />
+       inkscape:label="M1_Path4_1" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_18"
+       id="M1_Path4_2"
        cx="300.45984"
        cy="178.60419"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_18" />
+       inkscape:label="M1_Path4_2" />
+    <ellipse
+       style="display:inline;fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
+       id="M1_Path4_3"
+       cx="260.98541"
+       cy="178.56589"
+       rx="0.42013887"
+       ry="0.45833337"
+       inkscape:label="M1_Path4_3" />
     <ellipse
        style="fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:1.22222;stroke-dasharray:none"
-       id="M1_19"
+       id="M1_Path4_4"
        cx="227.10982"
        cy="178.5331"
        rx="0.42013887"
        ry="0.45833337"
-       inkscape:label="M1_19" />
+       inkscape:label="M1_Path4_4" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer4"
-     inkscape:label="Entrances/Exits">
+     inkscape:label="Entrances/Exits"
+     style="display:inline">
     <rect
        style="fill:#00ff00;stroke:#000000"
        id="Outside-Exit_1_M1"
@@ -71990,7 +71999,7 @@
        ry="2.7121303e-06"
        transform="rotate(90.062897)" />
     <rect
-       style="fill:#ffff00;stroke:#000000;opacity:0.5"
+       style="opacity:0.5;fill:#ffff00;stroke:#000000"
        id="Elevator_M1"
        width="27.842329"
        height="32.350136"
