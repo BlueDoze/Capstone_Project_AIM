@@ -1,34 +1,4 @@
 {
-    "Building A": {
-        "path": "Floorplans/Building A",
-        "floors": {
-            "1": {
-                "plan": "A1.svg",
-                "navigationGraph": {},
-                "roomToNode": {},
-                "exitToNode": {},
-                "objects": {
-                    "rooms": {},
-                    "exits": {}
-                }
-            }
-        }
-    },
-    "Building B": {
-        "path": "Floorplans/Building B",
-        "floors": {
-            "1": {
-                "plan": "B1.svg",
-                "navigationGraph": {},
-                "roomToNode": {},
-                "exitToNode": {},
-                "objects": {
-                    "rooms": {},
-                    "exits": {}
-                }
-            }
-        }
-    },
     "Building H": {
         "path": "Floorplans/Building H",
         "floors": {
