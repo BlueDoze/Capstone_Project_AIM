@@ -7,6 +7,7 @@ import asyncio
 import os
 import json
 import random
+import re
 import argparse
 from pathlib import Path
 from playwright.async_api import async_playwright
@@ -29,22 +30,28 @@ async def wait_for_2fa_approval(page, timeout=300000):
         # Procurar por código numérico na página
         verification_code = await page.evaluate("""
             () => {
+                console.log('Procurando código de verificação...');
+                
                 // Procurar por diferentes padrões de código
                 const codeSelectors = [
                     '#idRichContext_DisplaySign',
                     '[data-value]',
                     '.text-title',
                     '.request-description-content',
-                    'div[role="heading"]'
+                    'div[role="heading"]',
+                    '.table-centered',
+                    '[data-bind*="displaySign"]'
                 ];
 
                 for (const selector of codeSelectors) {
                     const element = document.querySelector(selector);
                     if (element) {
-                        const text = element.innerText || element.textContent;
+                        const text = element.innerText || element.textContent || '';
+                        console.log(`Selector ${selector}: "${text.substring(0, 100)}"`);
                         // Procurar por número de 2 dígitos
                         const match = text.match(/\\b(\\d{2})\\b/);
                         if (match) {
+                            console.log(`Código encontrado: ${match[1]}`);
                             return match[1];
                         }
                     }
@@ -52,20 +59,34 @@ async def wait_for_2fa_approval(page, timeout=300000):
 
                 // Procurar em todo o body por padrão "número é XX"
                 const bodyText = document.body.innerText;
+                console.log(`Body text length: ${bodyText.length}`);
+                
                 const patterns = [
                     /number is (\\d{2})/i,
+                    /número.*?(\\d{2})/i,
                     /código.*?(\\d{2})/i,
                     /digite.*?(\\d{2})/i,
-                    /enter.*?(\\d{2})/i
+                    /enter.*?(\\d{2})/i,
+                    /type\\s+(\\d{2})/i,
+                    /approval.*?(\\d{2})/i
                 ];
 
                 for (const pattern of patterns) {
                     const match = bodyText.match(pattern);
                     if (match) {
+                        console.log(`Código encontrado com pattern: ${match[1]}`);
                         return match[1];
                     }
                 }
+                
+                // Última tentativa: procurar qualquer número de 2 dígitos isolado
+                const isolatedNumber = bodyText.match(/(?:^|\\s)(\\d{2})(?:\\s|$)/);
+                if (isolatedNumber) {
+                    console.log(`Número isolado encontrado: ${isolatedNumber[1]}`);
+                    return isolatedNumber[1];
+                }
 
+                console.log('Nenhum código encontrado');
                 return null;
             }
         """)
@@ -73,6 +94,7 @@ async def wait_for_2fa_approval(page, timeout=300000):
         if verification_code:
             print("╔" + "="*78 + "╗")
             print("║" + f"  🔢 CÓDIGO DE VERIFICAÇÃO DETECTADO: {verification_code}  ".center(78) + "║")
+            print("║" + "  👉 Digite este número no seu app Microsoft Authenticator  ".center(78) + "║")
             print("╚" + "="*78 + "╝")
             print()
 
@@ -134,10 +156,14 @@ async def wait_for_2fa_approval(page, timeout=300000):
 
             print()
         else:
+            print("⚠️  CÓDIGO NÃO DETECTADO AUTOMATICAMENTE")
+            print()
             print("📱 AÇÃO NECESSÁRIA:")
             print("   1. Abra o app Microsoft Authenticator no seu celular")
-            print("   2. Procure pela notificação de aprovação")
-            print("   3. Toque em 'Aprovar' ou digite o código se solicitado")
+            print("   2. Você verá um NÚMERO DE 2 DÍGITOS na tela do navegador")
+            print("   3. Digite esse número no app OU toque em 'Aprovar'")
+            print()
+            print(f"   🌐 URL da página 2FA: {page.url[:80]}...")
             print()
 
     except Exception as e:
@@ -425,8 +451,114 @@ async def _extract_professor_info_impl(page, course_id, output_file, username, p
     # ETAPA 3: Extrair informações do professor
     print("\n[3/3] Extraindo informações do professor...")
     
-    professor_data = await page.evaluate("""
+    # Primeiro: encontrar o widget Professor Information
+    widget_info = await page.evaluate("""
         () => {
+            const widgets = document.querySelectorAll('.d2l-widget, d2l-widget');
+            for (const widget of widgets) {
+                const text = widget.innerText || widget.textContent || '';
+                if (text.includes('Professor Information')) {
+                    // Verificar se tem iframe dentro
+                    const iframe = widget.querySelector('iframe');
+                    
+                    // Verificar shadow DOM
+                    let shadowText = '';
+                    if (widget.shadowRoot) {
+                        shadowText = widget.shadowRoot.textContent || '';
+                    }
+                    
+                    // Verificar todos os elementos filhos com shadow DOM
+                    const childrenWithShadow = [];
+                    const allChildren = widget.querySelectorAll('*');
+                    for (const child of allChildren) {
+                        if (child.shadowRoot) {
+                            const childText = child.shadowRoot.textContent || '';
+                            if (childText.length > 50) {
+                                childrenWithShadow.push({
+                                    tag: child.tagName,
+                                    textLength: childText.length,
+                                    preview: childText.substring(0, 200)
+                                });
+                            }
+                        }
+                    }
+                    
+                    return {
+                        found: true,
+                        hasIframe: !!iframe,
+                        iframeSrc: iframe ? iframe.src : null,
+                        hasShadowDOM: !!widget.shadowRoot,
+                        shadowText: shadowText.substring(0, 200),
+                        childrenWithShadow: childrenWithShadow,
+                        innerHTML: widget.innerHTML.substring(0, 500),
+                        text: text.substring(0, 200)
+                    };
+                }
+            }
+            return { found: false };
+        }
+    """)
+    
+    print(f"   Widget encontrado: {widget_info.get('found')}")
+    if widget_info.get('hasIframe'):
+        print(f"   ✓ Widget contém iframe: {widget_info.get('iframeSrc', 'N/A')[:80]}")
+    if widget_info.get('hasShadowDOM'):
+        print(f"   ✓ Widget tem Shadow DOM: {widget_info.get('shadowText', '')[:80]}")
+    if widget_info.get('childrenWithShadow'):
+        print(f"   ✓ Elementos filhos com Shadow DOM: {len(widget_info['childrenWithShadow'])}")
+        for child in widget_info['childrenWithShadow']:
+            print(f"      - {child['tag']}: {child['textLength']} chars")
+            print(f"        Preview: {child['preview'][:100]}")
+    
+    professor_data = None
+    
+    # Se encontrou shadow DOM em elementos filhos, extrair de lá
+    if widget_info.get('found') and widget_info.get('childrenWithShadow'):
+        print("   → Extraindo de Shadow DOM...")
+        for child in widget_info['childrenWithShadow']:
+            if len(child.get('preview', '')) > 50:
+                professor_data = {
+                    'raw_text': child['preview'],
+                    'extraction_method': f"shadow_dom_{child['tag']}",
+                    'debug_info': [f"Extracted from Shadow DOM in {child['tag']}", f"Text length: {child['textLength']}"]
+                }
+                print(f"   ✓ Conteúdo extraído do Shadow DOM ({child['textLength']} chars)")
+                break
+    
+    # Se o widget tem iframe, tentar extrair dele
+    elif widget_info.get('found') and widget_info.get('hasIframe'):
+        print("   → Tentando extrair do iframe dentro do widget...")
+        iframe_src = widget_info.get('iframeSrc')
+        
+        # Procurar o frame correspondente
+        for frame in page.frames:
+            if iframe_src and iframe_src in frame.url:
+                try:
+                    # Aguardar carregamento do iframe
+                    await asyncio.sleep(2)
+                    
+                    frame_text = await frame.evaluate("""
+                        () => {
+                            return document.body.innerText || document.body.textContent || '';
+                        }
+                    """)
+                    
+                    if len(frame_text.strip()) > 30:
+                        print(f"   ✓ Conteúdo do iframe extraído ({len(frame_text)} chars)")
+                        professor_data = {
+                            'raw_text': frame_text,
+                            'extraction_method': 'widget_iframe',
+                            'debug_info': [f'Extracted from iframe inside widget', f'Frame URL: {frame.url}']
+                        }
+                        break
+                except Exception as e:
+                    print(f"   ⚠️  Erro ao acessar iframe: {str(e)[:50]}")
+    
+    # Fallback: extração DOM padrão
+    if not professor_data:
+        print("   → Usando extração DOM padrão...")
+        professor_data = await page.evaluate("""
+            () => {
             const result = {
                 name: null,
                 email: null,
@@ -600,6 +732,36 @@ async def _extract_professor_info_impl(page, course_id, output_file, username, p
             return result;
         }
     """)
+    
+    # Se dados vieram de iframe ou shadow DOM, parsear o raw_text
+    if professor_data and (professor_data.get('extraction_method') == 'widget_iframe' or 
+                          professor_data.get('extraction_method', '').startswith('shadow_dom')):
+        print("   → Parseando texto extraído...")
+        text = professor_data.get('raw_text', '')
+        
+        # Extrair nome (após "Name:")
+        name_match = re.search(r'Name:\s*([^\n]+)', text, re.IGNORECASE)
+        if name_match:
+            professor_data['name'] = name_match.group(1).strip()
+            print(f"   ✓ Nome: {professor_data['name']}")
+        
+        # Extrair email
+        email_match = re.search(r'([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+)', text)
+        if email_match:
+            professor_data['email'] = email_match.group(1)
+            print(f"   ✓ Email: {professor_data['email']}")
+        
+        # Extrair office
+        office_match = re.search(r'Office:\s*([^\n]+)', text, re.IGNORECASE)
+        if office_match:
+            professor_data['office'] = office_match.group(1).strip()
+            print(f"   ✓ Office: {professor_data['office']}")
+        
+        # Extrair office hours
+        hours_match = re.search(r'Office Hours?:\s*([^\n]+)', text, re.IGNORECASE)
+        if hours_match:
+            professor_data['office_hours'] = hours_match.group(1).strip()
+            print(f"   ✓ Office Hours: {professor_data['office_hours']}")
     
     # Debug screenshot se solicitado
     if debug:

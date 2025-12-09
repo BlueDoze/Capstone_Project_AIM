@@ -1,0 +1,200 @@
+{
+  "metadata": {
+    "source": "fanshawe_food_page_scraper",
+    "scraped_at": "2025-12-08T18:36:36.754991",
+    "total_restaurants": 21,
+    "source_url": "https://www.fanshawec.ca/students/life/campus-services/food",
+    "extraction_method": "heading_parsing"
+  },
+  "restaurants": [
+    {
+      "id": "fanshawe_rest_001",
+      "name": "Diverse Dining Options",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_002",
+      "name": "Healthy Choices",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_003",
+      "name": "Booster Juice",
+      "location": null,
+      "description": "",
+      "link": "https://www.fsu.ca/booster-juice",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_004",
+      "name": "Oasis",
+      "location": null,
+      "description": "",
+      "link": "https://www.fsu.ca/oasis",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_005",
+      "name": "The Variety Store",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_006",
+      "name": "Tim Hortons Express",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_007",
+      "name": "Brake Time Cafe",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_008",
+      "name": "CD's Coffee Bar",
+      "location": null,
+      "description": "",
+      "link": "https://www.fsu.ca/hospitality",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_009",
+      "name": "The Out Back Shack",
+      "location": null,
+      "description": "",
+      "link": "https://www.fsu.ca/out-back-shack",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_010",
+      "name": "Subway",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_011",
+      "name": "Starbucks",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_012",
+      "name": "Atrium Cafe",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_013",
+      "name": "The Nest Convenience Store",
+      "location": null,
+      "description": "",
+      "link": "https://www.fsu.ca/nest",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_014",
+      "name": "Tim Hortons",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_015",
+      "name": "Pizza Pizza",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_016",
+      "name": "Harveys",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_017",
+      "name": "Simcoe/Norfolk",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_018",
+      "name": "St. Thomas/Elgin",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_019",
+      "name": "Woodstock/Oxford",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_020",
+      "name": "The Chef's Table",
+      "location": null,
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_021",
+      "name": "We use cookies on this site to enhance your user experience.",
+      "location": null,
+      "description": "By clicking any link on this page, you are giving your consent for us to set cookies. You can reject cookies by changing your browser settings.",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    }
+  ]
+}

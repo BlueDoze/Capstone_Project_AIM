@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>SVG Overlay Adjuster</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        #map {
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 0; right: 0;
+        }
+        #svg-controls {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 2000;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: 2px solid #333;
+            min-width: 250px;
+        }
+        #svg-controls button {
+            margin: 5px 2px;
+            padding: 8px 12px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+        #svg-controls button:hover {
+            background: #45a049;
+        }
+        #svg-controls input {
+            margin: 5px 0;
+            width: 100px;
+            padding: 5px;
+        }
+        #svg-controls label {
+            font-weight: bold;
+            display: inline-block;
+            width: 90px;
+        }
+        .floor-button {
+            background: #2196F3 !important;
+            width: 40px;
+            padding: 8px 5px !important;
+        }
+        .floor-button.active {
+            background: #FF9800 !important;
+        }
+        #current-building {
+            color: #fff;
+            background: #333;
+            padding: 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    
+    <div id="svg-controls">
+        <b>🎨 SVG Overlay Adjuster</b><br><br>
+        
+        <div id="current-building">
+            No building selected - Click a building on the map
+        </div>
+        
+        <label>Floor Level:</label>
+        <button class="floor-button active" onclick="setFloor('1')">1</button>
+        <button class="floor-button" onclick="setFloor('2')">2</button>
+        <button class="floor-button" onclick="setFloor('3')">3</button>
+        <br><br>
+        
+        <hr>
+        
+        <label>Lat Offset:</label>
+        <input type="number" id="latOffset" value="0" step="0.0001" /><br><br>
+        
+        <label>Lng Offset:</label>
+        <input type="number" id="lngOffset" value="0" step="0.0001" /><br><br>
+        
+        <label>Scale:</label>
+        <input type="number" id="scaleOffset" value="1" step="0.05" /><br><br>
+        
+        <label>Rotation:</label>
+        <input type="number" id="rotationOffset" value="0" step="0.5" />°<br><br>
+        
+        <button onclick="updateOverlayPosition()">Apply Changes</button>
+        <button onclick="resetOverlayPosition()" style="background: #f44336;">Reset</button><br><br>
+        
+        <button onclick="logCurrentPosition()" style="background: #2196F3;">📋 Log/Save Position</button><br><br>
+        
+        <small>💡 Shift + Arrow Keys for fine adjustments<br>
+        🖱️ Shift + Drag to move SVG</small>
+    </div>
+
+    <script>
+        // Global variables
+        window.currentOverlay = null;
+        window.overlayBasePosition = null;
+        window.originalSvgElement = null;
+        window.currentSvgElement = null;
+        window.baseBounds = null;
+        window.floorPlans = null;
+        window.floorKey = "1"; // Default floor
+        window.currentBuildingName = null;
+        window.savedPositions = {}; // Store all saved positions
+        window.currentBuildingBounds = null; // Store the actual building bounds
+
+        // Load floor plans data
+        async function loadFloorPlans() {
+            try {
+                const response = await fetch('JSON/all_node_data.json?ts=' + new Date().getTime());
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                window.floorPlans = await response.json();
+                console.log("✅ Floor plans data loaded:", window.floorPlans);
+            } catch (error) {
+                console.error('❌ Failed to load floor plans:', error);
+                alert("Failed to load all_node_data.json!");
+            }
+        }
+
+        // Set floor level
+        function setFloor(floor) {
+            window.floorKey = floor;
+            console.log("🏢 Floor set to:", floor);
+            
+            // Update button styles
+            document.querySelectorAll('.floor-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Reload SVG if a building is selected
+            if (window.currentBuildingName && window.currentBuildingBounds) {
+                loadSVGForBuilding(window.currentBuildingName, window.currentBuildingBounds);
+            }
+        }
+
+        // Load SVG for a specific building and floor
+        function loadSVGForBuilding(buildingName, buildingBounds) {
+            if (!window.floorPlans) {
+                alert("Floor plans not loaded yet!");
+                return;
+            }
+
+            const buildingData = window.floorPlans[buildingName];
+            
+            if (!buildingData) {
+                console.error(`❌ Building "${buildingName}" not found in floor plans data`);
+                alert(`Building "${buildingName}" not found!`);
+                return;
+            }
+
+            const prePath = buildingData['path'];
+            const floorData = buildingData['floors'][window.floorKey];
+            
+            if (!floorData) {
+                console.error(`❌ Floor ${window.floorKey} not found for ${buildingName}`);
+                alert(`Floor ${window.floorKey} not available for this building!`);
+                return;
+            }
+
+            const floorPlanFile = floorData['plan'];
+            const svgPath = prePath + "/" + floorPlanFile;
+
+            console.log(`📂 Loading: ${buildingName} - Floor ${window.floorKey}`);
+            console.log(`📄 Path: ${svgPath}`);
+            console.log(`📐 Building bounds:`, buildingBounds);
+
+            // Update UI to show current building and floor
+            document.getElementById('current-building').textContent = 
+                `${buildingName} - Floor ${window.floorKey}`;
+            
+            window.currentBuildingName = buildingName;
+            window.currentBuildingBounds = buildingBounds; // Store for floor switching
+
+            // Fetch and load the SVG
+            fetch(svgPath + '?ts=' + new Date().getTime())
+                .then(r => r.text())
+                .then(svgText => {
+                    const svgDoc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+                    const svgElement = svgDoc.documentElement;
+
+                    console.log("✅ SVG loaded successfully!");
+
+                    // Use the ACTUAL building bounds from the GeoJSON
+                    window.baseBounds = buildingBounds;
+                    
+                    window.overlayBasePosition = {
+                        north: buildingBounds.getNorth(),
+                        south: buildingBounds.getSouth(),
+                        east: buildingBounds.getEast(),
+                        west: buildingBounds.getWest(),
+                        center: buildingBounds.getCenter()
+                    };
+
+                    console.log(`📍 Base position:`, window.overlayBasePosition);
+
+                    // Store original SVG
+                    window.originalSvgElement = svgElement.cloneNode(true);
+                    window.currentSvgElement = svgElement;
+
+                    // Check if we have saved positions for this building/floor
+                    if (window.savedPositions[buildingName] && 
+                        window.savedPositions[buildingName][window.floorKey]) {
+                        const saved = window.savedPositions[buildingName][window.floorKey].positionAdjustments;
+                        document.getElementById('latOffset').value = saved.latOffset;
+                        document.getElementById('lngOffset').value = saved.lngOffset;
+                        document.getElementById('scaleOffset').value = saved.scale;
+                        document.getElementById('rotationOffset').value = saved.rotation;
+                        console.log(`♻️ Loaded saved position for ${buildingName} Floor ${window.floorKey}`);
+                    } else {
+                        // Reset controls if no saved position
+                        document.getElementById('latOffset').value = 0;
+                        document.getElementById('lngOffset').value = 0;
+                        document.getElementById('scaleOffset').value = 1;
+                        document.getElementById('rotationOffset').value = 0;
+                    }
+
+                    // Remove existing overlay if any
+                    if (window.currentOverlay) {
+                        map.removeLayer(window.currentOverlay);
+                    }
+
+                    // Create overlay with the BUILDING's bounds as starting point
+                    window.currentOverlay = L.svgOverlay(svgElement, buildingBounds, {
+                        interactive: true,
+                        opacity: 0.5
+                    }).addTo(map);
+
+                    // If we loaded saved positions, apply them immediately
+                    if (window.savedPositions[buildingName] && 
+                        window.savedPositions[buildingName][window.floorKey]) {
+                        updateOverlayPosition();
+                    }
+
+                    console.log("🎨 Overlay added to map at building bounds!");
+                })
+                .catch(err => {
+                    console.error("❌ Error loading SVG:", err);
+                    alert("Failed to load SVG: " + err.message);
+                });
+        }
+
+        // Initialize map
+        const map = L.map('map', {
+            maxZoom: 22,
+            minZoom: 16,
+            keyboard: false  // Disable default keyboard controls
+        }).setView([43.0125, -81.2002], 18);
+
+        // Add base map tiles
+        L.tileLayer(
+            "https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=d3JSA6Uq18jaERqMgDqq",
+            {
+                attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a>',
+                maxZoom: 22
+            }
+        ).addTo(map);
+
+        // Initialize app
+        async function initApp() {
+            await loadFloorPlans();
+
+            // Load GeoJSON buildings
+            fetch('campus.geojson?ts=' + new Date().getTime())
+                .then(response => response.json())
+                .then(data => {
+                    console.log("🗺️ GeoJSON loaded:", data);
+                    
+                    L.geoJSON(data, {
+                        onEachFeature: function(feature, layer) {
+                            // Extract building name from feature properties
+                            let buildingName = feature.properties.name || "Unknown Building";
+                            
+                            console.log(`🏢 Found building: ${buildingName}`);
+                            
+                            layer.bindPopup("<b>" + buildingName + "</b><br>Click to load floor plan");
+
+                            // Click handler to load building floor plan
+                            layer.on('click', function(e) {
+                                console.log(`🏢 Building clicked: ${buildingName}`);
+                                
+                                // Get the ACTUAL bounds of this building polygon
+                                const buildingBounds = layer.getBounds();
+                                console.log(`📐 ${buildingName} bounds:`, buildingBounds);
+                                
+                                // Pass the building's actual bounds
+                                loadSVGForBuilding(buildingName, buildingBounds);
+                                
+                                // Prevent map from handling the click
+                                L.DomEvent.stopPropagation(e);
+                            });
+                        },
+                        style: {
+                            color: "blue",
+                            weight: 2,
+                            fillOpacity: 0.2
+                        }
+                    }).addTo(map);
+                })
+                .catch(err => console.error("Error loading GeoJSON:", err));
+        }
+
+        // Update overlay position with transformations
+        function updateOverlayPosition() {
+            if (!window.currentOverlay || !window.overlayBasePosition) {
+                alert("No overlay loaded! Click a building first.");
+                return;
+            }
+
+            const latOffset = parseFloat(document.getElementById('latOffset').value) || 0;
+            const lngOffset = parseFloat(document.getElementById('lngOffset').value) || 0;
+            const scale = parseFloat(document.getElementById('scaleOffset').value) || 1;
+            const rotation = parseFloat(document.getElementById('rotationOffset').value) || 0;
+
+            const base = window.overlayBasePosition;
+
+            // Calculate scaled bounds
+            const centerLat = (base.north + base.south) / 2;
+            const centerLng = (base.east + base.west) / 2;
+
+            const halfHeight = ((base.north - base.south) / 2) * scale;
+            const halfWidth = ((base.east - base.west) / 2) * scale;
+
+            const newBounds = L.latLngBounds(
+                [centerLat - halfHeight + latOffset, centerLng - halfWidth + lngOffset],
+                [centerLat + halfHeight + latOffset, centerLng + halfWidth + lngOffset]
+            );
+
+            // Remove old overlay
+            map.removeLayer(window.currentOverlay);
+
+            // Clone the original SVG
+            const svgClone = window.originalSvgElement.cloneNode(true);
+
+            // Apply rotation inside SVG
+            if (rotation !== 0) {
+                const viewBox = svgClone.viewBox.baseVal;
+                const centerX = viewBox.x + viewBox.width / 2;
+                const centerY = viewBox.y + viewBox.height / 2;
+
+                const innerContent = svgClone.innerHTML;
+                svgClone.innerHTML = `<g transform="rotate(${rotation}, ${centerX}, ${centerY})">${innerContent}</g>`;
+            }
+
+            // Create new overlay
+            window.currentOverlay = L.svgOverlay(svgClone, newBounds, {
+                interactive: true,
+                opacity: 0.5
+            }).addTo(map);
+
+            window.currentSvgElement = svgClone;
+
+            console.log("🔄 Overlay updated!");
+        }
+
+        // Reset overlay to original position
+        function resetOverlayPosition() {
+            document.getElementById('latOffset').value = 0;
+            document.getElementById('lngOffset').value = 0;
+            document.getElementById('scaleOffset').value = 1;
+            document.getElementById('rotationOffset').value = 0;
+            updateOverlayPosition();
+        }
+
+        // Log current position values
+        function logCurrentPosition() {
+            if (!window.currentBuildingName) {
+                alert("No building loaded!");
+                return;
+            }
+
+            const latOffset = parseFloat(document.getElementById('latOffset').value) || 0;
+            const lngOffset = parseFloat(document.getElementById('lngOffset').value) || 0;
+            const scale = parseFloat(document.getElementById('scaleOffset').value) || 1;
+            const rotation = parseFloat(document.getElementById('rotationOffset').value) || 0;
+
+            // Save to our global savedPositions object
+            if (!window.savedPositions[window.currentBuildingName]) {
+                window.savedPositions[window.currentBuildingName] = {};
+            }
+            
+            window.savedPositions[window.currentBuildingName][window.floorKey] = {
+                positionAdjustments: {
+                    latOffset: latOffset,
+                    lngOffset: lngOffset,
+                    scale: scale,
+                    rotation: rotation
+                }
+            };
+
+            console.log(`\n✅ Position saved for ${window.currentBuildingName} - Floor ${window.floorKey}!`);
+            console.log(`\n📋 Current building/floor output:`);
+            console.log(JSON.stringify({
+                [window.currentBuildingName]: {
+                    [window.floorKey]: {
+                        positionAdjustments: {
+                            latOffset: latOffset,
+                            lngOffset: lngOffset,
+                            scale: scale,
+                            rotation: rotation
+                        }
+                    }
+                }
+            }, null, 2));
+            
+            console.log(`\n📦 ALL SAVED POSITIONS (copy this):`);
+            console.log(JSON.stringify(window.savedPositions, null, 2));
+
+            alert(`✅ Position saved for ${window.currentBuildingName} Floor ${window.floorKey}!\n\nCheck console (F12) for full output.`);
+        }
+
+        // Drag-to-move SVG (Shift + Drag)
+        let isDragging = false;
+        let dragStartLatLng = null;
+        let dragStartOffsets = null;
+
+        map.on('mousedown', function(e) {
+            if (e.originalEvent.shiftKey && window.currentOverlay) {
+                isDragging = true;
+                dragStartLatLng = e.latlng;
+                dragStartOffsets = {
+                    lat: parseFloat(document.getElementById('latOffset').value) || 0,
+                    lng: parseFloat(document.getElementById('lngOffset').value) || 0
+                };
+                map.dragging.disable();
+                e.originalEvent.preventDefault();
+            }
+        });
+
+        map.on('mousemove', function(e) {
+            if (isDragging && dragStartLatLng) {
+                const currentLatLng = e.latlng;
+                const latDiff = currentLatLng.lat - dragStartLatLng.lat;
+                const lngDiff = currentLatLng.lng - dragStartLatLng.lng;
+
+                const newLatOffset = dragStartOffsets.lat + latDiff;
+                const newLngOffset = dragStartOffsets.lng + lngDiff;
+
+                document.getElementById('latOffset').value = newLatOffset.toFixed(6);
+                document.getElementById('lngOffset').value = newLngOffset.toFixed(6);
+                updateOverlayPosition();
+            }
+        });
+
+        map.on('mouseup', function(e) {
+            if (isDragging) {
+                isDragging = false;
+                dragStartLatLng = null;
+                dragStartOffsets = null;
+                map.dragging.enable();
+            }
+        });
+
+        // Also handle mouse leaving the map
+        document.addEventListener('mouseup', function(e) {
+            if (isDragging) {
+                isDragging = false;
+                dragStartLatLng = null;
+                dragStartOffsets = null;
+                map.dragging.enable();
+            }
+        });
+
+        // Keyboard controls (Shift + Arrow Keys)
+        document.addEventListener('keydown', function(e) {
+            if (!e.shiftKey || !window.currentOverlay) return;
+
+            const step = 0.00005;
+            let latOffset = parseFloat(document.getElementById('latOffset').value) || 0;
+            let lngOffset = parseFloat(document.getElementById('lngOffset').value) || 0;
+
+            switch(e.key) {
+                case 'ArrowUp':
+                    latOffset += step;
+                    e.preventDefault();
+                    break;
+                case 'ArrowDown':
+                    latOffset -= step;
+                    e.preventDefault();
+                    break;
+                case 'ArrowLeft':
+                    lngOffset -= step;
+                    e.preventDefault();
+                    break;
+                case 'ArrowRight':
+                    lngOffset += step;
+                    e.preventDefault();
+                    break;
+                default:
+                    return;
+            }
+
+            document.getElementById('latOffset').value = latOffset.toFixed(6);
+            document.getElementById('lngOffset').value = lngOffset.toFixed(6);
+            updateOverlayPosition();
+        });
+
+        // Start the app
+        initApp();
+
+        console.log("🚀 SVG Overlay Adjuster Ready!");
+        console.log("📝 Instructions:");
+        console.log("   1. Click any building on the map");
+        console.log("   2. The SVG will be positioned at the building's bounds");
+        console.log("   3. Select a floor level (1, 2, or 3)");
+        console.log("   4. Adjust position, scale, and rotation");
+        console.log("   5. Hold Shift + Drag to move the SVG manually");
+        console.log("   6. Use Shift + Arrow Keys for fine adjustments");
+        console.log("   7. Click 'Log/Save Position' to save current floor");
+        console.log("   8. Switch floors and repeat");
+        console.log("   9. All saved positions will be logged together");
+    </script>
+</body>
+</html>

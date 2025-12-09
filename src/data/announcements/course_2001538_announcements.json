@@ -1,0 +1,18 @@
+{
+  "course_id": "2001538",
+  "course_url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001538",
+  "total_announcements": 1,
+  "successful": 1,
+  "failed": 0,
+  "extracted_at": "2025-12-08T21:30:16.997833",
+  "announcements": [
+    {
+      "index": 1,
+      "title": "Presentation Announcement",
+      "date": "Dec 7, 2025 1:37 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001538/2278204/view?ou=2001538",
+      "content": "Dear all\nWe present on Monday, 8 December, at the scheduled class time. We may continue until we finish all presentations, but if some students are not available, we will need to continue tomorrow.\nWe start on time. We follow the FOL list. The order may change, so stay prepared.\nPlease join using the Zoom link.\nTiming• 5 minutes maximum for your presentation (penalties apply if you go over time)• 2 to 5 minutes for questions, based on your selected option\nScores and Confirmation• You receive your final course score after you present• Check your grade on FOL after your presentation• Send me a direct (for your privacy) message on Zoom to confirm your final score• If you have any questions about your marking, wait until the end of all presentations• After finalization, scores cannot change\nGrading• Presentation is out of 30, includes your presentation, your report, your code, and one question about your final project• You also have 5 points for the course content questions (📗In class Activity (Question answering) - 2 ) that you can choose one option at the start of your presentation (only if you didn't receive any score for this section): Option A. Use the average of quizzes and the final exam Option B. Answer two questions, 2.5 points each\nBe ready. Stay on time. Follow the time limits. Confirm your score.\nGood luck!",
+      "content_length": 1336
+    }
+  ]
+}

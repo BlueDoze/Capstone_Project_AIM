@@ -803,8 +803,23 @@ D2L_USERNAME=your_email@fanshaweonline.ca
 D2L_PASSWORD=your_password
 ```
 
-#### **Run the Scraper**
+#### **Run the Announcements Pipeline**
 
+**Option 1: Using the Pipeline Script (Recommended)**
+```bash
+# Automated script that checks dependencies and runs the pipeline
+./run_announcements_pipeline.sh
+```
+
+This script will:
+- ✅ Check and activate virtual environment
+- ✅ Verify .env file exists with credentials
+- ✅ Ensure Playwright is installed
+- ✅ Run the announcements scraper
+- ✅ Save output to `src/data/announcements/all_announcements.json`
+- ✅ Display summary with total announcements count
+
+**Option 2: Manual Execution**
 ```bash
 # Step 1: Activate virtual environment
 source .venv/bin/activate
@@ -812,21 +827,48 @@ source .venv/bin/activate
 # Step 2: Install Playwright browsers (first time only)
 python -m playwright install firefox
 
-# Step 3: Run the scraper using the wrapper script
-python extract_all_announcements.py
-
-# Or run directly from new location:
+# Step 3: Run the scraper directly
 python -m src.scrapers.d2l.announcements
 ```
 
-**Expected Behavior:**
+#### **Expected Behavior:**
 1. Opens Firefox browser (visible, not headless)
 2. Navigates to D2L login page
 3. Prompts for Microsoft SSO authentication
 4. **If 2FA is required**: Displays verification code in terminal
 5. Navigates to course pages
-6. Extracts announcements from multiple courses
-7. Saves to `data/d2l_announcements.json`
+6. Extracts the 5 most recent announcements
+7. **Saves to**: `src/data/announcements/all_announcements.json` (centralized path)
+
+#### **Output Structure:**
+```json
+{
+  "total_announcements": 5,
+  "successful": 5,
+  "failed": 0,
+  "course": "INFO-6156-(01)-25F",
+  "extracted_at": "2025-12-08T18:36:31.458370",
+  "announcements": [
+    {
+      "index": 1,
+      "title": "Sprint 4 Presentation - reg",
+      "date": "Dec 1, 2025 9:20 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/...",
+      "content": "Announcement content here...",
+      "content_length": 373
+    }
+  ]
+}
+```
+
+#### **Chatbot Integration:**
+After running the pipeline, the chatbot automatically reads from the same location:
+```
+User: "What are the recent D2L announcements?"
+Bot: [Lists announcements from src/data/announcements/all_announcements.json]
+```
+
+**Configuration:** All paths are centralized in `src/config/paths.py` to ensure consistency between the pipeline and chatbot.
 
 ---
 

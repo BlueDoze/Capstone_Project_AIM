@@ -1391,7 +1391,7 @@
 
         async function loadBuildingPositions() {
             try {   
-                const response = await fetch('JSON/Building Positions.json?ts=' + new Date().getTime());
+                const response = await fetch('JSON/building_positions.json?ts=' + new Date().getTime());
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }

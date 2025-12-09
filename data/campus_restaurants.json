@@ -17,9 +17,22 @@
         "sunday": "Closed"
       },
       "cuisine_type": "cafe",
-      "menu_highlights": ["coffee", "donuts", "sandwiches", "bagels", "breakfast items", "soups"],
-      "payment_methods": ["cash", "credit", "debit", "meal_plan"],
-      "description": "Popular Canadian coffee shop offering fresh coffee, baked goods, and quick meals. Perfect for grabbing a coffee between classes."
+      "menu_highlights": [
+        "coffee",
+        "donuts",
+        "sandwiches",
+        "bagels",
+        "breakfast items",
+        "soups"
+      ],
+      "payment_methods": [
+        "cash",
+        "credit",
+        "debit",
+        "meal_plan"
+      ],
+      "description": "Popular Canadian coffee shop offering fresh coffee, baked goods, and quick meals. Perfect for grabbing a coffee between classes.",
+      "link": null
     },
     {
       "id": "rest002",
@@ -38,8 +51,21 @@
         "sunday": "Closed"
       },
       "cuisine_type": "cafeteria",
-      "menu_highlights": ["daily hot meals", "salad bar", "pizza", "burgers", "vegetarian options", "vegan options"],
-      "payment_methods": ["cash", "credit", "debit", "meal_plan", "OneCard"],
+      "menu_highlights": [
+        "daily hot meals",
+        "salad bar",
+        "pizza",
+        "burgers",
+        "vegetarian options",
+        "vegan options"
+      ],
+      "payment_methods": [
+        "cash",
+        "credit",
+        "debit",
+        "meal_plan",
+        "OneCard"
+      ],
       "description": "Main campus cafeteria offering a variety of hot meals, salads, and daily specials. Spacious seating area with great views."
     },
     {
@@ -59,9 +85,21 @@
         "sunday": "Closed"
       },
       "cuisine_type": "sandwiches",
-      "menu_highlights": ["custom sandwiches", "salads", "wraps", "cookies", "chips"],
-      "payment_methods": ["cash", "credit", "debit", "meal_plan"],
-      "description": "Build your own sandwich with fresh ingredients. Healthy options available including salads and wraps."
+      "menu_highlights": [
+        "custom sandwiches",
+        "salads",
+        "wraps",
+        "cookies",
+        "chips"
+      ],
+      "payment_methods": [
+        "cash",
+        "credit",
+        "debit",
+        "meal_plan"
+      ],
+      "description": "Build your own sandwich with fresh ingredients. Healthy options available including salads and wraps.",
+      "link": null
     },
     {
       "id": "rest004",
@@ -80,8 +118,19 @@
         "sunday": "Closed"
       },
       "cuisine_type": "pub",
-      "menu_highlights": ["wings", "burgers", "nachos", "poutine", "craft beer", "cocktails"],
-      "payment_methods": ["cash", "credit", "debit"],
+      "menu_highlights": [
+        "wings",
+        "burgers",
+        "nachos",
+        "poutine",
+        "craft beer",
+        "cocktails"
+      ],
+      "payment_methods": [
+        "cash",
+        "credit",
+        "debit"
+      ],
       "description": "Campus pub and grill offering comfort food and beverages. Great place to relax with friends. Must be 19+ for alcohol service."
     },
     {
@@ -101,8 +150,21 @@
         "sunday": "Closed"
       },
       "cuisine_type": "convenience",
-      "menu_highlights": ["grab-and-go meals", "snacks", "drinks", "fresh fruit", "yogurt", "sandwiches"],
-      "payment_methods": ["cash", "credit", "debit", "meal_plan", "OneCard"],
+      "menu_highlights": [
+        "grab-and-go meals",
+        "snacks",
+        "drinks",
+        "fresh fruit",
+        "yogurt",
+        "sandwiches"
+      ],
+      "payment_methods": [
+        "cash",
+        "credit",
+        "debit",
+        "meal_plan",
+        "OneCard"
+      ],
       "description": "Convenience store offering quick snacks, drinks, and pre-packaged meals. Perfect for grabbing something quick between classes."
     },
     {
@@ -122,9 +184,319 @@
         "sunday": "Closed"
       },
       "cuisine_type": "cafe",
-      "menu_highlights": ["coffee", "tea", "frappuccinos", "pastries", "breakfast sandwiches"],
-      "payment_methods": ["cash", "credit", "debit", "Starbucks app"],
-      "description": "Premium coffee shop offering a wide variety of specialty drinks and light food options. Comfortable seating for studying."
+      "menu_highlights": [
+        "coffee",
+        "tea",
+        "frappuccinos",
+        "pastries",
+        "breakfast sandwiches"
+      ],
+      "payment_methods": [
+        "cash",
+        "credit",
+        "debit",
+        "Starbucks app"
+      ],
+      "description": "Premium coffee shop offering a wide variety of specialty drinks and light food options. Comfortable seating for studying.",
+      "link": null
+    },
+    {
+      "id": "fanshawe_rest_007",
+      "name": "Diverse Dining Options",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_008",
+      "name": "Healthy Choices",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_009",
+      "name": "Booster Juice",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": "https://www.fsu.ca/booster-juice",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_010",
+      "name": "Oasis",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": "https://www.fsu.ca/oasis",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_011",
+      "name": "The Variety Store",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_012",
+      "name": "Tim Hortons Express",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_013",
+      "name": "Brake Time Cafe",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_014",
+      "name": "CD's Coffee Bar",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": "https://www.fsu.ca/hospitality",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_015",
+      "name": "The Out Back Shack",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": "https://www.fsu.ca/out-back-shack",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_016",
+      "name": "Atrium Cafe",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_017",
+      "name": "The Nest Convenience Store",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": "https://www.fsu.ca/nest",
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_018",
+      "name": "Pizza Pizza",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_019",
+      "name": "Harveys",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_020",
+      "name": "Simcoe/Norfolk",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_021",
+      "name": "St. Thomas/Elgin",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_022",
+      "name": "Woodstock/Oxford",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_023",
+      "name": "The Chef's Table",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
+    },
+    {
+      "id": "fanshawe_rest_024",
+      "name": "We use cookies on this site to enhance your user experience.",
+      "location": null,
+      "building": null,
+      "floor": null,
+      "room": null,
+      "hours": null,
+      "cuisine_type": null,
+      "menu_highlights": [],
+      "payment_methods": [],
+      "description": "By clicking any link on this page, you are giving your consent for us to set cookies. You can reject cookies by changing your browser settings.",
+      "link": null,
+      "source": "fanshawe_scraper",
+      "data_source": "web_scraper"
     }
-  ]
+  ],
+  "metadata": {
+    "last_updated": "2025-12-08T18:47:04.597205",
+    "sources": [
+      "manual",
+      "web_scraper"
+    ],
+    "total_restaurants": 24,
+    "enhanced_count": 21,
+    "new_count": 0
+  }
 }

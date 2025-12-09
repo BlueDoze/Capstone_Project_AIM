@@ -1,0 +1,82 @@
+{
+  "course_id": "2001539",
+  "course_url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001539",
+  "total_announcements": 9,
+  "successful": 9,
+  "failed": 0,
+  "extracted_at": "2025-12-08T21:26:48.794949",
+  "announcements": [
+    {
+      "index": 1,
+      "title": "Lab activity tomorrow!",
+      "date": "Nov 27, 2025 2:28 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2264951/view?ou=2001539",
+      "content": "Dear students,\nWe will go through our lab activity tomorrow after the quiz. You can find the lab materials under Week 13.\nRegards,\nSulaiman.",
+      "content_length": 140
+    },
+    {
+      "index": 2,
+      "title": "Quiz 2!",
+      "date": "Nov 27, 2025 1:03 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2264907/view?ou=2001539",
+      "content": "Dear students,\nQuiz 2 will be available on 28 November 2025, from 8:00 AM to 8:45 AM.\nIt will include 20 questions and will cover the lectures from Weeks 6, 8, and 9.\nWishing you good luck!\nRegards,\nSulaiman.",
+      "content_length": 208
+    },
+    {
+      "index": 3,
+      "title": "Project Submission!",
+      "date": "Nov 25, 2025 2:52 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2263560/view?ou=2001539",
+      "content": "Dear Students,\nThe Project Submission folder on FOL is now open.\nPlease follow the instructions below when submitting your work:\nSave your notebook and ensure that all cell outputs are visible.\nExport your notebook as a PDF file.\nSubmit both:\nThe PDF file, and\nA complete, runnable version of your project code (Jupyter Notebook or Colab Notebook).\nUpload both files to the Project Submission Folder on FOL.\nImportant:The firm due date for the project is: December 7, 2025 at 11:59 PM\nThis project contributes 40% to your overall course grade:\n30% for the project notebook submission\n10% for the project presentation\nIf you have any questions, please feel free to ask.\nRegards,\nSulaiman.",
+      "content_length": 687
+    },
+    {
+      "index": 4,
+      "title": "Submission of Assignment 2",
+      "date": "Nov 23, 2025 1:35 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2261797/view?ou=2001539",
+      "content": "Dear students,\nThe submission folder for Assignment 2 will be open until tomorrow at midnight (11:59 pm), so you can still submit your work.\nPlease note that the late penalty wil lbe applied for all late submissions.\nRegards,\nSulaiman.",
+      "content_length": 235
+    },
+    {
+      "index": 5,
+      "title": "Quiz 2 will be on Friday, November 28.",
+      "date": "Nov 14, 2025 10:07 AM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2256285/view?ou=2001539",
+      "content": "Dear Students,\nWe will have our quiz in Week 13, on Friday, November 28, during class time.\nRegards,\nSulaiman.",
+      "content_length": 110
+    },
+    {
+      "index": 6,
+      "title": "Slides for our upcoming in-class activity",
+      "date": "Sep 18, 2025 11:00 AM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2231084/view?ou=2001539",
+      "content": "Dear Students,\nThe slides for our upcoming in-class activity this Friday are now available under Week 3 --> Module 2-2 Slides.\nThese slides cover the preprocessing steps required for the sentiment analysis task. Please review them before the activity.\nRegards,\nSulaiman.",
+      "content_length": 270
+    },
+    {
+      "index": 7,
+      "title": "First in-class activity",
+      "date": "Sep 16, 2025 2:00 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2230348/view?ou=2001539",
+      "content": "Dear Students,\nThis is a reminder of our first in-class activity for our upcoming class this Friday. You are required to run the sentiment analysis task using the dataset and Jupyter notebook provided under the Week 3 materials.\nOnce completed, please export your notebook as a PDF file and submit it. Please make sure to read the instructions in the activity submission folder on FOL.\nPlease note that Submission Deadline: Saturday, September 20, at 11:59 PM.\nRegards,\nSulaiman.",
+      "content_length": 479
+    },
+    {
+      "index": 8,
+      "title": "Important Information",
+      "date": "Sep 10, 2025 9:12 AM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2227705/view?ou=2001539",
+      "content": "Dear Students,\nHere is the marking scheme for your course:\nQuizzes, Labs, and In-Class Activities – 30%\nAssignments – 30%\nProject – 40%\nThe table below shows the due dates for the course activities. Wishing you all the best in the course!\nTime\nCourse Activity\nMarks\nDue Date\nWeek 3\nIn class activity #1\n5%\nSaturday, September 20, 2025 - 11:59 pm.\nWeek 4\nAssignment #1\n15%\nFriday, October 10, 2025 – 11:59 pm.\nWeek 5\nQuiz1\n10%\n08:00 am – 10:00 am on Friday, October 03, 2025.\nWeek 9\nAssignment #2\n15%\nFriday, November 21, 2025 – 11:59 pm.\nWeek 10\nIn class activity #2\n5%\nSaturday, November 15, 2025 - 11:59 pm.\nWeek 11\nQuiz 2\n10%\n08:00 am – 10:00 am on Friday, November 21, 2025.\nWeeks 14 & 15\nProject Submission\n40%\nFriday, December 05, 2025 – 11:59 pm\nWeeks 14 & 15\nProject Presentation\nDuring the classes of Weeks 14 & 15\nRegards,\nSulaiman.",
+      "content_length": 842
+    },
+    {
+      "index": 9,
+      "title": "Welcome to INFO6153 Natural Language Processing 2",
+      "date": "",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2202124/view?ou=2001539",
+      "content": "Welcome to the course Luiz Henrique !\nPlease review the Course Information Module to get started.",
+      "content_length": 97
+    }
+  ]
+}

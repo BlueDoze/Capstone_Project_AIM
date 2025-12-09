@@ -1,0 +1,157 @@
+{
+  "student_performance_log": {
+    "semester": "Fall 2025",
+    "courses": [
+      {
+        "course_id": "INFO-6155-(01)-25F",
+        "assessments": [
+          {
+            "activity": "Brandwatch courses",
+            "points_earned": 0,
+            "points_possible": 5,
+            "weight_achieved": "0 / 10"
+          },
+          {
+            "activity": "Brandwatch Academy certification",
+            "points_earned": 0,
+            "points_possible": 100,
+            "weight_achieved": "0 / 5"
+          },
+          {
+            "activity": "Selfie Video Introduction",
+            "points_earned": 0,
+            "points_possible": 5,
+            "feedback": "No Submission"
+          },
+          {
+            "activity": "Hootsuite Certification",
+            "points_earned": 10,
+            "points_possible": 10,
+            "weight_achieved": "10 / 10"
+          },
+          {
+            "activity": "AI use by Social Media Platforms",
+            "points_earned": 10,
+            "points_possible": 10,
+            "weight_achieved": "5 / 5",
+            "feedback": "Excellent post... Good interaction with peers."
+          },
+          {
+            "activity": "Midterm exam",
+            "points_earned": 38,
+            "points_possible": 50,
+            "weight_achieved": "15.2 / 20"
+          }
+        ]
+      },
+      {
+        "course_id": "INFO-6154-(01)-25F",
+        "assessments": [
+          {
+            "activity": "In class Activity 1",
+            "points_earned": 5,
+            "points_possible": 5
+          },
+          {
+            "activity": "Assignment 1 (Coding-Based Answer)",
+            "points_earned": 4.75,
+            "points_possible": 5
+          },
+          {
+            "activity": "Assignment 2 (Coding-Based Answer)",
+            "points_earned": 5,
+            "points_possible": 5,
+            "feedback": "Full mark... you already explained your codes to me."
+          },
+          {
+            "activity": "Quiz 3",
+            "points_earned": 4.5,
+            "points_possible": 5
+          },
+          {
+            "activity": "Quiz 4",
+            "points_earned": 4.5,
+            "points_possible": 5
+          },
+          {
+            "activity": "Final Exam",
+            "points_earned": 23,
+            "points_possible": 30
+          }
+        ]
+      },
+      {
+        "course_id": "INFO-6156-(01)-25F",
+        "assessments": [
+          {
+            "activity": "Proposal",
+            "points_earned": 5,
+            "points_possible": 5
+          },
+          {
+            "activity": "Sprint Meeting 1",
+            "points_earned": 22,
+            "points_possible": 22,
+            "feedback": "User stories listed, Evaluation docs submitted"
+          },
+          {
+            "activity": "Sprint Meeting 2",
+            "points_earned": 0,
+            "points_possible": 22
+          },
+          {
+            "activity": "Sprint Meeting 3",
+            "points_earned": 22,
+            "points_possible": 22,
+            "feedback": "FOL information added, consolidated schedule..."
+          },
+          {
+            "activity": "Sprint Meeting 4",
+            "points_earned": 0,
+            "points_possible": 22
+          }
+        ]
+      },
+      {
+        "course_id": "INFO-6152-(01)-25F",
+        "assessments": [
+          {
+            "activity": "In class Activity 1",
+            "points_earned": 3.8,
+            "points_possible": 5
+          },
+          {
+            "activity": "Assignment 1",
+            "points_earned": 5,
+            "points_possible": 5
+          },
+          {
+            "activity": "Assignment 2",
+            "points_earned": 4,
+            "points_possible": 5
+          },
+          {
+            "activity": "Quiz 2",
+            "points_earned": 4.5,
+            "points_possible": 5
+          },
+          {
+            "activity": "Quiz 3",
+            "points_earned": 4,
+            "points_possible": 5
+          },
+          {
+            "activity": "Final Exam",
+            "points_earned": 24,
+            "points_possible": 30
+          },
+          {
+            "activity": "Score Adjustment (Bonus)",
+            "points_earned": 0.5,
+            "points_possible": 10
+          }
+        ]
+      }
+    ]
+  }
+}

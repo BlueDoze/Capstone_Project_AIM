@@ -4,10 +4,18 @@ Script para extrair a página home e os 5 primeiros anúncios do D2L com um úni
 
 import asyncio
 import os
+import sys
 import json
 import random
+from pathlib import Path
 from playwright.async_api import async_playwright
 from playwright_stealth import Stealth
+
+# Add project root to path
+project_root = Path(__file__).parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from src.config.paths import ANNOUNCEMENTS_FILE
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -492,10 +500,13 @@ async def extract_all_announcements():
                 "announcements": all_announcements
             }
 
-            with open('all_announcements.json', 'w', encoding='utf-8') as f:
+            # Use centralized path configuration
+            output_path = ANNOUNCEMENTS_FILE
+            
+            with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(output, f, indent=2, ensure_ascii=False)
 
-            print(f"\n✓ Arquivo salvo: all_announcements.json")
+            print(f"\n✓ Arquivo salvo: {output_path}")
             print(f"✓ Home page: {len(home_content)} caracteres")
             print(f"✓ Total: {output['total_announcements']} anúncios")
             print(f"✓ Sucesso: {output['successful']}")
@@ -515,9 +526,12 @@ async def extract_all_announcements():
                     "error": str(e),
                     "announcements": all_announcements
                 }
-                with open('all_announcements_partial.json', 'w', encoding='utf-8') as f:
+                output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'announcements')
+                os.makedirs(output_dir, exist_ok=True)
+                partial_path = os.path.join(output_dir, 'all_announcements_partial.json')
+                with open(partial_path, 'w', encoding='utf-8') as f:
                     json.dump(partial_output, f, indent=2, ensure_ascii=False)
-                print(f"✓ Resultados parciais salvos em: all_announcements_partial.json")
+                print(f"✓ Resultados parciais salvos em: {partial_path}")
 
             raise
 
@@ -538,7 +552,7 @@ if __name__ == "__main__":
     print("\n" + "="*80)
     print("CONCLUÍDO COM SUCESSO!")
     print("="*80)
-    print(f"Arquivo gerado: all_announcements.json")
+    print(f"Arquivo gerado: data/announcements/all_announcements.json")
     print(f"Home page extraída: {result['home_page']['content_length']} caracteres")
     print(f"Total de anúncios extraídos: {result['total_announcements']}")
     print("="*80 + "\n")
