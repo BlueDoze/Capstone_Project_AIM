@@ -12,7 +12,7 @@ DATA_DIR = SRC_DIR / 'data'
 
 # Announcements paths
 ANNOUNCEMENTS_DIR = DATA_DIR / 'announcements'
-ANNOUNCEMENTS_FILE = ANNOUNCEMENTS_DIR / 'all_announcements.json'
+ANNOUNCEMENTS_FILE = ANNOUNCEMENTS_DIR / 'all_courses_announcements.json'
 
 # Ensure directories exist
 ANNOUNCEMENTS_DIR.mkdir(parents=True, exist_ok=True)

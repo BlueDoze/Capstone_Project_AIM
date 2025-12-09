@@ -20,7 +20,7 @@ sys.path.insert(0, str(project_root))
 from src.api.utils.text_cleaner import clean_html_to_text
 from src.services.navigation_service import get_navigation_service
 from src.services.direction_service import get_direction_service
-from src.config.paths import ANNOUNCEMENTS_FILE
+from src.config.paths import ANNOUNCEMENTS_FILE, ANNOUNCEMENTS_DIR
 
 load_dotenv()
 
@@ -1041,36 +1041,177 @@ def handle_restaurant_query(user_message: str, entities: Dict[str, Any]) -> Dict
         print(f"⚠️ Error handling restaurant query: {e}")
         return {'reply': 'Sorry, I encountered an error while searching for restaurants.'}
 
+def parse_announcement_date(date_string: str) -> Optional[datetime]:
+    """Parse announcement date string to datetime object
+
+    Handles formats like "Dec 7, 2025 1:37 PM"
+    Returns None for empty or unparseable dates
+    """
+    if not date_string or date_string.strip() == "":
+        return None
+
+    try:
+        # Format: "Dec 7, 2025 1:37 PM"
+        return datetime.strptime(date_string, "%b %d, %Y %I:%M %p")
+    except ValueError:
+        # Try without time if format differs
+        try:
+            return datetime.strptime(date_string, "%b %d, %Y")
+        except ValueError:
+            return None
+
+def load_announcement_content(course_id: str) -> dict:
+    """Load full announcement content for a specific course from individual course file"""
+    try:
+        announcements_dir = ANNOUNCEMENTS_DIR
+        course_file = announcements_dir / f'course_{course_id}_announcements.json'
+
+        if not course_file.exists():
+            return {}
+
+        with open(course_file, 'r', encoding='utf-8') as f:
+            course_data = json.load(f)
+
+        # Return announcements indexed by title for easy lookup
+        announcements_by_title = {}
+        for announcement in course_data.get('announcements', []):
+            title = announcement.get('title')
+            if title:
+                announcements_by_title[title] = announcement
+
+        return announcements_by_title
+    except Exception as e:
+        print(f"⚠️ Error loading announcement content for course {course_id}: {e}")
+        return {}
+
 def handle_announcement_query(user_message: str, entities: Dict[str, Any]) -> Dict[str, Any]:
-    """Handles announcement-related queries"""
+    """Handles announcement-related queries using multi-course aggregated data"""
     if not model:
         return {'reply': 'The AI model is not configured.'}
 
     try:
         announcements_path = ANNOUNCEMENTS_FILE
         if not announcements_path.exists():
-            return {'reply': 'Announcement information is currently unavailable. Please run extract_all_announcements.py to collect D2L announcements.'}
+            return {'reply': 'Announcement information is currently unavailable. Please run the announcements extraction pipeline to collect D2L announcements.'}
 
         with open(announcements_path, 'r', encoding='utf-8') as f:
-            raw_data = json.load(f)
+            courses_data = json.load(f)
 
-        announcements = raw_data.get('announcements', [])
-        if not announcements:
-            return {'reply': 'No announcements found.'}
+        # Handle both array format (multi-course) and single object format (legacy)
+        if isinstance(courses_data, dict):
+            courses_data = [courses_data]
 
-        announcements_context = "\n\n** Recent D2L Announcements: **\n"
-        announcements_context += f"Course: {raw_data.get('course', 'Unknown')}\n"
-        announcements_context += f"Total: {raw_data.get('total_announcements', 0)} announcements\n\n"
+        if not courses_data:
+            return {'reply': 'No courses with announcements found.'}
 
-        for announcement in announcements:
-            announcements_context += f"\n- **{announcement.get('title', 'Untitled')}**\n"
-            announcements_context += f"  Posted: {announcement.get('date', 'Unknown date')}\n"
+        # Extract course context from entities if available
+        target_course_id = None
+        if entities and 'course' in entities:
+            target_course_id = entities['course']
 
-            content = announcement.get('content', '')
-            if len(content) > 500:
-                announcements_context += f"  Content: {content[:500]}...\n"
-            else:
-                announcements_context += f"  Content: {content}\n"
+        # Detect if user is asking for recent announcements
+        recency_keywords = ['recent', 'latest', 'new', 'this week', 'last week', 'past week']
+        filter_recent = any(keyword in user_message.lower() for keyword in recency_keywords)
+
+        # Detect course from user message by keywords
+        course_keywords = {
+            'capstone': '2001542',
+            'nlp': '2001539',
+            'natural language processing': '2001539',
+            'social media': '2001541',
+            'homeroom': '2014765',
+            'aim': '2014765',
+            'machine learning': '2001540',
+            'machine learning optimization': '2001540',
+            'tensorflow': '2001538',
+            'keras': '2001538',
+            'tensorflow & keras': '2001538',
+            'tensorflow and keras': '2001538'
+        }
+
+        # Check user message for course keywords
+        detected_course_id = None
+        user_msg_lower = user_message.lower()
+        for keyword, course_id in course_keywords.items():
+            if keyword in user_msg_lower:
+                detected_course_id = course_id
+                break
+
+        # Override entity-based course detection if we found one in message
+        if detected_course_id:
+            target_course_id = detected_course_id
+
+        # Collect and filter announcements
+        all_announcements = []
+        for course in courses_data:
+            course_id = course.get('course_id')
+
+            # Filter by course if specified
+            if target_course_id and str(course_id) != str(target_course_id):
+                continue
+
+            for announcement in course.get('announcements', []):
+                all_announcements.append({
+                    'title': announcement.get('title', 'Untitled'),
+                    'date': announcement.get('date', 'Unknown date'),
+                    'url': announcement.get('url', ''),
+                    'course_id': course_id,
+                    'content_length': announcement.get('content_length', 0)
+                })
+
+        if not all_announcements:
+            return {'reply': 'No announcements found for your request.'}
+
+        # Sort by date (most recent first) - parse dates properly for correct chronological order
+        def get_sort_key(announcement):
+            parsed = parse_announcement_date(announcement['date'])
+            # Return datetime if parseable, otherwise return minimum datetime for sorting to end
+            return parsed if parsed else datetime.min
+
+        all_announcements.sort(key=get_sort_key, reverse=True)
+
+        # Apply recency filter if user asked for recent announcements
+        is_filtered_recent = False
+
+        if filter_recent:
+            # Take top 5 most recent announcements (already sorted by date, newest first)
+            if len(all_announcements) > 5:
+                all_announcements = all_announcements[:5]
+                is_filtered_recent = True
+            elif all_announcements:
+                # Less than 5 available, show all available
+                is_filtered_recent = True
+
+        # Build context with announcements
+        if is_filtered_recent:
+            announcements_context = "\n\n** D2L Announcements (Top 5 Recent): **\n"
+        else:
+            announcements_context = "\n\n** Recent D2L Announcements: **\n"
+
+        announcements_context += f"Total: {len(all_announcements)} announcements found\n"
+
+        # Cache loaded course content to avoid repeated file reads
+        loaded_content_cache = {}
+
+        # Include top announcements (up to 15 for better context)
+        for announcement in all_announcements[:15]:
+            announcements_context += f"\n- **{announcement['title']}**\n"
+            announcements_context += f"  Course: {announcement['course_id']} | Posted: {announcement['date']}\n"
+            if announcement['url']:
+                announcements_context += f"  Link: {announcement['url']}\n"
+
+            # Try to load full content for top announcements
+            course_id = announcement['course_id']
+            if course_id not in loaded_content_cache:
+                loaded_content_cache[course_id] = load_announcement_content(course_id)
+
+            course_content = loaded_content_cache[course_id]
+            if announcement['title'] in course_content:
+                full_content = course_content[announcement['title']].get('content', '')
+                if full_content:
+                    # Include first 300 chars of full content if available
+                    preview = full_content[:300] + '...' if len(full_content) > 300 else full_content
+                    announcements_context += f"  Content Preview: {preview}\n"
 
         prompt = f"{announcements_prompt}\n{announcements_context}\n\nUser: {user_message}\nAI:"
         response = model.generate_content(prompt)

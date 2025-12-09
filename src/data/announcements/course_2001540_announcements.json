@@ -1,0 +1,34 @@
+{
+  "course_id": "2001540",
+  "course_url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001540",
+  "total_announcements": 3,
+  "successful": 3,
+  "failed": 0,
+  "extracted_at": "2025-12-08T21:27:10.074350",
+  "announcements": [
+    {
+      "index": 1,
+      "title": "Presentation Announcement",
+      "date": "Dec 7, 2025 2:17 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001540/2278206/view?ou=2001540",
+      "content": "Dear all\nWe present on Monday, 8 December, at the scheduled class time. We may continue until we finish all presentations.\nWe start on time. We follow the FOL list. The order may change, so stay prepared.\nPlease join using the Zoom link.\nTiming• 5 minutes maximum for your presentation (penalties apply if you go over time)• 2 to 5 minutes for questions, based on your selected option\nScores and Confirmation• You receive your final course score after you present• Check your grade on FOL after your presentation• Send me a direct (for your privacy) message on Zoom to confirm your final score• If you have any questions about your marking, wait until the end of all presentations• After finalization, scores cannot change\nGrading• Presentation is out of 30, includes your presentation, your report, your code, and one question about your final project• You also have 5 points for the course content questions (📗In class Activity (Question answering) - 2 ) that you can choose one option at the start of your presentation: Option A. Use the average of quizzes and the final exam Option B. Answer two questions, 2.5 points each\nBe ready. Stay on time. Follow the time limits. Confirm your score.\nGood luck!",
+      "content_length": 1205
+    },
+    {
+      "index": 2,
+      "title": "Final Exam and Presentation Details",
+      "date": "Nov 29, 2025 3:48 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001540/2266439/view?ou=2001540",
+      "content": "Dear all,\nThe final exam will be on 3 December 2025 in the next session. Please be on time.\nExam format• 30 multiple choice questions.• Includes coding questions.• Covers all material from the slides.• You can bring one two sided cheat sheet.• After each quiz, please display the submission confirmation page.\nSeating• Sit in the same order as the link shared earlier.• Because the room is full, you do not need to leave an empty seat between each person. • Keep seats empty for anyone absent or late.\nAfter the exam: we will start the final project presentations (only for those ones that we already set as volunteers).\nGood luck.",
+      "content_length": 631
+    },
+    {
+      "index": 3,
+      "title": "Quiz Details and Seating Arrangement",
+      "date": "Nov 24, 2025 7:41 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001540/2263208/view?ou=2001540",
+      "content": "Dear all,\nAs discussed earlier, you will have two quizzes on Wednesday, 26 November.\n• Quiz 1, Hyperparameter optimization.• Quiz 2, Time series and explainability.\nPlease sit according to the seat order in this link. Because the room is full, you do not need to leave an empty seat between each person. If someone arrives late or is absent, keep their assigned seat empty.\nAfter each quiz, please show me your submission confirmation page. You may stay or take a short break after the first quiz, but you cannot start the second quiz immediately.\nPlease arrive on time, since submissions made outside the class will not be accepted.\nGood luck.Mohammad",
+      "content_length": 652
+    }
+  ]
+}
