@@ -1,0 +1,10 @@
+Fix for updateUserLocation():
+
+Change line 1144 from:
+userFloor = "1";
+
+To:
+const floorSelector = document.getElementById('floor-selector');
+userFloor = floorSelector ? floorSelector.value : "1";
+
+This will make the function use the currently selected floor from the dropdown instead of always defaulting to Floor 1.

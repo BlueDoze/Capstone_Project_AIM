@@ -136,48 +136,38 @@
         <div style="background:white; padding:20px; border-radius:10px; max-width:400px; text-align:center; box-shadow:0 4px 12px #999;">
             <h3 style="margin:0 0 15px 0; font-size:18px;">Campus Navigation</h3>
             
+            <!-- Step 1: Choose starting position method -->
             <div id="step1" style="display:block;">
-                <h4 style="margin:0 0 10px 0; font-size:14px;">Step 1: Select Your Current Floor</h4>
-                <select id="startFloorSelect" onchange="updateStartupFloor()" style="font-size:18px; padding:10px; margin:10px;">
+                <h4 style="margin:0 0 15px 0; font-size:14px;">How would you like to set your starting position?</h4>
+                <button onclick="startupUseGPS()" class="btn btn-primary btn-mb" style="width:100%; margin-bottom:10px;">
+                    📍 Use GPS
+                </button>
+                <button onclick="startupManualSelect()" class="btn btn-outline btn-mb" style="width:100%; margin-bottom:10px;">
+                    🗺️ Select on Map
+                </button>
+                <button onclick="startupEnterRoomID()" class="btn btn-outline" style="width:100%;">
+                    🚪 Enter Room ID
+                </button>
+            </div>
+            
+            <!-- Step 2: Select floor (for GPS or Manual) -->
+            <div id="step2" style="display:none;">
+                <h4 style="margin:0 0 10px 0; font-size:14px;">Select Your Current Floor</h4>
+                <select id="startFloorSelect" style="font-size:16px; padding:10px; margin:10px; width:80%; border:2px solid #A6192E; border-radius:4px;">
                     <option value="1">Floor 1</option>
                     <option value="2">Floor 2</option>
                     <option value="3">Floor 3</option>
                 </select>
                 <br>
-                <button onclick="startupStep2()" class="btn btn-primary btn-mt">Next</button>
-            </div>
-            
-            <div id="step2" style="display:none;">
-                <h4 style="margin:0 0 10px 0; font-size:14px;">Step 2: Set Your Starting Position</h4>
-                <button onclick="startupUseGPS()" class="btn btn-primary btn-m" style="width:100%; margin-bottom:8px;">
-                    📍 Use GPS
-                </button>
-                <button onclick="startupManualSelect()" class="btn btn-outline btn-m" style="width:100%; margin-bottom:8px;">
-                    🗺️ Select on Map
-                </button>
-                <button onclick="startupEnterRoomID()" class="btn btn-outline btn-m" style="width:100%;">
-                    🚪 Enter Room ID
-                </button>
-            </div>
-            
-            <div id="step3-roomid" style="display:none;">
-                <h4 style="margin:0 0 10px 0; font-size:14px;">Enter Your Current Room ID</h4>
-                <input id="startup-room-input" type="text" placeholder="e.g., M1035, H1015" style="width:100%; padding:10px; font-size:14px; border:2px solid #A6192E; border-radius:4px; margin-bottom:10px;">
-                <button onclick="startupConfirmRoom()" class="btn btn-primary" style="width:100%;">Confirm</button>
-                <button onclick="startupBackToStep2()" class="btn btn-outline" style="width:100%; margin-top:8px;">Back</button>
-            </div>
-            
-            <div id="step3-manual" style="display:none;">
-                <h4 style="margin:0 0 10px 0; font-size:14px;">📍 Click on the map to set your position</h4>
-                <p style="color:#666; font-size:12px; margin:5px 0;">Your marker will appear where you click.</p>
-                <button onclick="startupBackToStep2()" class="btn btn-outline" style="width:100%; margin-top:10px;">Back</button>
+                <button onclick="startupConfirmFloor()" class="btn btn-primary btn-mt">Continue</button>
+                <button onclick="startupBackToStep1()" class="btn btn-outline" style="width:100%; margin-top:8px;">Back</button>
             </div>
         </div>
     </div>
     <div id="map"></div>
     
     <!-- Floor selector with dropdown -->
-    <div style="position:absolute; top:40px; right:10px; z-index:1000; background:#A6192E; padding:8px 12px; border-radius:5px; box-shadow:0 2px 4px rgba(0,0,0,0.2);">
+    <div style="position:absolute; top:30px; right:10px; z-index:1000; background:#A6192E; padding:8px 12px; border-radius:5px; box-shadow:0 2px 4px rgba(0,0,0,0.2); width:140px;">
         <select id="floor-selector" onchange="changeFloor()" style="font-size:14px; padding:6px 10px; border:2px solid #A6192E; border-radius:4px; background:white; color:#A6192E; font-weight:600; cursor:pointer; width:100%;">
             <option value="1">Floor 1</option>
             <option value="2">Floor 2</option>
@@ -186,9 +176,10 @@
     </div>
     
     <!-- Clear Path Button -->
-    <button id="clear-path-btn" onclick="clearPath()" class="btn btn-outline btn-sm" style="position:absolute; top:100px; right:10px; z-index:1000; width:140px;">
+    <button id="clear-path-btn" onclick="clearPath()" class="btn btn-outline btn-sm" style="position:absolute; top:90px; right:10px; z-index:1000; width:164px;">
         Clear Path
     </button>
+    
     <!-- Location Mode Toggle Button -->
     <button id="location-mode-btn" onclick="toggleLocationMode()" class="btn btn-primary btn-sm" style="position:absolute; top:140px; right:10px; z-index:1000; width:164px;">
         Switch to GPS
@@ -199,43 +190,19 @@
         📍 Place Marker
     </button>
     
+    <!-- Room Entry Button -->
+    <button id="room-entry-btn" onclick="showRoomEntryModal()" class="btn btn-sm" style="position:absolute; top:240px; right:10px; z-index:1000; width:164px; background:#A6192E; color:white; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <span style="font-size:18px;">🚪</span>
+        <span>Enter Rooms</span>
+    </button>
+    
     <!-- Location Status Display -->
-    <div id="location-status" style="position:absolute; top:240px; right:10px; z-index:1000; background:rgba(255,255,255,0.9); padding:8px 12px; border-radius:5px; font-size:11px; color:#666; box-shadow:0 2px 4px rgba(0,0,0,0.2); display:none; width:140px;">
+    <div id="location-status" style="position:absolute; top:300px; right:10px; z-index:1000; background:rgba(255,255,255,0.9); padding:8px 12px; border-radius:5px; font-size:11px; color:#666; box-shadow:0 2px 4px rgba(0,0,0,0.2); display:none; width:140px;">
         Manual Mode
-    </div>
-    <div id="navigationPanel" 
-        style="position: absolute; top: 200px; right: 10px; 
-                background: white; padding: 12px; border-radius: 8px; 
-                box-shadow: 0 2px 6px rgba(0,0,0,0.3); z-index: 1000; min-width: 250px;">
-        <h4 style="margin: 0 0 10px 0; font-size: 14px;">🧭 Navigation</h4>
-        
-        <!-- Status Message Area -->
-        <div id="navStatus" style="display: none; padding: 8px; margin-bottom: 10px; border-radius: 4px; font-size: 12px; font-weight: bold; text-align: center;"></div>
-        
-        <!-- Step 1: Set Start Location -->
-        <div id="navStep1">
-            <div style="margin-bottom: 10px;">
-                <label style="display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #28a745;">📍 Your Current Location (Room ID):</label>
-                <input id="startObjectId" type="text" placeholder="e.g., M1033, H1015" style="width: 100%; padding: 6px; border: 1px solid #28a745; border-radius: 4px; font-size: 12px;">
-                <button id="setStartBtn" style="width: 100%; margin-top: 4px; padding: 6px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">Confirm Location</button>
-            </div>
-        </div>
-        
-        <!-- Step 2: Set Destination (Initially Hidden) -->
-        <div id="navStep2" style="display: none;">
-            <div style="margin-bottom: 10px;">
-                <button id="changeStartBtn" style="width: 100%; margin-bottom: 10px; padding: 6px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">Change Start Location</button>
-            </div>
-            <div>
-                <label style="display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #dc3545;">🎯 Destination (Room ID):</label>
-                <input id="destinationObjectId" type="text" placeholder="e.g., M2017, H1003" style="width: 100%; padding: 6px; border: 1px solid #dc3545; border-radius: 4px; font-size: 12px;">
-                <button id="navigateBtn" style="width: 100%; margin-top: 4px; padding: 6px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">Find Route</button>
-            </div>
-        </div>
     </div>
     
     <!-- Multi-Floor Navigation Panel -->
-    <div id="multiFloorPanel" style="display: none; position: absolute; top: 460px; right: 10px; background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); z-index: 1000; min-width: 280px; max-width: 320px;">
+    <div id="multiFloorPanel" style="display: none; position: absolute; top: 360px; right: 10px; background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); z-index: 1000; min-width: 280px; max-width: 320px;">
         <button onclick="document.getElementById('multiFloorPanel').style.display='none'; window.pendingFloorTransition=null;" style="position: absolute; top: 8px; right: 8px; background: none; border: none; font-size: 20px; color: #666; cursor: pointer; padding: 0; width: 24px; height: 24px; line-height: 20px; font-weight: bold;" onmouseover="this.style.color='#dc3545'" onmouseout="this.style.color='#666'">×</button>
         <h4 style="margin: 0 0 10px 0; font-size: 14px; color: #A6192E;">🏢 Multi-Floor Navigation</h4>
         <p id="multiFloorInstruction" style="font-size: 12px; margin: 0 0 8px 0; line-height: 1.5; color: #333;"></p>
@@ -243,6 +210,86 @@
         <button id="multiFloorArriveBtn" onclick="completeFloorTransition()" style="width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 600;">
             ✅ I've Arrived on This Floor
         </button>
+    </div>
+
+    
+    <!-- Room Entry Modal (from set_start_end_integrated.html) -->
+    <div id="room-entry-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:10000; justify-content:center; align-items:center;">
+        <div style="background:white; padding:15px; border-radius:8px; max-width:95%; width:340px; margin:10px; box-shadow:0 8px 32px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto; display:flex; flex-direction:column;">
+            <h3 style="margin:0 0 12px 0; font-size:16px; color:#333; text-align:center;">Navigate Between Rooms</h3>
+            
+            <!-- Scrollable Content Wrapper -->
+            <div style="flex:1; overflow-y:auto; padding-right:8px;">
+                <!-- Start Location Section -->
+                <div style="background:#f8f9fa; padding:10px; border-radius:6px; margin-bottom:12px;">
+                    <h4 style="margin:0 0 8px 0; font-size:14px; color:#A6192E;">📍 Starting Location</h4>
+                    
+                    <div style="margin-bottom:8px;">
+                        <label style="display:block; margin-bottom:4px; font-weight:600; color:#555; font-size:11px;">Building:</label>
+                        <select id="start-building-select" onchange="updateStartRooms()" style="width:100%; padding:6px; font-size:13px; border-radius:5px; border:2px solid #ddd; background:white;">
+                            <option value="">Select building...</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-bottom:8px;">
+                        <label style="display:block; margin-bottom:4px; font-weight:600; color:#555; font-size:11px;">Floor:</label>
+                        <select id="start-floor-select" onchange="updateStartRooms()" style="width:100%; padding:6px; font-size:13px; border-radius:5px; border:2px solid #ddd; background:white;">
+                            <option value="">Select floor...</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-bottom:8px;">
+                        <label style="display:block; margin-bottom:4px; font-weight:600; color:#555; font-size:11px;">Room:</label>
+                        <select id="start-room-select" style="width:100%; padding:6px; font-size:13px; border-radius:5px; border:2px solid #ddd; background:white;">
+                            <option value="">Select starting room...</option>
+                        </select>
+                    </div>
+                    
+                    <button onclick="setStartingLocation()" style="width:100%; padding:8px; margin-bottom:8px; font-size:13px; background:#A6192E; color:white; border:none; border-radius:5px; cursor:pointer; font-weight:600;">
+                        🔍 Set Location
+                    </button>
+                </div>
+                
+                <!-- Status Message -->
+                <div id="navStatus" style="display:none; padding:8px; margin-bottom:8px; border-radius:5px; font-size:12px; font-weight:bold; text-align:center; background:#d4edda; color:#155724;"></div>
+                
+                <!-- End Location Section -->
+                <div style="background:#f8f9fa; padding:10px; border-radius:6px; margin-bottom:12px;">
+                    <h4 style="margin:0 0 8px 0; font-size:14px; color:#A6192E;">🎯 Destination</h4>
+                    
+                    <div style="margin-bottom:8px;">
+                        <label style="display:block; margin-bottom:4px; font-weight:600; color:#555; font-size:11px;">Building:</label>
+                        <select id="end-building-select" onchange="updateEndRooms()" style="width:100%; padding:6px; font-size:13px; border-radius:5px; border:2px solid #ddd; background:white;">
+                            <option value="">Select building...</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-bottom:8px;">
+                        <label style="display:block; margin-bottom:4px; font-weight:600; color:#555; font-size:11px;">Floor:</label>
+                        <select id="end-floor-select" onchange="updateEndRooms()" style="width:100%; padding:6px; font-size:13px; border-radius:5px; border:2px solid #ddd; background:white;">
+                            <option value="">Select floor...</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label style="display:block; margin-bottom:4px; font-weight:600; color:#555; font-size:11px;">Room:</label>
+                        <select id="end-room-select" style="width:100%; padding:6px; font-size:13px; border-radius:5px; border:2px solid #ddd; background:white;">
+                            <option value="">Select destination room...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sticky Button Footer -->
+            <div style="display:flex; gap:6px; padding-top:8px; border-top:1px solid #eee;">
+                <button onclick="closeRoomEntryModal()" class="btn" style="flex:1; padding:8px; font-size:13px; border:2px solid #A6192E; background:white; color:#A6192E;">
+                    Cancel
+                </button>
+                <button onclick="navigateToRooms()" id="navigate-rooms-btn" class="btn" style="flex:1; padding:8px; font-size:13px; background:#95a5a6; color:white; border:none; opacity:0.5; cursor:not-allowed;" disabled>
+                    Navigate
+                </button>
+            </div>
+        </div>
     </div>
     <script>
 		
@@ -275,6 +322,9 @@
         window.gpsMarker = null;
         window.gpsAccuracyCircle = null;
         window.GPS_ACCURACY_THRESHOLD = 30;
+        window.gpsAvailable = false; // Track if GPS is available
+        window.gpsLoadingInBackground = false; // Track if GPS is loading
+        window.backgroundGpsWatchId = null; // For background GPS tracking
         
         // GPS boundary limits (Fanshawe College campus area)
         window.GPS_BOUNDS = {
@@ -394,6 +444,388 @@
             // Save state after clearing path
             saveUserState();
         }
+        
+        async function completeFloorTransition() {
+            if (!window.pendingFloorTransition) {
+                console.warn("⚠️ No pending floor transition");
+                return;
+            }
+            
+            const transition = window.pendingFloorTransition;
+            const panel = document.getElementById('multiFloorPanel');
+            const arriveBtn = document.getElementById('multiFloorArriveBtn');
+            
+            console.log("🔄 Starting floor transition...");
+            console.log("   Target floor:", transition.targetFloor);
+            console.log("   Destination:", transition.objectId);
+            
+            // Disable button and show loading state
+            if (arriveBtn) {
+                arriveBtn.disabled = true;
+                arriveBtn.textContent = "🔄 Loading Floor...";
+            }
+            
+            try {
+                // Load the destination floor
+                await loadFloorLevel(parseInt(transition.targetFloor));
+                
+                console.log("✅ Floor loaded successfully");
+                
+                // Update floor selector to match
+                document.getElementById('floor-selector').value = transition.targetFloor;
+                window.userCurrentFloor = transition.targetFloor;
+                
+                // Get the building data and overlay for the new floor
+                const building = transition.targetBuilding;
+                const svgMap = window.buildingSVGElements[building];
+                const buildingOverlay = window.buildingOverlays ? window.buildingOverlays[building] : null;
+                
+                if (!svgMap || !buildingOverlay) {
+                    throw new Error(`Missing SVG or overlay for ${building}`);
+                }
+                
+                // Find vertical connector position on new floor and update user position
+                const connectorElement = svgMap.getElementById(transition.verticalConnector.idOnEndFloor);
+                if (connectorElement) {
+                    const connectorPos = objectToLatLng(connectorElement, svgMap, buildingOverlay);
+                    window.userPosition = connectorPos;
+                    
+                    // Update user marker to connector position
+                    if (window.userMarker) {
+                        window.userMarker.setLatLng(connectorPos);
+                    }
+                    
+                    console.log(`✅ User position updated to connector on Floor ${transition.targetFloor}`);
+                }
+                
+                // Draw the second segment path
+                const segment = transition.segment;
+                if (segment && segment.path && segment.path.length > 0) {
+                    const graphData = window.buildingGraphData[building];
+                    
+                    // Determine final object ID for door highlighting
+                    let finalObjectId = null;
+                    if (transition.objectType === 'room' && transition.doorList && transition.doorList.length > 0) {
+                        finalObjectId = findClosestDoorToPosition(transition.doorList, svgMap, buildingOverlay, window.userPosition);
+                    } else if (transition.objectType === 'exit') {
+                        finalObjectId = transition.objectId;
+                    }
+                    
+                    // Draw second segment with vertical connector and final destination
+                    drawPathOnMap(
+                        segment.path,
+                        graphData.nodePositions,
+                        map,
+                        svgMap,
+                        false,
+                        finalObjectId,
+                        buildingOverlay,
+                        null,
+                        null,
+                        transition.verticalConnector.idOnEndFloor,
+                        false,
+                        true
+                    );
+                    
+                    console.log("✅ Second segment path drawn");
+                }
+                
+                // Hide the panel
+                if (panel) {
+                    panel.style.display = 'none';
+                }
+                
+                // Clear pending transition
+                window.pendingFloorTransition = null;
+                
+                alert(`✅ Now on Floor ${transition.targetFloor}. Follow the path to ${transition.objectId}`);
+                
+            } catch (error) {
+                console.error("❌ Error during floor transition:", error);
+                alert("Error loading floor. Please try again.");
+            } finally {
+                // Re-enable button
+                if (arriveBtn) {
+                    arriveBtn.disabled = false;
+                    arriveBtn.textContent = "✅ I've Arrived on This Floor";
+                }
+            }
+        }
+
+        // Room Entry Modal Functions
+        
+        // Helper function to populate room dropdown for a given building and floor
+        function populateRoomDropdown(selectElement, building, floor) {
+            // Clear previous options
+            selectElement.innerHTML = '<option value="">Select room...</option>';
+            
+            if (!building || !floor) {
+                selectElement.disabled = true;
+                return;
+            }
+            
+            // Get floor data from floorPlans (all_node_data.json)
+            if (!window.floorPlans || !window.floorPlans[building]) {
+                console.warn(`No floor plans loaded for ${building}`);
+                selectElement.disabled = true;
+                return;
+            }
+            
+            const buildingData = window.floorPlans[building];
+            const floorData = buildingData.floors?.[floor];
+            
+            if (!floorData || !floorData.objects?.rooms) {
+                console.warn(`No room data found for ${building} Floor ${floor}`);
+                selectElement.disabled = true;
+                return;
+            }
+            
+            // Extract room IDs from all_node_data.json structure
+            const rooms = Object.keys(floorData.objects.rooms).sort();
+            
+            if (rooms.length === 0) {
+                const noRoomsOption = document.createElement('option');
+                noRoomsOption.textContent = 'No rooms available';
+                selectElement.appendChild(noRoomsOption);
+                selectElement.disabled = true;
+                return;
+            }
+            
+            // Populate dropdown with rooms from the JSON data
+            rooms.forEach(room => {
+                const option = document.createElement('option');
+                option.value = room;
+                option.textContent = room;
+                selectElement.appendChild(option);
+            });
+            
+            selectElement.disabled = false;
+            console.log(`Populated ${rooms.length} rooms for ${building} Floor ${floor} from all_node_data`);
+        }
+        
+        // Update start room dropdown when building/floor changes
+        function updateStartRooms() {
+            const building = document.getElementById('start-building-select').value;
+            const floor = document.getElementById('start-floor-select').value;
+            const roomSelect = document.getElementById('start-room-select');
+            
+            populateRoomDropdown(roomSelect, building, floor);
+            updateNavigateButton();
+        }
+        
+        // Update end room dropdown when building/floor changes
+        function updateEndRooms() {
+            const building = document.getElementById('end-building-select').value;
+            const floor = document.getElementById('end-floor-select').value;
+            const roomSelect = document.getElementById('end-room-select');
+            
+            populateRoomDropdown(roomSelect, building, floor);
+            updateNavigateButton();
+        }
+        
+        // Update navigate button state based on selections
+        function updateNavigateButton() {
+            const navigateBtn = document.getElementById('navigate-rooms-btn');
+            const startBuilding = document.getElementById('start-building-select').value;
+            const startFloor = document.getElementById('start-floor-select').value;
+            const startRoom = document.getElementById('start-room-select').value;
+            const endBuilding = document.getElementById('end-building-select').value;
+            const endFloor = document.getElementById('end-floor-select').value;
+            const endRoom = document.getElementById('end-room-select').value;
+            
+            if (startBuilding && startFloor && startRoom && endBuilding && endFloor && endRoom) {
+                navigateBtn.style.opacity = '1';
+                navigateBtn.disabled = false;
+            } else {
+                navigateBtn.style.opacity = '0.5';
+                navigateBtn.disabled = true;
+            }
+        }
+        
+        function showRoomEntryModal() {
+            const modal = document.getElementById('room-entry-modal');
+            const startBuildingSelect = document.getElementById('start-building-select');
+            const startFloorSelect = document.getElementById('start-floor-select');
+            const startRoomSelect = document.getElementById('start-room-select');
+            const endBuildingSelect = document.getElementById('end-building-select');
+            const endFloorSelect = document.getElementById('end-floor-select');
+            const endRoomSelect = document.getElementById('end-room-select');
+            
+            // Clear all selections
+            startBuildingSelect.innerHTML = '<option value="">Select building...</option>';
+            startFloorSelect.innerHTML = '<option value="">Select floor...</option>';
+            startRoomSelect.innerHTML = '<option value="">Select starting room...</option>';
+            endBuildingSelect.innerHTML = '<option value="">Select building...</option>';
+            endFloorSelect.innerHTML = '<option value="">Select floor...</option>';
+            endRoomSelect.innerHTML = '<option value="">Select destination room...</option>';
+            
+            // Clear stored starting location
+            window.navigationStartBuilding = null;
+            window.navigationStartFloor = null;
+            window.navigationStartRoom = null;
+            
+            // Hide status message
+            const statusDiv = document.getElementById('navStatus');
+            statusDiv.style.display = 'none';
+            statusDiv.textContent = '';
+            
+            // Disable navigate button
+            const navigateBtn = document.getElementById('navigate-rooms-btn');
+            navigateBtn.disabled = true;
+            navigateBtn.style.opacity = '0.5';
+            navigateBtn.style.cursor = 'not-allowed';
+            
+            // Check if we have floor plans data
+            if (!window.floorPlans || Object.keys(window.floorPlans).length === 0) {
+                alert('Floor plans not yet loaded. Please try again in a moment.');
+                return;
+            }
+            
+            // Get list of all available buildings from floor plans
+            const availableBuildings = Object.keys(window.floorPlans).sort();
+            
+            console.log(`Available buildings: ${availableBuildings.join(', ')}`);
+            
+            // Populate building dropdowns
+            availableBuildings.forEach(building => {
+                const startOption = document.createElement('option');
+                startOption.value = building;
+                startOption.textContent = building;
+                startBuildingSelect.appendChild(startOption);
+                
+                const endOption = document.createElement('option');
+                endOption.value = building;
+                endOption.textContent = building;
+                endBuildingSelect.appendChild(endOption);
+            });
+            
+            // Populate floor dropdowns (floors 1-3 available)
+            ['1', '2', '3'].forEach(floor => {
+                const startFloorOption = document.createElement('option');
+                startFloorOption.value = floor;
+                startFloorOption.textContent = `Floor ${floor}`;
+                startFloorSelect.appendChild(startFloorOption);
+                
+                const endFloorOption = document.createElement('option');
+                endFloorOption.value = floor;
+                endFloorOption.textContent = `Floor ${floor}`;
+                endFloorSelect.appendChild(endFloorOption);
+            });
+            
+            // Set default values to user's current location
+            const currentBuilding = window.userCurrentBuilding || availableBuildings[0];
+            const currentFloor = window.userCurrentFloor || '1';
+            
+            if (availableBuildings.includes(currentBuilding)) {
+                startBuildingSelect.value = currentBuilding;
+                startFloorSelect.value = currentFloor;
+                updateStartRooms();
+            }
+            
+            // Show modal
+            modal.style.display = 'flex';
+            
+            // Add event listeners for room selection changes
+            startRoomSelect.addEventListener('change', updateNavigateButton);
+            endRoomSelect.addEventListener('change', updateNavigateButton);
+        }
+        
+        function closeRoomEntryModal() {
+            const modal = document.getElementById('room-entry-modal');
+            modal.style.display = 'none';
+            
+            // Clear all selections
+            document.getElementById('start-building-select').value = '';
+            document.getElementById('start-floor-select').value = '';
+            document.getElementById('start-room-select').value = '';
+            document.getElementById('end-building-select').value = '';
+            document.getElementById('end-floor-select').value = '';
+            document.getElementById('end-room-select').value = '';
+        }
+        
+        function navigateToRooms() {
+            const startBuilding = document.getElementById('start-building-select').value;
+            const startFloor = document.getElementById('start-floor-select').value;
+            const startRoom = document.getElementById('start-room-select').value;
+            const endBuilding = document.getElementById('end-building-select').value;
+            const endFloor = document.getElementById('end-floor-select').value;
+            const endRoom = document.getElementById('end-room-select').value;
+            
+            if (!startBuilding || !startFloor || !startRoom || !endBuilding || !endFloor || !endRoom) {
+                alert('Please select start and end locations');
+                return;
+            }
+            
+            console.log(`🗺️ Finding path from ${startRoom} (${startBuilding}, Floor ${startFloor}) to ${endRoom} (${endBuilding}, Floor ${endFloor})`);
+            
+            // Get graph data for both buildings
+            const startGraphData = window.buildingGraphData[startBuilding];
+            const endGraphData = window.buildingGraphData[endBuilding];
+            
+            if (!startGraphData || !endGraphData) {
+                alert('Graph data not loaded for selected buildings');
+                return;
+            }
+            
+            // Find nodes that represent the start and end rooms
+            let startNode = null;
+            let endNode = null;
+            
+            // Find start node
+            Object.entries(startGraphData.nodeMetadata).forEach(([nodeId, metadata]) => {
+                if (metadata.represents) {
+                    const represents = Array.isArray(metadata.represents) ? metadata.represents : [metadata.represents];
+                    represents.forEach(rep => {
+                        if (rep.type === 'room' && rep.id === startRoom) {
+                            startNode = nodeId;
+                        }
+                    });
+                }
+            });
+            
+            // Find end node
+            Object.entries(endGraphData.nodeMetadata).forEach(([nodeId, metadata]) => {
+                if (metadata.represents) {
+                    const represents = Array.isArray(metadata.represents) ? metadata.represents : [metadata.represents];
+                    represents.forEach(rep => {
+                        if (rep.type === 'room' && rep.id === endRoom) {
+                            endNode = nodeId;
+                        }
+                    });
+                }
+            });
+            
+            if (!startNode || !endNode) {
+                alert('Could not find navigation nodes for selected rooms');
+                return;
+            }
+            
+            console.log(`📍 Start node: ${startNode}, End node: ${endNode}`);
+            
+            // Check if same building and floor - use simple pathfinding
+            if (startBuilding === endBuilding && startFloor === endFloor) {
+                const path = findShortestPath(startGraphData.graph, startNode, endNode);
+                if (!path || path.length === 0) {
+                    alert('No path found');
+                    return;
+                }
+                
+                // Load floor if not already loaded
+                document.getElementById('floor-selector').value = startFloor;
+                loadFloorLevel(parseInt(startFloor)).then(() => {
+                    const svgElement = window.buildingSVGElements[startBuilding];
+                    drawPathOnMap(path, startGraphData.nodePositions, map, svgElement);
+                });
+            } else {
+                alert('Multi-building/floor navigation coming soon');
+                // TODO: Handle multi-building and multi-floor navigation
+            }
+            
+            // Close modal
+            closeRoomEntryModal();
+            
+            console.log(`✅ Route displayed from ${startRoom} to ${endRoom}`);
+        }
 
         function changeFloor() {
             const newFloor = document.getElementById('floor-selector').value;
@@ -415,7 +847,12 @@
         }
 
         function toggleLocationMode() {
+            // Check if GPS is available before allowing switch to GPS mode
             if (window.locationMode === 'manual') {
+                if (!window.gpsAvailable) {
+                    alert("⏳ GPS is still loading or not available. Please try again in a moment or ensure location permissions are enabled.");
+                    return;
+                }
                 console.log('🔄 Switching to GPS mode...');
                 // Hide user marker when switching to GPS
                 if (window.userMarker) {
@@ -459,6 +896,88 @@
             }
             
             console.log('✅ Manual marker activated');
+        }
+
+        // Start loading GPS in the background on page load
+        function startBackgroundGPSLoad() {
+            if (window.gpsLoadingInBackground) return; // Already loading
+            
+            console.log("🔄 Starting background GPS load...");
+            window.gpsLoadingInBackground = true;
+            
+            if (!navigator.geolocation) {
+                console.warn("⚠️ Geolocation not supported");
+                updateGpsButtonState();
+                return;
+            }
+            
+            window.backgroundGpsWatchId = navigator.geolocation.watchPosition(
+                function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const accuracy = position.coords.accuracy;
+                    
+                    console.log(`📍 Background GPS: [${lat}, ${lng}] Accuracy: ±${accuracy.toFixed(0)}m`);
+                    
+                    // Check bounds and accuracy
+                    const bounds = window.GPS_BOUNDS;
+                    const isInBounds = lat >= bounds.south && lat <= bounds.north && lng >= bounds.west && lng <= bounds.east;
+                    const isAccurate = accuracy <= window.GPS_ACCURACY_THRESHOLD;
+                    
+                    if (isInBounds && isAccurate) {
+                        window.gpsAvailable = true;
+                        console.log("✅ GPS is now available!");
+                        updateGpsButtonState();
+                        
+                        // Stop background tracking once available
+                        if (window.backgroundGpsWatchId !== null) {
+                            navigator.geolocation.clearWatch(window.backgroundGpsWatchId);
+                            window.backgroundGpsWatchId = null;
+                        }
+                    } else {
+                        console.warn(`⚠️ GPS not ready - InBounds: ${isInBounds}, Accurate: ${isAccurate}`);
+                    }
+                },
+                function(error) {
+                    console.warn("⚠️ Background GPS Error:", error.message);
+                    // Don't stop loading, keep trying in background
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 0 // Always get fresh GPS data
+                }
+            );
+            
+            // Set a timeout to give GPS a 30-second window to load
+            setTimeout(() => {
+                if (!window.gpsAvailable && window.backgroundGpsWatchId !== null) {
+                    console.log("⏱️ GPS loading timeout reached (30s), checking one more time...");
+                    // Could optionally stop here and mark as unavailable
+                }
+            }, 30000);
+        }
+
+        // Update GPS button styling based on availability
+        function updateGpsButtonState() {
+            const btn = document.getElementById('location-mode-btn');
+            if (!btn) return;
+            
+            if (window.gpsAvailable) {
+                // GPS is available - show normal red button
+                btn.style.background = "#A6192E";
+                btn.style.color = "white";
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+                btn.title = "Click to enable GPS tracking";
+            } else {
+                // GPS is not available - grey out button
+                btn.style.background = "#cccccc";
+                btn.style.color = "#666666";
+                btn.style.opacity = "0.6";
+                btn.style.cursor = "not-allowed";
+                btn.title = "GPS not currently available - still loading or outside campus area";
+            }
         }
 
         function startGPSTracking() {
@@ -533,6 +1052,12 @@
                         // Don't update position if accuracy is too poor
                         // Optionally: auto-switch to manual after X failed readings
                         return;
+                    }
+                    
+                    // Mark GPS as available once we get a good fix
+                    if (!window.gpsAvailable) {
+                        window.gpsAvailable = true;
+                        updateGpsButtonState();
                     }
                     
                     const latlng = L.latLng(lat, lng);
@@ -640,8 +1165,8 @@
             statusEl.style.display = 'block'; // Keep visible
             statusEl.style.background = 'rgba(255,255,255,0.9)';
             statusEl.style.color = '#666';
-            btn.textContent = "GPS Mode";
-            btn.style.background = "#A6192E";
+            btn.textContent = "Switch to GPS";
+            btn.style.background = window.gpsAvailable ? "#A6192E" : "#cccccc";
             
             // Recreate manual marker
             if (!window.userMarker) {
@@ -732,8 +1257,9 @@
             Object.entries(window.buildingInfoCache).forEach(([buildingName, buildingData]) => {
                 if (buildingData.bounds.contains(window.userPosition)) {
                     userBuilding = buildingName;
-                    // For now, assume they're on floor 1 (later we can add floor detection)
-                    userFloor = "1";
+                    // Use the current floor from the floor selector
+                    const floorSelector = document.getElementById('floor-selector');
+                    userFloor = floorSelector ? floorSelector.value : "1";
                     console.log(`👤 User is in ${buildingName}, Floor ${userFloor}`);
                 }
             });
@@ -1552,118 +2078,6 @@
                 console.log("📍 Position updated:", userPosition);
             });
         }
-
-        async function completeFloorTransition() {
-            if (!window.pendingFloorTransition) {
-                console.warn("⚠️ No pending floor transition");
-                return;
-            }
-            
-            const transition = window.pendingFloorTransition;
-            const arriveBtn = document.getElementById('multiFloorArriveBtn');
-            
-            console.log("🔄 Starting floor transition...");
-            console.log("   Target floor:", transition.targetFloor);
-            console.log("   Destination:", transition.objectId);
-            
-            // Disable button and show loading state
-            arriveBtn.disabled = true;
-            arriveBtn.textContent = "🔄 Loading Floor...";
-            
-            try {
-                // Load the destination floor
-                await loadFloorLevel(parseInt(transition.targetFloor));
-                
-                console.log("✅ Floor loaded successfully");
-                
-                // Update floor selector to match
-                document.getElementById('floor-selector').value = transition.targetFloor;
-                window.userCurrentFloor = transition.targetFloor;
-                
-                // Get the vertical connector position on the new floor and update user position
-                const verticalConnectorId = transition.verticalConnector.endId;
-                const destFloorData = window.floorPlans[transition.targetBuilding]?.floors?.[transition.targetFloor];
-                
-                if (destFloorData && destFloorData.navigationGraph) {
-                    // Find the vertical connector node on destination floor
-                    const verticalConnectorNodeId = transition.verticalConnector.endNode;
-                    
-                    // Build the graph data for the destination floor (needed for nodePositions)
-                    const svgMap = window.buildingSVGElements[transition.targetBuilding];
-                    const buildingOverlay = window.buildingOverlays?.[transition.targetBuilding];
-                    
-                    if (svgMap && buildingOverlay) {
-                        // Build navigation graph to get geo positions
-                        const graphData = buildNavigationGraph(svgMap, destFloorData.navigationGraph, buildingOverlay);
-                        
-                        // Update buildingGraphData for the new floor
-                        if (!window.buildingGraphData) {
-                            window.buildingGraphData = {};
-                        }
-                        window.buildingGraphData[transition.targetBuilding] = graphData;
-                        
-                        console.log(`✅ Built navigation graph for Floor ${transition.targetFloor}`);
-                        
-                        // Update user position to vertical connector location on new floor
-                        const connectorPos = graphData.nodePositions[verticalConnectorNodeId];
-                        if (connectorPos) {
-                            window.userPosition = connectorPos;
-                            
-                            // Place user marker at connector
-                            if (window.userMarker) {
-                                window.userMarker.setLatLng(connectorPos);
-                            } else {
-                                placeUserMarker(connectorPos);
-                            }
-                            
-                            console.log(`📍 Updated user position to ${verticalConnectorId} at [${connectorPos.lat.toFixed(6)}, ${connectorPos.lng.toFixed(6)}]`);
-                        }
-                        
-                        // Now draw the second segment path
-                        const segment = transition.segment;
-                        
-                        if (segment.path && segment.path.length > 0) {
-                            console.log(`🗺️ Drawing path to ${transition.objectId}...`);
-                            
-                            // Get door list for final object highlighting
-                            let finalObjectId = null;
-                            if (transition.objectType === 'room' && transition.doorList && transition.doorList.length > 0) {
-                                // Use first door from the list
-                                finalObjectId = transition.doorList[0];
-                            } else if (transition.objectType === 'exit') {
-                                finalObjectId = transition.objectId;
-                            }
-                            
-                            drawPathOnMap(segment.path, graphData.nodePositions, map, svgMap, true, finalObjectId, buildingOverlay);
-                            
-                            console.log("✅ Path drawn successfully");
-                            
-                            // Hide the multi-floor panel
-                            document.getElementById('multiFloorPanel').style.display = 'none';
-                            
-                            // Show success message
-                            alert(`✅ Navigation complete! Follow the path to ${transition.objectId}`);
-                            
-                            // Clear the pending transition
-                            window.pendingFloorTransition = null;
-                        }
-                    } else {
-                        console.error("❌ Missing SVG or overlay for building");
-                        alert("Error: Could not load floor map");
-                    }
-                } else {
-                    console.error("❌ Missing destination floor data");
-                    alert("Error: Could not find floor navigation data");
-                }
-            } catch (error) {
-                console.error("❌ Error during floor transition:", error);
-                alert("Error loading floor. Please try again.");
-            } finally {
-                // Re-enable button
-                arriveBtn.disabled = false;
-                arriveBtn.textContent = "✅ I've Arrived on This Floor";
-            }
-        }
    
         function showSvgControls() {
             document.getElementById('svg-controls').style.display = 'block';
@@ -1888,6 +2302,7 @@
             const isMultiFloor = (currentBuilding === targetBuilding && currentFloor !== targetFloor);
             
             let destinationNode = null;
+            const candidateNodes = [];
             
             // Find destination node based on scenario
             if (!isMultiFloor) {
@@ -1898,7 +2313,6 @@
                     return false;
                 }
                 
-                const candidateNodes = [];
                 Object.entries(graphData.nodeMetadata).forEach(([nodeId, data]) => {
                     if (!data.represents) return;
                     const represents = Array.isArray(data.represents) ? data.represents : [data.represents];
@@ -1908,13 +2322,37 @@
                         }
                     });
                 });
+            } else {
+                // Multi-floor - find destination node in target floor's navigationGraph
+                console.log(`🏢 Multi-floor detected - finding destination node in target floor data`);
+                const targetFloorNavGraph = floorData.navigationGraph;
                 
-                if (candidateNodes.length === 0) {
-                    alert(`No navigation node for ${objectId}`);
+                if (!targetFloorNavGraph) {
+                    alert(`No navigation graph for ${targetBuilding} Floor ${targetFloor}`);
                     return false;
                 }
                 
-                // Select closest node to user's current position
+                for (const [nodeId, nodeData] of Object.entries(targetFloorNavGraph)) {
+                    if (!nodeData.represents) continue;
+                    const represents = Array.isArray(nodeData.represents) ? nodeData.represents : [nodeData.represents];
+                    for (const rep of represents) {
+                        if (rep.id === objectId) {
+                            candidateNodes.push(nodeId);
+                            console.log(`✅ Found destination node in target floor: ${nodeId}`);
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if (candidateNodes.length === 0) {
+                alert(`No navigation node for ${objectId}`);
+                return false;
+            }
+            
+            // Select closest node to user's current position (for same-floor only)
+            if (!isMultiFloor) {
+                const graphData = window.buildingGraphData[targetBuilding];
                 let minDist = Infinity;
                 candidateNodes.forEach(nodeId => {
                     const nodePos = graphData.nodePositions[nodeId];
@@ -1926,42 +2364,29 @@
                         }
                     }
                 });
-                
-                console.log(`✅ Destination node: ${destinationNode}`);
             } else {
-                // Multi-floor - find destination node in target floor's navigationGraph from all_node_data.json
-                console.log(`🏢 Multi-floor detected - finding destination node in target floor data`);
-                const targetFloorNavGraph = floorData.navigationGraph;
-                
-                if (!targetFloorNavGraph) {
-                    alert(`No navigation graph for ${targetBuilding} Floor ${targetFloor}`);
-                    return false;
-                }
-                
-                // Search the target floor's navigation graph for the destination
-                for (const [nodeId, nodeData] of Object.entries(targetFloorNavGraph)) {
-                    if (!nodeData.represents) continue;
-                    const represents = Array.isArray(nodeData.represents) ? nodeData.represents : [nodeData.represents];
-                    for (const rep of represents) {
-                        if (rep.id === objectId) {
-                            destinationNode = nodeId;
-                            console.log(`✅ Found destination node in target floor: ${destinationNode}`);
-                            break;
-                        }
-                    }
-                    if (destinationNode) break;
-                }
-                
-                if (!destinationNode) {
-                    alert(`No navigation node for ${objectId} on floor ${targetFloor}`);
-                    return false;
-                }
+                // For multi-floor, just use the first candidate node
+                destinationNode = candidateNodes[0];
             }
             
-            // Find path from user's current location to destination
+            console.log(`✅ Destination node: ${destinationNode}`);
+            
+            // Determine starting location: use room entry modal's stored location if available,
+            // otherwise use the user's current detected location
+            const startBuilding = window.navigationStartBuilding || window.userCurrentBuilding;
+            const startFloor = window.navigationStartFloor || window.userCurrentFloor;
+            
+            if (!startBuilding || startFloor === null || startFloor === undefined) {
+                alert('Could not determine starting location. Please set your location first.');
+                return false;
+            }
+            
+            console.log(`📍 Starting from: ${startBuilding} Floor ${startFloor}`);
+            
+            // Find path using determined starting location
             const pathResult = findPathAcrossBuildings(
-                userLocation.building || targetBuilding,
-                userLocation.floor || "1",
+                startBuilding,
+                startFloor,
                 targetBuilding,
                 targetFloor,
                 destinationNode
@@ -2050,7 +2475,21 @@
                 const buildingOverlay = window.buildingOverlays ? window.buildingOverlays[firstSegment.building] : null;
                 
                 if (svgMap && buildingOverlay && firstSegment.path && firstSegment.path.length > 0) {
-                    drawPathOnMap(firstSegment.path, firstSegment.nodePositions, map, svgMap, true, null, buildingOverlay);
+                    // Draw first segment with vertical connector marker
+                    drawPathOnMap(
+                        firstSegment.path, 
+                        firstSegment.nodePositions, 
+                        map, 
+                        svgMap, 
+                        true, 
+                        null, 
+                        buildingOverlay, 
+                        window.userPosition, 
+                        null, 
+                        pathResult.verticalConnector.id, 
+                        true, 
+                        false
+                    );
                     
                     // Store pending floor transition data
                     const verticalType = pathResult.verticalConnector.type;
@@ -2065,17 +2504,20 @@
                         verticalType: verticalType
                     };
                     
-                    // Show multi-floor panel
+                    // Show multi-floor panel (if it exists)
                     const panel = document.getElementById('multiFloorPanel');
-                    const instructionText = document.getElementById('multiFloorInstruction');
-                    const floorDisplay = document.getElementById('multiFloorTarget');
-                    
-                    instructionText.textContent = `Take the ${verticalType} to Floor ${pathResult.segments[1].floor}, then press the button below:`;
-                    floorDisplay.textContent = `Destination: ${objectId} (Floor ${pathResult.segments[1].floor})`;
-                    panel.style.display = 'block';
-                    
-                    console.log(`✅ Showing path to ${verticalType} on current floor`);
-                    console.log(`📋 Stored transition data for Floor ${pathResult.segments[1].floor}`);
+                    if (panel) {
+                        const instructionText = document.getElementById('multiFloorInstruction');
+                        const floorDisplay = document.getElementById('multiFloorTarget');
+                        
+                        instructionText.textContent = `Take the ${verticalType} to Floor ${pathResult.segments[1].floor}, then press the button below:`;
+                        floorDisplay.textContent = `Destination: ${objectId} (Floor ${pathResult.segments[1].floor})`;
+                        panel.style.display = 'block';
+                    } else {
+                        // Fallback to alert if panel doesn't exist
+                        const instructions = pathResult.segments.map(s => s.description).join('\n\n');
+                        alert(`🏢 Multi-floor route:\n\n${instructions}\n\n✅ Showing path to ${verticalType} on current floor.\n\nℹ️ Change to Floor ${pathResult.segments[1].floor} to continue.`);
+                    }
                     
                     return true;
                 }
@@ -2109,8 +2551,8 @@
                         clearAllHighlights(svgMap);
                         highlightDoors(svgMap, doorList);
                         
-                        // Use unified navigation function
-                        navigateToObject(roomId, 'room', buildingName, "1");
+                        // Use unified navigation function with current floor
+                        navigateToObject(roomId, 'room', buildingName, window.userCurrentFloor);
                     });
                 }
             });
@@ -2355,86 +2797,91 @@
 
         function findMultiFloorPath(startBuilding, startFloor, startNode, endBuilding, endFloor, endNode) {
             console.log(`🏢 Multi-floor pathfinding: ${startBuilding} Floor ${startFloor} → Floor ${endFloor}`);
+            console.log(`   From node: ${startNode} → To node: ${endNode}`);
             
             if (startBuilding !== endBuilding) {
                 console.error("❌ Multi-floor function called for different buildings");
                 return null;
             }
             
-            // Get navigation graph data for both floors from all_node_data.json
+            // Get navigation graph data for both floors
             const startFloorData = window.floorPlans[startBuilding]?.floors?.[startFloor];
-            const endFloorData = window.floorPlans[endBuilding]?.floors?.[endFloor];
+            const endFloorData = window.floorPlans[startBuilding]?.floors?.[endFloor];
             
             if (!startFloorData || !endFloorData) {
                 console.error("❌ Missing floor data");
                 return null;
             }
             
-            const startNavGraph = startFloorData.navigationGraph;
-            const endNavGraph = endFloorData.navigationGraph;
-            const verticalConnectors = startFloorData.verticalConnectors;
-            
-            if (!startNavGraph || !endNavGraph || !verticalConnectors) {
-                console.error("❌ Missing navigation graph data or vertical connectors");
+            // Get graph data for the start building (has all floors)
+            const graphData = window.buildingGraphData[startBuilding];
+            if (!graphData) {
+                console.error("❌ No graph data for building");
                 return null;
             }
             
-            // Find nearest vertical connector that goes to target floor
-            let nearestConnector = null;
-            let nearestConnectorId = null;
-            let nearestDistance = Infinity;
+            console.log(`📋 Available nodes on Floor ${startFloor}:`, Object.keys(startFloorData.roomToNode || {}));
+            console.log(`📋 Available vertical connectors:`, Object.keys(startFloorData.verticalConnectors || {}));
             
-            // Get current user position or use start node position
-            const startGraphData = window.buildingGraphData[startBuilding];
-            const startNodePos = startGraphData?.nodePositions?.[startNode];
-            const referencePos = startNodePos || window.userPosition;
+            // Find vertical connector (stairs/elevator) on start floor that goes to end floor
+            let verticalConnectorIdStart = null;
+            let verticalConnectorIdEnd = null;
+            let verticalType = null;
             
-            console.log(`🔍 Searching vertical connectors for route to floor ${endFloor}...`);
-            
-            // Iterate through vertical connectors on start floor
-            for (const [connectorId, connectorData] of Object.entries(verticalConnectors)) {
-                // Check if this connector goes to the target floor
+            // Search through vertical connectors on start floor
+            const startVerticalConnectors = startFloorData.verticalConnectors || {};
+            for (const [connectorId, connectorData] of Object.entries(startVerticalConnectors)) {
+                // Check if this connector has a mapping to the target floor
                 if (connectorData.verticalConnections && connectorData.verticalConnections[endFloor]) {
-                    const connectorNodeId = connectorData.nodeId;
-                    const connectorPos = startGraphData?.nodePositions?.[connectorNodeId];
-                    
-                    if (connectorPos && referencePos) {
-                        const distance = referencePos.distanceTo(connectorPos);
-                        if (distance < nearestDistance) {
-                            nearestDistance = distance;
-                            nearestConnector = connectorData;
-                            nearestConnectorId = connectorId;
-                        }
-                    } else {
-                        // Fallback: use first available connector
-                        nearestConnector = connectorData;
-                        nearestConnectorId = connectorId;
-                        break;
-                    }
+                    verticalConnectorIdStart = connectorId;
+                    verticalConnectorIdEnd = connectorData.verticalConnections[endFloor];
+                    verticalType = connectorData.type || 'stairs';
+                    console.log(`✅ Found ${verticalType}: ${connectorId}`);
+                    console.log(`   Maps to: ${verticalConnectorIdEnd} on Floor ${endFloor}`);
+                    break;
                 }
             }
             
-            if (!nearestConnector) {
+            if (!verticalConnectorIdStart || !verticalConnectorIdEnd) {
                 console.error("❌ No vertical connector found between floors");
                 alert(`No stairs or elevator found connecting Floor ${startFloor} to Floor ${endFloor}`);
                 return null;
             }
             
-            const verticalConnectorNodeStart = nearestConnector.nodeId;
-            const verticalConnectorIdEnd = nearestConnector.verticalConnections[endFloor];
-            const verticalType = nearestConnector.type;
+            // Get navigationGraph for both floors
+            const startNavGraph = startFloorData.navigationGraph;
+            const endNavGraph = endFloorData.navigationGraph;
             
-            console.log(`✅ Selected ${verticalType}: ${nearestConnectorId}`);
-            console.log(`   Start floor node: ${verticalConnectorNodeStart}`);
-            console.log(`   End floor connector: ${verticalConnectorIdEnd}`);
+            if (!startNavGraph || !endNavGraph) {
+                console.error("❌ Missing navigation graph data");
+                return null;
+            }
             
-            // Find the node ID on the destination floor that contains the vertical connector
+            // Find vertical connector node on start floor by searching navigationGraph
+            let verticalConnectorNodeStart = null;
+            for (const [nodeId, nodeData] of Object.entries(startNavGraph)) {
+                if (!nodeData.represents) continue;
+                const represents = Array.isArray(nodeData.represents) ? nodeData.represents : [nodeData.represents];
+                for (const rep of represents) {
+                    if (rep.id === verticalConnectorIdStart) {
+                        verticalConnectorNodeStart = nodeId;
+                        console.log(`✅ Found connector on start floor at node ${nodeId}`);
+                        break;
+                    }
+                }
+                if (verticalConnectorNodeStart) break;
+            }
+            
+            if (!verticalConnectorNodeStart) {
+                console.error(`❌ Could not find node for ${verticalConnectorIdStart} on Floor ${startFloor}`);
+                return null;
+            }
+            
+            // Find vertical connector node on destination floor by searching navigationGraph
             let verticalConnectorNodeEnd = null;
             for (const [nodeId, nodeData] of Object.entries(endNavGraph)) {
                 if (!nodeData.represents) continue;
-                
                 const represents = Array.isArray(nodeData.represents) ? nodeData.represents : [nodeData.represents];
-                
                 for (const rep of represents) {
                     if (rep.id === verticalConnectorIdEnd) {
                         verticalConnectorNodeEnd = nodeId;
@@ -2446,32 +2893,27 @@
             }
             
             if (!verticalConnectorNodeEnd) {
-                console.error(`❌ Could not find node for ${verticalConnectorIdEnd} on floor ${endFloor}`);
+                console.error(`❌ Could not find node for ${verticalConnectorIdEnd} on Floor ${endFloor}`);
                 return null;
             }
             
-            // Build path segments using current floor's graph data
-            if (!startGraphData) {
-                console.error("❌ No graph data for building");
-                return null;
-            }
-            
-            // Segment 1: startNode → vertical connector on start floor
-            const segment1 = findShortestPath(startGraphData.graph, startNode, verticalConnectorNodeStart);
+            // Segment 1: startNode → vertical connector on start floor (use current buildingGraphData)
+            console.log(`🔄 Building Segment 1: ${startNode} → ${verticalConnectorNodeStart}`);
+            const segment1 = findShortestPath(graphData.graph, startNode, verticalConnectorNodeStart);
             if (!segment1) {
                 console.error(`❌ Could not find path to ${verticalType}`);
                 return null;
             }
             console.log(`✅ Segment 1: ${segment1.length} nodes to ${verticalType}`);
             
-            // Segment 2: We need to build the graph for the destination floor from navigationGraph
-            // Build temporary graph for destination floor
+            // Build temporary graph for destination floor from navigationGraph
             const destGraph = {};
             for (const [nodeId, nodeData] of Object.entries(endNavGraph)) {
                 destGraph[nodeId] = nodeData.connections || [];
             }
             
-            // Find path on destination floor from vertical connector to destination
+            // Segment 2: vertical connector on end floor → destination (use temp graph)
+            console.log(`🔄 Building Segment 2: ${verticalConnectorNodeEnd} → ${endNode}`);
             const segment2 = findShortestPath(destGraph, verticalConnectorNodeEnd, endNode);
             if (!segment2) {
                 console.error(`❌ Could not find path from ${verticalType} to destination`);
@@ -2487,23 +2929,23 @@
                         building: startBuilding,
                         floor: startFloor,
                         path: segment1,
-                        nodePositions: startGraphData.nodePositions,
+                        nodePositions: graphData.nodePositions,
                         description: `Navigate to ${verticalType} on Floor ${startFloor}`
                     },
                     {
-                        building: endBuilding,
+                        building: startBuilding,
                         floor: endFloor,
                         path: segment2,
-                        navigationGraph: endNavGraph,
+                        nodePositions: graphData.nodePositions,
                         description: `Take ${verticalType} to Floor ${endFloor}, then navigate to destination`
                     }
                 ],
                 verticalConnector: {
                     type: verticalType,
+                    id: verticalConnectorIdStart,
                     startNode: verticalConnectorNodeStart,
                     endNode: verticalConnectorNodeEnd,
-                    id: nearestConnectorId,
-                    endId: verticalConnectorIdEnd
+                    idOnEndFloor: verticalConnectorIdEnd
                 }
             };
         }
@@ -2706,85 +3148,106 @@
             console.log(`✅ Startup floor changed to ${selectedFloor}`);
         }
 
-        function startupStep2() {
+        function startupUseGPS() {
+            if (!navigator.geolocation) {
+                alert('GPS is not supported by your browser.\n\nPlease use another method to set your location.');
+                return;
+            }
+            
+            // Show floor selection step
+            window.startupMethod = 'gps';
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            document.getElementById('startFloorSelect').focus();
+        }
+
+        function startupManualSelect() {
+            // Show floor selection step
+            window.startupMethod = 'manual';
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            document.getElementById('startFloorSelect').focus();
+        }
+        
+        function startupEnterRoomID() {
+            // Skip to room entry modal for room ID entry
+            window.startupMethod = 'roomid';
+            document.getElementById('startup-modal').style.display = 'none';
+            showRoomEntryModal();
+        }
+        
+        function startupBackToStep1() {
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step1').style.display = 'block';
+            window.startupMethod = null;
+        }
+
+        function startupConfirmFloor() {
             const selectedFloor = document.getElementById('startFloorSelect').value;
             window.userCurrentFloor = selectedFloor;
             
             // Sync the main floor selector dropdown
             document.getElementById('floor-selector').value = selectedFloor;
             
-            document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').style.display = 'block';
-            
             // Load the selected floor in the background
             loadFloorLevel(parseInt(selectedFloor));
             
             // Save state after floor selection
             saveUserState();
+            
+            // Close startup modal
+            document.getElementById('startup-modal').style.display = 'none';
+            
+            // Proceed based on selected method
+            if (window.startupMethod === 'gps') {
+                startupUseGPSFlow();
+            } else if (window.startupMethod === 'manual') {
+                startupManualSelectFlow();
+            }
         }
 
-        function startupUseGPS() {
-            if (!navigator.geolocation) {
-                // GPS not supported - grey out button and show error
-                const gpsBtn = document.querySelector('#step2 button[onclick="startupUseGPS()"]');
-                gpsBtn.disabled = true;
-                gpsBtn.style.opacity = '0.5';
-                gpsBtn.style.cursor = 'not-allowed';
-                gpsBtn.innerHTML = '🚫 GPS Not Supported';
-                
-                alert('GPS is not supported by your browser.\n\nPlease use another method to set your location.');
-                return;
-            }
+        function startupUseGPSFlow() {
+            // Show loading state
+            const banner = document.createElement('div');
+            banner.id = 'instruction-banner';
+            banner.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(166, 25, 46, 0.95); color: white; padding: 20px 40px; border-radius: 10px; font-size: 18px; font-weight: bold; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.3); text-align: center;';
+            banner.innerHTML = '🔄 Acquiring GPS position...';
+            document.body.appendChild(banner);
             
-            // Sync floor selector if a floor was selected
-            if (window.userCurrentFloor) {
-                document.getElementById('floor-selector').value = window.userCurrentFloor;
-            }
-            
-            // Show loading state on GPS button
-            const gpsBtn = document.querySelector('#step2 button[onclick="startupUseGPS()"]');
-            const originalGPSText = gpsBtn.innerHTML;
-            gpsBtn.innerHTML = '🔄 Checking GPS...';
-            gpsBtn.disabled = true;
-            
-            // Try to get GPS position once to validate it works and is in bounds
+            // Try to get GPS position
             navigator.geolocation.getCurrentPosition(
                 function(position) {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
                     const accuracy = position.coords.accuracy;
                     
-                    console.log(`📍 Initial GPS check: [${lat}, ${lng}] Accuracy: ±${accuracy.toFixed(0)}m`);
+                    console.log(`📍 GPS position: [${lat}, ${lng}] Accuracy: ±${accuracy.toFixed(0)}m`);
                     
                     // Check if within campus bounds
                     const bounds = window.GPS_BOUNDS;
                     if (lat < bounds.south || lat > bounds.north || lng < bounds.west || lng > bounds.east) {
-                        console.warn(`⚠️ GPS position outside campus bounds: [${lat}, ${lng}]`);
+                        const instructionBanner = document.getElementById('instruction-banner');
+                        if (instructionBanner) instructionBanner.remove();
                         
-                        // Grey out GPS button
-                        gpsBtn.innerHTML = '🚫 GPS Not Available (Out of Range)';
-                        gpsBtn.style.opacity = '0.5';
-                        gpsBtn.style.cursor = 'not-allowed';
-                        
-                        alert('GPS is not available - you are outside the campus area.\n\nPlease manually select your location on the map or input the room number you are currently at.');
+                        alert('GPS is not available - you are outside the campus area.\n\nPlease manually select your location on the map.');
+                        showStartupModal();
                         return;
                     }
                     
                     // Check accuracy
                     if (accuracy > window.GPS_ACCURACY_THRESHOLD) {
-                        console.warn(`⚠️ GPS accuracy too low: ${accuracy.toFixed(0)}m (threshold: ${window.GPS_ACCURACY_THRESHOLD}m)`);
+                        const instructionBanner = document.getElementById('instruction-banner');
+                        if (instructionBanner) instructionBanner.remove();
                         
-                        // Grey out GPS button
-                        gpsBtn.innerHTML = '🚫 GPS Signal Too Weak';
-                        gpsBtn.style.opacity = '0.5';
-                        gpsBtn.style.cursor = 'not-allowed';
-                        
-                        alert(`GPS signal is too weak (±${accuracy.toFixed(0)}m accuracy).\n\nPlease use another method to set your location.`);
+                        alert(`GPS signal is too weak (±${accuracy.toFixed(0)}m accuracy).\n\nPlease use another method.`);
+                        showStartupModal();
                         return;
                     }
                     
-                    // GPS is good - proceed with normal startup
-                    document.getElementById('startup-modal').style.display = 'none';
+                    // GPS is good - proceed
+                    const latlng = L.latLng(lat, lng);
+                    window.userPosition = latlng;
+                    updateUserLocation();
                     
                     // Remove user marker when using GPS
                     if (window.userMarker) {
@@ -2794,21 +3257,14 @@
                     
                     startGPSTracking();
                     
-                    // Create marker at GPS position
-                    const latlng = L.latLng(lat, lng);
-                    window.userPosition = latlng;
-                    updateUserLocation();
+                    const instructionBanner = document.getElementById('instruction-banner');
+                    if (instructionBanner) instructionBanner.remove();
                     
-                    // Save state
                     saveUserState();
                 },
                 function(error) {
-                    console.error('GPS Error:', error);
-                    
-                    // Grey out GPS button
-                    gpsBtn.innerHTML = '🚫 GPS Error';
-                    gpsBtn.style.opacity = '0.5';
-                    gpsBtn.style.cursor = 'not-allowed';
+                    const instructionBanner = document.getElementById('instruction-banner');
+                    if (instructionBanner) instructionBanner.remove();
                     
                     let errorMsg = 'GPS error: ';
                     switch(error.code) {
@@ -2825,7 +3281,8 @@
                             errorMsg += error.message;
                     }
                     
-                    alert(errorMsg + '\n\nPlease use another method to set your location.');
+                    alert(errorMsg + '\n\nPlease use another method.');
+                    showStartupModal();
                 },
                 {
                     enableHighAccuracy: true,
@@ -2835,16 +3292,8 @@
             );
         }
 
-        function startupManualSelect() {
-            // Sync floor selector if a floor was selected
-            if (window.userCurrentFloor) {
-                document.getElementById('floor-selector').value = window.userCurrentFloor;
-            }
-            
-            // Hide the modal completely to avoid blocking
-            document.getElementById('startup-modal').style.display = 'none';
-            
-            // Show a floating instruction banner instead
+        function startupManualSelectFlow() {
+            // Show instruction banner
             const banner = document.createElement('div');
             banner.id = 'instruction-banner';
             banner.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(40, 167, 69, 0.95); color: white; padding: 20px 40px; border-radius: 10px; font-size: 18px; font-weight: bold; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.3); text-align: center;';
@@ -2866,41 +3315,17 @@
                     updateUserLocation();
                     
                     window.waitingForPositionClick = false;
-                    
-                    // Remove the click handler
                     map.off('click', clickHandler);
                     
-                    // Remove instruction banner
                     const instructionBanner = document.getElementById('instruction-banner');
-                    if (instructionBanner) {
-                        instructionBanner.remove();
-                    }
+                    if (instructionBanner) instructionBanner.remove();
                     
-                    // Save state after user sets position
                     saveUserState();
-                    
                     console.log("✅ Manual position set:", e.latlng);
                 }
             };
             
-            // Add click handler
             map.on('click', clickHandler);
-        }
-        
-        function startupEnterRoomID() {
-            // Sync floor selector if a floor was selected
-            if (window.userCurrentFloor) {
-                document.getElementById('floor-selector').value = window.userCurrentFloor;
-            }
-            
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('step3-roomid').style.display = 'block';
-            document.getElementById('startup-room-input').focus();
-        }
-        
-        function startupBackToStep2() {
-            document.getElementById('step3-roomid').style.display = 'none';
-            document.getElementById('step2').style.display = 'block';
         }
         
         function startupConfirmRoom() {
@@ -3228,6 +3653,323 @@
             }
         }
 
+
+        // Populate room dropdown for room-entry-modal
+        function populateRoomDropdown(selectElement, building, floor) {
+            // Clear previous options
+            selectElement.innerHTML = '<option value="">Select room...</option>';
+            
+            if (!building || !floor) {
+                return;
+            }
+            
+            // Get floor data from floorPlans (all_node_data.json)
+            if (!window.floorPlans || !window.floorPlans[building]) {
+                console.warn(`No floor plans loaded for ${building}`);
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = `Floor plans not available for ${building}`;
+                option.disabled = true;
+                selectElement.appendChild(option);
+                return;
+            }
+            
+            const buildingData = window.floorPlans[building];
+            const floorData = buildingData.floors?.[floor];
+            
+            if (!floorData || !floorData.objects?.rooms) {
+                console.warn(`No room data found for ${building} Floor ${floor}`);
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = `No rooms available on Floor ${floor}`;
+                option.disabled = true;
+                selectElement.appendChild(option);
+                return;
+            }
+            
+            // Extract room IDs from all_node_data.json structure
+            const rooms = Object.keys(floorData.objects.rooms).sort();
+            
+            if (rooms.length === 0) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'No rooms found';
+                option.disabled = true;
+                selectElement.appendChild(option);
+                return;
+            }
+            
+            // Populate dropdown with rooms from the JSON data
+            rooms.forEach(room => {
+                const option = document.createElement('option');
+                option.value = room;
+                option.textContent = room;
+                selectElement.appendChild(option);
+            });
+            
+            selectElement.disabled = false;
+            console.log(`Populated ${rooms.length} rooms for ${building} Floor ${floor} from all_node_data`);
+        }
+
+        // Update start room dropdown when building/floor changes
+        function updateStartRooms() {
+            const building = document.getElementById('start-building-select').value;
+            const floor = document.getElementById('start-floor-select').value;
+            const roomSelect = document.getElementById('start-room-select');
+            
+            populateRoomDropdown(roomSelect, building, floor);
+            updateNavigateButton();
+        }
+        
+        // Update end room dropdown when building/floor changes
+        function updateEndRooms() {
+            const building = document.getElementById('end-building-select').value;
+            const floor = document.getElementById('end-floor-select').value;
+            const roomSelect = document.getElementById('end-room-select');
+            
+            populateRoomDropdown(roomSelect, building, floor);
+            updateNavigateButton();
+        }
+        
+        // Update navigate button state based on selections
+        function updateNavigateButton() {
+            const navigateBtn = document.getElementById('navigate-rooms-btn');
+            const startBuilding = document.getElementById('start-building-select').value;
+            const startFloor = document.getElementById('start-floor-select').value;
+            const startRoom = document.getElementById('start-room-select').value;
+            const endBuilding = document.getElementById('end-building-select').value;
+            const endFloor = document.getElementById('end-floor-select').value;
+            const endRoom = document.getElementById('end-room-select').value;
+            
+            if (startBuilding && startFloor && startRoom && endBuilding && endFloor && endRoom) {
+                navigateBtn.style.background = '#A6192E';
+                navigateBtn.style.cursor = 'pointer';
+                navigateBtn.disabled = false;
+            } else {
+                navigateBtn.style.background = '#95a5a6';
+                navigateBtn.style.cursor = 'not-allowed';
+                navigateBtn.disabled = true;
+            }
+        }
+
+        // Show room entry modal
+        function showRoomEntryModal() {
+            const modal = document.getElementById('room-entry-modal');
+            const startBuildingSelect = document.getElementById('start-building-select');
+            const startFloorSelect = document.getElementById('start-floor-select');
+            const startRoomSelect = document.getElementById('start-room-select');
+            const endBuildingSelect = document.getElementById('end-building-select');
+            const endFloorSelect = document.getElementById('end-floor-select');
+            const endRoomSelect = document.getElementById('end-room-select');
+            
+            // Clear all selections
+            startBuildingSelect.innerHTML = '<option value="">Select building...</option>';
+            startFloorSelect.innerHTML = '<option value="">Select floor...</option>';
+            startRoomSelect.innerHTML = '<option value="">Select starting room...</option>';
+            endBuildingSelect.innerHTML = '<option value="">Select building...</option>';
+            endFloorSelect.innerHTML = '<option value="">Select floor...</option>';
+            endRoomSelect.innerHTML = '<option value="">Select destination room...</option>';
+            
+            // Check if we have floor plans data
+            if (!window.floorPlans || Object.keys(window.floorPlans).length === 0) {
+                alert('Floor plans not loaded. Please wait a moment and try again.');
+                return;
+            }
+            
+            // Get list of all available buildings from floor plans
+            const availableBuildings = Object.keys(window.floorPlans).sort();
+            
+            console.log(`Available buildings: ${availableBuildings.join(', ')}`);
+            
+            // Populate building dropdowns
+            availableBuildings.forEach(building => {
+                const startOption = document.createElement('option');
+                startOption.value = building;
+                startOption.textContent = building;
+                startBuildingSelect.appendChild(startOption);
+                
+                const endOption = document.createElement('option');
+                endOption.value = building;
+                endOption.textContent = building;
+                endBuildingSelect.appendChild(endOption);
+            });
+            
+            // Populate floor dropdowns (floors 1-3 available)
+            ['1', '2', '3'].forEach(floor => {
+                const startFloorOption = document.createElement('option');
+                startFloorOption.value = floor;
+                startFloorOption.textContent = `Floor ${floor}`;
+                startFloorSelect.appendChild(startFloorOption);
+                
+                const endFloorOption = document.createElement('option');
+                endFloorOption.value = floor;
+                endFloorOption.textContent = `Floor ${floor}`;
+                endFloorSelect.appendChild(endFloorOption);
+            });
+            
+            // Set default values to user's current location
+            const currentBuilding = window.userCurrentBuilding || availableBuildings[0];
+            const currentFloor = window.userCurrentFloor || '1';
+            
+            if (availableBuildings.includes(currentBuilding)) {
+                startBuildingSelect.value = currentBuilding;
+                startFloorSelect.value = currentFloor;
+                updateStartRooms();
+            }
+            
+            // Show modal
+            modal.style.display = 'flex';
+            
+            // Add event listeners for room selection changes
+            startRoomSelect.addEventListener('change', updateNavigateButton);
+            endRoomSelect.addEventListener('change', updateNavigateButton);
+            
+            // Initialize button state
+            updateNavigateButton();
+        }
+
+        // Close room entry modal
+        function closeRoomEntryModal() {
+            const modal = document.getElementById('room-entry-modal');
+            modal.style.display = 'none';
+            
+            // Clear all selections
+            document.getElementById('start-building-select').value = '';
+            document.getElementById('start-floor-select').value = '';
+            document.getElementById('start-room-select').value = '';
+            document.getElementById('end-building-select').value = '';
+            document.getElementById('end-floor-select').value = '';
+            document.getElementById('end-room-select').value = '';
+        }
+
+        // Set starting location and load its floor
+        async function setStartingLocation() {
+            const startBuilding = document.getElementById('start-building-select').value;
+            const startFloor = document.getElementById('start-floor-select').value;
+            const startRoom = document.getElementById('start-room-select').value;
+            
+            if (!startBuilding || !startFloor || !startRoom) {
+                alert('Please select building, floor, and room for starting location');
+                return;
+            }
+            
+            console.log(`📍 Setting starting location: ${startRoom} (${startBuilding}, Floor ${startFloor})`);
+            
+            // Load the starting floor's SVG overlays
+            console.log(`📦 Loading starting floor: ${startBuilding} Floor ${startFloor}`);
+            await loadFloorLevel(parseInt(startFloor));
+            
+            // Remove user marker when using navigation panel
+            if (window.userMarker) {
+                map.removeLayer(window.userMarker);
+                window.userMarker = null;
+            }
+            
+            // Store the starting location
+            window.navigationStartBuilding = startBuilding;
+            window.navigationStartFloor = parseInt(startFloor);
+            window.navigationStartRoom = startRoom;
+            
+            // Update UI to show location is set
+            const statusDiv = document.getElementById('navStatus');
+            statusDiv.style.display = 'block';
+            statusDiv.style.background = '#d4edda';
+            statusDiv.style.color = '#155724';
+            statusDiv.textContent = `✅ Starting location set: ${startRoom} (${startBuilding}, Floor ${startFloor})`;
+            
+            // Enable navigate button
+            document.getElementById('navigate-rooms-btn').disabled = false;
+            document.getElementById('navigate-rooms-btn').style.opacity = '1';
+            
+            // Show "Use My Location" button so user can go back to manual mode
+            document.getElementById('use-manual-location-btn').style.display = 'block';
+            
+            console.log('✅ Starting location confirmed and floor loaded');
+        }
+        
+        // Navigate to selected rooms (using previously set starting location)
+        async function navigateToRooms() {
+            // Use stored starting location
+            const startBuilding = window.navigationStartBuilding;
+            const startFloor = window.navigationStartFloor;
+            const startRoom = window.navigationStartRoom;
+            
+            const endBuilding = document.getElementById('end-building-select').value;
+            const endFloor = parseInt(document.getElementById('end-floor-select').value);
+            const endRoom = document.getElementById('end-room-select').value;
+            
+            if (!startBuilding || !startFloor || !startRoom || !endBuilding || !endFloor || !endRoom) {
+                alert('Please set starting location and select destination');
+                return;
+            }
+            
+            console.log(`🗺️ Finding path from ${startRoom} (${startBuilding}, Floor ${startFloor}) to ${endRoom} (${endBuilding}, Floor ${endFloor})`);
+            
+            // Get start room's first door to show where path begins
+            const startFloorData = window.floorPlans[startBuilding]?.floors?.[startFloor];
+            if (!startFloorData || !startFloorData.objects?.rooms?.[startRoom]) {
+                alert(`Could not find starting room ${startRoom}`);
+                return;
+            }
+            
+            const startRoomDoors = startFloorData.objects.rooms[startRoom];
+            
+            // Temporarily store user position AT the starting room door for pathfinding
+            const startSvgMap = window.buildingSVGElements[startBuilding];
+            const startBuildingOverlay = window.buildingOverlays?.[startBuilding];
+            
+            if (!startSvgMap || !startBuildingOverlay) {
+                alert('Starting location overlay not found');
+                return;
+            }
+            
+            const firstDoor = startSvgMap.getElementById(startRoomDoors[0]);
+            if (!firstDoor) {
+                alert(`Could not locate door on map`);
+                return;
+            }
+            
+            // Save original position so we can restore it
+            const originalUserPosition = window.userPosition;
+            
+            // Temporarily set position for pathfinding
+            window.userPosition = objectToLatLng(firstDoor, startSvgMap, startBuildingOverlay);
+            console.log(`📍 Temporarily set user position to start room door for pathfinding`);
+            
+            // Use navigateToObject which handles all three scenarios
+            const success = navigateToObject(endRoom, 'room', endBuilding, endFloor);
+            
+            // Restore original user position (don't keep the temporary one)
+            window.userPosition = originalUserPosition;
+            
+            if (!success) {
+                alert('Could not find route to destination');
+                return;
+            }
+            
+            closeRoomEntryModal();
+            console.log(`✅ Route displayed from ${startRoom} to ${endRoom}`);
+        }
+        
+        // Enhanced drawPathOnMap with automatic zoom to show path
+        function drawPathOnMapWithZoom(path, nodePositions, map, svgMap, clearPrevious = true, finalObjectId = null, overlay = null, userPosition = null, startDoorId = null, verticalConnectorId = null, isFirstFloorSegment = false, isLastFloorSegment = false) {
+            // Call original drawPathOnMap
+            drawPathOnMap(path, nodePositions, map, svgMap, clearPrevious, finalObjectId, overlay, userPosition, startDoorId, verticalConnectorId, isFirstFloorSegment, isLastFloorSegment);
+            
+            // Auto-zoom to show the path
+            if (window.pathPolylines && window.pathPolylines.length > 0) {
+                const featureGroup = L.featureGroup(window.pathPolylines);
+                const bounds = featureGroup.getBounds();
+                
+                if (bounds.isValid()) {
+                    map.fitBounds(bounds, { padding: [50, 50], maxZoom: 19 });
+                    console.log(`🔍 Zoomed to show full path`);
+                } else {
+                    console.warn(`⚠️ Could not calculate bounds for zoom`);
+                }
+            }
+        }
+
          // Step 1: Initialize the map
         async function initApp() {
             
@@ -3462,7 +4204,7 @@
                         
                         console.log("💾 Stored pending destination:", window.pendingDestination);
                         
-                        // Show the continue button
+                        // Show Step 3: Multi-Floor Navigation
                         const continueBtn = document.getElementById('continueFloorBtn');
                         const instructions = document.getElementById('floorInstructions');
                         
@@ -3470,7 +4212,11 @@
                             instructions.innerHTML = `<strong>Step 1:</strong> Follow path to ${nearestConnector.id}<br>
                                                      <strong>Step 2:</strong> Take ${connectorName} to Floor ${endFloor}<br>
                                                      <strong>Step 3:</strong> Click button below when you arrive`;
-                            continueBtn.style.display = 'block';
+                            
+                            // Hide Steps 1 and 2, show Step 3
+                            document.getElementById('multiFloorStep1').style.display = 'none';
+                            document.getElementById('multiFloorStep2').style.display = 'none';
+                            document.getElementById('multiFloorStep3').style.display = 'block';
                             document.getElementById('multiFloorPanel').style.display = 'block';
                         }
                     }
@@ -3494,10 +4240,12 @@
                 
                 // Set Start Position Button
                 document.getElementById("setStartBtn").addEventListener("click", () => {
-                    const roomId = document.getElementById("startObjectId").value.trim().toUpperCase();
+                    // Get room ID from either dropdown or text input
+                    let roomId = document.getElementById("start-room-select-list").value || 
+                                 document.getElementById("startObjectId").value.trim().toUpperCase();
                     
                     if (!roomId) {
-                        alert("Please enter your current room ID");
+                        alert("Please select a room or enter a room ID");
                         return;
                     }
                     
@@ -3563,15 +4311,21 @@
                                 map.setView(doorPosition, 19);
                                 
                                 // Show success message
-                                const statusDiv = document.getElementById('navStatus');
+                                const statusDiv = document.getElementById('multiFloorStatus');
                                 statusDiv.textContent = `✅ Location confirmed: ${roomId} (${roomBuilding}, Floor ${roomFloor})`;
                                 statusDiv.style.display = 'block';
                                 statusDiv.style.background = '#d4edda';
                                 statusDiv.style.color = '#155724';
                                 
+                                // Populate destination room dropdown based on current building and floor
+                                const endRoomSelect = document.getElementById('end-room-select');
+                                if (endRoomSelect) {
+                                    populateRoomDropdown(endRoomSelect, roomBuilding, roomFloor);
+                                }
+                                
                                 // Hide Step 1, Show Step 2
-                                document.getElementById('navStep1').style.display = 'none';
-                                document.getElementById('navStep2').style.display = 'block';
+                                document.getElementById('multiFloorStep1').style.display = 'none';
+                                document.getElementById('multiFloorStep2').style.display = 'block';
                                 
                                 console.log(`✅ Start location confirmed, ready for destination`);
                             }
@@ -3585,11 +4339,12 @@
                     clearPath();
                     
                     // Reset to Step 1
-                    document.getElementById('navStep1').style.display = 'block';
-                    document.getElementById('navStep2').style.display = 'none';
+                    document.getElementById('multiFloorStep1').style.display = 'block';
+                    document.getElementById('multiFloorStep2').style.display = 'none';
+                    document.getElementById('multiFloorStep3').style.display = 'none';
                     
                     // Clear status
-                    const statusDiv = document.getElementById('navStatus');
+                    const statusDiv = document.getElementById('multiFloorStatus');
                     statusDiv.style.display = 'none';
                     statusDiv.textContent = '';
                     
@@ -3607,10 +4362,12 @@
                 
                 // Navigate to Destination Button
                 document.getElementById("navigateBtn").addEventListener("click", () => {
-                    const objectId = document.getElementById("destinationObjectId").value.trim().toUpperCase();
+                    // Get destination room ID from either dropdown or text input
+                    let objectId = document.getElementById("end-room-select").value || 
+                                   document.getElementById("destinationObjectId").value.trim().toUpperCase();
                     
                     if (!objectId) {
-                        alert("Please enter a destination room ID");
+                        alert("Please select a destination room or enter a room ID");
                         return;
                     }
                     
@@ -3670,8 +4427,16 @@
                 });
         }
         initApp();
+        // Start loading GPS in the background
+        startBackgroundGPSLoad();
 		
     </script>
 	
 </body>
 </html>
+
+
+
+
+
+
