@@ -238,7 +238,7 @@ async def try_login_if_needed(page):
 
     # Wait for the page to fully load
     try:
-        await page.wait_for_load_state("networkidle", timeout=10000)
+        await page.wait_for_load_state("networkidle", timeout=20000)
     except:
         await asyncio.sleep(2)
 
@@ -255,7 +255,7 @@ async def try_login_if_needed(page):
     for selector in email_selectors:
         try:
             print(f"    Trying selector: {selector}")
-            await page.wait_for_selector(selector, timeout=5000)
+            await page.wait_for_selector(selector, timeout=15000)
             print(f"    ✓ Found with selector: {selector}")
             await asyncio.sleep(random.uniform(0.5, 1.0))
             await page.fill(selector, username)
@@ -327,7 +327,7 @@ async def try_login_if_needed(page):
     for selector in password_selectors:
         try:
             print(f"    Trying selector: {selector}")
-            await page.wait_for_selector(selector, timeout=3000)
+            await page.wait_for_selector(selector, timeout=15000)
             print(f"    ✓ Found with selector: {selector}")
             await asyncio.sleep(random.uniform(0.5, 1.0))
             await page.fill(selector, password)
@@ -709,7 +709,7 @@ async def extract_d2l_announcements_testing(course_id: str = "2001539",
 
     # Launch browser
     async with async_playwright() as p:
-        browser = await p.firefox.launch(headless=True)
+        browser = await p.firefox.launch(headless=False)
         context = await browser.new_context(
             viewport={'width': 1920, 'height': 1080},
             user_agent='Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0'
