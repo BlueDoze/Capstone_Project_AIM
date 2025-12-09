@@ -611,9 +611,57 @@ async def _extract_professor_info_impl(page, course_id, output_file, username, p
                     continue;
                 }
             }
-            
+
             result.debug_info.push(`Widget texts: ${JSON.stringify(widgetTexts).substring(0, 200)}`);
-            
+
+            // Estratégia 1B: Heurística para detectar nomes de professores sem palavras-chave
+            if (!professorWidget) {
+                result.debug_info.push('Applying heuristic detection for professor names...');
+
+                for (const selector of widgetSelectors) {
+                    try {
+                        const elements = document.querySelectorAll(selector);
+
+                        for (const elem of elements) {
+                            const text = elem.innerText || elem.textContent || '';
+                            const trimmed = text.trim();
+                            const words = trimmed.split(/\\s+/);
+
+                            // Heurística: É provável ser nome de professor se:
+                            // 1. Texto curto (< 100 chars)
+                            // 2. 2-4 palavras (nome + sobrenome, talvez nome do meio)
+                            // 3. Começa com letra maiúscula
+                            // 4. Não é um widget comum
+                            // 5. Não é um anúncio
+
+                            const hasCapitalStart = /^[A-Z]/.test(trimmed);
+                            const isShort = trimmed.length < 100;
+                            const hasReasonableWordCount = words.length >= 2 && words.length <= 4;
+                            const notCommonWidget = !['Calendar', 'Updates', 'Announcements'].includes(trimmed);
+                            const notAnnouncement = !text.includes('posted on');
+
+                            if (hasCapitalStart && isShort && hasReasonableWordCount &&
+                                notCommonWidget && notAnnouncement) {
+
+                                // Validação extra: cada palavra parece ser um nome
+                                const looksLikeName = words.every(word => /^[A-Z][a-z]+/.test(word));
+
+                                if (looksLikeName) {
+                                    professorWidget = elem;
+                                    result.extraction_method = `widget_heuristic:${selector}`;
+                                    result.debug_info.push(`Found professor via heuristic: "${trimmed}"`);
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (professorWidget) break;
+                    } catch (e) {
+                        continue;
+                    }
+                }
+            }
+
             // Estratégia 2: Tentar acessar shadow DOM
             if (!professorWidget) {
                 try {
@@ -739,26 +787,26 @@ async def _extract_professor_info_impl(page, course_id, output_file, username, p
         print("   → Parseando texto extraído...")
         text = professor_data.get('raw_text', '')
         
-        # Extrair nome (após "Name:")
-        name_match = re.search(r'Name:\s*([^\n]+)', text, re.IGNORECASE)
+        # Extrair nome usando lookahead para parar na próxima label
+        name_match = re.search(r'Name:\s*(.+?)(?=Office:|Email:|Office Hours:|$)', text, re.IGNORECASE)
         if name_match:
             professor_data['name'] = name_match.group(1).strip()
             print(f"   ✓ Nome: {professor_data['name']}")
-        
+
         # Extrair email
         email_match = re.search(r'([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+)', text)
         if email_match:
             professor_data['email'] = email_match.group(1)
             print(f"   ✓ Email: {professor_data['email']}")
-        
-        # Extrair office
-        office_match = re.search(r'Office:\s*([^\n]+)', text, re.IGNORECASE)
+
+        # Extrair office usando lookahead para parar na próxima label
+        office_match = re.search(r'Office:\s*(.+?)(?=Office Hours:|Email:|$)', text, re.IGNORECASE)
         if office_match:
             professor_data['office'] = office_match.group(1).strip()
             print(f"   ✓ Office: {professor_data['office']}")
-        
-        # Extrair office hours
-        hours_match = re.search(r'Office Hours?:\s*([^\n]+)', text, re.IGNORECASE)
+
+        # Extrair office hours usando lookahead para parar na próxima label
+        hours_match = re.search(r'Office Hours?:\s*(.+?)(?=Email:|$)', text, re.IGNORECASE)
         if hours_match:
             professor_data['office_hours'] = hours_match.group(1).strip()
             print(f"   ✓ Office Hours: {professor_data['office_hours']}")

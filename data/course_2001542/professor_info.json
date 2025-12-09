@@ -1,0 +1,15 @@
+{
+  "course_id": "2001542",
+  "extracted_at": "2025-12-09T09:51:53.673880",
+  "source_url": "https://www.fanshaweonline.ca/d2l/home/2001542",
+  "extraction_method": "shadow_dom_D2L-HTML-BLOCK",
+  "name": "Dr. Magdalene ROffice: Online by appointment Office Hours: Thursdays, 12 PM - 3 PMEmail: mravichandran@fanshaweonline.ca",
+  "email": "mravichandran@fanshaweonline.ca",
+  "office": "Online by appointment Office Hours: Thursdays, 12 PM - 3 PMEmail: mravichandran@fanshaweonline.ca",
+  "office_hours": "Thursdays, 12 PM - 3 PMEmail: mravichandran@fanshaweonline.ca",
+  "raw_text_preview": "\n\t\t\tName: Dr. Magdalene ROffice: Online by appointment Office Hours: Thursdays, 12 PM - 3 PMEmail: mravichandran@fanshaweonline.ca\n*All emails would be answered within 48 working hours\n\t\t\t\n\t\t",
+  "debug_info": [
+    "Extracted from Shadow DOM in D2L-HTML-BLOCK",
+    "Text length: 191"
+  ]
+}

@@ -494,15 +494,17 @@ courses_prompt = '''You are the Fanshawe Courses Assistant. You help students ge
 You have access to information about:
 - Course titles and codes
 - Course widgets (Announcements, Calendar, Professor Information, Updates)
+- Professor information (name, email, office, office hours)
 - Important links (Content, Profile, Notifications, Account Settings)
 - Recent announcements from instructors
 - Calendar events and deadlines
 - Course content overview
 
 When answering about courses:
-- Use emojis for visual appeal: 📚 for courses, 👨‍🏫 for professors, 📢 for announcements, 📅 for calendar, 🔗 for links, 📝 for content
+- Use emojis for visual appeal: 📚 for courses, 👨‍🏫 for professors, ✉️ for email, 🏢 for office, 🕐 for office hours, 📢 for announcements, 📅 for calendar, 🔗 for links, 📝 for content
 - Provide clear, organized information about the requested courses
 - List course titles with their codes when showing multiple courses
+- Include professor information prominently when discussing courses
 - Highlight important announcements or upcoming deadlines
 - Include relevant links when appropriate
 - Format with clear section headers using emojis
@@ -1589,30 +1591,66 @@ def handle_courses_query(user_message: str, entities: Dict[str, Any]) -> Dict[st
 
     try:
         courses_data = load_courses_info()
-        
+
         if not courses_data:
             return {'reply': 'Course information is currently unavailable.'}
 
+        # Load professor information
+        professors_data = load_professors_info()
+        professor_by_course = {}
+        if professors_data and 'courses' in professors_data:
+            for course_entry in professors_data['courses']:
+                course_id = course_entry.get('course_id')
+                professor = course_entry.get('professor')
+                if course_id and professor:
+                    professor_by_course[course_id] = professor
+
         # Build context from courses data
         courses_context = "\n\n** Your Enrolled Courses: **\n"
-        
+
         courses_list = courses_data.get('courses', [])
-        
+
+        # Detect if user is asking about a specific course
+        course_keywords = {
+            'capstone': '2001542',
+            'nlp': '2001539',
+            'natural language processing': '2001539',
+            'social media': '2001541',
+            'machine learning': '2001540',
+            'machine learning optimization': '2001540',
+            'tensorflow': '2001538',
+            'keras': '2001538',
+            'tensorflow & keras': '2001538',
+            'tensorflow and keras': '2001538',
+        }
+
+        target_course_id = None
+        user_msg_lower = user_message.lower()
+        for keyword, course_id in course_keywords.items():
+            if keyword in user_msg_lower:
+                target_course_id = course_id
+                break
+
         # Filter out non-course entries (Homeroom, Career Services, etc.)
         excluded_keywords = [
             'homeroom',
             'career services online resources',
             'welcome',
         ]
-        
+
         actual_courses = []
         for course in courses_list:
             title = course.get('title', '').lower()
             code = course.get('code', '')
-            
+            course_id = course.get('course_id', '')
+
+            # If user specified a course, only include that course
+            if target_course_id and course_id != target_course_id:
+                continue
+
             # Skip if title contains excluded keywords
             is_excluded = any(keyword in title for keyword in excluded_keywords)
-            
+
             # Skip if no course code (non-academic entries typically don't have codes)
             if not is_excluded and code:
                 actual_courses.append(course)
@@ -1637,7 +1675,21 @@ def handle_courses_query(user_message: str, entities: Dict[str, Any]) -> Dict[st
             if widgets:
                 widget_titles = [w.get('title', '') for w in widgets]
                 courses_context += f"Available Sections: {', '.join(widget_titles)}\n"
-            
+
+            # Add professor information if available
+            if course_id in professor_by_course:
+                prof = professor_by_course[course_id]
+                courses_context += f"\n👨‍🏫 **Professor Information:**\n"
+                if prof.get('name'):
+                    courses_context += f"  Instructor: {prof['name']}\n"
+                if prof.get('email'):
+                    courses_context += f"  ✉️ Email: {prof['email']}\n"
+                if prof.get('office'):
+                    courses_context += f"  🏢 Office: {prof['office']}\n"
+                if prof.get('office_hours'):
+                    courses_context += f"  🕐 Office Hours: {prof['office_hours']}\n"
+                courses_context += "\n"
+
             # Add recent announcements from links
             links = course.get('links', [])
             announcement_links = [link for link in links if 'announcement' in link.get('text', '').lower()]
@@ -1700,6 +1752,27 @@ def load_courses_info():
             return {}
     else:
         print(f"⚠️ Courses info JSON not found at {courses_path}")
+        return {}
+
+def load_professors_info():
+    """Load consolidated professor information from JSON file"""
+    try:
+        possible_paths = [
+            project_root / 'data' / 'professor' / 'professors_consolidated.json',
+            Path('/home/luizeng/Documents/fanshawe_repo/Capstone_Project_AIM/data/professor/professors_consolidated.json'),
+        ]
+
+        for professors_path in possible_paths:
+            if professors_path.exists():
+                with open(professors_path, 'r', encoding='utf-8') as f:
+                    professors_data = json.load(f)
+                    print(f"✅ Professors info loaded from {professors_path}")
+                    return professors_data
+
+        print(f"⚠️ Professors info JSON not found")
+        return {}
+    except Exception as e:
+        print(f"⚠️ Error loading professors info: {e}")
         return {}
 
 # ============== FLASK ROUTES ==============

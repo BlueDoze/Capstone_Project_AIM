@@ -1,0 +1,26 @@
+{
+  "course_id": "2001538",
+  "extracted_at": "2025-12-09T10:18:49.133207",
+  "source_url": "https://www.fanshaweonline.ca/d2l/home/2001538",
+  "extraction_method": "widget_not_found",
+  "name": null,
+  "email": null,
+  "office": null,
+  "office_hours": null,
+  "raw_text_preview": null,
+  "debug_info": [
+    "Total widgets found: 0",
+    "Selector 'div[class*=\"professor\"]': found 0 elements",
+    "Selector 'div[class*=\"instructor\"]': found 0 elements",
+    "Selector '[aria-label*=\"Professor\"]': found 0 elements",
+    "Selector '[aria-label*=\"Instructor\"]': found 0 elements",
+    "Selector '.d2l-widget': found 0 elements",
+    "Selector 'd2l-widget': found 0 elements",
+    "Selector '[role=\"complementary\"]': found 0 elements",
+    "Widget texts: []",
+    "Applying heuristic detection for professor names...",
+    "Checking shadow DOM in 136 elements",
+    "Body text length: 385",
+    "Professor widget not found anywhere"
+  ]
+}
