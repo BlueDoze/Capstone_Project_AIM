@@ -1,0 +1,97 @@
+{
+  "course_info": {
+    "code": "INFO6155",
+    "name": "Social Media Analytics",
+    "instructor": "Christie Ramos Castro",
+    "recipient": "Luiz Henrique"
+  },
+  "announcements": [
+    {
+      "id": 1,
+      "subject": "Class Recording and LAST Assignment Reminder",
+      "posted_date": "Dec 5, 2025 12:08 PM",
+      "status": "Edited",
+      "content_summary": "Reminder for final assignment and link to the last class recording.",
+      "assignment_details": {
+        "title": "Brandwatch Social Listening & Sentiment Analysis Walkthrough",
+        "due_date": "Wednesday, December 10, 2025",
+        "platform": "Brandwatch & Vimeo",
+        "instructions": [
+          "Choose a brand aligned with your mock client business.",
+          "Conduct thorough analysis (metrics, sentiment, trends).",
+          "Create a screen recording (3-5 minutes) using Vimeo.",
+          "Articulate key insights and provide visual representations.",
+          "Submit the Vimeo link to the submission folder."
+        ]
+      },
+      "class_recording": {
+        "title": "INFO6155 Social Media Analytics",
+        "date": "Dec 2, 2025 5:57 PM Eastern Time",
+        "link": "https://fanshawec-ca.zoom.us/rec/play/gHRigS4RrA1RnZX7BqIe23SCguAQj-dNEQrBD7ObtSgqEZNWZLcB6oIH6QpO7x_AUVcAVtWXXHDd94DP.GEBdchIaYU5nkGyV",
+        "passcode": "aQjJ^B2@"
+      }
+    },
+    {
+      "id": 2,
+      "subject": "Brandwatch Assignment Reminder & Class Recording",
+      "posted_date": "Dec 1, 2025 1:44 PM",
+      "status": "Edited",
+      "content_summary": "Reminder regarding Brandwatch Academy coursework certificates.",
+      "assignment_details": {
+        "title": "Brandwatch Course Assignment",
+        "due_date": "Wednesday, December 3, 2025",
+        "instructions": [
+          "Upload each of the six course certificates to 'Brandwatch Academy Course Work'.",
+          "Upload Brandwatch Academy certification to 'Brandwatch Academy Certification'."
+        ]
+      },
+      "class_recording": {
+        "title": "INFO6155 Social Media Analytics",
+        "date": "Nov 25, 2025 5:52 PM Eastern Time",
+        "link": "https://fanshawec-ca.zoom.us/rec/play/_I_a7Tnz6ifNurs-6_J1lWEnplNtX0eseBVlaF8BYtn3lfvYxUWPpX3giSfgIEzIQ7Qrufk4C2j1XiW0.E5x9aVMXJekj9DPn",
+        "passcode": "d6t3.1a^"
+      }
+    },
+    {
+      "id": 3,
+      "subject": "Brandwatch Access & Class Recording",
+      "posted_date": "Nov 20, 2025 5:53 PM",
+      "status": "Edited",
+      "content_summary": "Brandwatch access granted, assignments extended, and class recording provided.",
+      "assignment_details": [
+        {
+          "title": "Brandwatch Academy Certification",
+          "due_date": "December 2, 2025 (Extended)",
+          "note": "Check email for invitation."
+        },
+        {
+          "title": "Client Project",
+          "due_date": "November 21, 2025",
+          "note": "Submit plan to designated folder."
+        }
+      ],
+      "class_recording": {
+        "title": "INFO6155 Social Media Analytics",
+        "date": "Nov 18, 2025 5:55 PM Eastern Time",
+        "link": "https://fanshawec-ca.zoom.us/rec/play/0pgoxNKmh3Uzp0NJqPE0AzaeB76j2s38hZVAPHRbrAJQVObJQjFjTGI-6jm9D6uNfuPA15M2UKddiqPL.SPn5VFUlklE6tNXC",
+        "passcode": "0.znk5?r"
+      }
+    },
+    {
+      "id": 4,
+      "subject": "Updated Midterm Time",
+      "posted_date": "Nov 4, 2025 6:15 PM",
+      "status": "Edited",
+      "content_summary": "Exam time extended due to LockDown Browser issues.",
+      "details": "Exam extended until 8:30 p.m. Zoom room remains open for support."
+    },
+    {
+      "id": 5,
+      "subject": "Midterm Today",
+      "posted_date": "Nov 4, 2025 5:11 PM",
+      "status": "Edited",
+      "content_summary": "Midterm kickoff announcement.",
+      "details": "Zoom room open at regular class time for questions."
+    }
+  ]
+}
