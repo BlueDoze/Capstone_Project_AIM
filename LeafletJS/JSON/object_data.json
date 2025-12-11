@@ -1,0 +1,721 @@
+{
+    "Hmisc": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_Hmisc": "H1_1"
+        }
+    },
+    "H1017": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1017": "H1_11"
+        }
+    },
+    "H1016": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1016": "H1_5"
+        }
+    },
+    "H1015": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1015": "H1_6"
+        }
+    },
+    "H1014": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1014": "H1_7"
+        }
+    },
+    "Bathroom-Men_H1": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "bathroom",
+        "doors": {
+            "Door_Bathroom-Men_H1": "H1_8"
+        }
+    },
+    "Bathroom-Accessible_H1": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "bathroom",
+        "doors": {
+            "Door_Bathroom-Accessible_H1": "H1_9"
+        }
+    },
+    "Bathroom-Women_H1": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "bathroom",
+        "doors": {
+            "Door_Bathroom-Women_H1": "H1_10"
+        }
+    },
+    "Cafeteria_H1": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "eatery",
+        "doors": {
+            "Door_Cafe_H1_1": "H1_10",
+            "Door_Cafe_H1_2": "H1_22"
+        }
+    },
+    "H1006": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1006": "H1_12"
+        }
+    },
+    "H1005": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1005_2": "H1_13",
+            "Door_H1005_1": "H1_14"
+        }
+    },
+    "H1004": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1004": "H1_14"
+        }
+    },
+    "H1003": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1003": "H1_15"
+        }
+    },
+    "H1019": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1019": "H1_19"
+        }
+    },
+    "H1022": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1022": "H1_19"
+        }
+    },
+    "H1023": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1023": "H1_20"
+        }
+    },
+    "H1024": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1024": "H1_21"
+        }
+    },
+    "H1032": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1032": "H1_25"
+        }
+    },
+    "H1034": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1034": "H1_26"
+        }
+    },
+    "H1033": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H1033": "H1_27"
+        }
+    },
+    "M-Building_H1": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "building_connection",
+        "goesTo": [
+            "M1"
+        ],
+        "node": "M1_entry"
+    },
+    "Elevator_H1": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "elevator",
+        "goesTo": [
+            "H2",
+            "H3"
+        ],
+        "node": "H1_3"
+    },
+    "Stairs_1_H1": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "stairs",
+        "goesTo": [
+            "H2",
+            "H3"
+        ],
+        "node": "H1_4"
+    },
+    "Outside-Exit_1_H1": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "outside_exit",
+        "goesTo": [
+            "outside"
+        ],
+        "node": "H1_4"
+    },
+    "Stairs_2_H1": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "stairs",
+        "goesTo": [
+            "H2",
+            "H3"
+        ],
+        "node": "H1_16"
+    },
+    "Outside-Exit_2_H1": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "outside_exit",
+        "goesTo": [
+            "outside"
+        ],
+        "node": "H1_17"
+    },
+    "F-Building_H1": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "building_connection",
+        "goesTo": [
+            "F1"
+        ],
+        "node": "H1_17"
+    },
+    "Outside-Exit_3_H1": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "outside_exit",
+        "goesTo": [
+            "outside"
+        ],
+        "node": "H1_18"
+    },
+    "Stairs_3_H1": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "stairs",
+        "goesTo": [
+            "H2",
+            "H3"
+        ],
+        "node": "H1_28"
+    },
+    "Outside-Exit_4_H1": {
+        "building": "Building H",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "outside_exit",
+        "goesTo": [
+            "outside"
+        ],
+        "node": "H1_28"
+    },
+    "M1006": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M1006": "M1_Path1_3"
+        }
+    },
+    "M1004": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M1004": "M1_Path1_4"
+        }
+    },
+    "M1003": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M1003_1": "M1_Path1_6",
+            "Door_M1003_2": "M1_Int_2"
+        }
+    },
+    "M1018": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M1018": "M1_Path2_1"
+        }
+    },
+    "Bathroom-Men_M1": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "bathroom",
+        "doors": {
+            "Door_Bathroom-Men_M1": "M1_Path2_2"
+        }
+    },
+    "Bathroom-Accessible_M1": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "bathroom",
+        "doors": {
+            "Door_Bathroom-Accessible_M1": "M1_Path2_3"
+        }
+    },
+    "Bathroom-Women_M1": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "bathroom",
+        "doors": {
+            "Door_Bathroom-Women_M1": "M1_Path2_4"
+        }
+    },
+    "M1033": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M1033": "M1_Path2_5"
+        }
+    },
+    "M1035": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M1035": "M1_Path3_1"
+        }
+    },
+    "M1037": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M1037": "M1_Path3_2"
+        }
+    },
+    "M1030": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M1030": "M1_Path3_3"
+        }
+    },
+    "M1041": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M1041": "M1_Path3_3"
+        }
+    },
+    "M1045": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M1045": "M1_Turn_3"
+        }
+    },
+    "M1040": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M1040": "M1_Path4_1"
+        }
+    },
+    "M1049": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M1049": "M1_Path4_2"
+        }
+    },
+    "H1-Building_M1": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "building_connection",
+        "goesTo": [
+            "H1"
+        ],
+        "node": "H1_entry"
+    },
+    "Stairs_1_M1": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "stairs",
+        "goesTo": [
+            "M2",
+            "M3"
+        ],
+        "node": "M1_Path1_2"
+    },
+    "Outside-Exit_2_M1": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "outside_exit",
+        "goesTo": [
+            "outside"
+        ],
+        "node": "M1_Path1_2"
+    },
+    "Elevator_M1": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "elevator",
+        "goesTo": [
+            "M2",
+            "M3"
+        ],
+        "node": "M1_Path1_5"
+    },
+    "Outside-Exit_1_M1": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "outside_exit",
+        "goesTo": [
+            "outside"
+        ],
+        "node": "M1_Path1_7"
+    },
+    "Stairs_2_M1": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "stairs",
+        "goesTo": [
+            "M2",
+            "M3"
+        ],
+        "node": "M1_Path2_7"
+    },
+    "Outside-Exit_3_M1": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "outside_exit",
+        "goesTo": [
+            "outside"
+        ],
+        "node": "M1_Path2_7"
+    },
+    "Outside-Exit_4_M1": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "outside_exit",
+        "goesTo": [
+            "outside"
+        ],
+        "node": "M1_Path4_4"
+    },
+    "Stairs_3_M1": {
+        "building": "Building M",
+        "floor": "1",
+        "typeCategory": "exit",
+        "type": "stairs",
+        "goesTo": [
+            "M2",
+            "M3"
+        ],
+        "node": "M1_Path4_4"
+    },
+    "M2004": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M2004": "M2_Path1_2"
+        }
+    },
+    "M2013": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M2013": "M2_Turn_1"
+        }
+    },
+    "M2010": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M2010": "M2_Path2_1"
+        }
+    },
+    "M2012": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M2012_1": "M2_Path2_2",
+            "Door_M2012_2": "M2_Path2_4"
+        }
+    },
+    "M2017": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M2017_1": "M2_Path2_3",
+            "Door_M2017_2": "M2_Path2_6"
+        }
+    },
+    "M2018": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M2018_1": "M2_Path2_5",
+            "Door_M2018_2": "M2_Path2_7"
+        }
+    },
+    "Bathroom-Men_M2": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "bathroom",
+        "doors": {
+            "Door_Bathroom-Men_M2": "M2_Path3_1"
+        }
+    },
+    "Bathroom-Accessible_M2": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "bathroom",
+        "doors": {
+            "Door_Bathroom-Accessible_M2": "M2_Path3_2"
+        }
+    },
+    "Bathroom-Women_M2": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "bathroom",
+        "doors": {
+            "Door_Bathroom-Women_M2": "M2_Path3_3"
+        }
+    },
+    "M2033": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M2033": "M2_Path3_4"
+        }
+    },
+    "M2035": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M2035": "M2_Path2_8"
+        }
+    },
+    "M2037": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M2037": "M2_Path2_9"
+        }
+    },
+    "M2022": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M2022": "M2_Path2_10"
+        }
+    },
+    "M2028": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M2028": "M2_Path2_11"
+        }
+    },
+    "M2041": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M2041_1": "M2_Path2_12",
+            "Door_M2041_2": "M2_Turn_2"
+        }
+    },
+    "M2047": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M2047_1": "M2_Turn_2",
+            "Door_M2047_2": "M2_Path4_1"
+        }
+    },
+    "H2-Building_M2": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "exit",
+        "type": "building_connection",
+        "goesTo": [
+            "H2"
+        ],
+        "node": "H2_entry"
+    },
+    "Stairs_1_M2": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "exit",
+        "type": "stairs",
+        "goesTo": [
+            "M1",
+            "M3"
+        ],
+        "node": "M2_Path1_1"
+    },
+    "Elevator_M2": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "exit",
+        "type": "elevator",
+        "goesTo": [
+            "M1",
+            "M3"
+        ],
+        "node": "M2_Path1_4"
+    },
+    "Stairs_2_M2": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "exit",
+        "type": "stairs",
+        "goesTo": [
+            "M1",
+            "M3"
+        ],
+        "node": "M2_Path3_6"
+    },
+    "Stairs_3_M2": {
+        "building": "Building M",
+        "floor": "2",
+        "typeCategory": "exit",
+        "type": "stairs",
+        "goesTo": [
+            "M1",
+            "M3"
+        ],
+        "node": "M2_Path4_2"
+    }
+}

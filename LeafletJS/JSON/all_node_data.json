@@ -37,7 +37,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "Hmisc",
                                 "door": "Door_Hmisc"
                             }
@@ -50,7 +50,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1017",
                                 "door": "Door_H1017"
                             }
@@ -122,7 +122,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1016",
                                 "door": "Door_H1016"
                             }
@@ -135,7 +135,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1015",
                                 "door": "Door_H1015"
                             }
@@ -148,7 +148,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1014",
                                 "door": "Door_H1014"
                             }
@@ -205,7 +205,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1017",
                                 "door": "Door_H1017"
                             }
@@ -218,7 +218,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1006",
                                 "door": "Door_H1006"
                             }
@@ -231,7 +231,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1005",
                                 "door": "Door_H1005_2"
                             }
@@ -244,12 +244,12 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1005",
                                 "door": "Door_H1005_1"
                             },
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1004",
                                 "door": "Door_H1004"
                             }
@@ -262,7 +262,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1003",
                                 "door": "Door_H1003"
                             }
@@ -342,12 +342,12 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1019",
                                 "door": "Door_H1019"
                             },
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1022",
                                 "door": "Door_H1022"
                             }
@@ -360,7 +360,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1023",
                                 "door": "Door_H1023"
                             }
@@ -373,7 +373,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1024",
                                 "door": "Door_H1024"
                             }
@@ -413,7 +413,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1032",
                                 "door": "Door_H1032"
                             }
@@ -426,7 +426,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1034",
                                 "door": "Door_H1034"
                             }
@@ -439,7 +439,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "H1033",
                                 "door": "Door_H1033"
                             }
@@ -571,105 +571,195 @@
                 },
                 "objects": {
                     "rooms": {
-                        "Hmisc": [
-                            "Door_Hmisc"
-                        ],
-                        "H1017": [
-                            "Door_H1017",
-                            "Door_H1017"
-                        ],
-                        "H1016": [
-                            "Door_H1016"
-                        ],
-                        "H1015": [
-                            "Door_H1015"
-                        ],
-                        "H1014": [
-                            "Door_H1014"
-                        ],
-                        "Bathroom-Men_H1": [
-                            "Door_Bathroom-Men_H1"
-                        ],
-                        "Bathroom-Accessible_H1": [
-                            "Door_Bathroom-Accessible_H1"
-                        ],
-                        "Bathroom-Women_H1": [
-                            "Door_Bathroom-Women_H1"
-                        ],
-                        "Cafeteria_H1": [
-                            "Door_Cafe_H1_1",
-                            "Door_Cafe_H1_2"
-                        ],
-                        "H1006": [
-                            "Door_H1006"
-                        ],
-                        "H1005": [
-                            "Door_H1005_2",
-                            "Door_H1005_1"
-                        ],
-                        "H1004": [
-                            "Door_H1004"
-                        ],
-                        "H1003": [
-                            "Door_H1003"
-                        ],
-                        "H1019": [
-                            "Door_H1019"
-                        ],
-                        "H1022": [
-                            "Door_H1022"
-                        ],
-                        "H1023": [
-                            "Door_H1023"
-                        ],
-                        "H1024": [
-                            "Door_H1024"
-                        ],
-                        "H1032": [
-                            "Door_H1032"
-                        ],
-                        "H1034": [
-                            "Door_H1034"
-                        ],
-                        "H1033": [
-                            "Door_H1033"
-                        ]
+                        "Hmisc": {
+                            "doors": [
+                                "Door_Hmisc"
+                            ],
+                            "type": "classroom"
+                        },
+                        "H1017": {
+                            "doors": [
+                                "Door_H1017",
+                                "Door_H1017"
+                            ],
+                            "type": "classroom"
+                        },
+                        "H1016": {
+                            "doors": [
+                                "Door_H1016"
+                            ],
+                            "type": "classroom"
+                        },
+                        "H1015": {
+                            "doors": [
+                                "Door_H1015"
+                            ],
+                            "type": "classroom"
+                        },
+                        "H1014": {
+                            "doors": [
+                                "Door_H1014"
+                            ],
+                            "type": "classroom"
+                        },
+                        "Bathroom-Men_H1": {
+                            "doors": [
+                                "Door_Bathroom-Men_H1"
+                            ],
+                            "type": "bathroom"
+                        },
+                        "Bathroom-Accessible_H1": {
+                            "doors": [
+                                "Door_Bathroom-Accessible_H1"
+                            ],
+                            "type": "bathroom"
+                        },
+                        "Bathroom-Women_H1": {
+                            "doors": [
+                                "Door_Bathroom-Women_H1"
+                            ],
+                            "type": "bathroom"
+                        },
+                        "Cafeteria_H1": {
+                            "doors": [
+                                "Door_Cafe_H1_1",
+                                "Door_Cafe_H1_2"
+                            ],
+                            "type": "eatery"
+                        },
+                        "H1006": {
+                            "doors": [
+                                "Door_H1006"
+                            ],
+                            "type": "classroom"
+                        },
+                        "H1005": {
+                            "doors": [
+                                "Door_H1005_2",
+                                "Door_H1005_1"
+                            ],
+                            "type": "classroom"
+                        },
+                        "H1004": {
+                            "doors": [
+                                "Door_H1004"
+                            ],
+                            "type": "classroom"
+                        },
+                        "H1003": {
+                            "doors": [
+                                "Door_H1003"
+                            ],
+                            "type": "classroom"
+                        },
+                        "H1019": {
+                            "doors": [
+                                "Door_H1019"
+                            ],
+                            "type": "classroom"
+                        },
+                        "H1022": {
+                            "doors": [
+                                "Door_H1022"
+                            ],
+                            "type": "classroom"
+                        },
+                        "H1023": {
+                            "doors": [
+                                "Door_H1023"
+                            ],
+                            "type": "classroom"
+                        },
+                        "H1024": {
+                            "doors": [
+                                "Door_H1024"
+                            ],
+                            "type": "classroom"
+                        },
+                        "H1032": {
+                            "doors": [
+                                "Door_H1032"
+                            ],
+                            "type": "classroom"
+                        },
+                        "H1034": {
+                            "doors": [
+                                "Door_H1034"
+                            ],
+                            "type": "classroom"
+                        },
+                        "H1033": {
+                            "doors": [
+                                "Door_H1033"
+                            ],
+                            "type": "classroom"
+                        }
                     },
                     "exits": {
-                        "M-Building_H1": [
-                            "M1"
-                        ],
-                        "Elevator_H1": [
-                            "H2",
-                            "H3"
-                        ],
-                        "Stairs_1_H1": [
-                            "H2",
-                            "H3"
-                        ],
-                        "Outside-Exit_1_H1": [
-                            "outside"
-                        ],
-                        "Stairs_2_H1": [
-                            "H2",
-                            "H3"
-                        ],
-                        "Outside-Exit_2_H1": [
-                            "outside"
-                        ],
-                        "F-Building_H1": [
-                            "F1"
-                        ],
-                        "Outside-Exit_3_H1": [
-                            "outside"
-                        ],
-                        "Stairs_3_H1": [
-                            "H2",
-                            "H3"
-                        ],
-                        "Outside-Exit_4_H1": [
-                            "outside"
-                        ]
+                        "M-Building_H1": {
+                            "destinations": [
+                                "M1"
+                            ],
+                            "type": "building_connection"
+                        },
+                        "Elevator_H1": {
+                            "destinations": [
+                                "H2",
+                                "H3"
+                            ],
+                            "type": "elevator"
+                        },
+                        "Stairs_1_H1": {
+                            "destinations": [
+                                "H2",
+                                "H3"
+                            ],
+                            "type": "stairs"
+                        },
+                        "Outside-Exit_1_H1": {
+                            "destinations": [
+                                "outside"
+                            ],
+                            "type": "outside_exit"
+                        },
+                        "Stairs_2_H1": {
+                            "destinations": [
+                                "H2",
+                                "H3"
+                            ],
+                            "type": "stairs"
+                        },
+                        "Outside-Exit_2_H1": {
+                            "destinations": [
+                                "outside"
+                            ],
+                            "type": "outside_exit"
+                        },
+                        "F-Building_H1": {
+                            "destinations": [
+                                "F1"
+                            ],
+                            "type": "building_connection"
+                        },
+                        "Outside-Exit_3_H1": {
+                            "destinations": [
+                                "outside"
+                            ],
+                            "type": "outside_exit"
+                        },
+                        "Stairs_3_H1": {
+                            "destinations": [
+                                "H2",
+                                "H3"
+                            ],
+                            "type": "stairs"
+                        },
+                        "Outside-Exit_4_H1": {
+                            "destinations": [
+                                "outside"
+                            ],
+                            "type": "outside_exit"
+                        }
                     }
                 },
                 "verticalConnectors": {
@@ -684,7 +774,8 @@
                         "verticalConnections": {
                             "2": "Elevator_H2",
                             "3": "Elevator_H3"
-                        }
+                        },
+                        "accessible": true
                     },
                     "Stairs_1_H1": {
                         "id": "Stairs_1_H1",
@@ -697,7 +788,8 @@
                         "verticalConnections": {
                             "2": "Stairs_1_H2",
                             "3": "Stairs_1_H3"
-                        }
+                        },
+                        "accessible": false
                     },
                     "Stairs_2_H1": {
                         "id": "Stairs_2_H1",
@@ -710,7 +802,8 @@
                         "verticalConnections": {
                             "2": "Stairs_2_H2",
                             "3": "Stairs_2_H3"
-                        }
+                        },
+                        "accessible": false
                     },
                     "Stairs_3_H1": {
                         "id": "Stairs_3_H1",
@@ -723,7 +816,8 @@
                         "verticalConnections": {
                             "2": "Stairs_3_H2",
                             "3": "Stairs_3_H3"
-                        }
+                        },
+                        "accessible": false
                     }
                 }
             }
@@ -790,7 +884,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M1006",
                                 "door": "Door_M1006"
                             }
@@ -815,7 +909,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M1004",
                                 "door": "Door_M1004"
                             }
@@ -851,7 +945,7 @@
                                 "type": "turn"
                             },
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M1003",
                                 "door": "Door_M1003_1"
                             }
@@ -889,7 +983,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M1018",
                                 "door": "Door_M1018"
                             }
@@ -906,7 +1000,7 @@
                                 "type": "intersection"
                             },
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M1003",
                                 "door": "Door_M1003_2"
                             }
@@ -958,7 +1052,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M1033",
                                 "door": "Door_M1033"
                             }
@@ -1008,7 +1102,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M1035",
                                 "door": "Door_M1035"
                             }
@@ -1021,7 +1115,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M1037",
                                 "door": "Door_M1037"
                             }
@@ -1034,12 +1128,12 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M1030",
                                 "door": "Door_M1030"
                             },
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M1041",
                                 "door": "Door_M1041"
                             }
@@ -1055,7 +1149,7 @@
                                 "type": "turn"
                             },
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M1045",
                                 "door": "Door_M1045"
                             }
@@ -1068,7 +1162,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M1040",
                                 "door": "Door_M1040"
                             }
@@ -1081,7 +1175,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M1049",
                                 "door": "Door_M1049"
                             }
@@ -1200,85 +1294,157 @@
                 },
                 "objects": {
                     "rooms": {
-                        "M1006": [
-                            "Door_M1006"
-                        ],
-                        "M1004": [
-                            "Door_M1004"
-                        ],
-                        "M1003": [
-                            "Door_M1003_1",
-                            "Door_M1003_2"
-                        ],
-                        "M1018": [
-                            "Door_M1018"
-                        ],
-                        "Bathroom-Men_M1": [
-                            "Door_Bathroom-Men_M1"
-                        ],
-                        "Bathroom-Accessible_M1": [
-                            "Door_Bathroom-Accessible_M1"
-                        ],
-                        "Bathroom-Women_M1": [
-                            "Door_Bathroom-Women_M1"
-                        ],
-                        "M1033": [
-                            "Door_M1033"
-                        ],
-                        "M1035": [
-                            "Door_M1035"
-                        ],
-                        "M1037": [
-                            "Door_M1037"
-                        ],
-                        "M1030": [
-                            "Door_M1030"
-                        ],
-                        "M1041": [
-                            "Door_M1041"
-                        ],
-                        "M1045": [
-                            "Door_M1045"
-                        ],
-                        "M1040": [
-                            "Door_M1040"
-                        ],
-                        "M1049": [
-                            "Door_M1049"
-                        ]
+                        "M1006": {
+                            "doors": [
+                                "Door_M1006"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M1004": {
+                            "doors": [
+                                "Door_M1004"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M1003": {
+                            "doors": [
+                                "Door_M1003_1",
+                                "Door_M1003_2"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M1018": {
+                            "doors": [
+                                "Door_M1018"
+                            ],
+                            "type": "classroom"
+                        },
+                        "Bathroom-Men_M1": {
+                            "doors": [
+                                "Door_Bathroom-Men_M1"
+                            ],
+                            "type": "bathroom"
+                        },
+                        "Bathroom-Accessible_M1": {
+                            "doors": [
+                                "Door_Bathroom-Accessible_M1"
+                            ],
+                            "type": "bathroom"
+                        },
+                        "Bathroom-Women_M1": {
+                            "doors": [
+                                "Door_Bathroom-Women_M1"
+                            ],
+                            "type": "bathroom"
+                        },
+                        "M1033": {
+                            "doors": [
+                                "Door_M1033"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M1035": {
+                            "doors": [
+                                "Door_M1035"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M1037": {
+                            "doors": [
+                                "Door_M1037"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M1030": {
+                            "doors": [
+                                "Door_M1030"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M1041": {
+                            "doors": [
+                                "Door_M1041"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M1045": {
+                            "doors": [
+                                "Door_M1045"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M1040": {
+                            "doors": [
+                                "Door_M1040"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M1049": {
+                            "doors": [
+                                "Door_M1049"
+                            ],
+                            "type": "classroom"
+                        }
                     },
                     "exits": {
-                        "H1-Building_M1": [
-                            "H1"
-                        ],
-                        "Stairs_1_M1": [
-                            "M2",
-                            "M3"
-                        ],
-                        "Outside-Exit_2_M1": [
-                            "outside"
-                        ],
-                        "Elevator_M1": [
-                            "M2",
-                            "M3"
-                        ],
-                        "Outside-Exit_1_M1": [
-                            "outside"
-                        ],
-                        "Stairs_2_M1": [
-                            "M2",
-                            "M3"
-                        ],
-                        "Outside-Exit_3_M1": [
-                            "outside"
-                        ],
-                        "Outside-Exit_4_M1": [
-                            "outside"
-                        ],
-                        "Stairs_3_M1": [
-                            "M2",
-                            "M3"
-                        ]
+                        "H1-Building_M1": {
+                            "destinations": [
+                                "H1"
+                            ],
+                            "type": "building_connection"
+                        },
+                        "Stairs_1_M1": {
+                            "destinations": [
+                                "M2",
+                                "M3"
+                            ],
+                            "type": "stairs"
+                        },
+                        "Outside-Exit_2_M1": {
+                            "destinations": [
+                                "outside"
+                            ],
+                            "type": "outside_exit"
+                        },
+                        "Elevator_M1": {
+                            "destinations": [
+                                "M2",
+                                "M3"
+                            ],
+                            "type": "elevator"
+                        },
+                        "Outside-Exit_1_M1": {
+                            "destinations": [
+                                "outside"
+                            ],
+                            "type": "outside_exit"
+                        },
+                        "Stairs_2_M1": {
+                            "destinations": [
+                                "M2",
+                                "M3"
+                            ],
+                            "type": "stairs"
+                        },
+                        "Outside-Exit_3_M1": {
+                            "destinations": [
+                                "outside"
+                            ],
+                            "type": "outside_exit"
+                        },
+                        "Outside-Exit_4_M1": {
+                            "destinations": [
+                                "outside"
+                            ],
+                            "type": "outside_exit"
+                        },
+                        "Stairs_3_M1": {
+                            "destinations": [
+                                "M2",
+                                "M3"
+                            ],
+                            "type": "stairs"
+                        }
                     }
                 },
                 "verticalConnectors": {
@@ -1293,7 +1459,8 @@
                         "verticalConnections": {
                             "2": "Stairs_1_M2",
                             "3": "Stairs_1_M3"
-                        }
+                        },
+                        "accessible": false
                     },
                     "Elevator_M1": {
                         "id": "Elevator_M1",
@@ -1306,7 +1473,8 @@
                         "verticalConnections": {
                             "2": "Elevator_M2",
                             "3": "Elevator_M3"
-                        }
+                        },
+                        "accessible": true
                     },
                     "Stairs_2_M1": {
                         "id": "Stairs_2_M1",
@@ -1319,7 +1487,8 @@
                         "verticalConnections": {
                             "2": "Stairs_2_M2",
                             "3": "Stairs_2_M3"
-                        }
+                        },
+                        "accessible": false
                     },
                     "Stairs_3_M1": {
                         "id": "Stairs_3_M1",
@@ -1332,7 +1501,8 @@
                         "verticalConnections": {
                             "2": "Stairs_3_M2",
                             "3": "Stairs_3_M3"
-                        }
+                        },
+                        "accessible": false
                     }
                 }
             },
@@ -1380,7 +1550,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2004",
                                 "door": "Door_M2004"
                             }
@@ -1423,7 +1593,7 @@
                                 "type": "turn"
                             },
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2013",
                                 "door": "Door_M2013"
                             }
@@ -1436,7 +1606,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2010",
                                 "door": "Door_M2010"
                             }
@@ -1449,7 +1619,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2012",
                                 "door": "Door_M2012_1"
                             }
@@ -1462,7 +1632,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2017",
                                 "door": "Door_M2017_1"
                             }
@@ -1475,7 +1645,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2012",
                                 "door": "Door_M2012_2"
                             }
@@ -1488,7 +1658,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2018",
                                 "door": "Door_M2018_1"
                             }
@@ -1501,7 +1671,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2017",
                                 "door": "Door_M2017_2"
                             }
@@ -1565,7 +1735,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2033",
                                 "door": "Door_M2033"
                             }
@@ -1608,7 +1778,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2018",
                                 "door": "Door_M2018_2"
                             }
@@ -1621,7 +1791,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2035",
                                 "door": "Door_M2035"
                             }
@@ -1634,7 +1804,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2037",
                                 "door": "Door_M2037"
                             }
@@ -1647,7 +1817,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2022",
                                 "door": "Door_M2022"
                             }
@@ -1660,7 +1830,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2028",
                                 "door": "Door_M2028"
                             }
@@ -1673,7 +1843,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2041",
                                 "door": "Door_M2041_1"
                             }
@@ -1689,12 +1859,12 @@
                                 "type": "turn"
                             },
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2041",
                                 "door": "Door_M2041_2"
                             },
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2047",
                                 "door": "Door_M2047_1"
                             }
@@ -1707,7 +1877,7 @@
                         ],
                         "represents": [
                             {
-                                "type": "room",
+                                "type": "classroom",
                                 "id": "M2047",
                                 "door": "Door_M2047_2"
                             }
@@ -1807,80 +1977,143 @@
                 },
                 "objects": {
                     "rooms": {
-                        "M2004": [
-                            "Door_M2004"
-                        ],
-                        "M2013": [
-                            "Door_M2013"
-                        ],
-                        "M2010": [
-                            "Door_M2010"
-                        ],
-                        "M2012": [
-                            "Door_M2012_1",
-                            "Door_M2012_2"
-                        ],
-                        "M2017": [
-                            "Door_M2017_1",
-                            "Door_M2017_2"
-                        ],
-                        "M2018": [
-                            "Door_M2018_1",
-                            "Door_M2018_2"
-                        ],
-                        "Bathroom-Men_M2": [
-                            "Door_Bathroom-Men_M2"
-                        ],
-                        "Bathroom-Accessible_M2": [
-                            "Door_Bathroom-Accessible_M2"
-                        ],
-                        "Bathroom-Women_M2": [
-                            "Door_Bathroom-Women_M2"
-                        ],
-                        "M2033": [
-                            "Door_M2033"
-                        ],
-                        "M2035": [
-                            "Door_M2035"
-                        ],
-                        "M2037": [
-                            "Door_M2037"
-                        ],
-                        "M2022": [
-                            "Door_M2022"
-                        ],
-                        "M2028": [
-                            "Door_M2028"
-                        ],
-                        "M2041": [
-                            "Door_M2041_1",
-                            "Door_M2041_2"
-                        ],
-                        "M2047": [
-                            "Door_M2047_1",
-                            "Door_M2047_2"
-                        ]
+                        "M2004": {
+                            "doors": [
+                                "Door_M2004"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M2013": {
+                            "doors": [
+                                "Door_M2013"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M2010": {
+                            "doors": [
+                                "Door_M2010"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M2012": {
+                            "doors": [
+                                "Door_M2012_1",
+                                "Door_M2012_2"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M2017": {
+                            "doors": [
+                                "Door_M2017_1",
+                                "Door_M2017_2"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M2018": {
+                            "doors": [
+                                "Door_M2018_1",
+                                "Door_M2018_2"
+                            ],
+                            "type": "classroom"
+                        },
+                        "Bathroom-Men_M2": {
+                            "doors": [
+                                "Door_Bathroom-Men_M2"
+                            ],
+                            "type": "bathroom"
+                        },
+                        "Bathroom-Accessible_M2": {
+                            "doors": [
+                                "Door_Bathroom-Accessible_M2"
+                            ],
+                            "type": "bathroom"
+                        },
+                        "Bathroom-Women_M2": {
+                            "doors": [
+                                "Door_Bathroom-Women_M2"
+                            ],
+                            "type": "bathroom"
+                        },
+                        "M2033": {
+                            "doors": [
+                                "Door_M2033"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M2035": {
+                            "doors": [
+                                "Door_M2035"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M2037": {
+                            "doors": [
+                                "Door_M2037"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M2022": {
+                            "doors": [
+                                "Door_M2022"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M2028": {
+                            "doors": [
+                                "Door_M2028"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M2041": {
+                            "doors": [
+                                "Door_M2041_1",
+                                "Door_M2041_2"
+                            ],
+                            "type": "classroom"
+                        },
+                        "M2047": {
+                            "doors": [
+                                "Door_M2047_1",
+                                "Door_M2047_2"
+                            ],
+                            "type": "classroom"
+                        }
                     },
                     "exits": {
-                        "H2-Building_M2": [
-                            "H2"
-                        ],
-                        "Stairs_1_M2": [
-                            "M1",
-                            "M3"
-                        ],
-                        "Elevator_M2": [
-                            "M1",
-                            "M3"
-                        ],
-                        "Stairs_2_M2": [
-                            "M1",
-                            "M3"
-                        ],
-                        "Stairs_3_M2": [
-                            "M1",
-                            "M3"
-                        ]
+                        "H2-Building_M2": {
+                            "destinations": [
+                                "H2"
+                            ],
+                            "type": "building_connection"
+                        },
+                        "Stairs_1_M2": {
+                            "destinations": [
+                                "M1",
+                                "M3"
+                            ],
+                            "type": "stairs"
+                        },
+                        "Elevator_M2": {
+                            "destinations": [
+                                "M1",
+                                "M3"
+                            ],
+                            "type": "elevator"
+                        },
+                        "Stairs_2_M2": {
+                            "destinations": [
+                                "M1",
+                                "M3"
+                            ],
+                            "type": "stairs"
+                        },
+                        "Stairs_3_M2": {
+                            "destinations": [
+                                "M1",
+                                "M3"
+                            ],
+                            "type": "stairs"
+                        }
                     }
                 },
                 "verticalConnectors": {
@@ -1895,7 +2128,8 @@
                         "verticalConnections": {
                             "1": "Stairs_1_M1",
                             "3": "Stairs_1_M3"
-                        }
+                        },
+                        "accessible": false
                     },
                     "Elevator_M2": {
                         "id": "Elevator_M2",
@@ -1908,7 +2142,8 @@
                         "verticalConnections": {
                             "1": "Elevator_M1",
                             "3": "Elevator_M3"
-                        }
+                        },
+                        "accessible": true
                     },
                     "Stairs_2_M2": {
                         "id": "Stairs_2_M2",
@@ -1921,7 +2156,8 @@
                         "verticalConnections": {
                             "1": "Stairs_2_M1",
                             "3": "Stairs_2_M3"
-                        }
+                        },
+                        "accessible": false
                     },
                     "Stairs_3_M2": {
                         "id": "Stairs_3_M2",
@@ -1934,7 +2170,8 @@
                         "verticalConnections": {
                             "1": "Stairs_3_M1",
                             "3": "Stairs_3_M3"
-                        }
+                        },
+                        "accessible": false
                     }
                 }
             }

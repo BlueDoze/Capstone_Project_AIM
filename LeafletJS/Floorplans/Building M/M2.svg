@@ -24,12 +24,12 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="2.799372"
-     inkscape:cx="308.46204"
-     inkscape:cy="242.37579"
+     inkscape:zoom="1.399686"
+     inkscape:cx="338.64738"
+     inkscape:cy="413.30698"
      inkscape:window-width="2240"
      inkscape:window-height="1294"
-     inkscape:window-x="-11"
+     inkscape:window-x="2869"
      inkscape:window-y="-11"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer3">
@@ -13418,7 +13418,7 @@
        ry="1.3930805e-06"
        transform="matrix(8.024808e-4,-0.99999968,0.99999997,2.5094431e-4,0,0)" />
     <rect
-       style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
+       style="display:inline;fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
        id="Door_Bathroom-Accessible_M2"
        width="0.99725729"
        height="9.5666962"
@@ -13446,22 +13446,24 @@
        transform="matrix(6.5779883e-4,-0.99999978,0.99999995,3.061392e-4,0,0)" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2047_2"
+       id="Door_M2047_2"
        width="1.2166027"
        height="9.5666962"
        x="-154.91982"
        y="284.32007"
        ry="1.3930805e-06"
-       transform="matrix(6.5779883e-4,-0.99999978,0.99999995,3.061392e-4,0,0)" />
+       transform="matrix(6.5779883e-4,-0.99999978,0.99999995,3.061392e-4,0,0)"
+       inkscape:label="Door_M2047_2" />
     <rect
        style="fill:#ff0000;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
-       id="Door_2033"
+       id="Door_M2033"
        width="1.2166027"
        height="9.5666962"
        x="48.418259"
        y="723.55505"
        ry="1.3930805e-06"
-       transform="matrix(0.72259344,-0.69127326,0.69152733,0.7223503,0,0)" />
+       transform="matrix(0.72259344,-0.69127326,0.69152733,0.7223503,0,0)"
+       inkscape:label="Door_M2033" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -13501,20 +13503,20 @@
        y="686.58521" />
     <rect
        style="opacity:0.5;fill:#008000;stroke:#000000;stroke-width:1.10578"
-       id="Stairs_3_M3"
+       id="Stairs_3_M2"
        width="34.34351"
        height="32.067589"
        x="240.46361"
        y="187.59291"
        inkscape:label="Stairs_3_M2" />
     <rect
-       style="fill:#ccff00;stroke:#000000"
+       style="fill:#ccff00;stroke:#000000;stroke-width:1;stroke-dasharray:none"
        id="H2-Building_M2"
-       width="3.6875"
-       height="18.625"
-       x="173.5925"
-       y="758.52753"
-       ry="2.7121303e-06" />
+       width="2.8895802"
+       height="40.026222"
+       x="174.11913"
+       y="747.49048"
+       ry="5.8285277e-06" />
   </g>
   <g
      inkscape:groupmode="layer"

@@ -843,8 +843,6 @@
                 title: "Your Location"
             }).addTo(map);
             
-            userMarker.bindPopup("<b>📍 You are here Test</b>").openPopup();
-            
             userMarker.on('dragend', function(e) {
                 userPosition = e.target.getLatLng();
                 console.log("📍 Position updated:", userPosition);
