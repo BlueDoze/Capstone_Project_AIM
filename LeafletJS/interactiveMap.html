@@ -205,36 +205,6 @@
     <div id="location-status" style="position:absolute; top:300px; right:10px; z-index:1000; background:rgba(255,255,255,0.9); padding:8px 12px; border-radius:5px; font-size:11px; color:#666; box-shadow:0 2px 4px rgba(0,0,0,0.2); display:none; width:140px;">
         Manual Mode
     </div>
-    <div id="navigationPanel" 
-        style="position: fixed; top: 100px; left: 10px; 
-                background: white; padding: 12px; border-radius: 8px; 
-                box-shadow: 0 2px 6px rgba(0,0,0,0.3); z-index: 1000; min-width: 250px;">
-        <h4 style="margin: 0 0 10px 0; font-size: 14px;">🧭 Navigation</h4>
-        
-        <!-- Status Message Area -->
-        <div id="navStatus" style="display: none; padding: 8px; margin-bottom: 10px; border-radius: 4px; font-size: 12px; font-weight: bold; text-align: center;"></div>
-        
-        <!-- Step 1: Set Start Location -->
-        <div id="navStep1">
-            <div style="margin-bottom: 10px;">
-                <label style="display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #28a745;">📍 Your Current Location (Room ID):</label>
-                <input id="startObjectId" type="text" placeholder="e.g., M1033, H1015" style="width: 100%; padding: 6px; border: 1px solid #28a745; border-radius: 4px; font-size: 12px;">
-                <button id="setStartBtn" style="width: 100%; margin-top: 4px; padding: 6px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">Confirm Location</button>
-            </div>
-        </div>
-        
-        <!-- Step 2: Set Destination (Initially Hidden) -->
-        <div id="navStep2" style="display: none;">
-            <div style="margin-bottom: 10px;">
-                <button id="changeStartBtn" style="width: 100%; margin-bottom: 10px; padding: 6px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">Change Start Location</button>
-            </div>
-            <div>
-                <label style="display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #dc3545;">🎯 Destination (Room ID):</label>
-                <input id="destinationObjectId" type="text" placeholder="e.g., M2017, H1003" style="width: 100%; padding: 6px; border: 1px solid #dc3545; border-radius: 4px; font-size: 12px;">
-                <button id="navigateBtn" style="width: 100%; margin-top: 4px; padding: 6px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">Find Route</button>
-            </div>
-        </div>
-    </div>
     
     <!-- Multi-Floor Navigation Panel -->
     <div id="multiFloorPanel" style="display: none; position: fixed; bottom: 20px; left: 10px; background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); z-index: 1000; min-width: 280px; max-width: 320px;">
@@ -350,13 +320,16 @@
         window.startingRoomDoorList = null;
         window.startingRoomBuilding = null;
 
-        window.userPosition = L.latLng(43.0143425, -81.19856355); // Starting position
+        window.userPosition = null; // No default position - user must set it
         window.userMarker = null;
         window.locationMode = 'manual'; // 'manual' or 'gps'
         window.gpsWatchId = null;
         window.gpsMarker = null;
         window.gpsAccuracyCircle = null;
         window.GPS_ACCURACY_THRESHOLD = 30;
+        
+        // Manual location selection mode
+        window.manualSelectionMode = false; // When true, user is clicking to select location
         
         // GPS boundary limits (Fanshawe College campus area)
         window.GPS_BOUNDS = {
@@ -383,10 +356,10 @@
             
             const state = {
                 floor: window.userCurrentFloor,
-                position: {
+                position: window.userPosition ? {
                     lat: window.userPosition.lat,
                     lng: window.userPosition.lng
-                },
+                } : null,
                 mode: window.locationMode,
                 paths: pathData,
                 highlightedNodes: window.highlightedNodes || []
@@ -498,31 +471,11 @@
         }
 
         function toggleLocationMode() {
-            if (window.locationMode === 'manual') {
-                console.log('🔄 Switching to GPS mode...');
-                // Hide user marker when switching to GPS
-                if (window.userMarker) {
-                    map.removeLayer(window.userMarker);
-                    window.userMarker = null;
-                }
-                // Update button text
-                document.getElementById('location-mode-btn').textContent = 'Switch to Manual';
-                // Hide manual marker button
-                document.getElementById('switch-manual-marker-btn').style.display = 'none';
-                // Switch to GPS mode
+            if (window.locationMode !== 'gps') {
+                console.log('📍 Attempting GPS...');
                 startGPSTracking();
             } else {
-                console.log('🔄 Switching to manual mode...');
-                // Hide user marker when switching away from GPS
-                if (window.userMarker) {
-                    map.removeLayer(window.userMarker);
-                    window.userMarker = null;
-                }
-                // Update button text
-                document.getElementById('location-mode-btn').textContent = 'Switch to GPS';
-                // Show manual marker button
-                document.getElementById('switch-manual-marker-btn').style.display = 'block';
-                // Switch to manual mode
+                console.log('🛑 Stopping GPS');
                 stopGPSTracking();
             }
         }
@@ -530,18 +483,97 @@
         // Switch to manual location mode with marker
         function switchToManualWithMarker() {
             if (window.locationMode !== 'manual') {
-                // First switch to manual mode
                 toggleLocationMode();
             }
             
-            // Show manual marker and allow dragging
-            if (!window.userMarker) {
-                createUserMarker(window.userPosition);
-            } else {
-                window.userMarker.setLatLng(window.userPosition);
-            }
+            // Enable manual selection mode - user can click on map/SVG elements to select location
+            window.manualSelectionMode = true;
+            console.log('📍 Manual selection mode enabled - click on map or rooms to set location');
             
-            console.log('✅ Manual marker activated');
+            // If user already has a position, show marker
+            if (window.userPosition) {
+                if (!window.userMarker) {
+                    createUserMarker(window.userPosition);
+                } else {
+                    window.userMarker.setLatLng(window.userPosition);
+                }
+            } else {
+                console.log('👆 Click on the map or click a room/door to set your starting location');
+            }
+        }
+
+        // Handle clicking on SVG elements (rooms, doors) during manual location selection
+        function handleSVGElementClick(event, svgElement, buildingName, overlay) {
+            if (!window.manualSelectionMode) return;
+            
+            const clickedElement = event.target;
+            const elementId = clickedElement.id;
+            
+            if (!elementId) return;
+            
+            console.log(`🎯 Clicked on: ${elementId}`);
+            
+            // Check if it's a room
+            if (window.objectData?.[elementId]?.typeCategory === 'room') {
+                const roomInfo = window.objectData[elementId];
+                const doorList = roomInfo.doors;
+                
+                if (doorList && Object.keys(doorList).length > 0) {
+                    // Get first door of the room
+                    const firstDoorId = Object.keys(doorList)[0];
+                    const firstDoor = svgElement.getElementById(firstDoorId);
+                    
+                    if (firstDoor) {
+                        const doorPosition = objectToLatLng(firstDoor, svgElement, overlay);
+                        
+                        // Set the position
+                        window.userPosition = doorPosition;
+                        window.userCurrentBuilding = buildingName;
+                        window.userCurrentFloor = roomInfo.floor;
+                        window.startingRoomId = elementId;
+                        window.startingRoomDoorList = doorList;
+                        window.startingRoomBuilding = buildingName;
+                        
+                        // Show marker
+                        if (!window.userMarker) {
+                            createUserMarker(doorPosition);
+                        } else {
+                            window.userMarker.setLatLng(doorPosition);
+                        }
+                        
+                        // Disable selection mode and zoom to location
+                        window.manualSelectionMode = false;
+                        map.setView(doorPosition, 19);
+                        
+                        console.log(`✅ Starting location set to ${elementId}`);
+                    }
+                }
+            }
+            // Check if it's a door or exit
+            else if (window.objectData?.[elementId]) {
+                const objInfo = window.objectData[elementId];
+                const objPosition = objectToLatLng(clickedElement, svgElement, overlay);
+                
+                if (objPosition) {
+                    // Set the position
+                    window.userPosition = objPosition;
+                    window.userCurrentBuilding = buildingName;
+                    window.userCurrentFloor = objInfo.floor;
+                    
+                    // Show marker
+                    if (!window.userMarker) {
+                        createUserMarker(objPosition);
+                    } else {
+                        window.userMarker.setLatLng(objPosition);
+                    }
+                    
+                    // Disable selection mode and zoom to location
+                    window.manualSelectionMode = false;
+                    map.setView(objPosition, 19);
+                    
+                    console.log(`✅ Starting location set to ${elementId}`);
+                }
+            }
         }
 
         function populateRoomDropdown(selectElement, building, floor) {
@@ -882,23 +914,14 @@
                 return;
             }
             
-            // Clear any existing path when switching to GPS mode
-            clearPath();
+            clearPath()
             
             const statusEl = document.getElementById('location-status');
-            const btn = document.getElementById('location-mode-btn');
             
-            statusEl.style.display = 'block'; // Make status visible
-            statusEl.textContent = "🔄 Starting GPS tracking...";
-            btn.textContent = "Manual Mode";
-            btn.style.background = "#A6192E";
+            statusEl.style.display = 'block';
+            statusEl.textContent = "🔄 Starting GPS...";
             
             window.locationMode = 'gps';
-            
-            // Hide manual marker, make it non-draggable
-            if (window.userMarker) {
-                window.userMarker.dragging.disable();
-            }
             
             window.gpsWatchId = navigator.geolocation.watchPosition(
                 function(position) {
@@ -914,15 +937,15 @@
                     if (lat < bounds.south || lat > bounds.north || lng < bounds.west || lng > bounds.east) {
                         console.warn(`⚠️ GPS position outside campus bounds: [${lat}, ${lng}]`);
                         
-                        statusEl.innerHTML = `❌ GPS Not Available<br><b>Outside campus area</b>`;
+                        statusEl.innerHTML = `❌ GPS Not Available (Outside campus)`;
                         statusEl.style.background = 'rgba(220, 53, 69, 0.95)';
                         statusEl.style.color = 'white';
                         
-                        // Auto-switch to manual mode (only alert once)
+                        // Auto-stop GPS (only alert once)
                         if (!window.gpsOutOfBoundsAlerted) {
                             window.gpsOutOfBoundsAlerted = true;
                             stopGPSTracking();
-                            alert('GPS is not available - you are outside the campus area.\n\nPlease manually select your location on the map or input the room number you are currently at.');
+                            alert('GPS is not available - you are outside the campus area.\n\nUse Place Marker or Enter Rooms to set your location.');
                         }
                         return;
                     }
@@ -935,7 +958,7 @@
                     if (accuracy > window.GPS_ACCURACY_THRESHOLD) {
                         console.warn(`⚠️ GPS accuracy too low: ${accuracy.toFixed(0)}m (threshold: ${window.GPS_ACCURACY_THRESHOLD}m)`);
                         
-                        statusEl.innerHTML = `⚠️ Poor GPS Signal<br>Accuracy: ±${accuracy.toFixed(0)}m<br>(Threshold: ${window.GPS_ACCURACY_THRESHOLD}m)<br><b>Using last known position</b>`;
+                        statusEl.innerHTML = `⚠️ GPS Accuracy: ±${accuracy.toFixed(0)}m`;
                         
                         // Change accuracy circle to red to indicate poor signal
                         if (window.gpsAccuracyCircle) {
@@ -946,26 +969,22 @@
                         }
                         
                         // Don't update position if accuracy is too poor
-                        // Optionally: auto-switch to manual after X failed readings
                         return;
                     }
                     
                     const latlng = L.latLng(lat, lng);
                     
                     // Update status (green = good signal)
-                    let statusText = `✅ GPS Active<br>Accuracy: ±${accuracy.toFixed(0)}m`;
+                    let statusText = `✅ GPS Active (±${accuracy.toFixed(0)}m)`;
                     if (altitude !== null) {
-                        statusText += `<br>Alt: ${altitude.toFixed(1)}m`;
+                        statusText += ` Alt: ${altitude.toFixed(0)}m`;
                     }
                     statusEl.innerHTML = statusText;
+                    statusEl.style.background = 'rgba(255,255,255,0.9)';
+                    statusEl.style.color = '#666';
                     
                     // Update or create GPS marker
                     if (!window.gpsMarker) {
-                        // Remove manual marker
-                        if (window.userMarker) {
-                            map.removeLayer(window.userMarker);
-                        }
-                        
                         // Create GPS accuracy circle (blue = good signal)
                         window.gpsAccuracyCircle = L.circle(latlng, {
                             radius: accuracy,
@@ -984,7 +1003,7 @@
                         });
                         
                         window.gpsMarker = L.marker(latlng, { icon: gpsIcon }).addTo(map);
-                        window.gpsMarker.bindPopup("<b>📍 GPS Location</b><br>Tracking active").openPopup();
+                        window.gpsMarker.bindPopup("<b>📍 GPS Location</b>");
                     } else {
                         // Update existing markers
                         window.gpsMarker.setLatLng(latlng);
@@ -1004,18 +1023,18 @@
                     
                     // Center and zoom to user location on first GPS fix
                     if (!window.gpsFirstFixDone) {
-                        map.setView(latlng, 18); // Zoom level 18 for close-up view
+                        map.setView(latlng, 18);
                         window.gpsFirstFixDone = true;
                         console.log('📍 First GPS fix - zoomed to user location');
                     }
                 },
                 function(error) {
                     console.error("GPS Error:", error);
-                    statusEl.innerHTML = `❌ GPS Error<br>${error.message}`;
+                    statusEl.innerHTML = `❌ GPS Not Available`;
                     
-                    // Fall back to manual mode
-                    stopGPSTracking();
-                    alert("GPS tracking failed. Switched to manual mode.");
+                    // Revert to no location mode
+                    window.locationMode = 'manual';
+                    alert("GPS tracking failed. Use Place Marker to set your location manually.");
                 },
                 {
                     enableHighAccuracy: true,
@@ -1041,30 +1060,13 @@
                 window.gpsAccuracyCircle = null;
             }
             
-            // Clear any existing path when switching to manual mode
-            clearPath();
-            
             window.locationMode = 'manual';
-            window.gpsFirstFixDone = false; // Reset for next GPS session
-            window.gpsOutOfBoundsAlerted = false; // Reset alert flag
+            window.gpsFirstFixDone = false;
+            window.gpsOutOfBoundsAlerted = false;
             
             const statusEl = document.getElementById('location-status');
-            const btn = document.getElementById('location-mode-btn');
-            
-            statusEl.innerHTML = "📍 Manual Mode";
-            statusEl.style.display = 'block'; // Keep visible
-            statusEl.style.background = 'rgba(255,255,255,0.9)';
-            statusEl.style.color = '#666';
-            btn.textContent = "GPS Mode";
-            btn.style.background = "#A6192E";
-            
-            // Recreate manual marker
-            if (!window.userMarker) {
-                createUserMarker(window.userPosition);
-            } else {
-                map.addLayer(window.userMarker);
-                window.userMarker.dragging.enable();
-            }
+            statusEl.innerHTML = "";
+            statusEl.style.display = 'none';
         }
 
         function debugShowNodePositions(buildingName) {
@@ -1909,9 +1911,11 @@
             const transition = window.pendingFloorTransition;
             const arriveBtn = document.getElementById('multiFloorArriveBtn');
             
-            console.log("🔄 Starting floor transition...");
+            console.log("🔄 Starting Segment 2 - Floor transition...");
             console.log("   Target floor:", transition.targetFloor);
+            console.log("   Target building:", transition.targetBuilding);
             console.log("   Destination:", transition.objectId);
+            console.log("   Arriving at vertical connector node:", transition.verticalConnectorNodeOnTargetFloor);
             
             // Disable button and show loading state
             arriveBtn.disabled = true;
@@ -1935,7 +1939,8 @@
                 // Update floor selector and user state
                 document.getElementById('floor-selector').value = transition.targetFloor;
                 window.userCurrentFloor = transition.targetFloor;
-                console.log(`📍 User floor updated to: ${transition.targetFloor}`);
+                window.userCurrentBuilding = transition.targetBuilding;
+                console.log(`📍 User floor updated to: ${transition.targetBuilding} Floor ${transition.targetFloor}`);
                 
                 // STEP 2: Build graph data for the loaded floor
                 const destFloorData = window.floorPlans[transition.targetBuilding]?.floors?.[transition.targetFloor];
@@ -1964,20 +1969,19 @@
                 }
                 window.buildingGraphData[transition.targetBuilding][transition.targetFloor] = graphData;
                 
-                // STEP 3: Update user position to the arrival point (vertical connector)
-                const arrivalPointNode = transition.departurePointNewFloorNode;
+                // STEP 3: Update user position to the arrival point (vertical connector on target floor)
+                const arrivalPointNode = transition.verticalConnectorNodeOnTargetFloor;
                 const arrivalPointPos = graphData.nodePositions[arrivalPointNode];
                 
                 if (arrivalPointPos) {
                     window.userPosition = arrivalPointPos;
-                    
-                    console.log(`📍 User positioned at arrival point ${arrivalPointNode}: [${arrivalPointPos.lat.toFixed(6)}, ${arrivalPointPos.lng.toFixed(6)}]`);
+                    console.log(`📍 User positioned at vertical connector ${arrivalPointNode}: [${arrivalPointPos.lat.toFixed(6)}, ${arrivalPointPos.lng.toFixed(6)}]`);
                 } else {
-                    console.warn(`⚠️ Could not find position for arrival node ${arrivalPointNode}`);
+                    console.warn(`⚠️ Could not find position for vertical connector node ${arrivalPointNode}`);
                 }
                 
-                // STEP 4: Plan path from arrival point to final destination
-                console.log(`🗺️ Planning path to ${transition.objectId} on Floor ${transition.targetFloor}...`);
+                // STEP 4: Plan path from vertical connector to final destination
+                console.log(`🗺️ [SEGMENT 2] Planning path to ${transition.objectId} from vertical connector...`);
                 
                 // Get finalDestination (doors dict for room, node for exit)
                 let finalDestination = null;
@@ -2015,16 +2019,16 @@
                         
                         let closestDoorId = null;
                         let minDistance = Infinity;
-                        const departurePointPos = graphData.nodePositions[arrivalPointNode];
+                        const arrivalPos = graphData.nodePositions[arrivalPointNode];
                         
-                        if (departurePointPos) {
+                        if (arrivalPos) {
                             doorIds.forEach(doorId => {
                                 const doorElement = svgMap.getElementById(doorId);
                                 if (doorElement) {
                                     const doorPos = objectToLatLng(doorElement, svgMap, buildingOverlay);
                                     if (doorPos) {
-                                        const distance = departurePointPos.distanceTo(doorPos);
-                                        console.log(`   📏 ${doorId}: ${distance.toFixed(2)}m from arrival point`);
+                                        const distance = arrivalPos.distanceTo(doorPos);
+                                        console.log(`   📏 ${doorId}: ${distance.toFixed(2)}m from vertical connector`);
                                         
                                         if (distance < minDistance) {
                                             minDistance = distance;
@@ -2057,20 +2061,20 @@
                     throw new Error(`Could not determine destination node`);
                 }
                 
-                // Find shortest path from arrival point to destination
+                // Find shortest path from vertical connector to destination
                 const pathToDestination = findShortestPath(graphData.graph, arrivalPointNode, destinationNode);
                 
                 if (!pathToDestination || pathToDestination.length === 0) {
                     throw new Error(`No path found from ${arrivalPointNode} to ${destinationNode}`);
                 }
                 
-                console.log(`✅ Path found: ${pathToDestination.length} nodes`);
+                console.log(`✅ Segment 2 path found: ${pathToDestination.length} nodes`);
                 
                 // STEP 5: Draw the complete path on the new floor
-                console.log(`🎨 Drawing path from arrival point to ${transition.objectId}...`);
+                console.log(`🎨 Drawing Segment 2 path from ${transition.verticalConnectorType} to ${transition.objectId}...`);
                 drawPathOnMap(pathToDestination, graphData.nodePositions, map, svgMap, true, finalObjectId, buildingOverlay);
                 
-                console.log("✅ Path drawn successfully");
+                console.log("✅ Segment 2 path drawn successfully");
                 
                 // Hide the multi-floor panel
                 document.getElementById('multiFloorPanel').style.display = 'none';
@@ -2286,6 +2290,12 @@
                         
                         if (window.isDragging) {
                             console.log("Ignoring click - user was dragging");
+                            return;
+                        }
+                        
+                        // Check if user is in manual location selection mode
+                        if (window.manualSelectionMode) {
+                            handleSVGElementClick(e, svgMap, buildingName, window.buildingOverlays[buildingName]);
                             return;
                         }
                         
@@ -2922,6 +2932,20 @@
             }
         }
 
+        async function loadBuildingConnectionsFloors() {
+            try {
+                const response = await fetch('/leaflet-assets/JSON/building_connections_floors.json?ts=' + new Date().getTime());
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                window.buildingConnectionsFloors = await response.json();
+                console.log("Floor-aware building connections loaded:", window.buildingConnectionsFloors);
+            } catch (error) {
+                console.error('Failed to load floor-aware building connections:', error);
+                window.buildingConnectionsFloors = {}; // Fallback to empty object
+            }
+        }
+
         async function loadObjectData() {
             try {
                 const response = await fetch('/leaflet-assets/JSON/object_data.json?ts=' + new Date().getTime());
@@ -3139,12 +3163,14 @@
             await loadBuildingPositions();
             await loadGeoJSON();
             await loadBuildingConnections();
+            await loadBuildingConnectionsFloors();
             await loadObjectData();
 
             console.log("Floor plans loaded:", window.floorPlans);
             console.log("Building positions loaded:", window.buildingPositions);
             console.log("GeoJSON data loaded:", window.geojsonData);
             console.log("Building connections loaded:", window.buildingConnections);
+            console.log("Floor-aware building connections loaded:", window.buildingConnectionsFloors);
             console.log("Object data loaded:", window.objectData);
 
             const mapBearing = 0
@@ -3176,6 +3202,34 @@
                 setTimeout(() => {
                     window.isDragging = false;
                 }, 50); // Small delay to ensure click events see the drag state
+            });
+
+            // Handle map clicks for manual location selection mode
+            map.on('click', function(e) {
+                if (window.manualSelectionMode && !window.isDragging) {
+                    const clickPosition = e.latlng;
+                    
+                    console.log(`📍 Clicked on map at [${clickPosition.lat.toFixed(6)}, ${clickPosition.lng.toFixed(6)}]`);
+                    
+                    // Set the position to wherever user clicked
+                    window.userPosition = clickPosition;
+                    
+                    // Show marker at clicked location
+                    if (!window.userMarker) {
+                        createUserMarker(clickPosition);
+                    } else {
+                        window.userMarker.setLatLng(clickPosition);
+                    }
+                    
+                    // Update user location info (building/floor based on current floor selector)
+                    window.userCurrentFloor = document.getElementById('floor-selector').value || '1';
+                    updateUserLocation();
+                    
+                    // Disable selection mode
+                    window.manualSelectionMode = false;
+                    
+                    console.log(`✅ Starting location set to clicked position`);
+                }
             });
 
             // Step 2: Add tile layer (the actual map)
@@ -3249,153 +3303,6 @@
                 //     showStartupModal();
                 // });
 
-
-                // Multi-Floor Navigation Function
-                
-                // Set Start Position Button
-                document.getElementById("setStartBtn").addEventListener("click", () => {
-                    const roomId = document.getElementById("startObjectId").value.trim().toUpperCase();
-                    
-                    if (!roomId) {
-                        alert("Please enter your current room ID");
-                        return;
-                    }
-                    
-                    console.log(`🔍 Setting start location: ${roomId}`);
-                    
-                    // Fast lookup using object_data.json (O(1) instead of O(buildings × floors))
-                    const roomInfo = window.objectData?.[roomId];
-                    
-                    // Check if object exists and is a room-type object (room, classroom, bathroom, eatery, etc.)
-                    // But NOT exits (stairs, elevators, building_connections, outside_exits)
-                    if (!roomInfo || roomInfo.typeCategory !== 'room') {
-                        alert(`Room "${roomId}" not found. Please check the room ID.`);
-                        return;
-                    }
-                    
-                    const roomBuilding = roomInfo.building;
-                    const roomFloor = roomInfo.floor;
-                    const doorList = roomInfo.doors;
-                    
-                    console.log(`✅ Found ${roomId} in ${roomBuilding}, Floor ${roomFloor}`);
-                    
-                    // Set user location
-                    window.userCurrentBuilding = roomBuilding;
-                    window.userCurrentFloor = roomFloor;
-                    
-                    // Store starting room information for navigation
-                    window.startingRoomId = roomId;
-                    window.startingRoomDoorList = doorList;
-                    window.startingRoomBuilding = roomBuilding;
-                    console.log(`💾 Stored starting room: ${roomId} with ${Object.keys(doorList).length} doors`);
-                    
-                    // Load floor and set position
-                    document.getElementById('floor-selector').value = roomFloor;
-                    loadFloorLevel(parseInt(roomFloor));
-                    
-                    setTimeout(() => {
-                        const svgElement = window.buildingSVGElements[roomBuilding];
-                        const buildingOverlay = window.buildingOverlays[roomBuilding];
-                        
-                        if (svgElement && buildingOverlay && doorList && Object.keys(doorList).length > 0) {
-                            const firstDoorId = Object.keys(doorList)[0];
-                            const firstDoor = svgElement.getElementById(firstDoorId);
-                            if (firstDoor) {
-                                const doorPosition = objectToLatLng(firstDoor, svgElement, buildingOverlay);
-
-                                // Clear any preexisting paths
-                                clearPath();
-                                
-                                // Remove existing marker if present
-                                if (window.userMarker) {
-                                    map.removeLayer(window.userMarker);
-                                    window.userMarker = null;
-                                }
-                                
-                                // Set user position (but don't show marker yet)
-                                window.userPosition = doorPosition;
-                                map.setView(doorPosition, 19);
-                                
-                                // Show success message
-                                const statusDiv = document.getElementById('navStatus');
-                                statusDiv.textContent = `✅ Location confirmed: ${roomId} (${roomBuilding}, Floor ${roomFloor})`;
-                                statusDiv.style.display = 'block';
-                                statusDiv.style.background = '#d4edda';
-                                statusDiv.style.color = '#155724';
-                                
-                                // Hide Step 1, Show Step 2
-                                document.getElementById('navStep1').style.display = 'none';
-                                document.getElementById('navStep2').style.display = 'block';
-                                
-                                console.log(`✅ Start location confirmed, ready for destination`);
-                            }
-                        }
-                    }, 1000);
-                });
-                
-                // Change Start Location Button
-                document.getElementById("changeStartBtn").addEventListener("click", () => {
-                    // Clear any existing path
-                    clearPath();
-                    
-                    // Reset to Step 1
-                    document.getElementById('navStep1').style.display = 'block';
-                    document.getElementById('navStep2').style.display = 'none';
-                    
-                    // Clear status
-                    const statusDiv = document.getElementById('navStatus');
-                    statusDiv.style.display = 'none';
-                    statusDiv.textContent = '';
-                    
-                    // Clear inputs
-                    document.getElementById('startObjectId').value = '';
-                    document.getElementById('destinationObjectId').value = '';
-                    
-                    // Clear starting room state
-                    window.startingRoomId = null;
-                    window.startingRoomDoorList = null;
-                    window.startingRoomBuilding = null;
-                    
-                    console.log("↩️ Returning to start location selection");
-                });
-                
-                // Navigate to Destination Button
-                document.getElementById("navigateBtn").addEventListener("click", () => {
-                    const objectId = document.getElementById("destinationObjectId").value.trim().toUpperCase();
-                    
-                    if (!objectId) {
-                        alert("Please enter a destination room ID");
-                        return;
-                    }
-                    
-                    console.log(`🔍 Searching for destination: ${objectId}`);
-                    
-                    // Check if we have a departure point set
-                    if (!window.userPosition) {
-                        alert("Please set your starting location first");
-                        return;
-                    }
-                    
-                    // Try to get the departure floor from the current state or object_data
-                    let departureFloor = window.userCurrentFloor;
-                    
-                    // If floor is not set, try to infer it from the current position
-                    if (!departureFloor) {
-                        // Check if we have a starting room ID stored (from startup modal)
-                        if (window.startingRoomId && window.objectData?.[window.startingRoomId]) {
-                            const startingRoomData = window.objectData[window.startingRoomId];
-                            departureFloor = startingRoomData.floor;
-                            console.log(`✅ Inferred departure floor from starting room: ${departureFloor}`);
-                        } else {
-                            // Fall back to Floor 1 only if we truly have no information
-                            departureFloor = "1";
-                            console.warn(`⚠️  Could not determine floor, defaulting to Floor 1`);
-                        }
-                    }
-                    
-                    // Use the consolidated navigation function
-                    navigateFromCoordinates(window.userPosition, departureFloor, objectId);
-                });
         }
         
         // Load external navigation module

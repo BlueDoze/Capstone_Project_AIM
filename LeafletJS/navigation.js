@@ -503,6 +503,8 @@ function findAndDisplayPath(departureCoords, departureFloor, arrivalObjectId, de
                 arrivalObjectData: arrivalObjData,
                 departurePointNewFloor: departurePointNewFloor,
                 departurePointNewFloorNode: departurePointNewFloorNode,
+                verticalConnectorNodeOnTargetFloor: departurePointNewFloorNode,
+                verticalConnectorType: nearestConnector.type,
                 verticalConnector: {
                     id: nearestConnector.id,
                     type: nearestConnector.type,
