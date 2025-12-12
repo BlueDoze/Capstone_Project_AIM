@@ -1,0 +1,38 @@
+{
+  "metadata": {
+    "source": "sharepoint_scraper",
+    "scraped_at": "2025-12-11T23:34:18.271755",
+    "total_events": 2,
+    "endpoint": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-12-11&EndDate=2026-01-10&AudienceTarget=false",
+    "date_range": {
+      "start_date": "2025-12-11",
+      "end_date": "2026-01-10"
+    },
+    "max_events_limit": 100,
+    "extraction_method": "modern_event_cards"
+  },
+  "events": [
+    {
+      "id": "sp_evt_001",
+      "name": "Rapid HIV and Hep C testing (free)",
+      "date": "Thu, Dec 11, 1:30 PM",
+      "time": "",
+      "location": "Room J1004, Wellness Centre (J building), Yellow Zone, London Campus, 1001 Fanshawe College Blvd.",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-12-11&EndDate=2026-01-10&AudienceTarget=false"
+    },
+    {
+      "id": "sp_evt_002",
+      "name": "Holiday closure 2025-26",
+      "date": "Wed, Dec 24, 12:00 PM",
+      "time": "",
+      "location": "All Fanshawe campuses, sites and centres",
+      "description": "",
+      "category": "sharepoint",
+      "source": "sharepoint",
+      "link": "https://fanshawecca.sharepoint.com/_layouts/15/Events.aspx?ListGuid=d1ad5108-61da-44a6-9b0a-d114a09c5e7e&StartDate=2025-12-11&EndDate=2026-01-10&AudienceTarget=false"
+    }
+  ]
+}

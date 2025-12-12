@@ -1,13 +1,21 @@
 {
   "course_id": "2014765",
   "course_url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2014765",
-  "total_announcements": 9,
-  "successful": 9,
+  "total_announcements": 10,
+  "successful": 10,
   "failed": 0,
-  "extracted_at": "2025-12-08T21:31:04.563712",
+  "extracted_at": "2025-12-12T00:42:26.207216",
   "announcements": [
     {
       "index": 1,
+      "title": "𝗔𝗜-𝗴𝗻𝗶𝘁𝗲 𝗙𝗮𝗹𝗹 𝟮𝟬𝟮𝟱 – 𝗖𝗮𝗽𝘀𝘁𝗼𝗻𝗲 𝗣𝗿𝗼𝗷𝗲𝗰𝘁 𝗦𝗵𝗼𝘄𝗰𝗮𝘀𝗲",
+      "date": "Dec 11, 2025 3:31 PM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2286679/view?ou=2014765",
+      "content": "🌟 𝗬𝗼𝘂’𝗿𝗲 𝗜𝗻𝘃𝗶𝘁𝗲𝗱! 𝗔𝗜-𝗴𝗻𝗶𝘁𝗲 𝗙𝗮𝗹𝗹 𝟮𝟬𝟮𝟱 – 𝗖𝗮𝗽𝘀𝘁𝗼𝗻𝗲 𝗣𝗿𝗼𝗷𝗲𝗰𝘁 𝗦𝗵𝗼𝘄𝗰𝗮𝘀𝗲 🌟\nI’m excited to invite you to AI-gnite Fall 2025, our upcoming capstone project showcase where students will present innovative AI-driven solutions they’ve been building throughout the term.\n📅 𝗗𝗮𝘁𝗲: December 12th, 2025⏰ 𝗧𝗶𝗺𝗲: 10:30 AM – 12:00 Noon📍 𝗟𝗼𝗰𝗮𝘁𝗶𝗼𝗻: Canada Life Village Square, F Building, Fanshawe College\nRegister Now: Click Here\nJoin us to:✨ Explore creative and industry-relevant AI projects✨ Engage with emerging talent✨ Network with faculty, industry experts, and community partners\nLooking forward to seeing you there! 🚀",
+      "content_length": 602
+    },
+    {
+      "index": 2,
       "title": "Co-op Status Survey – IMPORTANT!",
       "date": "Nov 26, 2025 11:50 AM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2263929/view?ou=2014765",
@@ -15,7 +23,7 @@
       "content_length": 342
     },
     {
-      "index": 2,
+      "index": 3,
       "title": "Building Agentic AI using IBM Tools - 18th Nov, Tuesday, 2-4 PM",
       "date": "Nov 13, 2025 1:34 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2255780/view?ou=2014765",
@@ -23,7 +31,7 @@
       "content_length": 766
     },
     {
-      "index": 3,
+      "index": 4,
       "title": "Gentle Reminder - Building with Agentic AI: A Hands-on Workshop",
       "date": "Oct 28, 2025 9:52 AM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2246213/view?ou=2014765",
@@ -31,7 +39,7 @@
       "content_length": 463
     },
     {
-      "index": 4,
+      "index": 5,
       "title": "Agentic AI Hackathon with IBM watsonx Orchestrate",
       "date": "Oct 7, 2025 6:50 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2239214/view?ou=2014765",
@@ -39,7 +47,7 @@
       "content_length": 366
     },
     {
-      "index": 5,
+      "index": 6,
       "title": "How To Build GenAI Applications Using Your Data, an IBM TechXchange Workshop",
       "date": "Oct 7, 2025 6:34 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2239207/view?ou=2014765",
@@ -47,7 +55,7 @@
       "content_length": 505
     },
     {
-      "index": 6,
+      "index": 7,
       "title": "An Exciting Opportunity for Students Passionate About STEM – With TCS",
       "date": "Sep 23, 2025 1:57 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2233132/view?ou=2014765",
@@ -55,7 +63,7 @@
       "content_length": 1470
     },
     {
-      "index": 7,
+      "index": 8,
       "title": "Any program questions? Book a time to chat!",
       "date": "Sep 11, 2025 1:51 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2228522/view?ou=2014765",
@@ -63,7 +71,7 @@
       "content_length": 371
     },
     {
-      "index": 8,
+      "index": 9,
       "title": "Student Orientation Events and Zoom Links",
       "date": "Sep 2, 2025 3:05 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2222941/view?ou=2014765",
@@ -71,7 +79,7 @@
       "content_length": 316
     },
     {
-      "index": 9,
+      "index": 10,
       "title": "WELCOME to 25F Homeroom - Artificial Intelligence (AI) and Machine Learning (AIM)",
       "date": "Sep 2, 2025 10:51 AM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2222318/view?ou=2014765",

@@ -22,8 +22,19 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Course IDs to scrape
-COURSE_IDS = [
+def load_course_ids_from_file():
+    """Load course IDs from data/courses.txt"""
+    courses_file = project_root / 'data' / 'courses.txt'
+    if courses_file.exists():
+        with open(courses_file, 'r') as f:
+            content = f.read().strip()
+            # Parse comma-separated course IDs
+            course_ids = [cid.strip() for cid in content.split(',') if cid.strip()]
+            return course_ids
+    return []
+
+# Course IDs to scrape - load from file or use defaults
+COURSE_IDS = load_course_ids_from_file() or [
     "2001539",
     "2001540",
     "2001541",
