@@ -7,6 +7,14 @@
         "scale": 1.28,
         "rotation": -20.5
       }
+    },
+    "2": {
+      "positionAdjustments": {
+        "latOffset": -0.000016,
+        "lngOffset": -0.000029,
+        "scale": 1.25,
+        "rotation": -20
+      }
     }
   },
   "Building M": {
@@ -24,6 +32,14 @@
         "lngOffset": 0.000045,
         "scale": 1.52,
         "rotation": -21.3
+      }
+    },
+    "3": {
+      "positionAdjustments": {
+        "latOffset": -0.000063,
+        "lngOffset": 0.000086,
+        "scale": 1.5,
+        "rotation": -21.5
       }
     }
   }

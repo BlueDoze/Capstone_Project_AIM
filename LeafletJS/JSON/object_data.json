@@ -314,6 +314,15 @@
             "Door_Bathroom-Men_H2": "H2_Path3_4"
         }
     },
+    "H2009": {
+        "building": "Building H",
+        "floor": "2",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_H2009": "H2_Path3_7"
+        }
+    },
     "Bathroom-Women_H2": {
         "building": "Building H",
         "floor": "2",
@@ -1019,6 +1028,15 @@
             "Door_M3039": "M3_Path2_5"
         }
     },
+    "M3041": {
+        "building": "Building M",
+        "floor": "3",
+        "typeCategory": "room",
+        "type": "classroom",
+        "doors": {
+            "Door_M3041": "M3_Path2_7"
+        }
+    },
     "M3048": {
         "building": "Building M",
         "floor": "3",
@@ -1034,7 +1052,7 @@
         "typeCategory": "room",
         "type": "classroom",
         "doors": {
-            "Door_MM3043": "M3_Path2_9"
+            "Door_M3043": "M3_Path2_9"
         }
     },
     "M3045": {

@@ -2,22 +2,22 @@
 M3_Path1_1,object,M3_Path1_2,Stairs_1_M3,,exit,stairs,[M1|M2],[Stairs_1_M1|Stairs_1_M2]
 M3_Path1_2,object,"M3_Path1_1,M3_Path1_3",M3006,Door_M3006,room,classroom,,
 M3_Path1_3,object,"M3_Path1_2, M3_Path1_4",M3004,Door_M3004,room,classroom,,
-M3_Path1_4,object,"M3_Path1_3, M3_Turn_1",Elevator_M3,,exit,elevator,[M1|M2],[Elevator_M1|Stairs_1_M2]
+M3_Path1_4,object,"M3_Path1_3, M3_Turn_1",Elevator_M3,,exit,elevator,[M1|M2],[Elevator_M1|Elevator_M2]
 M3_Turn_1,"object, object, turn","M3_Path1_4, M3_Path2_1","M3001, M3009","Door_M3001, Door_M3009","room, room","classroom, classroom",,
 M3_Path2_1,"object, turn","M3_Turn_1, M3_Path2_2",M3013,Door_M3013,room,classroom,,
 M3_Path2_2,object,"M3_Path2_1, M3_Path2_3",M3010,Door_M3010_1,room,classroom,,
 M3_Path2_3,object,"M3_Path2_2, M3_Int_1",M3017,Door_M3017,room,classroom,,
 M3_Int_1,int,"M3_Path2_3, M3_Path2_4, M3_Path3_1",,,,,,
 M3_Path2_4,object,"M3_Int_1, M3_Path2_5",M3035,Door_M3035,room,classroom,,
-M3_Path2_5,object,"M2_Path2_4, M2_Path2_6",M3039,Door_M3039,room,classroom,,
-M3_Path2_6,object,"M2_Path2_5, M3_Path2_7",M3010,Door_M3010_2,room,classroom,,
-M3_Path2_7,int,"M3_Path2_6, M3_Path2_8",M3041,Door_M3041,,,,
+M3_Path2_5,object,"M3_Path2_4, M3_Path2_6",M3039,Door_M3039,room,classroom,,
+M3_Path2_6,object,"M3_Path2_5, M3_Path2_7",M3010,Door_M3010_2,room,classroom,,
+M3_Path2_7,int,"M3_Path2_6, M3_Path2_8",M3041,Door_M3041,room,classroom,,
 M3_Path2_8,object,"M3_Path2_7, M3_Path2_9",M3048,Door_M3048,room,classroom,,
-M3_Path2_9,object,"M2_Path3_1, M2_Path3_3",M3043,Door_MM3043,room,classroom,,
+M3_Path2_9,object,"M3_Path2_8, M3_Turn_2",M3043,Door_M3043,room,classroom,,
 M3_Turn_2,"object, turn","M3_Path2_9, M3_Path4_1",M3045,Door_M3045,room,classroom,,
 M3_Path4_1,object,"M3_Turn_2, M3_Path4_2",M3047,Door_M3047,room,classroom,,
 M3_Path4_2,object,M3_Path4_1,Stairs_3_M3,,exit,stairs,[M1|M2],[Stairs_3_M1|Stairs_3_M2]
-M3_Path3_1,object,"M3_Int_1, M3_Path2_2",Bathroom-Men_M3,Door_Bathroom-Men_M3,room,bathroom,,
+M3_Path3_1,object,"M3_Int_1, M3_Path3_2",Bathroom-Men_M3,Door_Bathroom-Men_M3,room,bathroom,,
 M3_Path3_2,turn,"M3_Path3_1, M3_Path3_3",M3025,Door_M3025,room,classroom,,
 M3_Path3_3,object,"M3_Path3_2, M3_Path3_4",Bathroom-Accessible_M3,Door_Bathroom-Accessible_M3,room,bathroom,,
 M3_Path3_4,object,"M3_Path3_3, M3_Path3_5",Bathroom-Accessible_M3,Door_Bathroom-Accessible_M3,room,bathroom,,

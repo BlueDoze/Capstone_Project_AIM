@@ -493,7 +493,7 @@ function findAndDisplayPath(departureCoords, departureFloor, arrivalObjectId, de
         const buildingOverlay = window.buildingOverlays?.[departureBuilding];
         
         if (svgMap && buildingOverlay && shortestPath.length > 0) {
-            drawPathOnMap(shortestPath, graphData.nodePositions, window.map, svgMap, true, null, buildingOverlay);
+            drawPathOnMap(shortestPath, graphData.nodePositions, window.map, svgMap, true, null, buildingOverlay, null, null, nearestConnector.id, true, false);
             
             window.pendingFloorTransition = {
                 targetFloor: targetFloor,
@@ -536,9 +536,9 @@ function findAndDisplayPath(departureCoords, departureFloor, arrivalObjectId, de
     if (departureBuilding !== targetBuilding) {
         console.log(`🌉 Multi-building: ${departureBuilding} → ${targetBuilding}`);
         
-        const connection = window.buildingConnections?.[departureBuilding]?.[targetBuilding];
+        const connection = window.buildingConnectionsFloors?.[departureBuilding]?.[departureFloor]?.[targetBuilding];
         if (!connection) {
-            console.error(`❌ No connection between ${departureBuilding} and ${targetBuilding}`);
+            console.error(`❌ No connection between ${departureBuilding} Floor ${departureFloor} and ${targetBuilding}`);
             alert(`No route between ${departureBuilding} and ${targetBuilding}`);
             return false;
         }

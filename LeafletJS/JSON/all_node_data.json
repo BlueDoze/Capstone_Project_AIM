@@ -840,7 +840,7 @@
                     },
                     "H2_Path1_1": {
                         "connections": [
-                            "H2_entry",
+                            "M2_entry",
                             "H2_Path1_2"
                         ],
                         "represents": [
@@ -991,8 +991,9 @@
                         ],
                         "represents": [
                             {
-                                "type": "nan",
-                                "id": "H2009"
+                                "type": "classroom",
+                                "id": "H2009",
+                                "door": "Door_H2009"
                             }
                         ]
                     },
@@ -1267,6 +1268,9 @@
                     "Bathroom-Men_H2": [
                         "H2_Path3_4"
                     ],
+                    "H2009": [
+                        "H2_Path3_7"
+                    ],
                     "Bathroom-Women_H2": [
                         "H2_Path3_8"
                     ],
@@ -1353,6 +1357,12 @@
                                 "Door_Bathroom-Men_H2"
                             ],
                             "type": "bathroom"
+                        },
+                        "H2009": {
+                            "doors": [
+                                "Door_H2009"
+                            ],
+                            "type": "classroom"
                         },
                         "Bathroom-Women_H2": {
                             "doors": [
@@ -2945,7 +2955,7 @@
                                 ],
                                 "verticalConnections": [
                                     "Elevator_M1",
-                                    "Stairs_1_M2"
+                                    "Elevator_M2"
                                 ]
                             }
                         ]
@@ -3040,8 +3050,8 @@
                     },
                     "M3_Path2_5": {
                         "connections": [
-                            "M2_Path2_4",
-                            "M2_Path2_6"
+                            "M3_Path2_4",
+                            "M3_Path2_6"
                         ],
                         "represents": [
                             {
@@ -3053,7 +3063,7 @@
                     },
                     "M3_Path2_6": {
                         "connections": [
-                            "M2_Path2_5",
+                            "M3_Path2_5",
                             "M3_Path2_7"
                         ],
                         "represents": [
@@ -3074,8 +3084,9 @@
                                 "type": "intersection"
                             },
                             {
-                                "type": "nan",
-                                "id": "M3041"
+                                "type": "classroom",
+                                "id": "M3041",
+                                "door": "Door_M3041"
                             }
                         ]
                     },
@@ -3094,14 +3105,14 @@
                     },
                     "M3_Path2_9": {
                         "connections": [
-                            "M2_Path3_1",
-                            "M2_Path3_3"
+                            "M3_Path2_8",
+                            "M3_Turn_2"
                         ],
                         "represents": [
                             {
                                 "type": "classroom",
                                 "id": "M3043",
-                                "door": "Door_MM3043"
+                                "door": "Door_M3043"
                             }
                         ]
                     },
@@ -3156,7 +3167,7 @@
                     "M3_Path3_1": {
                         "connections": [
                             "M3_Int_1",
-                            "M3_Path2_2"
+                            "M3_Path3_2"
                         ],
                         "represents": [
                             {
@@ -3270,6 +3281,9 @@
                     "M3039": [
                         "M3_Path2_5"
                     ],
+                    "M3041": [
+                        "M3_Path2_7"
+                    ],
                     "M3048": [
                         "M3_Path2_8"
                     ],
@@ -3367,6 +3381,12 @@
                             ],
                             "type": "classroom"
                         },
+                        "M3041": {
+                            "doors": [
+                                "Door_M3041"
+                            ],
+                            "type": "classroom"
+                        },
                         "M3048": {
                             "doors": [
                                 "Door_M3048"
@@ -3375,7 +3395,7 @@
                         },
                         "M3043": {
                             "doors": [
-                                "Door_MM3043"
+                                "Door_M3043"
                             ],
                             "type": "classroom"
                         },
@@ -3473,7 +3493,7 @@
                         ],
                         "verticalConnections": {
                             "1": "Elevator_M1",
-                            "2": "Stairs_1_M2"
+                            "2": "Elevator_M2"
                         },
                         "accessible": true
                     },

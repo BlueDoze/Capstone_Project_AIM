@@ -13,13 +13,6 @@
         "entryNode": "M2_entry",
         "description": "M-H Connector Floor 2"
       }
-    },
-    "3": {
-      "Building H": {
-        "exitNode": "H3_entry",
-        "entryNode": "M3_entry",
-        "description": "M-H Connector Floor 3"
-      }
     }
   },
   "Building H": {
@@ -46,18 +39,6 @@
         "entryNode": "F-Building",
         "description": "H-F Connector Floor 2"
       }
-    },
-    "3": {
-      "Building M": {
-        "exitNode": "M3_entry",
-        "entryNode": "H3_entry",
-        "description": "H-M Connector Floor 3"
-      },
-      "Building F": {
-        "exitNode": "H_A_connector",
-        "entryNode": "F-Building",
-        "description": "H-F Connector Floor 3"
-      }
     }
   },
   "Building F": {
@@ -73,13 +54,6 @@
         "exitNode": "F-Building",
         "entryNode": "H_A_connector",
         "description": "F-H Connector Floor 2"
-      }
-    },
-    "3": {
-      "Building H": {
-        "exitNode": "F-Building",
-        "entryNode": "H_A_connector",
-        "description": "F-H Connector Floor 3"
       }
     }
   }
