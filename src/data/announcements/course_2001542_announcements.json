@@ -1,13 +1,21 @@
 {
   "course_id": "2001542",
   "course_url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001542",
-  "total_announcements": 17,
-  "successful": 17,
+  "total_announcements": 18,
+  "successful": 18,
   "failed": 0,
-  "extracted_at": "2025-12-08T21:30:06.125974",
+  "extracted_at": "2025-12-12T00:48:20.107772",
   "announcements": [
     {
       "index": 1,
+      "title": "Agenda and Meeting Link",
+      "date": "Dec 10, 2025 11:57 AM",
+      "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2283672/view?ou=2001542",
+      "content": "Hello everyone,\nPlease find below the agenda for the AI-gnite Fall 2025 capstone showcase.\nWe kindly request all groups to join the Teams meeting early, even before it is your scheduled turn. This is to make sure there is a smooth flow of presentations and avoid any delays.\nPlease be ready to present when your turn comes up.\nHere is the meeting link for you to join: AI-gnite Fall 2025 Teams Meeting\nThank you,\nMagdalene",
+      "content_length": 422
+    },
+    {
+      "index": 2,
       "title": "Sprint 4 Presentation - reg",
       "date": "Dec 1, 2025 9:20 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2270052/view?ou=2001542",
@@ -15,7 +23,7 @@
       "content_length": 373
     },
     {
-      "index": 2,
+      "index": 3,
       "title": "Reminder: Capstone Class & Agentic AI Workshop",
       "date": "Nov 18, 2025 10:15 AM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2257918/view?ou=2001542",
@@ -23,7 +31,7 @@
       "content_length": 351
     },
     {
-      "index": 3,
+      "index": 4,
       "title": "Building Agentic AI using IBM Tools - 18th Nov, Tuesday, 2-4 PM",
       "date": "Nov 13, 2025 1:24 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2255777/view?ou=2001542",
@@ -31,7 +39,7 @@
       "content_length": 766
     },
     {
-      "index": 4,
+      "index": 5,
       "title": "Gentle Reminder - Sprint 2",
       "date": "Nov 4, 2025 9:36 AM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2249581/view?ou=2001542",
@@ -39,7 +47,7 @@
       "content_length": 161
     },
     {
-      "index": 5,
+      "index": 6,
       "title": "Gentle Reminder - Building with Agentic AI: A Hands-on Workshop",
       "date": "Oct 28, 2025 9:47 AM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2246212/view?ou=2001542",
@@ -47,7 +55,7 @@
       "content_length": 463
     },
     {
-      "index": 6,
+      "index": 7,
       "title": "Sprint 2 Submission - reg",
       "date": "Oct 27, 2025 10:36 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2246117/view?ou=2001542",
@@ -55,7 +63,7 @@
       "content_length": 294
     },
     {
-      "index": 7,
+      "index": 8,
       "title": "Gentle Reminder on dates!",
       "date": "Oct 20, 2025 2:34 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2242864/view?ou=2001542",
@@ -63,7 +71,7 @@
       "content_length": 763
     },
     {
-      "index": 8,
+      "index": 9,
       "title": "Sprint 2 submission and other dates",
       "date": "Oct 8, 2025 2:26 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2239639/view?ou=2001542",
@@ -71,7 +79,7 @@
       "content_length": 740
     },
     {
-      "index": 9,
+      "index": 10,
       "title": "How To Build GenAI Applications Using Your Data, an IBM TechXchange Workshop",
       "date": "Oct 7, 2025 6:14 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2239204/view?ou=2001542",
@@ -79,7 +87,7 @@
       "content_length": 188
     },
     {
-      "index": 10,
+      "index": 11,
       "title": "Sprint 1 submission",
       "date": "Oct 2, 2025 1:06 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2236941/view?ou=2001542",
@@ -87,7 +95,7 @@
       "content_length": 607
     },
     {
-      "index": 11,
+      "index": 12,
       "title": "Building with Agentic AI: A Hands-on Workshop",
       "date": "Oct 2, 2025 1:03 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2236901/view?ou=2001542",
@@ -95,7 +103,7 @@
       "content_length": 175
     },
     {
-      "index": 12,
+      "index": 13,
       "title": "Wellness Break Oct 14-17",
       "date": "Sep 25, 2025 1:23 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2234029/view?ou=2001542",
@@ -103,7 +111,7 @@
       "content_length": 271
     },
     {
-      "index": 13,
+      "index": 14,
       "title": "An Exciting Opportunity for Students Passionate About STEM – With TCS",
       "date": "Sep 23, 2025 1:52 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2233131/view?ou=2001542",
@@ -111,7 +119,7 @@
       "content_length": 1471
     },
     {
-      "index": 14,
+      "index": 15,
       "title": "Collaboration Opportunity with HSY students",
       "date": "Sep 15, 2025 10:14 AM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2229745/view?ou=2001542",
@@ -119,7 +127,7 @@
       "content_length": 518
     },
     {
-      "index": 15,
+      "index": 16,
       "title": "Proposal Presentation",
       "date": "Sep 11, 2025 2:57 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2228551/view?ou=2001542",
@@ -127,7 +135,7 @@
       "content_length": 245
     },
     {
-      "index": 16,
+      "index": 17,
       "title": "Group Enrollment",
       "date": "Sep 4, 2025 4:11 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2224959/view?ou=2001542",
@@ -135,7 +143,7 @@
       "content_length": 569
     },
     {
-      "index": 17,
+      "index": 18,
       "title": "Welcome to INFO6156 Capstone Project",
       "date": "Sep 3, 2025 8:59 PM",
       "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2224211/view?ou=2001542",

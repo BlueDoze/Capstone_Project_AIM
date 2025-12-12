@@ -26,6 +26,7 @@ def aggregate_announcements(data_dir=None, output_file=None):
                         'title': a.get('title'),
                         'date': a.get('date'),
                         'url': a.get('url'),
+                        'content': a.get('content'),
                         'content_length': a.get('content_length')
                     } for a in data.get('announcements', [])
                 ]

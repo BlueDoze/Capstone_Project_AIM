@@ -1,126 +1,334 @@
 [
   {
-    "course_id": "2001542",
-    "course_url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001542",
-    "total_announcements": 17,
+    "course_id": "906769",
+    "course_url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=906769",
+    "total_announcements": 22,
     "announcements": [
       {
         "index": 1,
-        "title": "Sprint 4 Presentation - reg",
-        "date": "Dec 1, 2025 9:20 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2270052/view?ou=2001542",
-        "content_length": 373
+        "title": "Peer Mentorship",
+        "date": "Oct 22, 2025 9:58 AM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/2243703/view?ou=906769",
+        "content": "Have you heard of peer mentorship? Get matched with an upper-level student peer mentor to learn strategies for finding a part time job or co-op, talk about your career goals, and get connected to services at Fanshawe! There are currently 24 peer mentorship spots available, so register today at fanshawec.ca/inspire.",
+        "content_length": 316
       },
       {
         "index": 2,
-        "title": "Reminder: Capstone Class & Agentic AI Workshop",
-        "date": "Nov 18, 2025 10:15 AM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2257918/view?ou=2001542",
-        "content_length": 351
+        "title": "Career Services - September Virtual Workshops",
+        "date": "Sep 5, 2023 3:46 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1658663/view?ou=906769",
+        "content": "",
+        "content_length": 0
       },
       {
         "index": 3,
-        "title": "Building Agentic AI using IBM Tools - 18th Nov, Tuesday, 2-4 PM",
-        "date": "Nov 13, 2025 1:24 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2255777/view?ou=2001542",
-        "content_length": 766
+        "title": "Headshot Event",
+        "date": "May 12, 2023 1:50 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1579036/view?ou=906769",
+        "content": "",
+        "content_length": 0
       },
       {
         "index": 4,
-        "title": "Gentle Reminder - Sprint 2",
-        "date": "Nov 4, 2025 9:36 AM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2249581/view?ou=2001542",
-        "content_length": 161
+        "title": "CAREER FAIR by PHEEDLOOP",
+        "date": "Feb 11, 2022 10:25 AM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1289437/view?ou=906769",
+        "content": "",
+        "content_length": 0
       },
       {
         "index": 5,
-        "title": "Gentle Reminder - Building with Agentic AI: A Hands-on Workshop",
-        "date": "Oct 28, 2025 9:47 AM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2246212/view?ou=2001542",
-        "content_length": 463
+        "title": "One on One Career Consultant Meeting",
+        "date": "Sep 2, 2021 8:47 AM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1176319/view?ou=906769",
+        "content": "",
+        "content_length": 0
       },
       {
         "index": 6,
-        "title": "Sprint 2 Submission - reg",
-        "date": "Oct 27, 2025 10:36 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2246117/view?ou=2001542",
-        "content_length": 294
+        "title": "How to answer \"Tell Me About Yourself\" question at the interview",
+        "date": "Jul 27, 2021 3:33 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1149297/view?ou=906769",
+        "content": "Presented by Co-op Consultants Laurel Teall and Tracey Taylor.",
+        "content_length": 62
       },
       {
         "index": 7,
-        "title": "Gentle Reminder on dates!",
-        "date": "Oct 20, 2025 2:34 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2242864/view?ou=2001542",
-        "content_length": 763
+        "title": "Common Questions in Job Interviews",
+        "date": "Jul 27, 2021 3:24 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1149295/view?ou=906769",
+        "content": "By Kari Townsend-Professor in Language and Liberal Arts",
+        "content_length": 55
       },
       {
         "index": 8,
-        "title": "Sprint 2 submission and other dates",
-        "date": "Oct 8, 2025 2:26 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2239639/view?ou=2001542",
-        "content_length": 740
+        "title": "5 Quick Tips for Virtual Interview Success by Kari Townsend",
+        "date": "Jul 27, 2021 3:19 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1149293/view?ou=906769",
+        "content": "",
+        "content_length": 0
       },
       {
         "index": 9,
-        "title": "How To Build GenAI Applications Using Your Data, an IBM TechXchange Workshop",
-        "date": "Oct 7, 2025 6:14 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2239204/view?ou=2001542",
-        "content_length": 188
+        "title": "InStage Virtual Interview",
+        "date": "Jul 13, 2021 12:30 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1143315/view?ou=906769",
+        "content": "NEW!  InStageInStage is a cloud-based experiential learning tool designed to make it fun for students to build their career skills.  Students can choose from a library of simulations including job interviews, introducing themselves, presenting, and business pitches. After each practice session, students receive a detailed progress report that shows rate of speech, filler words, volume, and much more.  To book your session, go here : https://www.instage.io/library/fanshawe_career\nGet ready to go InStage! The importance of developing your communication soft skills cannot be undervalued. Fanshawe is proud to offer InStage virtual reality sessions to before your contact.  To start your practice session, follow these steps: 1. Book a day and time for your practice session 2. Enter your name and email, and select your simulation (Interviews, Introduction, Freestyle Presentation, or ESL.3. Select an InStage Mode (“Solo mode” to practice on your own, “Group mode” for a group presentation) 4. The software will then send an email to confirm your booking\nFor more details on what to expect in the session, go to https://bit.ly/3fLHKaCQuestions? Email jobsite@fanshawec.ca",
+        "content_length": 1176
       },
       {
         "index": 10,
-        "title": "Sprint 1 submission",
-        "date": "Oct 2, 2025 1:06 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2236941/view?ou=2001542",
-        "content_length": 607
+        "title": "Resume Drop In for - Business Accounting, Business and Business Finance Students",
+        "date": "Apr 28, 2021 1:40 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1116331/view?ou=906769",
+        "content": "Join your Career and Co-op consultant for a Resume and Job Search support  Drop-in session!\nThursday, April 29th from 2 p.m.- 3 p.m.\nhttps://fanshawec-ca.zoom.us/j/98506539869?pwd=eXhJS2lUWklmRk9qRHBjNFBJRHdGQT09",
+        "content_length": 212
       },
       {
         "index": 11,
-        "title": "Building with Agentic AI: A Hands-on Workshop",
-        "date": "Oct 2, 2025 1:03 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2236901/view?ou=2001542",
-        "content_length": 175
+        "title": "MESSAGE TO STUDENTS",
+        "date": "Mar 2, 2021 4:36 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1077371/view?ou=906769",
+        "content": "If you can’t access our jobsite please try logging out from FanshaweOnline and then log back in.  Hold down Shift key on the keyboard while pressing F5 key to fully reload the FOL page.\nThen, click on Career/Co-op/CCR option in Resources drop-down menu.  Again, hold down Shift key on the keyboard while pressing F5 key to fully reload this page as well.\n(Site address for students is:  orbis2.fanshawec.ca and NOT orbis.fanshawec.ca )",
+        "content_length": 435
       },
       {
         "index": 12,
-        "title": "Wellness Break Oct 14-17",
-        "date": "Sep 25, 2025 1:23 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2234029/view?ou=2001542",
-        "content_length": 271
+        "title": "Virtual Career and Summer Job Fair 2021",
+        "date": "Jan 27, 2021 4:53 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1062669/view?ou=906769",
+        "content": "Register now to prepare for your future career!",
+        "content_length": 47
       },
       {
         "index": 13,
-        "title": "An Exciting Opportunity for Students Passionate About STEM – With TCS",
-        "date": "Sep 23, 2025 1:52 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2233131/view?ou=2001542",
-        "content_length": 1471
+        "title": "WORKSHOP REGISTRATION-ONLINE",
+        "date": "Jan 27, 2021 1:20 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1062520/view?ou=906769",
+        "content": "Please follow steps to register our Live Sessions!",
+        "content_length": 50
       },
       {
         "index": 14,
-        "title": "Collaboration Opportunity with HSY students",
-        "date": "Sep 15, 2025 10:14 AM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2229745/view?ou=2001542",
-        "content_length": 518
+        "title": "2021 Virtual Career Fair",
+        "date": "Jan 6, 2021 4:18 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1048069/view?ou=906769",
+        "content": "",
+        "content_length": 0
       },
       {
         "index": 15,
-        "title": "Proposal Presentation",
-        "date": "Sep 11, 2025 2:57 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2228551/view?ou=2001542",
-        "content_length": 245
+        "title": "CRA Information Session",
+        "date": "Nov 13, 2020 12:00 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/1002661/view?ou=906769",
+        "content": "Come join the Canada Revenue Agency (CRA) for an information session!\nThe Canada Revenue Agency contributes to the well-being of Canadians by delivering world-class tax and benefit administration that is responsive, effective, and trusted because we put people first! We have been recognized as one of Canada's Top 100 Employers for 2020. We have a diverse workforce with wide ranging skill sets and we offer a variety of positions, mobility and continuous learning opportunities.\nIf you're looking for meaningful work and the chance to grow professionally, consider the CRA!\nWe offer positions across Canada from entry level to senior management in a variety of areas including:\nAppeals\nAudit\nCollections\nInformation Technology\nClient Services\nFinance and Administration\nHuman Resources\nPublic Affairs\nFor more information, please visit: https://www.canada.ca/en/revenue-agency/corporate/careers-cra.html\nDate: November 19, 2020\nTime: 10:30am – 11:15am\nPlatform: Zoom\nRegister: FOL > Resources > Career/Co-op/CCR > Events Calendar",
+        "content_length": 1031
       },
       {
         "index": 16,
-        "title": "Group Enrollment",
-        "date": "Sep 4, 2025 4:11 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2224959/view?ou=2001542",
-        "content_length": 569
+        "title": "Mount Sinai Hospital Recruiting",
+        "date": "",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/994811/view?ou=906769",
+        "content": "",
+        "content_length": 0
       },
       {
         "index": 17,
+        "title": "REMOTE WORKING TIPS FOR STUDENTS",
+        "date": "Aug 17, 2020 2:35 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/953701/view?ou=906769",
+        "content": "",
+        "content_length": 0
+      },
+      {
+        "index": 18,
+        "title": "ONLINE JOB SCAM WARNING SIGNS",
+        "date": "Apr 15, 2020 6:55 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/880771/view?ou=906769",
+        "content": "",
+        "content_length": 0
+      },
+      {
+        "index": 19,
+        "title": "Dress For Success!",
+        "date": "Apr 15, 2020 6:55 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/887257/view?ou=906769",
+        "content": "Business Professional\nBusiness Casual",
+        "content_length": 37
+      },
+      {
+        "index": 20,
+        "title": "One-on-One LinkedIn Consultation",
+        "date": "Apr 14, 2020 8:11 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/909177/view?ou=906769",
+        "content": "One-on-One LinkedIn ConsultationIf you have created a LinkedIn profile and would like to have it reviewed, career services consultants are offering one-on-one LinkedIn consultations.Students can contact their career consultant to receive assistance with:-Profile review-Picture, content and wording-Create a headline-What to include and how to promote your skills\nSee the list of Career Services Consultants and the programs they support in this page.",
+        "content_length": 451
+      },
+      {
+        "index": 21,
+        "title": "Dress for Success - NOT to WEAR!",
+        "date": "Mar 5, 2020 1:06 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/887259/view?ou=906769",
+        "content": "DO NOT WEAR!",
+        "content_length": 12
+      },
+      {
+        "index": 22,
+        "title": "Rising Leaders Seminars registration will be open on Tuesday, February 18,2020!",
+        "date": "Feb 13, 2020 9:56 AM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/906769/882208/view?ou=906769",
+        "content": "",
+        "content_length": 0
+      }
+    ]
+  },
+  {
+    "course_id": "2001542",
+    "course_url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001542",
+    "total_announcements": 18,
+    "announcements": [
+      {
+        "index": 1,
+        "title": "Agenda and Meeting Link",
+        "date": "Dec 10, 2025 11:57 AM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2283672/view?ou=2001542",
+        "content": "Hello everyone,\nPlease find below the agenda for the AI-gnite Fall 2025 capstone showcase.\nWe kindly request all groups to join the Teams meeting early, even before it is your scheduled turn. This is to make sure there is a smooth flow of presentations and avoid any delays.\nPlease be ready to present when your turn comes up.\nHere is the meeting link for you to join: AI-gnite Fall 2025 Teams Meeting\nThank you,\nMagdalene",
+        "content_length": 422
+      },
+      {
+        "index": 2,
+        "title": "Sprint 4 Presentation - reg",
+        "date": "Dec 1, 2025 9:20 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2270052/view?ou=2001542",
+        "content": "Dear all,\nPlease note that Sprint 4 and the final presentation+code are different. Your Sprint 4 presentation may still have a few minor corrections or revisions before your final product is ready.\nSprint 4 presentations will begin tomorrow for the teams who are ready to present. If your team would like to present on Thursday, please reach out to me.\nThank you,\nMagdalene",
+        "content_length": 373
+      },
+      {
+        "index": 3,
+        "title": "Reminder: Capstone Class & Agentic AI Workshop",
+        "date": "Nov 18, 2025 10:15 AM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2257918/view?ou=2001542",
+        "content": "Dear all,\nPlease note that we will be meeting in the Canada Life Village Square, F Building, for our regular capstone project class from 1–2 PM, followed by the Agentic AI workshop from 2-4 PM.\nI appreciate full attendance (I will be taking attendance before 2 pm) for this session, as it is organized exclusively for AIM students.\nThank you,Magdalene",
+        "content_length": 351
+      },
+      {
+        "index": 4,
+        "title": "Building Agentic AI using IBM Tools - 18th Nov, Tuesday, 2-4 PM",
+        "date": "Nov 13, 2025 1:24 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2255777/view?ou=2001542",
+        "content": "Hello everyone,\nHere is another exciting opportunity to learn Agentic AI building using IBM tools.\nRegister Now!\nNov 18th, 2-4 PM at Canada Life Village Square (F1027/F1029), Innovation Village\nHands-on Workshop: Building Agents with watsonx Orchestrate\nLearning Objectives\nBy the end of this session, you’ll be able to:\nUnderstand what watsonx Orchestrate is and how it works\nBuild agents without writing any code\nIntegrate tools and knowledge bases into your agents\nCreate agentic RAG (Retrieval Augmented Generation) solutions\nUse external tools like Firecrawl for web scraping\nGovern Agents\nThis is a hands-on session, so don’t forget to bring your laptop!\nIt’s also a fantastic chance to meet industry experts from IBM and gain insights into their expectations.",
+        "content_length": 766
+      },
+      {
+        "index": 5,
+        "title": "Gentle Reminder - Sprint 2",
+        "date": "Nov 4, 2025 9:36 AM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2249581/view?ou=2001542",
+        "content": "Dear all,\nPlease note that your Sprint 2 presentation will take place today, November 4th from 1:00 to 4:00 p.m.\nThe presentation is GRADED!\nThank you,\nMagdalene",
+        "content_length": 161
+      },
+      {
+        "index": 6,
+        "title": "Gentle Reminder - Building with Agentic AI: A Hands-on Workshop",
+        "date": "Oct 28, 2025 9:47 AM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2246212/view?ou=2001542",
+        "content": "Dear all,\nYou should have received the meeting invitation along with your registration confirmation. However, I’m sharing it here again in case you’re unable to locate it.\nJoin Zoom Meeting:\nhttps://fanshawec-ca.zoom.us/j/94157020641?pwd=rQsQ5PQJ9Q5CEaa5Z6xYqkTdBRdjvz.1Meeting ID: 941 5702 0641Passcode: 13937778\nDate: October 28,  1-3 PM\nPlease reach out to me at mravichandran@fanshaweonline.ca if you have any trouble joining the meeting.\nThank you,\nMagdalene",
+        "content_length": 463
+      },
+      {
+        "index": 7,
+        "title": "Sprint 2 Submission - reg",
+        "date": "Oct 27, 2025 10:36 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2246117/view?ou=2001542",
+        "content": "Dear all,\nPlease submit your Sprint 2 work by October 28th, as you will need to begin working on Sprint 3 right after.\nSince we couldn’t have our Sprint presentation due to the workshop, it has been rescheduled to November 4th but there is no change to the submission date.\nThank you,\nMagdalene",
+        "content_length": 294
+      },
+      {
+        "index": 8,
+        "title": "Gentle Reminder on dates!",
+        "date": "Oct 20, 2025 2:34 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2242864/view?ou=2001542",
+        "content": "Dear all,\nPlease note that your Sprint 2 presentation will take place on November 4th from 1:00 to 4:00 p.m.\nAlso, please note that on the following dates, you are required to submit the recordings /documentation in your respective discussion forums:(Communications → Discussions → Capstone Project - INFO-6156-01-25F - #)\nOctober 9 (Thurs), 21 (Tues) and 30 (Thurs)\nOctober 9 - Sprint 2 Planning meeting (Video/Zoom recording)\nOctober 21 - Scrum Meeting (Sprint 2) (Document)\nOctober 30 - Sprint 3 planning meeting (Video/Zoom recording)\nPlease note that I will not be available in person on those dates, so please make sure your submissions are posted on time in the respective discussion forums.\nPlease reach out if you have any questions.\nThank you,\nMagdalene",
+        "content_length": 763
+      },
+      {
+        "index": 9,
+        "title": "Sprint 2 submission and other dates",
+        "date": "Oct 8, 2025 2:26 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2239639/view?ou=2001542",
+        "content": "Dear all,\nPlease note that your Sprint 2 presentation will take place on November 4th from 1:00 to 4:00 p.m.\nAlso, please note that on the following dates, you are required to submit the recordings /documentation in your respective discussion forums:(Communications → Discussions → Capstone Project - INFO-6156-01-25F - #)\nOctober 9 (Thurs), 21 (Tues) and 30 (Thurs)\nOctober 9 - Sprint 2 Planning meeting (Video/Zoom recording)\nOctober 21 - Scrum Meeting (Sprint 2) (Document)\nOctober 30 - Sprint 3 planning meeting (Video/Zoom recording)\nPlease note that I will not be available in person on those dates, so please make sure your submissions are posted on time in the forum.\nPlease reach out if you have any questions.\nThank you,\nMagdalene",
+        "content_length": 740
+      },
+      {
+        "index": 10,
+        "title": "How To Build GenAI Applications Using Your Data, an IBM TechXchange Workshop",
+        "date": "Oct 7, 2025 6:14 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2239204/view?ou=2001542",
+        "content": "Here is the link the register for the workshop:\nIBM TechXchange Workshop\nDate: October 21st, 2025\n9:00 AM – 1:30 PM\nLocation: IBM Toronto16 York Street, 7th Floor, Rooms 070-010/020Toronto",
+        "content_length": 188
+      },
+      {
+        "index": 11,
+        "title": "Sprint 1 submission",
+        "date": "Oct 2, 2025 1:06 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2236941/view?ou=2001542",
+        "content": "Dear all,\nPlease note that the Sprint 1 presentation, including the first technical demo, will take place on October 7, 2025,  1-4 PM. All team members are required to be present in person to explain their individual contributions.\nSprint 1 Submission folder:\nProject Backlog (as per template or Screenshots from Jira/Trello)\nSprint Backlog (as per template or Screenshots from Jira/Trello)\nSprint Planning Evaluation (as per template provided)\nScrum Meeting Evaluation (as per template provided)\nAll current code as a zip file\nKindly reach out to me if you have any questions/concerns.\nThank you,\nMagdalene",
+        "content_length": 607
+      },
+      {
+        "index": 12,
+        "title": "Building with Agentic AI: A Hands-on Workshop",
+        "date": "Oct 2, 2025 1:03 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2236901/view?ou=2001542",
+        "content": "Dear all,\nHere is the registration link to the workshop:\nBuilding with Agentic AI: A Hands-on Workshop\nFeel free to reach out to me if you have questions.\nThank you,\nMagdalene",
+        "content_length": 175
+      },
+      {
+        "index": 13,
+        "title": "Wellness Break Oct 14-17",
+        "date": "Sep 25, 2025 1:23 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2234029/view?ou=2001542",
+        "content": "Dear all,\nPlease note that there will be no classes during the wellness break from October 14–17 (i.e) Tuesday, Oct 14, 1-4PM and Thursday, Oct 16, 3-6 PM. Submission dates do not fall within this week.\nFeel free to reach out if you have any questions.\nRegards,\nMagdalene",
+        "content_length": 271
+      },
+      {
+        "index": 14,
+        "title": "An Exciting Opportunity for Students Passionate About STEM – With TCS",
+        "date": "Sep 23, 2025 1:52 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2233131/view?ou=2001542",
+        "content": "Hello,\nLooking to kickstart your career and connect with industry leaders? Here’s your chance to prove your skills and get a fair chance to get interviewed and identified for Internship/Co-op or Full Time Opportunities.\nRegister now for TCS CodeVita Season 13 - https://codevita.tcsapps.com/\n🎁 Exclusive Benefits: USD 20,000 cash prize, Certificates, global rankings, and gift vouchers for participants and winners, Top Women coder Awards!\n🎁 Perks for Early Birds: The first 100 participants to register will receive exciting gift vouchers!\n🎁 Meet the Experts: Get a unique opportunity to interact with top industry professionals at the Networking event and gain insights for your career.\nDon’t miss out – your journey to innovation, networking, and prizes starts here!\nRegistration deadline: October 3 , 2025\n1. Sign up here: https://codevita.tcsapps.com/\n2. Total Time to register at platform: 60 seconds\n3. Link for Instructions: https://www.linkedin.com/feed/update/urn:li:activity:7361230268369727488/\n4.  Award ceremony  of season 12- https://youtube.com/live/vCanLT7aT_U?si=DDIZqRhYP5iOLp-b\nIn addition, you are invited to join a variety of engaging events, including networking sessions, lucky draws, and interview opportunities. These experiences are designed to give you valuable insights and connections in the STEM industry.\nPLEASE make use of this opportunity and kindly reach out to me if you have any questions or need guidance!\nHappy to help :)\n-Magdalene",
+        "content_length": 1471
+      },
+      {
+        "index": 15,
+        "title": "Collaboration Opportunity with HSY students",
+        "date": "Sep 15, 2025 10:14 AM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2229745/view?ou=2001542",
+        "content": "Dear all,\nHere’s a chance to work with HSY (Health Systems Management) students on their project! We need at least 16 AIM students to join in (you can even pair with more than one HSY student if you’d like).\nPlease sign up here: https://docs.google.com/document/d/1bOkeHNByb0IY4Qr-O7DG2GJATTavLb61HJhjmmBM8ic/edit?usp=sharing\nAll participants will receive a small micro-certificate for their involvement.\nIt’s a great way to collaborate and gain experience and I encourage everyone to participate!\nThank you,\nMagdalene",
+        "content_length": 518
+      },
+      {
+        "index": 16,
+        "title": "Proposal Presentation",
+        "date": "Sep 11, 2025 2:57 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2228551/view?ou=2001542",
+        "content": "Dear all,\nPlease note that your proposal presentation will happen on 16th September 2025 at 1 pm.\nIt is mandatory for all the students to attend the session as it will be graded.\nFeel free to reach out to me if you have any questions.\nThank you!",
+        "content_length": 245
+      },
+      {
+        "index": 17,
+        "title": "Group Enrollment",
+        "date": "Sep 4, 2025 4:11 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2224959/view?ou=2001542",
+        "content": "Dear all,\nGroup enrollment is now open!\nPlease ensure you join a group for your project. You are free to form groups with anyone you wish to work with, and the group will remain the same until the end of the term. Each group must have between 2 and 5 members, as projects will be challenging with fewer than four participants. To join a group, go to the Groups Page (Click on the course -> Communications -> Groups).\nPlease complete your group enrollment by September 9 at 1:00 pm.\nIf you have any questions, feel free to reach out to me via email.\nThank you,\nMagdalene",
+        "content_length": 569
+      },
+      {
+        "index": 18,
         "title": "Welcome to INFO6156 Capstone Project",
         "date": "Sep 3, 2025 8:59 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001542/2224211/view?ou=2001542",
+        "content": "Dear Luiz Henrique,\nWelcome to INFO6156 Capstone Project ! Please take a moment to review the Course Outline (Under resources tab) to get started.\nMy name is Magdalene, and I’ll be your professor for this course.\nI’m excited to meet all of you and to begin this learning journey together. By the end of this Capstone Project, I’m confident you’ll gain the hands-on experience needed to prepare for the industry.\nIf you have any questions, please don’t hesitate to reach out. I look forward to seeing you tomorrow, September 4, 2025 in M Building M3043.\nKind regards,Magdalene",
         "content_length": 575
       }
     ]
@@ -135,6 +343,7 @@
         "title": "Lab activity tomorrow!",
         "date": "Nov 27, 2025 2:28 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2264951/view?ou=2001539",
+        "content": "Dear students,\nWe will go through our lab activity tomorrow after the quiz. You can find the lab materials under Week 13.\nRegards,\nSulaiman.",
         "content_length": 140
       },
       {
@@ -142,6 +351,7 @@
         "title": "Quiz 2!",
         "date": "Nov 27, 2025 1:03 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2264907/view?ou=2001539",
+        "content": "Dear students,\nQuiz 2 will be available on 28 November 2025, from 8:00 AM to 8:45 AM.\nIt will include 20 questions and will cover the lectures from Weeks 6, 8, and 9.\nWishing you good luck!\nRegards,\nSulaiman.",
         "content_length": 208
       },
       {
@@ -149,6 +359,7 @@
         "title": "Project Submission!",
         "date": "Nov 25, 2025 2:52 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2263560/view?ou=2001539",
+        "content": "Dear Students,\nThe Project Submission folder on FOL is now open.\nPlease follow the instructions below when submitting your work:\nSave your notebook and ensure that all cell outputs are visible.\nExport your notebook as a PDF file.\nSubmit both:\nThe PDF file, and\nA complete, runnable version of your project code (Jupyter Notebook or Colab Notebook).\nUpload both files to the Project Submission Folder on FOL.\nImportant:The firm due date for the project is: December 7, 2025 at 11:59 PM\nThis project contributes 40% to your overall course grade:\n30% for the project notebook submission\n10% for the project presentation\nIf you have any questions, please feel free to ask.\nRegards,\nSulaiman.",
         "content_length": 687
       },
       {
@@ -156,6 +367,7 @@
         "title": "Submission of Assignment 2",
         "date": "Nov 23, 2025 1:35 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2261797/view?ou=2001539",
+        "content": "Dear students,\nThe submission folder for Assignment 2 will be open until tomorrow at midnight (11:59 pm), so you can still submit your work.\nPlease note that the late penalty wil lbe applied for all late submissions.\nRegards,\nSulaiman.",
         "content_length": 235
       },
       {
@@ -163,6 +375,7 @@
         "title": "Quiz 2 will be on Friday, November 28.",
         "date": "Nov 14, 2025 10:07 AM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2256285/view?ou=2001539",
+        "content": "Dear Students,\nWe will have our quiz in Week 13, on Friday, November 28, during class time.\nRegards,\nSulaiman.",
         "content_length": 110
       },
       {
@@ -170,6 +383,7 @@
         "title": "Slides for our upcoming in-class activity",
         "date": "Sep 18, 2025 11:00 AM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2231084/view?ou=2001539",
+        "content": "Dear Students,\nThe slides for our upcoming in-class activity this Friday are now available under Week 3 --> Module 2-2 Slides.\nThese slides cover the preprocessing steps required for the sentiment analysis task. Please review them before the activity.\nRegards,\nSulaiman.",
         "content_length": 270
       },
       {
@@ -177,6 +391,7 @@
         "title": "First in-class activity",
         "date": "Sep 16, 2025 2:00 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2230348/view?ou=2001539",
+        "content": "Dear Students,\nThis is a reminder of our first in-class activity for our upcoming class this Friday. You are required to run the sentiment analysis task using the dataset and Jupyter notebook provided under the Week 3 materials.\nOnce completed, please export your notebook as a PDF file and submit it. Please make sure to read the instructions in the activity submission folder on FOL.\nPlease note that Submission Deadline: Saturday, September 20, at 11:59 PM.\nRegards,\nSulaiman.",
         "content_length": 479
       },
       {
@@ -184,6 +399,7 @@
         "title": "Important Information",
         "date": "Sep 10, 2025 9:12 AM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2227705/view?ou=2001539",
+        "content": "Dear Students,\nHere is the marking scheme for your course:\nQuizzes, Labs, and In-Class Activities – 30%\nAssignments – 30%\nProject – 40%\nThe table below shows the due dates for the course activities. Wishing you all the best in the course!\nTime\nCourse Activity\nMarks\nDue Date\nWeek 3\nIn class activity #1\n5%\nSaturday, September 20, 2025 - 11:59 pm.\nWeek 4\nAssignment #1\n15%\nFriday, October 10, 2025 – 11:59 pm.\nWeek 5\nQuiz1\n10%\n08:00 am – 10:00 am on Friday, October 03, 2025.\nWeek 9\nAssignment #2\n15%\nFriday, November 21, 2025 – 11:59 pm.\nWeek 10\nIn class activity #2\n5%\nSaturday, November 15, 2025 - 11:59 pm.\nWeek 11\nQuiz 2\n10%\n08:00 am – 10:00 am on Friday, November 21, 2025.\nWeeks 14 & 15\nProject Submission\n40%\nFriday, December 05, 2025 – 11:59 pm\nWeeks 14 & 15\nProject Presentation\nDuring the classes of Weeks 14 & 15\nRegards,\nSulaiman.",
         "content_length": 842
       },
       {
@@ -191,34 +407,52 @@
         "title": "Welcome to INFO6153 Natural Language Processing 2",
         "date": "",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001539/2202124/view?ou=2001539",
+        "content": "Welcome to the course Luiz Henrique !\nPlease review the Course Information Module to get started.",
         "content_length": 97
       }
     ]
   },
   {
+    "course_id": "1047637",
+    "course_url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=1047637",
+    "total_announcements": 0,
+    "announcements": []
+  },
+  {
     "course_id": "2001540",
     "course_url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2001540",
-    "total_announcements": 3,
+    "total_announcements": 4,
     "announcements": [
       {
         "index": 1,
-        "title": "Presentation Announcement",
-        "date": "Dec 7, 2025 2:17 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001540/2278206/view?ou=2001540",
-        "content_length": 1205
+        "title": "Presentation Schedule Update",
+        "date": "Dec 9, 2025 10:30 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001540/2283263/view?ou=2001540",
+        "content": "Dear all,\nThe presentation scheduled for tomorrow will begin at 9:00 AM for those who selected the live online presentation option. Please join a few minutes early to ensure your setup is working properly.\nFor the rest of you, please remember to submit a video of your presentation.\nSorry for the late update.\nGood luck!",
+        "content_length": 320
       },
       {
         "index": 2,
-        "title": "Final Exam and Presentation Details",
-        "date": "Nov 29, 2025 3:48 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001540/2266439/view?ou=2001540",
-        "content_length": 631
+        "title": "Presentation Announcement",
+        "date": "Dec 7, 2025 2:17 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001540/2278206/view?ou=2001540",
+        "content": "Dear all\nWe present on Monday, 8 December, at the scheduled class time. We may continue until we finish all presentations.\nWe start on time. We follow the FOL list. The order may change, so stay prepared.\nPlease join using the Zoom link.\nTiming• 5 minutes maximum for your presentation (penalties apply if you go over time)• 2 to 5 minutes for questions, based on your selected option\nScores and Confirmation• You receive your final course score after you present• Check your grade on FOL after your presentation• Send me a direct (for your privacy) message on Zoom to confirm your final score• If you have any questions about your marking, wait until the end of all presentations• After finalization, scores cannot change\nGrading• Presentation is out of 30, includes your presentation, your report, your code, and one question about your final project• You also have 5 points for the course content questions (📗In class Activity (Question answering) - 2 ) that you can choose one option at the start of your presentation: Option A. Use the average of quizzes and the final exam Option B. Answer two questions, 2.5 points each\nBe ready. Stay on time. Follow the time limits. Confirm your score.\nGood luck!",
+        "content_length": 1205
       },
       {
         "index": 3,
+        "title": "Final Exam and Presentation Details",
+        "date": "Nov 29, 2025 3:48 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2001540/2266439/view?ou=2001540",
+        "content": "Dear all,\nThe final exam will be on 3 December 2025 in the next session. Please be on time.\nExam format• 30 multiple choice questions.• Includes coding questions.• Covers all material from the slides.• You can bring one two sided cheat sheet.• After each quiz, please display the submission confirmation page.\nSeating• Sit in the same order as the link shared earlier.• Because the room is full, you do not need to leave an empty seat between each person. • Keep seats empty for anyone absent or late.\nAfter the exam: we will start the final project presentations (only for those ones that we already set as volunteers).\nGood luck.",
+        "content_length": 631
+      },
+      {
+        "index": 4,
         "title": "Quiz Details and Seating Arrangement",
         "date": "Nov 24, 2025 7:41 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001540/2263208/view?ou=2001540",
+        "content": "Dear all,\nAs discussed earlier, you will have two quizzes on Wednesday, 26 November.\n• Quiz 1, Hyperparameter optimization.• Quiz 2, Time series and explainability.\nPlease sit according to the seat order in this link. Because the room is full, you do not need to leave an empty seat between each person. If someone arrives late or is absent, keep their assigned seat empty.\nAfter each quiz, please show me your submission confirmation page. You may stay or take a short break after the first quiz, but you cannot start the second quiz immediately.\nPlease arrive on time, since submissions made outside the class will not be accepted.\nGood luck.Mohammad",
         "content_length": 652
       }
     ]
@@ -226,69 +460,86 @@
   {
     "course_id": "2014765",
     "course_url": "https://www.fanshaweonline.ca/d2l/lms/news/main.d2l?ou=2014765",
-    "total_announcements": 9,
+    "total_announcements": 10,
     "announcements": [
       {
         "index": 1,
-        "title": "Co-op Status Survey – IMPORTANT!",
-        "date": "Nov 26, 2025 11:50 AM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2263929/view?ou=2014765",
-        "content_length": 342
+        "title": "𝗔𝗜-𝗴𝗻𝗶𝘁𝗲 𝗙𝗮𝗹𝗹 𝟮𝟬𝟮𝟱 – 𝗖𝗮𝗽𝘀𝘁𝗼𝗻𝗲 𝗣𝗿𝗼𝗷𝗲𝗰𝘁 𝗦𝗵𝗼𝘄𝗰𝗮𝘀𝗲",
+        "date": "Dec 11, 2025 3:31 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2286679/view?ou=2014765",
+        "content": "🌟 𝗬𝗼𝘂’𝗿𝗲 𝗜𝗻𝘃𝗶𝘁𝗲𝗱! 𝗔𝗜-𝗴𝗻𝗶𝘁𝗲 𝗙𝗮𝗹𝗹 𝟮𝟬𝟮𝟱 – 𝗖𝗮𝗽𝘀𝘁𝗼𝗻𝗲 𝗣𝗿𝗼𝗷𝗲𝗰𝘁 𝗦𝗵𝗼𝘄𝗰𝗮𝘀𝗲 🌟\nI’m excited to invite you to AI-gnite Fall 2025, our upcoming capstone project showcase where students will present innovative AI-driven solutions they’ve been building throughout the term.\n📅 𝗗𝗮𝘁𝗲: December 12th, 2025⏰ 𝗧𝗶𝗺𝗲: 10:30 AM – 12:00 Noon📍 𝗟𝗼𝗰𝗮𝘁𝗶𝗼𝗻: Canada Life Village Square, F Building, Fanshawe College\nRegister Now: Click Here\nJoin us to:✨ Explore creative and industry-relevant AI projects✨ Engage with emerging talent✨ Network with faculty, industry experts, and community partners\nLooking forward to seeing you there! 🚀",
+        "content_length": 602
       },
       {
         "index": 2,
-        "title": "Building Agentic AI using IBM Tools - 18th Nov, Tuesday, 2-4 PM",
-        "date": "Nov 13, 2025 1:34 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2255780/view?ou=2014765",
-        "content_length": 766
+        "title": "Co-op Status Survey – IMPORTANT!",
+        "date": "Nov 26, 2025 11:50 AM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2263929/view?ou=2014765",
+        "content": "Dear all,\nPlease take a moment to complete the survey (Applicable for students who have their co-op term in Winter-26W).\nYour response is important and will only take a minute. The survey is editable, so if you secure a co-op position or decide to change your plan, you can update your response anytime until December 19.\nThank you,\nMagdalene",
+        "content_length": 342
       },
       {
         "index": 3,
-        "title": "Gentle Reminder - Building with Agentic AI: A Hands-on Workshop",
-        "date": "Oct 28, 2025 9:52 AM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2246213/view?ou=2014765",
-        "content_length": 463
+        "title": "Building Agentic AI using IBM Tools - 18th Nov, Tuesday, 2-4 PM",
+        "date": "Nov 13, 2025 1:34 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2255780/view?ou=2014765",
+        "content": "Hello everyone,\nHere is another exciting opportunity to learn Agentic AI building using IBM tools.\nRegister Now!\nNov 18th, 2-4 PM at Canada Life Village Square (F1027/F1029), Innovation Village\nHands-on Workshop: Building Agents with watsonx Orchestrate\nLearning Objectives\nBy the end of this session, you’ll be able to:\nUnderstand what watsonx Orchestrate is and how it works\nBuild agents without writing any code\nIntegrate tools and knowledge bases into your agents\nCreate agentic RAG (Retrieval Augmented Generation) solutions\nUse external tools like Firecrawl for web scraping\nGovern Agents\nThis is a hands-on session, so don’t forget to bring your laptop!\nIt’s also a fantastic chance to meet industry experts from IBM and gain insights into their expectations.",
+        "content_length": 766
       },
       {
         "index": 4,
-        "title": "Agentic AI Hackathon with IBM watsonx Orchestrate",
-        "date": "Oct 7, 2025 6:50 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2239214/view?ou=2014765",
-        "content_length": 366
+        "title": "Gentle Reminder - Building with Agentic AI: A Hands-on Workshop",
+        "date": "Oct 28, 2025 9:52 AM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2246213/view?ou=2014765",
+        "content": "Dear all,\nYou should have received the meeting invitation along with your registration confirmation. However, I’m sharing it here again in case you’re unable to locate it.\nJoin Zoom Meeting:\nhttps://fanshawec-ca.zoom.us/j/94157020641?pwd=rQsQ5PQJ9Q5CEaa5Z6xYqkTdBRdjvz.1Meeting ID: 941 5702 0641Passcode: 13937778\nDate: October 28,  1-3 PM\nPlease reach out to me at mravichandran@fanshaweonline.ca if you have any trouble joining the meeting.\nThank you,\nMagdalene",
+        "content_length": 463
       },
       {
         "index": 5,
-        "title": "How To Build GenAI Applications Using Your Data, an IBM TechXchange Workshop",
-        "date": "Oct 7, 2025 6:34 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2239207/view?ou=2014765",
-        "content_length": 505
+        "title": "Agentic AI Hackathon with IBM watsonx Orchestrate",
+        "date": "Oct 7, 2025 6:50 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2239214/view?ou=2014765",
+        "content": "Build AI agents with IBM watsonx Orchestrate and transform how people and businesses get work done!\nLeverage Orchestrate’s digital skills to create solutions that automate repetitive tasks, orchestrate workflows across tools, and empower employees to focus on what matters most.\nSign up link - IBM Hackathon\nDate: Friday, November 21 2025 - 10:00 AM America/New_York",
+        "content_length": 366
       },
       {
         "index": 6,
-        "title": "An Exciting Opportunity for Students Passionate About STEM – With TCS",
-        "date": "Sep 23, 2025 1:57 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2233132/view?ou=2014765",
-        "content_length": 1470
+        "title": "How To Build GenAI Applications Using Your Data, an IBM TechXchange Workshop",
+        "date": "Oct 7, 2025 6:34 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2239207/view?ou=2014765",
+        "content": "IBM will be hosting a TechXchange Workshop titled “How to Build GenAI Applications Using Your Data.”This hands-on session offers participants the opportunity to learn how to design and develop generative AI applications using real data, guided by IBM experts.\nDate: October 21, 2025Time: 9:00 AM – 1:30 PMLocation: IBM Toronto16 York Street, 7th Floor, Rooms 070-010/020\nRegistration link: IBM TechXchange Workshop Registration\nSpots are limited — interested participants are encouraged to register early!",
+        "content_length": 505
       },
       {
         "index": 7,
-        "title": "Any program questions? Book a time to chat!",
-        "date": "Sep 11, 2025 1:51 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2228522/view?ou=2014765",
-        "content_length": 371
+        "title": "An Exciting Opportunity for Students Passionate About STEM – With TCS",
+        "date": "Sep 23, 2025 1:57 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2233132/view?ou=2014765",
+        "content": "Hello,\nLooking to kickstart your career and connect with industry leaders? Here’s your chance to prove your skills and get a fair chance to get interviewed and identified for Internship/Co-op or Full Time Opportunities.\nRegister now for TCS CodeVita Season 13 - https://codevita.tcsapps.com/\n🎁 Exclusive Benefits: USD 20,000 cash prize, Certificates, global rankings, and gift vouchers for participants and winners, Top Women coder Awards!\n🎁 Perks for Early Birds: The first 100 participants to register will receive exciting gift vouchers!\n🎁 Meet the Experts: Get a unique opportunity to interact with top industry professionals at the Networking event and gain insights for your career.\nDon’t miss out – your journey to innovation, networking, and prizes starts here!\nRegistration deadline: October 3 , 2025\n1. Sign up here: https://codevita.tcsapps.com/\n2. Total Time to register at platform: 60 seconds\n3. Link for Instructions: https://www.linkedin.com/feed/update/urn:li:activity:7361230268369727488/\n4. Award ceremony  of season 12- https://youtube.com/live/vCanLT7aT_U?si=DDIZqRhYP5iOLp-b\nIn addition, you are invited to join a variety of engaging events, including networking sessions, lucky draws, and interview opportunities. These experiences are designed to give you valuable insights and connections in the STEM industry.\nPLEASE make use of this opportunity and kindly reach out to me if you have any questions or need guidance!\nHappy to help :)\n-Magdalene",
+        "content_length": 1470
       },
       {
         "index": 8,
-        "title": "Student Orientation Events and Zoom Links",
-        "date": "Sep 2, 2025 3:05 PM",
-        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2222941/view?ou=2014765",
-        "content_length": 316
+        "title": "Any program questions? Book a time to chat!",
+        "date": "Sep 11, 2025 1:51 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2228522/view?ou=2014765",
+        "content": "Dear Students,\nIf you have any program-related questions or concerns, you can now book a one-on-one appointment with me at your convenience.\nPlease use the link below to select a time slot that works best for you:\nAppointment with Magdalene\n*Kindly mention the topic of discussion in the notes section!\nLocation - G3001\nLooking forward to meeting up with you!\n- Magdalene",
+        "content_length": 371
       },
       {
         "index": 9,
+        "title": "Student Orientation Events and Zoom Links",
+        "date": "Sep 2, 2025 3:05 PM",
+        "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2222941/view?ou=2014765",
+        "content": "Dear all,\nAs per your request, please find the link below to access all orientation events and their corresponding Zoom links:\nFanshawe Orientation Events\nCoop Orientation Link: Once on the page, go to Community and Support Resources, and under Co-op Orientation, you will find the Zoom link.\nKind regards,\nMagdalene",
+        "content_length": 316
+      },
+      {
+        "index": 10,
         "title": "WELCOME to 25F Homeroom - Artificial Intelligence (AI) and Machine Learning (AIM)",
         "date": "Sep 2, 2025 10:51 AM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2014765/2222318/view?ou=2014765",
+        "content": "Hello Luiz Henrique !\nWelcome to the Fall 2025 term of the AIM1 and AIM2 Artificial Intelligence and Machine Learning programs at Fanshawe College.\nPlease find attached the Orientation presentation for your reference:\nOrientation Fall 2025\nFeel free to reach out if you have any questions related to the program.\nRegards,\nMagdalene",
         "content_length": 331
       }
     ]
@@ -303,6 +554,7 @@
         "title": "Presentation Announcement",
         "date": "Dec 7, 2025 1:37 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001538/2278204/view?ou=2001538",
+        "content": "Dear all\nWe present on Monday, 8 December, at the scheduled class time. We may continue until we finish all presentations, but if some students are not available, we will need to continue tomorrow.\nWe start on time. We follow the FOL list. The order may change, so stay prepared.\nPlease join using the Zoom link.\nTiming• 5 minutes maximum for your presentation (penalties apply if you go over time)• 2 to 5 minutes for questions, based on your selected option\nScores and Confirmation• You receive your final course score after you present• Check your grade on FOL after your presentation• Send me a direct (for your privacy) message on Zoom to confirm your final score• If you have any questions about your marking, wait until the end of all presentations• After finalization, scores cannot change\nGrading• Presentation is out of 30, includes your presentation, your report, your code, and one question about your final project• You also have 5 points for the course content questions (📗In class Activity (Question answering) - 2 ) that you can choose one option at the start of your presentation (only if you didn't receive any score for this section): Option A. Use the average of quizzes and the final exam Option B. Answer two questions, 2.5 points each\nBe ready. Stay on time. Follow the time limits. Confirm your score.\nGood luck!",
         "content_length": 1336
       }
     ]
@@ -317,6 +569,7 @@
         "title": "Class Recording and LAST Assignment Reminder",
         "date": "Dec 5, 2025 12:08 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2276387/view?ou=2001541",
+        "content": "Hi Luiz Henrique,\nPlease find the recording link for our last class at the bottom of this message.\nA quick reminder that your assignment: Brandwatch Social Listening & Sentiment Analysis Walkthrough is due next Wednesday, December 10. You can find all the details in the Assignments section under the Content menu, and it’s also listed in the Course Calendar on the main page.\nQuick assignment instructions:\nChoose a brand or company that you'd like to analyze. Select a brand aligned with your mock client business\nUtilize the search feature on Brandwatch to conduct a thorough analysis of the chosen brand.\nPay attention to relevant metrics, sentiment analysis, and any significant trends or patterns that emerge from the data.\nUsing Vimeo's screen recording extension, compile your findings into a comprehensive video walkthrough. Your video should be no longer than 5 minutes and no less than 3 minutes.\nIn the video, clearly articulate the key insights, trends, and sentiment analysis you discovered during your research.\nProvide examples and visual representations of the data to support your analysis. Share your screen or create a slide deck with visuals/screenshots.\nShowcase your critical thinking skills by offering meaningful interpretations and implications of the findings.\nEnsure your video walkthrough is well-structured, engaging, and professionally presented.\nTo submit your video, submit the link of your Vimeo to the submission folder\nRefer to the class material and recording for a guideline of questions you should answer in your video.\nIf you have any questions, please don’t hesitate to reach out.\nHappy recording!\nClass Recording:\nTitle: INFO6155 Social Media AnalyticsDate: Dec 2, 2025 5:57 PM Eastern Time (US and Canada)\nRecording-1(187 MB)https://fanshawec-ca.zoom.us/rec/play/gHRigS4RrA1RnZX7BqIe23SCguAQj-dNEQrBD7ObtSgqEZNWZLcB6oIH6QpO7x_AUVcAVtWXXHDd94DP.GEBdchIaYU5nkGyV\nPasscode: aQjJ^B2@",
         "content_length": 1922
       },
       {
@@ -324,6 +577,7 @@
         "title": "Brandwatch Assignment Reminder & Class Recording",
         "date": "Dec 1, 2025 1:44 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2269685/view?ou=2001541",
+        "content": "Hi Luiz Henrique,\nPlease find the recording link for our last class at the bottom of this message.\nA quick reminder that your Brandwatch Course Assignment is due Wednesday, December 3. You can find all the details in the Assignments section under the Content menu, and it’s also listed in the Course Calendar on the main page.\nQuick assignment instructions:Once you’ve completed your courses, please:\nUpload each of the six course certificates (one file per course) in the folder \"Brandwatch Academy Course Work \"\nOnce you complete the full suite, upload your Brandwatch Academy certification in the folder \"Brandwatch Academy Certification\"\nIf you have any questions, please don’t hesitate to reach out.\nHappy learning!\nClass Recording:\nTitle: INFO6155 Social Media AnalyticsDate: Nov 25, 2025 5:52 PM Eastern Time (US and Canada)\nRecording-1(542 MB)https://fanshawec-ca.zoom.us/rec/play/_I_a7Tnz6ifNurs-6_J1lWEnplNtX0eseBVlaF8BYtn3lfvYxUWPpX3giSfgIEzIQ7Qrufk4C2j1XiW0.E5x9aVMXJekj9DPn\nPasscode: d6t3.1a^",
         "content_length": 1005
       },
       {
@@ -331,6 +585,7 @@
         "title": "Brandwatch Access & Class Recording",
         "date": "Nov 20, 2025 5:53 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2260435/view?ou=2001541",
+        "content": "Hi Luiz Henrique,\nYour Brandwatch access is now active. Please look for an invitation email in your inbox. Once you accept the invite, you’ll be able to access Brandwatch Academy and start your certification.\nDue to the delay, I’ve extended the assignment due date to December 2 so you have enough time to complete the task.\nA friendly reminder that your Client Project is due tomorrow, November 21. Please submit your plan to the designated folder. I’m looking forward to reviewing your proposal!.\nLastly, you can find the class recording at the bottom of this announcement.\nIf you have any questions, please don’t hesitate to reach out.\nHappy learning!\nClass Recording\nTitle: INFO6155 Social Media AnalyticsDate: Nov 18, 2025 5:55 PM Eastern Time (US and Canada)\nRecording-1(267 MB)https://fanshawec-ca.zoom.us/rec/play/0pgoxNKmh3Uzp0NJqPE0AzaeB76j2s38hZVAPHRbrAJQVObJQjFjTGI-6jm9D6uNfuPA15M2UKddiqPL.SPn5VFUlklE6tNXC\nPasscode: 0.znk5?r",
         "content_length": 938
       },
       {
@@ -338,6 +593,7 @@
         "title": "Updated Midterm Time",
         "date": "Nov 4, 2025 6:15 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2250208/view?ou=2001541",
+        "content": "Hi Luiz Henrique,\nDue to the delay caused by the LockDown Browser issue, the exam time has been extended until 8:30 p.m.\nThe Zoom room will remain open in case you encounter any issues while starting.\nPace yourself — there is enough time. You're all set.",
         "content_length": 254
       },
       {
@@ -345,6 +601,7 @@
         "title": "Midterm Today",
         "date": "Nov 4, 2025 5:11 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2250182/view?ou=2001541",
+        "content": "Hi Luiz Henrique,\nAs we begin our midterm today, I will open the Zoom room at our regular class time in case you have any questions before we start.\nWishing you clarity and confidence today!",
         "content_length": 190
       },
       {
@@ -352,6 +609,7 @@
         "title": "Practice Dataset Released — Class Recording",
         "date": "Nov 1, 2025 2:25 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2248218/view?ou=2001541",
+        "content": "Hi Luiz Henrique,\nAs communicated during class, as part of our applied learning for Social Media Analytics, you now have access to a practice dataset covering four months of paid campaign performance.The file and instructions have been released. You can find them in the Content section in FOL, under the Assignments section, titled Social Media Metrics — Practice.\nThis activity is not graded; it’s designed to help you internalize concepts and build confidence with real social media marketing workflows.The goal is for you to explore, practice, and apply the concepts we’ve covered, including:\nSocial media KPIs\nCampaign performance analysis\nVisualization & insights\nObjectiveBy the end of this practice, you should feel more confident in:\nUnderstanding & applying social media metrics, including formulas\nWorking with structured marketing data\nUsing BI tools to create performance dashboards\nInterpreting digital campaign performance\nDataset includes:  Ad Set, Ad Name, Ad Format (Image/Video), Spend, Reach, Impressions, Engagements, Clicks, Video Views, Conversions, and more. A dashboard guideline was also included.\nBring questions or your WIP to class — we’ll review examples together in the class following the midterm.\nA reminder that next Tuesday, Nov 4, we will have the midterm from 6–8 PM. Please ensure you have your LockDown Browser set up.\nFinally, please see this week's class recording link at the bottom of this announcement.\nHappy practicing!\nTitle: INFO6155 Social Media AnalyticsDate: Oct 28, 2025 5:53 PM Eastern Time (US and Canada)\nRecording-1(546 MB)https://fanshawec-ca.zoom.us/rec/play/7Gf9CJrj_MGO9mTX8MbgqeCTvOYBI1QTGpcrjA-JBKMrBLA38FfI4aH7Y07zlX1fmltHdk_wpCOJD5Eq.Fm6CmbSFcJ-e2eNs\nPasscode: P8?Y5*fZ",
         "content_length": 1732
       },
       {
@@ -359,6 +617,7 @@
         "title": "Class recording + Assignment Reminder",
         "date": "Oct 22, 2025 7:16 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2244041/view?ou=2001541",
+        "content": "Hi Luiz Henrique,\nPlease find the recording link for yesterday’s class at the bottom of this message.\nA quick reminder that your Discussion Assignment is due this Friday, October 24. You can find all the details in the Assignments section under the Content menu, and it’s also listed in the Course Calendar on the main page.\nAssignment Overview:Reflect on how the use of AI in a social platform of your choice (e.g., TikTok) has surprised, inspired, intrigued, or concerned you. Apply your critical thinking skills to discuss whether you believe the benefits to business outweigh the potential societal risks. Share your perspective — your hot take — and let’s spark a thoughtful and friendly debate.\nAfter posting your response, engage in the discussion by replying to at least two classmates’ posts. Ask questions, challenge ideas, or share how someone’s perspective made you reconsider your own. Remember, meaningful participation is key to earning full marks. Posting early will give everyone time to interact and build a richer discussion.\nIf you have any questions, please don’t hesitate to reach out. I’m looking forward to reading your insights and seeing a lively conversation unfold!\nHappy Discussing!\nClass Recording:\nTitle: INFO6155 Social Media AnalyticsDate: Oct 21, 2025 5:52 PM Eastern Time (US and Canada)\nRecording-1(423 MB)https://fanshawec-ca.zoom.us/rec/play/Kn7-htKnTzjK9zW4YY8L8_a6h0J7phYgGSzLU5VyQUjn09s_oqo6nH0JysK0tCpMfg49rx7W4cytVarn.qnaHwGnccaEN2SHy\nPasscode: 0*9aQjnJ",
         "content_length": 1496
       },
       {
@@ -366,6 +625,7 @@
         "title": "Important Updates and Reminder",
         "date": "Oct 8, 2025 9:45 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2239824/view?ou=2001541",
+        "content": "Hi Luiz Henrique,\nPlease find below the Zoom link and recording of yesterday’s class.\nI understand that some of you were participating in a College activity and couldn’t attend live. I strongly encourage you to review the recording, as the topic covered — Social Media KPIs — is a key concept in this course and one that many of you have expressed particular interest in mastering.\nIf you have any questions after watching the recording, please feel free to book an appointment to go over any doubts or clarifications.\nI also encourage you to complete the practice activity for this module, as it will help reinforce the concepts discussed in class.\nLater this week, I will be sharing a dataset so you can practice applying what we learned about KPIs — stay tuned!\nFinally, a reminder that the Hootsuite Certification is due this Friday, October 10th. Please review the instructions carefully — in addition to submitting the certificate, you must also include a screenshot showing your score. Refer to the assignment folder in FOL for full details and the screenshot below as a reference.\nHappy Practice!Zoom Link:\nTitle: INFO6155 Social Media AnalyticsDate: Oct 7, 2025 5:56 PM Eastern Time (US and Canada)\nRecording-1(341 MB)https://fanshawec-ca.zoom.us/rec/play/0Jik5vViQACoG45eaf3op4PcvsodMWn5dw4TR3EMqCNtqL8S_bYXJ59Y64dmvuUShbBQQBXbOVOd0T-B.mlToci0DxzNbV5Hn\nPasscode: hMynN+y5",
         "content_length": 1381
       },
       {
@@ -373,6 +633,7 @@
         "title": "Zoom Meeting for Q&A Started",
         "date": "Oct 1, 2025 6:29 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2236645/view?ou=2001541",
+        "content": "Hi Luiz Henrique,\nIf you have any questions, please feel free to join the Zoom meeting today. It will be open from 6:30pm to 7:30pm.\nZoom link:\nTopic: INFO6155 Social Media Analytics - Additional Open Hour for questionsTime: Oct 1, 2025 06:30 PM Eastern Time (US and Canada)Join Zoom Meetinghttps://fanshawec-ca.zoom.us/j/92883721859?pwd=pUVug80GVhXyL2woCpIdCUmg4Oi91j.1\nMeeting ID: 928 8372 1859Passcode: 68986877\nRegards!",
         "content_length": 423
       },
       {
@@ -380,6 +641,7 @@
         "title": "Stay on Track: Class Recording, Q&A Session TOMORROW, and Hootsuite Certification",
         "date": "Sep 30, 2025 11:46 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2236330/view?ou=2001541",
+        "content": "Hi Luiz Henrique,\nPlease find below the recording of today’s class.\nAs a reminder, the Hootsuite certification is scheduled for next Friday, October 10th. By now, you should have progressed up to Module 3. To stay on track, please complete Module 4 this week, Module 5 next week, and then proceed to the test to fulfill the certification requirement.\nAs communicated in class today, tomorrow, Wednesday, October 1st, I will be available from 6:30pm to 7:30pm for a dedicated Q&A session in case you have questions about the practice activity we started together in class, or any other course content we have discussed. Here is the Zoom link for the session, so you will have it handy.\nZoom link:\nTopic: INFO6155 Social Media Analytics - Additional Open Hour for questionsTime: Oct 1, 2025 06:30 PM Eastern Time (US and Canada)Join Zoom Meetinghttps://fanshawec-ca.zoom.us/j/92883721859?pwd=pUVug80GVhXyL2woCpIdCUmg4Oi91j.1\nMeeting ID: 928 8372 1859Passcode: 68986877\nWith the material reviewed in class today, you are equipped to continue advancing your client project, now focusing on content pillars. This week’s work includes brainstorming ideas with ChatGPT, recording your process and sharing the AI link, selecting the pillars that best fit your client, creating a sample post, and developing a two-week content calendar. Please refer to the assignment details in FOL as well as the evaluation rubric to ensure you are fulfilling all the required tasks. If you would like to check in on your progress more directly, you’re welcome to book an appointment with me.\nHappy practice!\nClass Recording:Title: INFO6155 Social Media AnalyticsDate: Sep 30, 2025 5:45 PM Eastern Time (US and Canada)\nRecording-1(342 MB)https://fanshawec-ca.zoom.us/rec/play/k_VRbBvbIARwvGL4Bdxj8hufnFsLleRgti8LIEfWue3AmGhJYK91C-8-5Xdy4UOFWRbdhoMi5lSQuCAM.vAZC7ccGk9ZnlGJL\nPasscode: pp1a9Y#b",
         "content_length": 1868
       },
       {
@@ -387,6 +649,7 @@
         "title": "Class Recording and Course Update",
         "date": "Sep 24, 2025 9:45 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2233812/view?ou=2001541",
+        "content": "Hi Luiz Henrique,\nPlease find below the recording of yesterday’s class.\nThe decks for all classes are now available, and the dates have been updated accordingly.\nMy email is now fully up and running without issues. If you reached out previously, you should have already received my response. If not, I encourage you to resend your message.\nI trust that you have set up your Hootsuite account and are making progress toward the certification due on October 10th. As a reminder, the program you should be completing is Social Media Marketing, which is located at the bottom of the main page (see image below). There should be no cost to access this program.\nIf you have any questions, please don’t hesitate to reach out.\nHappy Learning!\nClass Recording:\nhttps://fanshawec-ca.zoom.us/rec/play/rXrMXdlKvpSkU4I52J-_UP3sF5wUgp6vQSub52Nu8_u5xpvERtXIIKVZVLNKHfz5d1sd6nWEi2oEiKB7.KVXCHzqhoAanh7-W\nPasscode: +rv7L6Qj",
         "content_length": 906
       },
       {
@@ -394,6 +657,7 @@
         "title": "Email Issue!",
         "date": "Sep 23, 2025 11:55 AM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2233074/view?ou=2001541",
+        "content": "Dear Luiz Henrique,\nIt was recently brought to my attention that there was an issue with my email, which prevented me from viewing the communications I had received. I was finally able to access my account today. I sincerely apologize if you tried to reach me during this time and did not receive a reply, and for any inconvenience this may have caused. I am now reviewing all messages and will be responding within the next few hours.\nThank you very much for your patience and understanding.",
         "content_length": 492
       },
       {
@@ -401,6 +665,7 @@
         "title": "Class Recording & Key Assignment Reminders",
         "date": "Sep 17, 2025 1:05 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2230777/view?ou=2001541",
+        "content": "Hi Luiz Henrique,\nThanks for joining yesterday’s session! You’ll find the recording linked at the bottom of this message.\nQuick Assignment Reminders:\nHootsuite (10% of your final grade):\nYour account should now be set up, and you should be progressing toward completing Module 3 by next week.\nClient Case Assignment (30% of your final grade):\nThis is a major, capstone-style project that spans two-thirds of the course. You’ll build it gradually, applying the concepts we cover in class each week. Based on what we’ve covered so far, you should be able to complete up to slide 5.\nPlease ensure  to:\nReview the assignment instructions in the Assignment section under the Content menu in FOL.\nIdentify your assigned customer in the Mock Client Spreadsheet, located in the same folder.\nWe’ll begin our next class by reviewing the assignment and answering any questions. If you have questions ahead of time, feel free to email them.\nHappy discovering!\nClass recording:\nhttps://fanshawec-ca.zoom.us/rec/play/WVZ51PbetJ6DpxZXrTkpqU7LUFNAQzZ4_gLoSeGMQsW3VnZJELOOMmkXvMWCun6poZtk8Tv_xitMbbya.QBLxtwHZQ00KZTZ5\nPasscode: v!5@xKa5",
         "content_length": 1119
       },
       {
@@ -408,6 +673,7 @@
         "title": "Session Recording + Your First Assignment",
         "date": "Sep 9, 2025 9:37 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2227644/view?ou=2001541",
+        "content": "Hi Luiz Henrique,\nThanks for joining today’s session! You’ll find the recording linked at the bottom of this message.\nA quick reminder: your first assignment is due this Sunday, September 14. You can find all the details in the Assignments section under the “Content” menu, and it’s also listed in the Calendar on the main screen.\nHere’s a brief overview:\nAssignment: Selfie Video Introduction. Record a 2-minute selfie video introducing yourself using your mobile phone. Feel free to get creative—this course will often ask you to think like a marketer. Ask yourself: If I were an influencer or brand manager, how could I make this video more engaging or even go viral?\nAfter posting your video, be sure to engage with at least two classmates’ posts. Ask questions, share thoughts, and start building connections.\nIf you have any questions, don’t hesitate to reach out. I’m really looking forward to seeing your videos and getting to know each of you better.\nHappy filming!\nClass Recording:https://fanshawec-ca.zoom.us/rec/play/xIijF4wMK9mUa0DJD0wh1SsypXH3bStruAAHO6qtFoSKpTEgEcPb4UvyxdRJkliSJucOJie4hNAZobVe.2MFcqD8dzPecu7Tv\nPasscode: .*f*AZg3",
         "content_length": 1145
       },
       {
@@ -415,6 +681,7 @@
         "title": "Social Media Rankings Revealed – What Surprised You?",
         "date": "Sep 9, 2025 9:19 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2227633/view?ou=2001541",
+        "content": "Hi Luiz Henrique,\nAs promised, here’s the full list of the Top Social Media Platforms, ranked by global user data and traffic trends.\nEarlier in class, I asked you to guess which platform holds the #1 spot. If you said Facebook, you were correct! With over 3 billion monthly active users, it currently leads in user count. However, when it comes to web traffic, YouTube takes the crown—generating a staggering 40 billion visits per month, making it the most visited social platform worldwide.\nThis ranking isn’t just trivia—it’s a powerful snapshot of how billions of people connect, share, and consume content. Understanding these platforms is essential for navigating today’s digital world.\nLooking forward to hearing what stood out to you.\nHappy reading!",
         "content_length": 757
       },
       {
@@ -422,6 +689,7 @@
         "title": "Welcome!",
         "date": "Sep 2, 2025 7:25 PM",
         "url": "https://www.fanshaweonline.ca/d2l/le/news/2001541/2223274/view?ou=2001541",
+        "content": "Hey Luiz Henrique!\nWelcome to Social Media Analytics (INFO-6155)\nMy name is Christie Ramos, and I’m thrilled to be your professor this semester. While we meet next week, you can get to know me a bit better by viewing my bio under Instructor Information.\nOver the next 14 weeks, we embark on a journey to explore how organizations turn social data into decisions—covering social media foundations, strategy and goal-setting, content (including AI-generated content), measurement, and industry tools. We’ll review Hootsuite and Brandwatch, discuss social listening and sentiment analysis, and examine AI’s capabilities, limits, and safeguards in the social landscape. We will also take a hands-on approach to reporting and metric analysis.\nBy the end of this course, you’ll be able to define and interpret the metrics that matter, build a measurement and content strategy, use AI-powered tools to create content, and conduct market research that incorporates sentiment analysis and social listening.\nNext week we kick off class with our first lecture which will serve as an introduction to myself, the course, and some of the key concepts we'll learn throughout the semester.  Please read the Week 1 Module to gear up for our first class.\nClass will take place Tuesday, Sep 9th via Zoom at 6:00PM. Please join our weekly online classroom here.\nI’m looking forward to virtually seeing you soon. Let’s make this a rewarding and enriching experience for both of us!",
         "content_length": 1460
       }
     ]

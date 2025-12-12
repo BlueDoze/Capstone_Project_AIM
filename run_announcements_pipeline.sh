@@ -40,15 +40,15 @@ echo "✓ Environment file: Found"
 echo "✓ Playwright: Installed"
 echo ""
 
-echo "🚀 Starting D2L Announcements Scraper..."
+echo "🚀 Starting D2L Multi-Course Announcements Scraper..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
-# Run the announcements scraper
-python -m src.scrapers.d2l.announcements
+# Run the multi-course announcements scraper
+python -m src.scrapers.d2l.announcements_multi_course
 
 # Check if the output file was created
-OUTPUT_FILE="src/data/announcements/all_announcements.json"
+OUTPUT_FILE="src/data/announcements/all_courses_announcements.json"
 
 if [ -f "$OUTPUT_FILE" ]; then
     echo ""
@@ -58,12 +58,12 @@ if [ -f "$OUTPUT_FILE" ]; then
     echo ""
     
     # Display summary
-    TOTAL=$(python -c "import json; data=json.load(open('$OUTPUT_FILE')); print(data.get('total_announcements', 0))")
-    COURSE=$(python -c "import json; data=json.load(open('$OUTPUT_FILE')); print(data.get('course', 'Unknown'))")
+    TOTAL_COURSES=$(python -c "import json; data=json.load(open('$OUTPUT_FILE')); print(len(data))")
+    TOTAL_ANNOUNCEMENTS=$(python -c "import json; data=json.load(open('$OUTPUT_FILE')); print(sum(c.get('total_announcements', 0) for c in data))")
     
     echo "📊 Summary:"
-    echo "   Course: $COURSE"
-    echo "   Total Announcements: $TOTAL"
+    echo "   Total Courses: $TOTAL_COURSES"
+    echo "   Total Announcements: $TOTAL_ANNOUNCEMENTS"
     echo ""
     echo "💬 The chatbot can now access these announcements!"
     echo "   Ask: 'What are the recent announcements?' or 'Show me D2L updates'"
